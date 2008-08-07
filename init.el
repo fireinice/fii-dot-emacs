@@ -6,6 +6,8 @@
 (setq load-path (cons "~/.emacs.d/python-mode/" load-path))
 (setq load-path (cons "~/.emacs.d/html-helper/" load-path))
 (setq load-path (cons "~/.emacs.d/weblogger" load-path))
+;; add git support(only in debian)
+(setq load-path (cons (expand-file-name "/usr/share/doc/git-core/contrib/emacs") load-path))
 
 
 
@@ -809,6 +811,16 @@ Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
 ;;echo error in minibuffer instead moving mouse on it
 (load-library "flymake-cursor") 
 (global-set-key "\C-c\C-e" 'flymake-goto-next-error)
+
+
+;;========git=====================================
+ (require 'vc-git)
+ (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
+ (require 'git)
+ (autoload 'git-blame-mode "git-blame"
+           "Minor mode for incremental blame for Git." t)
+
+
 ;;========Custom Configure End HERE====================
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
