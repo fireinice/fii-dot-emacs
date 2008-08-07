@@ -1,0 +1,5 @@
+#name : <src type="...">...</src>
+# --
+<src type="$1">
+$0
+</src>

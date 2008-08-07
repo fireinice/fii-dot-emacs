@@ -1,0 +1,5 @@
+#name : for ( var ... in ... ) { ... }
+# --
+for(var ${1:item} in ${2:itemList}) {
+    $0
+}

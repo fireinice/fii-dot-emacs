@@ -1,0 +1,1314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn">
+  <head>
+    <title>Muse Config</title>
+    <meta name="generator" content="Muse">
+    <meta http-equiv="Content-Type"
+          content="text/xhtml; charset=utf-8">
+    <link rel="stylesheet" type="text/css" charset="utf-8" media="all"
+          href="./common/stylesheets/core.css" />
+    <link rel="made" href="mailto:larisq{at}gmail.com" />
+    <link rel="shortcut icon" href="./common/images/my-icon.ico" >
+  </head>
+  <body>
+    <h1 id=top>Muse Config
+   <!-- Google Search -->
+     <div class="searchbar">
+        <form id="searchbar" method="get" action="http://www.google.com/custom" title="My Site Search">
+           <div id="searchbar">
+              <label for="q" title="Search this site">
+                     <img src="./common/images/google.gif" ></label>
+              <input type=hidden name=domains value="http://www.google.com/">
+              <input type=hidden name=sitesearch value="http://www.google.com/">
+              <input type="text" id="q" name="q" accesskey="s" size="16">
+              <input type="submit" id="submit" value="Go">
+           </div>
+        </form>
+     </div>
+   <!-- Google Search -->
+  </h1>
+   <!-- menu start here -->
+     <div class="menu">
+        <div class="menuitem">
+          <a href=" ./index.html">Home</a>
+        </div>
+        <div class="menuitem">
+          <a href=" ./wiki/index.html">WiKiNotes</a>
+        </div>
+      </div>
+    <!-- menu ends here -->
+ <!-- Page published by Emacs Muse begins here -->
+
+
+<div class="mulu">
+                     <h6 class="mulu">Contents</h6>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec1">前记</a>
+</dt>
+<dt class="contents">
+<a href="#sec2">感谢</a>
+</dt>
+<dt class="contents">
+<a href="#sec3">安装</a>
+</dt>
+<dd>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec4">Debian/Ubuntu系统上的安装</a>
+</dt>
+</dl>
+</dd>
+<dt class="contents">
+<a href="#sec5">配置使用</a>
+</dt>
+<dd>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec6">基本配置</a>
+</dt>
+<dt class="contents">
+<a href="#sec7">Projects的管理</a>
+</dt>
+<dd>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec8">“并排”方式</a>
+</dt>
+<dt class="contents">
+<a href="#sec9">“目录树”方式</a>
+</dt>
+</dl>
+</dd>
+<dt class="contents">
+<a href="#sec10">自定义派生的style</a>
+</dt>
+<dd>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec11">“并排”方式的派生style设置</a>
+</dt>
+<dt class="contents">
+<a href="#sec12">“目录树”方式派生style设置</a>
+</dt>
+</dl>
+</dd>
+<dt class="contents">
+<a href="#sec13">Google的搜索栏</a>
+</dt>
+<dt class="contents">
+<a href="#sec14">导航菜单</a>
+</dt>
+</dl>
+</dd>
+<dt class="contents">
+<a href="#sec15">自定义的函数</a>
+</dt>
+<dd>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec16">ywb-muse-relative-path</a>
+</dt>
+<dt class="contents">
+<a href="#sec17">ywb-muse-html-markup-table</a>
+</dt>
+<dt class="contents">
+<a href="#sec18">ywb-muse-publish-math-tab</a>
+</dt>
+<dt class="contents">
+<a href="#sec19">ywb-muse-publish-src-tag</a>
+</dt>
+<dt class="contents">
+<a href="#sec20">ywb-muse-handle-file-link</a>
+</dt>
+<dt class="contents">
+<a href="#sec21">使contents更漂亮</a>
+</dt>
+<dt class="contents">
+<a href="#sec22">给每个标题加个top锚</a>
+</dt>
+<dt class="contents">
+<a href="#sec23">ywb-muse-publish-project</a>
+</dt>
+<dt class="contents">
+<a href="#sec24">ywb-muse-output-file</a>
+</dt>
+<dt class="contents">
+<a href="#sec25">ywb-muse-publish-this-file</a>
+</dt>
+<dt class="contents">
+<a href="#sec26">ywb-muse-generate-index</a>
+</dt>
+<dt class="contents">
+<a href="#sec27">ywb-muse-preview-with-w3m</a>
+</dt>
+<dt class="contents">
+<a href="#sec28">ywb-muse-preview-html</a>
+</dt>
+<dt class="contents">
+<a href="#sec29">ywb-muse-preview-source</a>
+</dt>
+</dl>
+</dd>
+<dt class="contents">
+<a href="#sec30">3.02.90 版中的一些问题</a>
+</dt>
+<dd>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec31">解决方法</a>
+</dt>
+</dl>
+</dd>
+<dt class="contents">
+<a href="#sec32">环境变量设置</a>
+</dt>
+<dt class="contents">
+<a href="#sec33">Planner抄来的配置</a>
+</dt>
+<dt class="contents">
+<a href="#sec34">快捷键设置</a>
+</dt>
+<dt class="contents">
+<a href="#sec35">相关链接</a>
+</dt>
+<dd>
+<dl class="contents">
+<dt class="contents">
+<a href="#sec36">Muse相关</a>
+</dt>
+<dt class="contents">
+<a href="#sec37">EmacsWiki相关</a>
+</dt>
+</dl>
+</dd>
+</dl>
+</div>
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec1" id="sec1"></a>前记</h2>
+最早看到用Emacs写WiKi的人应该是王垠吧，后来感觉最流行和最好看的WiKi就应该是薛瑞
+尼的了。但是现在<a href="http://www.emacswiki.org/cgi-bin/wiki/">Emacs Wiki</a>的作者<a href="http://www.mwolson.org/web/WelcomePage.html">Michael Olson</a>已经不维护<a href="http://www.emacswiki.org/cgi-bin/wiki/">Emacs Wiki</a>这个项目了，而是维护一个类似
+的但功能更强大的项目Muse。而Muse有一些功能还不是很完善，于是我在Google和Emacs@newsmth之间
+游走，到处找人帮忙，终于弄出了一个感觉还不错的配置文件，虽然有一些地方还不完善，但是还
+是先写出来，来以飨大家，其实更重要的是抛砖引玉，使Muse的配置更完善。如果大家对配
+置或者其中有一些函数进行改进，请尽量保留原作者的信息。
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec2" id="sec2"></a>感谢</h2>
+<a href="http://learn.tsinghua.edu.cn:8080/2005211356/website/WelcomePage.html">叶文彬</a>&mdash;几乎所有自定义的函数和大多数配置都是他写的，我都有些不好意思而求他了：）所以下面配置
+文件里所有带ywb字样的函数请保留，以表示对他的感谢。
+
+<p><a href="http://learn.tsinghua.edu.cn:8080/2003214890/publish/Default/WelcomePage.html">薛瑞尼</a>&mdash;我的css文件基本上是改他的，的确很漂亮。他也提供了他的配置文件供我参考。</p>
+
+<p><a href="#others">其他人</a>&mdash;我参考的其他人用Muse写的网页或者用Emacs-WiKi写的网页。</p>
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec3" id="sec3"></a>安装</h2>
+可以到<a href="http://www.mwolson.org/web/WelcomePage.html">Michael Olson</a>的主页上去下载最新版
+
+<p><a href="http://www.mwolson.org/projects/EmacsMuse.html">http://www.mwolson.org/projects/EmacsMuse.html</a></p>
+
+<p>你也可以到下面的地址去下载最新release的tar.gz格式或者zip格式的包。
+<pre class="example">
+http://www.mwolson.org/static/dist/muse/
+</pre></p>
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec4" id="sec4"></a>Debian/Ubuntu系统上的安装</h3>
+如果你用Debian的话，在etch(testing)和sid(unstable)里已经有3.02.6-2这个版本了，所
+以只要
+<pre class="example">
+apt-get install muse-el
+</pre>
+就可以了。
+如果想要装最新的版本，请在你的/etc/apt/sources.list加入下面的源然后更新安装即可。
+<pre class="example">
+deb http://www.mwolson.org/debian/ ./
+</pre>
+你也可以到下面的地址去下载最新release的deb包然后直接dpkg -i muse-el_***.deb安装
+即可。
+<pre class="example">
+http://mwolson.org/debian/
+</pre>
+现在我装的版本是3.02.92.arch.193-1，刚刚看到Olson已经把Muse开发到3.03了，但是not
+yet released，呵呵，好像增加了好多新特性，如果你要看看有什么新东西的话看这里
+<a href="http://www.mwolson.org/static/dist/muse/NEWS-3.03">NEWS-3.03</a>，或者看我下载的这个<a href="NEWS-3.03.html">NEWS-3.03</a>
+
+<p>如果用是用Ubuntu，我没有测试过，不知道源里有没有，但是上面添加
+<a href="http://www.mwolson.org/web/WelcomePage.html">Michael Olson</a>所提供的源然后安装的方法一定是可以的。</p>
+
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec5" id="sec5"></a>配置使用</h2>
+配置使用可以去<a href="http://www.emacswiki.org/cgi-bin/wiki/MuseMode">Emacs Wiki: Muse Mode</a>看看。
+
+<p><a href="http://www.emacswiki.org/cgi-bin/wiki/MuseMode">http://www.emacswiki.org/cgi-bin/wiki/MuseMode</a></p>
+
+<p>也可以参考别人的，我这里尽量把我所知道的都写出来。
+我的配置文件在这里：</p>
+
+<p><a href="muse-init.el">muse-init.el</a>
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec6" id="sec6"></a>基本配置</h3></p>
+
+<p>Muse之所以功能强大，最重要的是能输出很多种格式的文件，但是如果只写网页的话只要几
+样就行了。所以下面配置里前面注掉的都是你可以选择的，如果你要输出其它格式的文件的
+话，请参考Muse自的带的文档说明。</p>
+
+<pre class="sourcecode">
+<span class="comment-delimiter">;;; </span><span class="comment">muse-init.el --- Initialize muse-mode.
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Add below to ~/.emacs config file
+</span><span class="comment-delimiter">;</span><span class="comment">(load-file "~/.emacs.d/conf/muse-init.el")
+</span><span class="comment-delimiter">;</span><span class="comment">(add-to-list 'load-path "/usr/share/emacs/site-lisp/muse-el/experimental")
+</span><span class="comment-delimiter">;;;; </span><span class="comment">xhtml footer and header (&#22914;&#26524;&#20320;&#27839;&#29992;emacs-wiki&#37027;&#26679;&#23450;&#20041;&#22810;&#20010;&#39033;&#30446;&#32780;&#19981;&#29992;muse&#23376;&#30446;&#24405;&#21457;&#24067;&#21151;&#33021;&#65292;&#27880;&#25481;&#23427;&#65292;&#36825;&#20010;&#22312;&#21518;&#38754;&#20250;&#35828;&#26126;&#65289;
+</span>(load-file <span class="string">"~/.emacs.d/conf/muse-footer-header.el"</span>)
+(<span class="keyword">require</span> '<span class="constant">muse</span>)          <span class="comment-delimiter">; </span><span class="comment">load generic module
+</span>(<span class="keyword">require</span> '<span class="constant">muse-mode</span> nil t)     <span class="comment-delimiter">; </span><span class="comment">load authoring mode
+</span>(<span class="keyword">require</span> '<span class="constant">muse-wiki</span> nil t)     <span class="comment-delimiter">; </span><span class="comment">load Wiki support
+</span>(<span class="keyword">require</span> '<span class="constant">muse-html</span> nil t)     <span class="comment-delimiter">; </span><span class="comment">load (X)HTML publishing style
+</span>(<span class="keyword">require</span> '<span class="constant">muse-colors</span> nil t)   <span class="comment-delimiter">; </span><span class="comment">load coloring/font-lock module
+</span>(<span class="keyword">require</span> '<span class="constant">outline</span> nil t)
+(<span class="keyword">require</span> '<span class="constant">sgml-mode</span>)
+(<span class="keyword">require</span> '<span class="constant">tp-muse-highlight</span> nil t)
+<span class="comment-delimiter">;;;;</span><span class="comment">(&#19979;&#38754;&#30340;&#21487;&#36873;&#65292;&#25105;&#27809;&#26377;&#29992;&#21040;)
+</span><span class="comment-delimiter">;</span><span class="comment">(require 'muse-blosxom)  ; load blosxom module
+</span><span class="comment-delimiter">;</span><span class="comment">(require 'muse-docbook)  ; load DocBook publishing style
+</span><span class="comment-delimiter">;</span><span class="comment">(require 'muse-latex)    ; load LaTeX/PDF publishing styles
+</span><span class="comment-delimiter">;</span><span class="comment">(require 'muse-texinfo)  ; load Info publishing style
+</span><span class="comment-delimiter">;</span><span class="comment">(require 'muse-xml)      ; load XML support
+</span><span class="comment-delimiter">;</span><span class="comment">(require 'muse-journal)  ; load journal module
+</span><span class="comment-delimiter">;</span><span class="comment">(require 'muse-message)  ; load message support (experimental)
+</span><span class="comment-delimiter">;</span><span class="comment">(require 'muse-srctag)   ; load srctag support
+</span></pre>
+
+<p><a href="tp-muse-highlight.el">tp-muse-highlight.el</a></p>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec7" id="sec7"></a>Projects的管理</h3>
+Muse在projects的定义和管理方面做得比<a href="http://www.emacswiki.org/cgi-bin/wiki/">Emacs Wiki</a>好，可以省去很多麻烦。projects之间
+的引用也很方便。而且有一项新功能是从blosxom那里学来的，就是可以把一个源文件的目
+录树相应地发布成html文件，而发布的目录树的结构跟源文件目录树的结构相同。但是这样
+也存在一些问题，比如说css文件、图片或者其它的一些东西的相对路径不能自动处理。但
+是叶文彬写了一些函数可以来解决这个问题。所以projects的管理我分种方法来说明，一种是
+像<a href="http://www.emacswiki.org/cgi-bin/wiki/">Emacs Wiki</a>那样的组织多个“并排”的projects，另一种是“目录树”结构。下面分别介绍：
+<h4><span class="toplink"><a href="#top">top</a></span><a name="sec8" id="sec8"></a>“并排”方式</h4>
+这种方式最简单，其实也最实用，唯一不爽的就是你得把所有的projects的源文件和发布文
+件都并排地放到一起，没有层次感。不过也并不是每个人都像我一样喜欢用树状结构来分类
+吧：）
+
+<pre class="sourcecode">
+(setq muse-project-alist
+      `(
+        (<span class="string">"Debian"</span>                      <span class="comment-delimiter">;</span><span class="comment">&#39033;&#30446;&#21517;&#31216;
+</span>         (<span class="string">"~/muse/source/wiki/debian"</span>  <span class="comment-delimiter">;</span><span class="comment">&#28304;&#25991;&#20214;&#30340;&#20301;&#32622;
+</span>          <span class="builtin">:default</span> <span class="string">"index"</span>             <span class="comment-delimiter">;</span><span class="comment">&#40664;&#35748;&#30340;project&#30340;&#20027;&#39029;
+</span>          <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>))<span class="comment-delimiter">;</span><span class="comment">&#21457;&#24067;&#39033;&#30446;&#26102;&#21516;&#26102;&#21457;&#24067;project&#30340;&#32034;&#24341;&#25991;&#20214;
+</span>         (<span class="builtin">:base</span> <span class="string">"wiki-xhtml"</span> <span class="builtin">:path</span> <span class="string">"~/muse/publish/wiki/debian"</span>)) <span class="comment-delimiter">;</span><span class="comment">&#21457;&#24067;&#36335;&#24452;
+</span>        (<span class="string">"Emacs"</span>
+         (<span class="string">"~/muse/source/wiki/emacs"</span>
+         <span class="builtin">:default</span> <span class="string">"index"</span>
+         <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>))
+         (<span class="builtin">:base</span> <span class="string">"wiki-xhtml"</span> <span class="builtin">:path</span> <span class="string">"~/muse/publish/wiki/emacs"</span>))
+        (<span class="string">"GNU"</span>
+         (<span class="string">"~/muse/source/wiki/gnu"</span>
+          <span class="builtin">:default</span> <span class="string">"index"</span>
+          <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>))
+         (<span class="builtin">:base</span> <span class="string">"wiki-xhtml"</span> <span class="builtin">:path</span> <span class="string">"~/muse/publish/wiki/gnu"</span>))
+        ))
+</pre>
+
+
+<h4><span class="toplink"><a href="#top">top</a></span><a name="sec9" id="sec9"></a>“目录树”方式</h4>
+如果你像我一样平时收集了一堆从网上弄来的Linux相关的Tips啦，文章啦，而看着这一堆
+的东西太乱了，于是分门别类地建了一堆目录来分类，而目录下可能还有子目录。那在组织
+projects时也想这么干吧。Muse中有一个设置muse-project-alist-dirs可以来干这个，并
+且把这个你定义的project下的所有目录树结构记住，在发布成html文件时相应地按源文件
+的目录树结构来发布到指定的目录下。
+<pre class="sourcecode">
+(setq muse-project-alist
+      `(                             <span class="comment-delimiter">;</span><span class="comment">&#65281;&#27880;&#24847;&#36825;&#19968;&#34892;&#26368;&#24038;&#36793;&#30340;&#26159;&#19968;&#20010;&#8220;`&#8221;&#65292;ESC&#38190;&#19979;&#38754;&#37027;&#20010;&#65281;
+</span>        (<span class="string">"Muse"</span>
+         (<span class="string">"~/muse/source/wiki/gnu/emacs/muse"</span>
+         <span class="builtin">:default</span> <span class="string">"MuseIndex"</span>
+         <span class="builtin">:force-publish</span> (<span class="string">"index"</span>))
+         (<span class="builtin">:base</span> <span class="string">"wiki-xhtml"</span> <span class="builtin">:path</span> <span class="string">"~/muse/publish/wiki/gnu/emacs/muse"</span>))
+        (<span class="string">"Debian"</span>
+         (<span class="string">"~/muse/source/wiki/gnu/debian"</span>
+          <span class="builtin">:default</span> <span class="string">"index"</span>
+          <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>))
+         (<span class="builtin">:base</span> <span class="string">"wiki-xhtml"</span> <span class="builtin">:path</span> <span class="string">"~/muse/publish/wiki/gnu/debian"</span>))
+        (<span class="string">"Emacs"</span>
+         (<span class="string">"~/muse/source/wiki/gnu/emacs"</span>
+         <span class="builtin">:default</span> <span class="string">"index"</span>
+         <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>))
+         (<span class="builtin">:base</span> <span class="string">"wiki-xhtml"</span> <span class="builtin">:path</span> <span class="string">"~/muse/publish/wiki/gnu/emacs"</span>))
+        (<span class="string">"GNU"</span>
+         (<span class="string">"~/muse/source/wiki/gnu"</span>
+          <span class="builtin">:default</span> <span class="string">"index"</span>
+          <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>))
+         (<span class="builtin">:base</span> <span class="string">"wiki-xhtml"</span> <span class="builtin">:path</span> <span class="string">"~/muse/publish/wiki/gnu"</span>))
+
+        (<span class="string">"WiKi"</span> (,@(muse-project-alist-dirs <span class="string">"~/muse/source/wiki"</span>)<span class="comment-delimiter">;</span><span class="comment">&#28304;&#25991;&#20214;&#36335;&#24452;
+</span>                   <span class="builtin">:default</span> <span class="string">"index"</span>                              <span class="comment-delimiter">;</span><span class="comment">&#40664;&#35748;&#39033;&#30446;&#20027;&#39029;
+</span>                   <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>)
+                   )
+         ,@(muse-project-alist-styles <span class="string">"~/muse/source/wiki"</span>       <span class="comment-delimiter">;</span><span class="comment">&#36824;&#26159;&#28304;&#25991;&#20214;&#36335;&#24452;
+</span>                                      <span class="string">"~/muse/publish/wiki"</span>      <span class="comment-delimiter">;</span><span class="comment">&#21457;&#24067;&#36335;&#24452;
+</span>                                      <span class="string">"wiki-xhtml"</span>))
+        (<span class="string">"Others"</span>
+         (<span class="string">"~/muse/source/others"</span>
+          <span class="builtin">:default</span> <span class="string">"index"</span>
+          <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>))
+         (<span class="builtin">:base</span> <span class="string">"xhtml"</span> <span class="builtin">:path</span> <span class="string">"~/muse/publish/others"</span>))
+
+        (<span class="string">"Default"</span> (,@(muse-project-alist-dirs <span class="string">"~/muse/source/default"</span>)
+                    <span class="builtin">:default</span> <span class="string">"index"</span>
+                   <span class="builtin">:force-publish</span> (<span class="string">"WikiIndex"</span>))
+         ,@(muse-project-alist-styles <span class="string">"~/muse/source/default"</span>
+                                      <span class="string">"~/muse/publish"</span>
+                                      <span class="string">"default-xhtml"</span>))
+
+        ))
+</pre>
+
+<p>肯定有人会问，既然都用子目录结构了，为什么还定义那些子projects呢？因为目录树的这
+个功能很有限，他只会把相应文件发布并按目录树结构安装，而如果你还是想把Emacs、
+Debian、GNU这些做为projects，方便项目之间的引用的话，还得在写上这些项目的定义。
+而且写法也得按一定的“规矩”来，这个“规矩”是：
+<ul>
+<li>1.源文件目录中最上层目录放到项目定义的最下面</p></li>
+</ul>
+
+<p>配置中的WiKi就得安排在Muse、Debian、Emacs、GNU的下面，因为这些“子”项目所在的目录都在
+WiKi的目录中，是它的子目录。
+<ul>
+<li>2.项目在配置文件里的设置是根据目录的层数的深度来确定位置，原则是层数深的不能在层
+数浅的上面</p></li>
+</ul>
+
+<p>配置中Muse的目录比Debian和Emacs的深，所以在它们俩的上面，而相同深度的就随便谁在
+上谁在下都行。
+<ul>
+<li>3.如果两个项目没有目录树间的关系，可以随便写。</p></li>
+</ul>
+
+<p>比如说Others就可以写在下面。</p>
+
+<p>这个是我实验过很多次得出的最好的方法。因为在header和footer里有一些处理项目名称的
+函数，这样写不会出乱子。</p>
+
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec10" id="sec10"></a>自定义派生的style</h3>
+Muse之所以能生成多种格式的文件的原因之一我想可能就是这个功能了，在输出html格式方
+面，你可以自定义你的html文件的header和footer，这样使用起来很方便。其他输出文件格
+式请参考Muse文档。
+但是因为有了上面的Projects的管理的两种配置方法，这里也要相应地跟着变化。
+<h4><span class="toplink"><a href="#top">top</a></span><a name="sec11" id="sec11"></a>“并排”方式的派生style设置</h4>
+这个也最简单，定义一个派生的style，把你想要的header.html和footer.html的路径写上
+可以了。而这两个文件是按照html的语法来写的，在发布时直接把其中的内容拷到发布的
+html文件里。
+<pre class="sourcecode">
+(<span class="keyword">unless</span> (assoc <span class="string">"my-blosxom"</span> muse-publishing-styles)
+  (muse-derive-style <span class="string">"wiki-xhtml"</span> <span class="string">"xhtml"</span>     <span class="comment-delimiter">;</span><span class="comment">&#23450;&#20041;&#19968;&#20010;&#27966;&#29983;&#30340;style&#20026;wiki-xhtml
+</span>                     <span class="builtin">:header</span> <span class="string">"~/muse/common/templates/header.html"</span>
+                     <span class="builtin">:footer</span> <span class="string">"~/muse/common/templates/footer.html"</span>
+                     )
+  (muse-derive-style <span class="string">"default-xhtml"</span> <span class="string">"xhtml"</span>  <span class="comment-delimiter">;</span><span class="comment">&#23450;&#20041;&#21478;&#19968;&#20010;&#27966;&#29983;&#30340;style
+</span>                     <span class="builtin">:header</span> <span class="string">"~/muse/common/templates/default-header.html"</span>
+                     <span class="builtin">:footer</span> <span class="string">"~/muse/common/templates/default-footer.html"</span>
+                     ))
+</pre>
+
+<p>如果要对其中一些可变的内容用lisp函数来处理理，可以在其中嵌入lisp函数，比如说我在
+footer.html里要设定网页发布的时间，就可以加上这么变态的几句来处理：
+<pre class="sourcecode">
+&#26368;&#21518;&#26356;&#26032;:
+ &lt;lisp&gt;
+   (format-time-string <span class="string">"%4Y-%2m-%2d-%T"</span>
+   (nth 5 (file-attributes
+            muse-publishing-current-file)))
+ &lt;/lisp&gt;
+</pre></p>
+
+<p>然后效果就是:
+<pre class="example">
+最后更新: 2006-08-25-23:23:19
+</pre>
+我的header.html和footer.html你可以参考一下。
+文件的内容可以看这里:</p>
+
+<p><a href="header.html">header.html</a></p>
+
+<p><a href="footer.html">footer.html</a></p>
+
+<p>下载在这里:</p>
+
+<p><a href="common/templates/header.html">common/templates/header.html</a></p>
+
+<p><a href="common/templates/footer.html">common/templates/footer.html</a></p>
+
+
+<h4><span class="toplink"><a href="#top">top</a></span><a name="sec12" id="sec12"></a>“目录树”方式派生style设置</h4>
+因为要处理html文件里css和图片的相对路径的问题，所以按上面“并排”的方式设置派生
+style是有些问题的。我实验过，css文件的路径处理可以在header.html里用
+ywb-muse-relative-path函数来处理(这个函数在下面会介绍，不要急：），像这样：
+<pre class="example">
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; charset=&quot;utf-8&quot; media=&quot;all&quot;
+      href=&quot;&lt;lisp&gt;(ywb-muse-relative-path &quot;common/stylesheets/core.css&quot;)&lt;/lisp&gt;&quot; /&gt;
+</pre>
+但是对于图片链接就不行了比如说这个：
+<pre class="example">
+&lt;a href=&quot;http://www.mwolson.org/projects/EmacsMuse.html&quot;&gt;
+   &lt;img style=&quot;border: 0em none ;&quot;
+     src=&quot; &lt;lisp&gt; (ywb-muse-relative-path &quot;common/images/muse-powered-by.png&quot;)&lt;/lisp&gt; &quot; alt=&quot;Emacs Muse Logo&quot;&gt;&lt;/a&gt;
+</pre>
+可能是因为elisp的或者是html对“&quot;”的处理问题吧。
+那现在怎么办呢？其实很简单，可以入到muse-init.el中，如果要写到emacs的配置文件里
+去在每一个“&quot;”前加一个“\”来转义就可以了。
+也可以单独写一份文件叫muse-header-footer.el,在加载muse-init.el时同时加载它就行了。
+<pre class="sourcecode">
+<span class="comment-delimiter">;;; </span><span class="comment">muse-init.el --- Initialize muse-mode.
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Add below to ~/.emacs config file
+</span><span class="comment-delimiter">;</span><span class="comment">(load-file "~/.emacs.d/conf/muse-init.el")
+</span><span class="comment-delimiter">;;;; </span><span class="comment">xhtml footer and header (&#22914;&#26524;&#20320;&#27839;&#29992;emacs-wiki&#37027;&#26679;&#23450;&#20041;&#22810;&#20010;&#39033;&#30446;&#32780;&#19981;&#29992;muse&#23376;&#30446;&#24405;&#21457;&#24067;&#21151;&#33021;&#65292;&#27880;&#25481;&#23427;&#65292;&#36825;&#20010;&#22312;&#21518;&#38754;&#20250;&#35828;&#26126;&#65289;
+</span>(load-file <span class="string">"~/.emacs.d/conf/muse-footer-header.el"</span>)
+</pre>
+
+<p>文件的内容可以看这里:</p>
+
+<p><a href="muse-header-footer_el.html">muse-header-footer_el.html</a></p>
+
+<p>下载在这里:</p>
+
+<p><a href="muse-header-footer.el">muse-header-footer.el</a></p>
+
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec13" id="sec13"></a>Google的搜索栏</h3>
+我是参考<a href="http://www.mysmu.edu/me2005/zhaopeng.2005/homepage/WelcomePage.html">邢兆鹏</a>的，只在要header里的&lt;h1&gt;title&lt;/h1&gt;加上下面这段就行了。那个Google图
+片也是从他网站上拷下来的，希望他不介意：）
+<pre class="sourcecode">
+&lt;<span class="function-name">h1</span>&gt;
+ &lt;<span class="function-name">lisp</span>&gt;(muse-publishing-directive \<span class="string">"title\"</span>)&lt;/<span class="function-name">lisp</span>&gt;
+ <span class="comment-delimiter">&lt;!-- </span><span class="comment">Google Search </span><span class="comment-delimiter">--&gt;</span>
+  &lt;<span class="function-name">div</span> class=\<span class="string">"searchbar\"</span>&gt;
+    &lt;<span class="function-name">form</span> id=\<span class="string">"searchbar\"</span> method=\<span class="string">"get\"</span> action=\<span class="string">"http://www.google.com/custom\"</span> title=\<span class="string">"My Site Search\"</span>&gt;
+       &lt;<span class="function-name">div</span> id=\<span class="string">"searchbar\"</span>&gt;
+          &lt;<span class="function-name">label</span> for=\<span class="string">"q\"</span> title=\<span class="string">"Search this site\"</span>&gt;
+                 &lt;<span class="function-name">img</span> src=\<span class="string">"&lt;lisp&gt; (ywb-muse-relative-path \"</span>common/images/google.gif\<span class="string">")&lt;/lisp&gt;\"</span> &gt;&lt;/<span class="function-name">label</span>&gt;
+          &lt;<span class="function-name">input</span> type=hidden name=domains value=\<span class="string">"http://www.yoursite.org/\"</span>&gt;
+          &lt;<span class="function-name">input</span> type=hidden name=sitesearch value=\<span class="string">"http://www.yoursite.org/\"</span>&gt;
+          &lt;<span class="function-name">input</span> type=\<span class="string">"text\"</span> id=\<span class="string">"q\"</span> name=\<span class="string">"q\"</span> accesskey=\<span class="string">"s\"</span> size=\<span class="string">"16\"</span>&gt;
+          &lt;<span class="function-name">input</span> type=\<span class="string">"submit\"</span> id=\<span class="string">"submit\"</span> value=\<span class="string">"Go\"</span>&gt;
+       &lt;/<span class="function-name">div</span>&gt;
+    &lt;/<span class="function-name">form</span>&gt;
+  &lt;/<span class="function-name">div</span>&gt;
+ <span class="comment-delimiter">&lt;!-- </span><span class="comment">Google Search </span><span class="comment-delimiter">--&gt;</span>
+&lt;/<span class="function-name">h1</span>&gt;
+</pre>
+
+<p>如果要你用“并排”方式来设置projects，那么请把上面所有的“\”去掉，然后加到
+header.html里。当然我已经给弄好了一份，可以看上面的两小节。</p>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec14" id="sec14"></a>导航菜单</h3>
+跟Google搜索栏相似，在header.html里的最后加入下面的内容就行了。其实会lisp语言的话还可
+做的更灵活：）
+<pre class="sourcecode">
+   <span class="comment-delimiter">&lt;!-- </span><span class="comment">menu start here </span><span class="comment-delimiter">--&gt;</span>
+     &lt;<span class="function-name">div</span> class=\<span class="string">"menu\"</span>&gt;
+        &lt;<span class="function-name">div</span> class=\<span class="string">"menuitem\"</span>&gt;
+          &lt;<span class="function-name">a</span> href=\<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path \"</span>index.html\<span class="string">")&lt;/lisp&gt;\"</span>&gt;Home&lt;/<span class="function-name">a</span>&gt;
+        &lt;/<span class="function-name">div</span>&gt;
+        &lt;<span class="function-name">div</span> class=\<span class="string">"menuitem\"</span>&gt;
+          &lt;<span class="function-name">a</span> href=\<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path \"</span>wiki/index.html\<span class="string">")&lt;/lisp&gt;\"</span>&gt;WiKiNotes&lt;/<span class="function-name">a</span>&gt;
+        &lt;/<span class="function-name">div</span>&gt;
+      &lt;/<span class="function-name">div</span>&gt;
+    <span class="comment-delimiter">&lt;!-- </span><span class="comment">menu ends here </span><span class="comment-delimiter">--&gt;</span>
+
+</pre>
+
+
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec15" id="sec15"></a>自定义的函数</h2>
+这些函数可以在叶文彬的Muse配置文件里找到：
+
+<p><a href="http://learn.tsinghua.edu.cn:8080/2005211356/emacs/EmacsMusecof.html">http://learn.tsinghua.edu.cn:8080/2005211356/emacs/EmacsMusecof.html</a></p>
+
+<p>他写的关于Muse的说明：</p>
+
+<p><a href="http://learn.tsinghua.edu.cn:8080/2005211356/emacs/EmacsMuse.html">http://learn.tsinghua.edu.cn:8080/2005211356/emacs/EmacsMuse.html</a>
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec16" id="sec16"></a>ywb-muse-relative-path</h3>
+如果你想用Projects的管理方式中的“目录树”方式，这个函数可以说是写的极好，肯定必用！
+<pre class="sourcecode">
+(<span class="keyword">defun</span> <span class="function-name">ywb-muse-relative-path</span> (file)
+  (concat
+   (file-relative-name
+    my-muse-publish-directory
+    (file-name-directory muse-publishing-current-output-path))
+   file))
+</pre></p>
+
+<p>这个函数用于子目录发布，在发布的过程中推断出相对路径。有了这个函数，对于 css 或
+者图片名，在muse-init.el或者muse-header-footer.el这样写就行了：
+<pre class="example">
+&lt;lisp&gt;(ywb-muse-relative-path \&quot;css/core.css\&quot;)&lt;/lisp&gt;
+</pre>
+css/core.css 是相对于 my-muse-publish-directory 的路径。
+而my-muse-publish-directory是个变量，定义如下：
+<pre class="example">
+(defvar my-muse-publish-directory &quot;~/muse/publish/&quot;)
+</pre>
+<ul>
+<li>说明:</p></li>
+</ul>
+
+<p>这个变量和函数的作用，这个变量是跟定义了你的所有要发布文件要发布到哪个目录
+中去，而在你的这个目录中(~/muse/publish/)如果有一个文件夹为css,里面有个core.css
+的文件，那么把这个函数放到xhtml的头文件的定义中去来代替里面的css文件的路径位置，
+然后在发布过程中这个函数会把core.css这个文件相对于(~/muse/publish/)这个目录的相
+对路径输出到html文件里，所以对于放着我的这个html网页和其它文件的这个文件夹来说，只要目录里的文件和文件夹的相对
+位置不变，那么无论把这个文件夹放到谁的机器上还是放到服务器上，你用浏览器打开这个
+网页都能正常显示，因为css文件的路径是相对的，而底下的那一排图标的路径也是相对的。
+我问过Olson这个问题，他要我用绝对路径，他的网站上所有的css文件和图片的路径都是绝
+对路径。可是我还没有服务器上传，我只想在本机上看，用绝对路径在本地看肯定不行了。所以我觉得这个函数很棒，真是非常感谢叶文彬：）</p>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec17" id="sec17"></a>ywb-muse-html-markup-table</h3>
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;;</span><span class="comment">_+ ywb-muse-html-markup-table
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb-muse-html-markup-table</span> ()
+  (<span class="keyword">let</span> ((str (match-string 1)))
+    (<span class="keyword">when</span> (= (aref str 0) ?|)
+      (<span class="keyword">save-excursion</span>
+        (<span class="keyword">save-match-data</span>
+          (<span class="keyword">let</span> ((endmarker (set-marker (make-marker) (match-end 0)))
+                (start (match-beginning 0))
+                (nextline (<span class="keyword">lambda</span> () (forward-line 1) (point))))
+            (goto-char (1+ start))
+            (<span class="keyword">when</span> (looking-at <span class="string">"|</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[-]+[|+]</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">+[ \t]*$"</span>)
+              (delete-region (point) (funcall nextline))
+              (perform-replace <span class="string">"[ \t]+|[ \t]+"</span> <span class="string">" || "</span> nil t nil nil nil
+                               (point) (funcall nextline))
+              (delete-region (funcall nextline) (funcall nextline)))
+            (goto-char endmarker)
+            (forward-line -1)
+            (<span class="keyword">when</span> (looking-at <span class="string">"|</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[-]+[|+]</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">+[ \t]*$"</span>)
+              (delete-region (point) (funcall nextline)))
+            (perform-replace <span class="string">"^|[ \t]*"</span> <span class="string">""</span> nil t nil nil nil start endmarker)
+            (perform-replace <span class="string">"|[ \t]*$"</span> <span class="string">""</span> nil t nil nil nil start endmarker)))))
+    (muse-html-markup-table)))
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec18" id="sec18"></a>ywb-muse-publish-math-tab</h3>
+org-mode 可以发布一些具有上标和下标的html代码。可以借来用一下。
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;;</span><span class="comment">_+ ywb-muse-publish-math-tab
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb-muse-publish-math-tab</span> (beg end attrs)
+  (<span class="keyword">require</span> '<span class="constant">org</span>)
+  (<span class="keyword">let</span> ((tag (or (cdr (assoc <span class="string">"tag"</span> attrs)) <span class="string">"span"</span>)))
+    (insert (concat <span class="string">"&lt;"</span> tag <span class="string">" class=\"math\"&gt;"</span>
+                    (org-export-html-convert-sub-super
+                     (delete-and-extract-region beg end))
+                    <span class="string">"&lt;/"</span> tag <span class="string">"&gt;\n"</span>))
+    (muse-publish-mark-read-only beg (point))))
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec19" id="sec19"></a>ywb-muse-publish-src-tag</h3>
+语法加亮。本网页中的emacs-lisp语法加亮都是用这个函数来实现的。
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;;</span><span class="comment">_+  ywb-muse-publish-src-tag
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb-muse-publish-src-tag</span> (beg end attrs)
+  (<span class="keyword">let</span> ((mode (cdr (assoc <span class="string">"type"</span> attrs))))
+    (tp-muse-fontified-example-tag beg end nil
+                                   (intern-soft (concat mode <span class="string">"-mode"</span>)))))
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec20" id="sec20"></a>ywb-muse-handle-file-link</h3>
+处理文件链接的函数。
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;;</span><span class="comment">_+ ywb-muse-handle-file-link
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb-muse-handle-file-link</span> (<span class="type">&amp;optional</span> string)
+  (or string
+      (setq string
+            (<span class="keyword">let</span> ((end (<span class="keyword">save-excursion</span>
+                         (re-search-forward <span class="string">"]"</span> nil t)
+                         (1- (point)))))
+              (<span class="keyword">when</span> end
+                (buffer-substring-no-properties (point) end)))))
+  (setq string
+        (expand-file-name
+         (concat (muse-get-keyword <span class="builtin">:path</span> (nth 2 (muse-project)))
+                 <span class="string">"/"</span> string)))
+  (<span class="keyword">when</span> (file-exists-p string)
+    string))
+</pre>
+
+<p>下面的这几句我看不太懂，但意思差不多明白，应该是把上面那些自定义的有增强功能的函数加到
+Muse自带的相应函数里去。反正照写就是啦：）
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;;</span><span class="comment">_+
+</span>(add-to-list 'muse-html-markup-functions '(table . ywb-muse-html-markup-table))
+(add-to-list 'muse-html-markup-tags      '(<span class="string">"math"</span> t t ywb-muse-publish-math-tag))
+(add-to-list 'muse-html-markup-tags      '(<span class="string">"src"</span> t t ywb-muse-publish-src-tag))
+(add-to-list 'muse-explicit-link-functions 'ywb-muse-handle-file-link)
+</pre></p>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec21" id="sec21"></a>使contents更漂亮</h3>
+因为薛瑞尼的css文件对contents做了一些设置，并用了一个好看的小图片（就是最上面
+Contents中那一排金色的小圆圈），看了他的配置文件才知道，其实他是加了一层
+contents,并且改用了sacha写的一个函数，我开始改写了这个函数，但是虽然Contents好看
+了，然后所有的标题里的内容都跑到外面去了，叶文彬指出了错误所以在（处理时多输出了
+一个回车），于是重新改写于下：
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;</span><span class="comment">_+ insert contents. contents should strip all the tags
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb/muse-publish-strip-tags</span> (string)
+   (<span class="keyword">while</span> (string-match <span class="string">"&lt;.*?&gt;"</span> string)
+     (setq string (replace-match <span class="string">""</span> nil t string)))
+   string)
+(<span class="keyword">defadvice</span> <span class="function-name">muse-publish-contents-tag</span> (around ywb activate)
+   (<span class="keyword">let*</span> ((beg (ad-get-arg 0))
+          (end (ad-get-arg 1))
+          (attrs (ad-get-arg 2))
+          (max-depth (<span class="keyword">let</span> ((depth (cdr (assoc <span class="string">"depth"</span> attrs))))
+                       (or (and depth (string-to-int depth)) 3)))
+          (index 1)
+          base contents l)
+     (<span class="keyword">save-excursion</span>
+       (<span class="keyword">catch</span> '<span class="constant">done</span>
+         (<span class="keyword">while</span> (re-search-forward <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">\\*+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\\s-+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span> nil t)
+           (setq l (length (match-string 1)))
+           (<span class="keyword">if</span> (null base)
+               (setq base l)
+             (<span class="keyword">if</span> (&lt; l base)
+                 (<span class="keyword">throw</span> '<span class="constant">done</span> t)))
+           (<span class="keyword">when</span> (&lt;= l max-depth)
+             (setq contents (cons (cons l (match-string-no-properties 2))
+                                  contents))
+             (goto-char (match-beginning 2))
+             (muse-html-insert-anchor (concat <span class="string">"sec"</span> (int-to-string index)))
+             (delete-backward-char 1)
+             (setq index (1+ index))))))
+     (setq index 1 contents (reverse contents))
+     (<span class="keyword">let</span> ((depth 1) (sub-open 0) (p (point)))
+       (insert <span class="string">"&lt;div class=\"mulu\"&gt;
+                     &lt;h6 class=\"mulu\"&gt;Contents&lt;/h6&gt;\n"</span>)
+       (insert <span class="string">"&lt;dl class=\"contents\"&gt;\n"</span>)
+       (<span class="keyword">while</span> contents
+         (insert <span class="string">"&lt;dt class=\"contents\"&gt;\n"</span>)
+         (insert <span class="string">"&lt;a href=\"#sec"</span> (int-to-string index) <span class="string">"\"&gt;"</span>
+                 (ywb/muse-publish-strip-tags (cdar contents))
+                 <span class="string">"&lt;/a&gt;\n"</span>)
+         (setq index (1+ index))
+         (insert <span class="string">"&lt;/dt&gt;\n"</span>)
+         (setq depth (caar contents)
+               contents (cdr contents))
+         (<span class="keyword">if</span> contents
+             (<span class="keyword">cond</span>
+              ((&lt; (caar contents) depth)
+               (<span class="keyword">let</span> ((idx (caar contents)))
+                 (<span class="keyword">while</span> (&lt; idx depth)
+                   (insert <span class="string">"&lt;/dl&gt;\n&lt;/dd&gt;\n"</span>)
+                   (setq sub-open (1- sub-open)
+                         idx (1+ idx)))))
+              ((&gt; (caar contents) depth) <span class="comment-delimiter">; </span><span class="comment">can't jump more than one ahead
+</span>               (insert <span class="string">"&lt;dd&gt;\n&lt;dl class=\"contents\"&gt;\n"</span>)
+               (setq sub-open (1+ sub-open))))))
+       (<span class="keyword">while</span> (&gt; sub-open 0)
+         (insert <span class="string">"&lt;/dl&gt;\n&lt;/dd&gt;\n"</span>)
+         (setq sub-open (1- sub-open)))
+       (insert <span class="string">"&lt;/dl&gt;\n"</span>)
+       (insert <span class="string">"&lt;/div&gt;\n"</span>)
+       (put-text-property p (point) 'read-only t))))
+</pre>
+
+<p>但是好像不用这个函数也可以，因为可以在css文件中设置contents相应的属性，比如说像
+flyzhy的网页中的Contents就感觉还不错。我写信问过他，他说是在css文件中设置的。</p>
+
+<p><a href="http://www.flyzhy.org/projects/WebsiteSettings.html">http://www.flyzhy.org/projects/WebsiteSettings.html</a></p>
+
+<p><a href="http://www.mwolson.org/projects/EmacsMuse.html">http://www.mwolson.org/projects/EmacsMuse.html</a></p>
+
+<p>在Muse的<a href="http://www.mwolson.org/static/dist/muse/NEWS-3.03">NEWS-3.03</a>(我下载的文件<a href="NEWS-3.03.html">NEWS-3.03</a>）中提到了：
+<pre class="example">
+Make the Table of Contents CSS easier to customize.
+For an example, see examples/mwolson/stylesheets/screen.css.
+</pre>
+如果真能实现像薛瑞尼那样的效果，那可真不错，起码省了一个函数。如果你弄明白了，一
+定要告诉我啊：）</p>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec22" id="sec22"></a>给每个标题加个top锚</h3>
+薛瑞尼的网页中每个标题右边都有一个top的锚，如果一个网页很长，当你想回到页首看
+contents的时候，这个锚就很有用了。但是薛瑞尼给我的sacha的函数已经不能用了，于是
+叶文彬就重写了一个，功能完全一样。
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;</span><span class="comment">_+ insert toplink in html files
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb/muse-publish-markup-heading</span> ()
+   (<span class="keyword">let*</span> ((len (length (match-string 1)))
+          (start (muse-markup-text
+                  (<span class="keyword">cond</span> ((= len 1) 'section)
+                        ((= len 2) 'subsection)
+                        ((= len 3) 'subsubsection)
+                        (t 'section-other))
+                  len))
+          (end   (muse-markup-text
+                  (<span class="keyword">cond</span> ((= len 1) 'section-end)
+                        ((= len 2) 'subsection-end)
+                        ((= len 3) 'subsubsection-end)
+                        (t 'section-other-end))
+                  len)))
+     (delete-region (match-beginning 0) (match-end 0))
+     (muse-insert-markup start)
+     (insert
+      (propertize
+      <span class="string">"&lt;span class=\"toplink\"&gt;&lt;a href=\"#top\"&gt;top&lt;/a&gt;&lt;/span&gt;"</span>
+      'rear-nonsticky '(read-only) 'read-only t))
+     (end-of-line)
+     (<span class="keyword">when</span> end
+       (muse-insert-markup end))
+     (muse-publish-section-close len)))
+(<span class="keyword">defalias</span> '<span class="function-name">muse-publish-markup-heading</span> 'ywb/muse-publish-markup-heading)
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec23" id="sec23"></a>ywb-muse-publish-project</h3>
+这个函数我没有用，因为我的配置好像不用它就能正常工作，而且项目组织用“目录树”方
+式，只要在最上层目录上按Cc Cp就能发布所有没有发布的文件，如果Cu Cc Cp的话，就是
+全部更新了：）叶文彬在这个函数中把源文件放到发布文件目录中的wikisource下的，我是分开的。而且改了改他的函数也没改对：）如果你看
+懂了，想改一下就试试吧。
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;</span><span class="comment">_+ publish functions
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb-muse-publish-project</span> (<span class="type">&amp;optional</span> arg)
+  (interactive <span class="string">"P"</span>)
+  (<span class="keyword">let</span> ((dir default-directory)
+        (published (muse-project-publish (muse-project) arg))
+        (muse-explicit-link-functions (remove
+                                       'ywb-muse-handle-file-link
+                                       muse-explicit-link-functions))
+        cmd)
+    (<span class="keyword">when</span> (= (aref published 0) ?A)
+      (setq default-directory dir)
+      (setq cmd (concat <span class="string">"psync .*\\.muse$ "</span>
+                        (expand-file-name
+                         (concat (muse-get-keyword <span class="builtin">:path</span> (car (cddr
+                                                               (muse-project))))
+                                 <span class="string">"/wikisource/"</span>))))
+      (message cmd)
+      (shell-command cmd))
+    (message published)))
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec24" id="sec24"></a>ywb-muse-output-file</h3>
+这个函数在下面几个函数中用到了
+<ul>
+<li>ywb-muse-publish-this-file</li>
+<li>ywb-muse-preview-with-w3m</li>
+<li>ywb-muse-preview-html</li>
+<li>ywb-muse-preview-source
+<pre class="sourcecode">
+(<span class="keyword">defun</span> <span class="function-name">ywb-muse-output-file</span> ()
+  <span class="doc">"Get output file name"</span>
+  (<span class="keyword">let</span> ((styles (muse-project-applicable-styles buffer-file-name (cddr (muse-project))))
+        output-dir)
+    (<span class="keyword">while</span> (and styles
+                (<span class="keyword">progn</span>
+                  (setq output-dir (muse-style-element <span class="builtin">:path</span> (car styles)))
+                  (not (file-exists-p output-dir))))
+      (setq styles (cdr styles)))
+    (<span class="keyword">when</span> output-dir
+      (muse-publish-output-file
+       buffer-file-name
+       output-dir
+       <span class="string">"html"</span>))))
+</pre></li>
+</ul>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec25" id="sec25"></a>ywb-muse-publish-this-file</h3>
+Muse自带的muse-publish-this-file有个Bug，看stid的<a href="http://learn.tsinghua.edu.cn:8080/981852/gnu/emacs-muse.html">说明</a>:
+<pre class="example">
+muse 中有一个比较不爽的地方，就是单独发布一个文件时，不会发布到指定的项目发布目录中，而用 C-c C-p 发布整个项目就没问题，这是一个 bug。
+muse 的BugTracker系统上已经有人提过了，相信不久的将来会有改进。
+</pre>
+叶文彬自己定义的发布正在编辑的文件的一个函数，有两个。
+
+<p>其实这不是Bug,只是作者写这个函数的意思被大家误解了吧。我现在用的这个Muse
+版本<sup><a name="fnr.1" href="#fn.1">1</a></sup>加上我的配置能自动处理了，不是修复了这个“Bug”，而是换了一种方案。如果你装了
+我装的这个新版本，再按C-c C-h看看：）
+<pre class="example">
+C-c C-t		muse-project-publish-this-file
+C-c C-S-t	muse-publish-this-file
+</pre>
+如果你用的时候觉得这个“Bug”在你装的Muse的版本上还存在的话，可以试试这两个函数。
+<pre class="sourcecode">
+(<span class="keyword">defun</span> <span class="function-name">ywb-muse-publish-this-file</span> (<span class="type">&amp;optional</span> arg)
+  <span class="doc">"Publish current file to html"</span>
+  (interactive)
+  (save-buffer)
+  (<span class="keyword">let</span> ((path (muse-get-keyword <span class="builtin">:path</span> (nth 2 (muse-project)))))
+    (muse-publish-this-file <span class="string">"xhtml"</span> path current-prefix-arg)))
+</pre></p>
+
+<pre class="sourcecode">
+(<span class="keyword">defun</span> <span class="function-name">ywb-muse-publish-this-file</span> (<span class="type">&amp;optional</span> arg)
+  <span class="doc">"Publish current file to html"</span>
+  (interactive)
+  (save-buffer)
+  (<span class="keyword">let*</span> ((path (file-name-directory (ywb-muse-output-file)))
+         (muse-explicit-link-functions (remove 'ywb-muse-handle-file-link muse-explicit-link-functions))
+         (source-path (concat path <span class="string">"/wikisource/"</span>)))
+    (<span class="keyword">unless</span> (file-exists-p source-path)
+      (message <span class="string">"Creating wiki source directory %s"</span> source-path)
+      (make-directory source-path t))
+    (copy-file buffer-file-name source-path t)
+    (muse-project-publish-file buffer-file-name (cddr muse-current-project) current-prefix-arg)))
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec26" id="sec26"></a>ywb-muse-generate-index</h3>
+原来生成 index 的方法是在 <a href="WikiIndex.html">Wiki Index</a>.muse 里写上：
+<pre class="example">
+&lt;lisp&gt;(muse-index-as-string t t)&lt;/lisp&gt;
+</pre>
+叶文彬写了一个函数，可以使生成的 index 是网页的 title,只要在 <a href="WikiIndex.html">Wiki Index</a>.muse 中加上这一句：
+<pre class="example">
+&lt;lisp&gt;(ywb-muse-generate-index)&lt;/lisp&gt;
+</pre>
+也可以传递参数生成多个 project 的目录。例如：
+<pre class="example">
+&lt;lisp&gt;(ywb-muse-generate-index '(&quot;Debian&quot; &quot;Emacs&quot; &quot;Muse&quot; &quot;GNU&quot;))&lt;/lisp&gt;
+</pre>
+
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb-muse-generate-index</span> (<span class="type">&amp;optional</span> project-list)
+  <span class="doc">"Generate the index of all wikifile except the file in the\"website\" project"</span>
+  (<span class="keyword">unless</span> project-list
+    (setq project-list (list (car (muse-project)))))
+  (<span class="keyword">let</span> (project-files title)
+    (muse-with-temp-buffer
+      (<span class="keyword">dolist</span> (project project-list)
+        (setq project-files (muse-project-file-alist project))
+        (<span class="keyword">progn</span>
+          (insert <span class="string">"* "</span> project <span class="string">"\n"</span>))
+        (<span class="keyword">dolist</span> (file project-files)
+          (<span class="keyword">unless</span> (or (equal (car file) <span class="string">"index"</span>)
+                      (equal (car file) <span class="string">"WikiIndex"</span>))
+            (insert <span class="string">" - [["</span> project <span class="string">"#"</span> (car file) <span class="string">"]["</span>
+                    (<span class="keyword">save-excursion</span>
+                      (set-buffer (generate-new-buffer <span class="string">"*index*"</span>))
+                      (insert-file-contents (cdr file))
+                      (goto-char (point-min))
+                      (setq title
+                            (<span class="keyword">if</span> (re-search-forward <span class="string">"^#title"</span> nil t)
+                                (buffer-substring (point) (line-end-position))
+                              (car file)))
+                      (kill-buffer (current-buffer))
+                      title)
+                    <span class="string">"]]\n"</span>)))
+        (insert <span class="string">"\n"</span>))
+      (buffer-string))))
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec27" id="sec27"></a>ywb-muse-preview-with-w3m</h3>
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;;</span><span class="comment">_+ preview commands
+</span>(<span class="keyword">defun</span> <span class="function-name">ywb-muse-preview-with-w3m</span> ()
+  <span class="doc">"Preview the html file"</span>
+  (interactive)
+<span class="comment-delimiter">; </span><span class="comment">(ywb-muse-publish-this-file)
+</span>  (muse-project-publish-this-file)
+  (<span class="keyword">let</span> ((file (ywb-muse-output-file)))
+    (w3m-goto-url (<span class="keyword">if</span> (string-match <span class="string">"^[a-zA-Z]:"</span> file)
+                      (ywb-convert-to-cygwin-path file)
+                    (concat <span class="string">"file://"</span> file)))))
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec28" id="sec28"></a>ywb-muse-preview-html</h3>
+<pre class="sourcecode">
+(<span class="keyword">defun</span> <span class="function-name">ywb-muse-preview-html</span> ()
+  <span class="doc">"Preview the html file"</span>
+  (interactive)
+<span class="comment-delimiter">; </span><span class="comment">(ywb-muse-publish-this-file)
+</span>  (muse-project-publish-this-file)
+  (browse-url (ywb-muse-output-file)))
+</pre>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec29" id="sec29"></a>ywb-muse-preview-source</h3>
+<pre class="sourcecode">
+(<span class="keyword">defun</span> <span class="function-name">ywb-muse-preview-source</span> ()
+  <span class="doc">"Find the html file"</span>
+  (interactive)
+<span class="comment-delimiter">; </span><span class="comment">(ywb-muse-publish-this-file)
+</span>  (muse-project-publish-this-file)
+  (find-file (ywb-muse-output-file)))
+</pre>
+
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec30" id="sec30"></a>3.02.90 版中的一些问题</h2>
+叶文彬对3.02.90版Muse中的一些问题的处理。我现在的版本没有测试过，不知道有没有这
+些问题，供你参考。
+<ul>
+<li>1. 图片可以自己定义处理路径的函数，但是 <code>muse-colors-insert-image</code> 函数
+中将 link 转换成绝对路径了，所以其它定义的函数仍然无效。其它文件链接
+仍然没有一个选项能将路径修改为发布的目录。</li>
+<li>2. latex2png 中使用 (cd &quot;/tmp&quot;)，但是不同平台下的 tmp 目录不同。</li>
+</ul>
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec31" id="sec31"></a>解决方法</h3>
+<ul>
+<li>1. 将 muse-colors-insert-image 中的第一行注释：
+<pre class="sourcecode">
+<span class="comment-delimiter">;;  </span><span class="comment">(setq link (expand-file-name link))
+</span></pre></li>
+</ul>
+
+<p>我觉得最好不要一直显示图像，可以用命令
+muse-colors-toggle-inline-images 来切换图像的显示。
+如果想文件的链接是相对于发布目录的路径，可以增加下面的函数：
+<pre class="sourcecode">
+(<span class="keyword">defun</span> <span class="function-name">ywb-muse-handle-file-link</span> (<span class="type">&amp;optional</span> string) <span class="comment-delimiter">;</span><span class="comment">&#35265;&#19978;&#38754;
+</span></pre></p>
+
+<ul>
+<li>2. 修改 latex2png 函数：
+<pre class="sourcecode">
+(<span class="keyword">defun</span> <span class="function-name">latex2png</span> (math prefix preamble)
+  <span class="doc">"Convert the MATH code into a png with PREFIX."</span>
+  (<span class="keyword">unless</span> preamble
+    (setq preamble <span class="string">""</span>))
+  (<span class="keyword">let*</span> ((tmppath (<span class="keyword">cond</span> ((boundp 'temporary-file-directory)
+                         temporary-file-directory)
+                        ((fboundp 'temp-directory)
+                         (temp-directory))))
+         (texfile (expand-file-name
+                   (concat prefix <span class="string">"_"</span>  (format <span class="string">"%d"</span> (abs (sxhash math))))
+                   tmppath))
+         (oldcddir default-directory))
+    (<span class="keyword">with-temp-file</span> (concat texfile <span class="string">".tex"</span>)
+      (insert (concat <span class="string">"\\documentclass{article}
+\\usepackage{fullpage}
+\\usepackage{amssymb}
+\\usepackage[usenames]{color}
+\\usepackage{amsmath}
+\\usepackage{latexsym}
+\\usepackage[mathscr]{eucal}\n"</span> preamble
+<span class="string">"\n\\pagestyle{empty}
+\\begin{document}"</span>
+<span class="string">"{"</span>
+math
+<span class="string">"}\n"</span>
+<span class="string">"\n\\end{document}\n\n"</span>)))
+    (cd tmppath)
+    (call-process <span class="string">"latex"</span> nil nil nil texfile)
+    (<span class="keyword">if</span> (file-exists-p (concat texfile <span class="string">".dvi"</span>))
+        (<span class="keyword">progn</span>
+          (shell-command-to-string
+           (concat <span class="string">"dvipng "</span> texfile <span class="string">".dvi -E "</span>
+                   <span class="string">" -fg "</span> latex2png-fg
+                   <span class="string">" -bg "</span> latex2png-bg <span class="string">" -T tight"</span>
+                   <span class="string">" -x "</span> (format  <span class="string">"%s"</span> (* latex2png-scale-factor 1000))
+                   <span class="string">" -y "</span> (format  <span class="string">"%s"</span> (* latex2png-scale-factor 1000))
+                   <span class="string">" -o "</span> texfile <span class="string">".png"</span>))
+          (<span class="keyword">if</span> (file-exists-p (concat texfile <span class="string">".png"</span>))
+              (<span class="keyword">progn</span>
+                (delete-file (concat texfile <span class="string">".dvi"</span>))
+                (delete-file (concat texfile <span class="string">".tex"</span>))
+                (delete-file (concat texfile <span class="string">".aux"</span>))
+                (delete-file (concat texfile <span class="string">".log"</span>))
+                (cd oldcddir)
+                (concat texfile <span class="string">".png"</span>))
+            (message <span class="string">"Failed to create png file"</span>)))
+      (message (concat <span class="string">"Failed to create dvi file "</span> texfile)))))
+</pre></li>
+
+<li>3. redefine muse-colors-toggle-inline-images
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;;</span><span class="comment">_+ redefine of function
+</span>(<span class="keyword">defun</span> <span class="function-name">muse-colors-insert-image</span> (link beg end invis-props)
+  <span class="doc">"Create an image using create-image or make-glyph and insert it
+in place of an image link defined by BEG and END."</span>
+<span class="comment-delimiter">;;  </span><span class="comment">(setq link (expand-file-name link))
+</span>  (<span class="keyword">let</span> ((image-file (<span class="keyword">cond</span>
+                     ((eq muse-colors-inline-image-method 'default-directory)
+                      link)
+                     ((functionp muse-colors-inline-image-method)
+                      (funcall muse-colors-inline-image-method link))))
+        glyph)
+    (<span class="keyword">when</span> (stringp image-file)
+      (<span class="keyword">if</span> (fboundp 'create-image)
+          <span class="comment-delimiter">;; </span><span class="comment">use create-image and display property
+</span>          (add-text-properties beg end
+                               (list 'display (create-image image-file)))
+        <span class="comment-delimiter">;; </span><span class="comment">use make-glyph and invisible property
+</span>        (and (setq glyph (muse-make-file-glyph image-file))
+             (<span class="keyword">progn</span>
+               (add-text-properties beg end invis-props)
+               (add-text-properties beg end (list
+                                             'end-glyph glyph
+                                             'help-echo link))))))))
+</pre></li>
+</ul>
+
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec32" id="sec32"></a>环境变量设置</h2>
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;;</span><span class="comment">_+ variable setting
+</span>(add-to-list 'magic-mode-alist
+             '(<span class="string">"#title "</span> . muse-mode))
+(<span class="keyword">when</span> (<span class="keyword">featurep</span> '<span class="constant">tp-muse-highlight</span>)
+  (tp-muse-html-syntax-highlight-tag <span class="string">"sqlexample"</span> 'sql-mode)
+  (tp-muse-html-syntax-highlight-tag <span class="string">"perlexample"</span> 'cperl-mode)
+  (tp-muse-html-syntax-highlight-tag <span class="string">"javaexample"</span> 'java-mode))
+
+(custom-set-variables
+<span class="comment-delimiter">;;;; </span><span class="comment">If you don't want to use any extension at all,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">and want Muse to autodetect project files based on their location,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">then add the following to your Muse settings file.
+</span> '(muse-file-extension nil)
+ '(muse-mode-auto-p t)
+<span class="comment-delimiter">;;;; </span><span class="comment">If you don't want to use .muse, you can customize
+</span><span class="comment-delimiter">;;;; </span><span class="comment">the extension by setting the value of muse-file-extension.
+</span> '(muse-file-extension <span class="string">"muse"</span>)
+<span class="comment-delimiter">;;;; </span><span class="comment">The content type used for the HTML &lt;meta&gt; tag.
+</span><span class="comment-delimiter">;;;; </span><span class="comment">If you are striving for XHTML 1.1 compliance,
+</span><span class="comment-delimiter">;;;; </span><span class="comment">you may want to change this to &#8220;application/xhtml+xml&#8221;.
+</span><span class="comment-delimiter">; </span><span class="comment">(setq muse-html-meta-content-type "text/html; charset=utf-8")
+</span><span class="comment-delimiter">;;;; </span><span class="comment">The charset to append to the HTML &lt;meta&gt; tag.
+</span><span class="comment-delimiter">;;;; </span><span class="comment">If set to the symbol 'detect, use muse-html-encoding-map
+</span><span class="comment-delimiter">;;;; </span><span class="comment">to try and determine the HTML charset from emacs's coding.
+</span><span class="comment-delimiter">;;;; </span><span class="comment">If set to a string, this string will be used to force a
+</span><span class="comment-delimiter">;;;; </span><span class="comment">particular charset.
+</span> '(muse-html-meta-content-encoding (quote utf-8))
+<span class="comment-delimiter">;;;; </span><span class="comment">The default HTML meta charset to use if no translation
+</span><span class="comment-delimiter">;;;; </span><span class="comment">is found in muse-html-encoding-map.
+</span> '(muse-html-charset-default <span class="string">"utf-8"</span>)
+
+<span class="comment-delimiter">;;;; </span><span class="comment">The default Emacs buffer encoding to use in published files.
+</span><span class="comment-delimiter">;;;; </span><span class="comment">This will be used if no special characters are found.
+</span> '(muse-html-encoding-default (quote utf-8))
+
+<span class="comment-delimiter">;;;; </span><span class="comment">An alist mapping emacs coding systems to appropriate HTML
+</span><span class="comment-delimiter">;;;; </span><span class="comment">charsets. Use the base name of the coding system
+</span><span class="comment-delimiter">;;;; </span><span class="comment">(i.e. without the -unix).
+</span> '(muse-html-encoding-map <span class="string">"utf8"</span>)
+ '(muse-colors-autogen-headings (quote outline))
+ '(muse-colors-inline-image-method (quote muse-colors-use-publishing-directory))
+ '(muse-html-meta-content-encoding (quote utf-8))
+
+ '(muse-html-meta-content-type <span class="string">"text/xhtml; charset=utf-8"</span>)
+ '(muse-mode-hook (quote (flyspell-mode footnote-mode)))
+ '(muse-publish-comments-p t)
+ '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title muse-wiki-publish-pretty-interwiki)))
+ '(muse-html-markup-functions (quote ((anchor . muse-html-markup-anchor) (table . muse-html-markup-table) (footnote . muse-html-markup-footnote))))
+ '(muse-table-line-regexp <span class="string">"^|?[[:blank:]]*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(?:</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">|\n]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">|</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">[[:blank:]-]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[|+]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(?:</span></span><span class="string">[[:blank:]-]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">$</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">|\n].*"</span>)
+ '(muse-mode-highlight-p t)
+ '(muse-wiki-ignore-bare-project-names t)
+ '(muse-colors-evaluate-lisp-tags nil)
+ <span class="comment-delimiter">;</span><span class="comment">'(muse-html-style-sheet "&lt;link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"../common/stylesheets/core.css\" /&gt;")
+</span> <span class="comment-delimiter">;</span><span class="comment">'(muse-xhtml-style-sheet "&lt;link rel=\"stylesheet\" type=\"text/css\" charset=\"utf-8\" media=\"all\" href=\"../common/stylesheets/core.css\" /&gt;")
+</span> '(muse-wiki-publish-small-title-words (quote (<span class="string">"the"</span> <span class="string">"and"</span> <span class="string">"at"</span> <span class="string">"on"</span> <span class="string">"of"</span> <span class="string">"for"</span> <span class="string">"in"</span> <span class="string">"an"</span> <span class="string">"a"</span> <span class="string">"page"</span> <span class="string">"anime"</span>))))
+</pre>
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec33" id="sec33"></a>Planner抄来的配置</h2>
+<pre class="sourcecode">
+<span class="comment-delimiter">;;;</span><span class="comment">_. planner
+</span>(<span class="keyword">require</span> '<span class="constant">planner</span> nil t)
+(<span class="keyword">require</span> '<span class="constant">planner-id</span> nil t)
+(<span class="keyword">when</span> (<span class="keyword">featurep</span> '<span class="constant">planner</span>)
+  (global-set-key (kbd <span class="string">"&lt;f9&gt; t"</span>) 'planner-create-task-from-buffer)
+  (global-set-key (kbd <span class="string">"&lt;f9&gt; c"</span>) 'planner-create-task)
+  (global-set-key (kbd <span class="string">"&lt;f9&gt; &lt;f9&gt;"</span>) 'plan)
+  (<span class="keyword">require</span> '<span class="constant">remember-planner</span> nil t)
+  (<span class="keyword">when</span> (<span class="keyword">featurep</span> '<span class="constant">remember-planner</span>)
+    (setq remember-annotation-functions planner-annotation-functions)
+    (setq remember-handler-functions '(remember-planner-append))))
+
+(autoload 'remember <span class="string">"remember"</span> nil t)
+(autoload 'remember-region <span class="string">"remember"</span> nil t)
+(global-set-key (kbd <span class="string">"&lt;f9&gt; r"</span>) 'remember)
+(global-set-key (kbd <span class="string">"&lt;f9&gt; s"</span>) 'remember-region)
+(global-set-key (kbd <span class="string">"&lt;f9&gt; d"</span>) 'planner-diary-add-entry)
+
+(<span class="keyword">require</span> '<span class="constant">planner-diary</span> nil t)
+(<span class="keyword">when</span> (<span class="keyword">featurep</span> '<span class="constant">planner-diary</span>)
+  (<span class="keyword">defun</span> <span class="function-name">planner-diary-add-entry</span> (date time text)
+    <span class="doc">"Prompt for a diary entry to add to `</span><span class="doc"><span class="constant">diary-file</span></span><span class="doc">'.  Will run
+    planner-annotations to make hyper links"</span>
+    (interactive (list (planner-read-date)
+                       (read-string <span class="string">"Time: "</span>)
+                       (read-string <span class="string">"Diary entry: "</span>)))
+    (<span class="keyword">save-excursion</span>
+      (<span class="keyword">save-window-excursion</span>
+        (make-diary-entry
+         (concat
+          (<span class="keyword">let</span> ((cal-date (planner-filename-to-calendar-date date)))
+            (<span class="keyword">if</span> european-calendar-style
+                (format <span class="string">"%d/%d/%d"</span>
+                        (elt cal-date 1)
+                        (elt cal-date 0)
+                        (elt cal-date 2))
+              (format <span class="string">"%d/%d/%d"</span>
+                      (elt cal-date 0)
+                      (elt cal-date 1)
+                      (elt cal-date 2))))
+          <span class="string">" "</span> time <span class="string">" "</span> text <span class="string">" "</span>
+          (run-hook-with-args-until-success
+           'planner-annotation-functions))))))
+  (setq planner-diary-use-diary t)
+  (planner-insinuate-diary)
+  (planner-insinuate-calendar)
+  (setq planner-diary-number-of-days 7)
+  (setq planner-diary-number-of-diary-entries 7)
+  (setq planner-diary-file diary-file))
+</pre>
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec34" id="sec34"></a>快捷键设置</h2>
+<pre class="sourcecode">
+(setq muse-mode-hook
+      (<span class="keyword">lambda</span> ()
+        (footnote-mode)
+        (auto-fill-mode 1)
+        (modify-syntax-entry ?&gt; <span class="string">")"</span> muse-mode-syntax-table)
+        (modify-syntax-entry ?&lt; <span class="string">"("</span> muse-mode-syntax-table)
+        (define-key muse-mode-map (kbd <span class="string">"C-c /"</span>) 'sgml-close-tag)
+        (define-key muse-mode-map (kbd <span class="string">"C-c t"</span>) 'sgml-tag)
+<span class="comment-delimiter">;       </span><span class="comment">(define-key muse-mode-map (kbd "C-c C-t") 'ywb-muse-publish-this-file)
+</span><span class="comment-delimiter">;       </span><span class="comment">(define-key muse-mode-map (kbd "C-c C-p") 'ywb-muse-publish-project)
+</span>        (define-key muse-mode-map (kbd <span class="string">"C-c C-c"</span>) 'ywb-muse-preview-source)
+        (define-key muse-mode-map (kbd <span class="string">"C-c C-j"</span>) 'ywb-muse-preview-html)
+        (define-key muse-mode-map (kbd <span class="string">"C-c C-m"</span>) 'ywb-muse-preview-with-w3m)
+        (define-key muse-mode-map (kbd <span class="string">"&lt;C-return&gt;"</span>) 'ywb-html-insert-newline)
+        (define-key muse-mode-map (kbd <span class="string">"M-RET"</span>) 'ywb-insert-item)
+        ))
+<span class="comment-delimiter">;;</span><span class="comment">Local variables:
+</span><span class="comment-delimiter">;;</span><span class="comment">allout-layout: (0 : -1 -1 0)
+</span><span class="comment-delimiter">;;</span><span class="comment">End:
+</span></pre>
+
+
+
+<h2><span class="toplink"><a href="#top">top</a></span><a name="sec35" id="sec35"></a>相关链接</h2>
+<h3><a name="others" id="others"></a><span class="toplink"><a href="#top">top</a></span><a name="sec36" id="sec36"></a>Muse相关</h3>
+<a href="https://gna.org/projects/muse-el">Muse-el BugTracker</a>
+
+<p><a href="http://blog.gmane.org/gmane.emacs.muse.general">http://blog.gmane.org/gmane.emacs.muse.general</a></p>
+
+<p><a href="http://www.mwolson.org/web/WelcomePage.html">Michael Olson</a>&mdash;<a href="http://www.mwolson.org/projects/EmacsMuse.html">http://www.mwolson.org/projects/EmacsMuse.html</a></p>
+
+<p><a href="http://learn.tsinghua.edu.cn:8080/981852/index.html">stid</a>&mdash;<a href="http://learn.tsinghua.edu.cn:8080/981852/gnu/emacs-muse.html">http://learn.tsinghua.edu.cn:8080/981852/gnu/emacs-muse.html</a></p>
+
+<p><a href="http://www.flyzhy.org/web/WelcomePage.html">flyzhy</a>&mdash;<a href="http://www.flyzhy.org/projects/WebsiteSettings.html">http://www.flyzhy.org/projects/WebsiteSettings.html</a></p>
+
+<p><a href="http://www.xshi.org">ShiXin</a>&mdash;<a href="http://www.xshi.org/notes/WebPage.html">http://www.xshi.org/notes/WebPage.html</a></p>
+
+<p><a href="http://gunnarwrobel.de/wiki/index.html">Gunnar Wrobel</a>&mdash;<a href="http://gunnarwrobel.de/wiki/EmacsMuseMode.html">http://gunnarwrobel.de/wiki/EmacsMuseMode.html</a></p>
+
+<p><a href="http://cisd-ftp.swfc.edu.cn/~syk/WebWiki/index.html">Sun Yongke</a>&mdash;<a href="http://cisd-ftp.swfc.edu.cn/~syk/WebWiki/muse.html">http://cisd-ftp.swfc.edu.cn/~syk/WebWiki/muse.html</a></p>
+
+<p><a href="http://blog.donews.com/pluskid/">pluskid</a>&mdash;<a href="http://blog.donews.com/pluskid/archive/2006/05/06/858197.aspx">http://blog.donews.com/pluskid/archive/2006/05/06/858197.aspx</a> 他写的用
+stardict的sdcv版在emacs里查单词的插件很不错。</p>
+
+<p><a href="http://people.ku.edu/~yjli/dk/EmacsMuse.html">http://people.ku.edu/~yjli/dk/EmacsMuse.html</a></p>
+
+<p><a href="http://ryang.68ab.com/notes_tips.html#top">http://ryang.68ab.com/notes_tips.html#top</a></p>
+
+<p><a href="http://www.mysmu.edu/me2005/zhaopeng.2005/homepage/WelcomePage.html">邢兆鹏</a>&mdash;<a href="http://www.mysmu.edu/me2005/zhaopeng.2005/blog/journal.html">http://www.mysmu.edu/me2005/zhaopeng.2005/blog/journal.html</a> 我网页上那个
+Google是抄他的，嘿嘿：）</p>
+
+
+<h3><span class="toplink"><a href="#top">top</a></span><a name="sec37" id="sec37"></a><a href="http://www.emacswiki.org/cgi-bin/wiki/">Emacs Wiki</a>相关</h3>
+
+<p><a href="http://learn.tsinghua.edu.cn:8080/2001315450/">王垠</a>&mdash;<a href="http://learn.tsinghua.edu.cn:8080/2001315450/wiki/WiKi.html">http://learn.tsinghua.edu.cn:8080/2001315450/wiki/WiKi.html</a></p>
+
+<p><a href="http://59.77.16.178/html/liyu/webpage/EmacsWikiZh.html">LiYu</a>&mdash;<a href="http://59.77.16.178/html/liyu/webpage/EmacsWikiZh.html">http://59.77.16.178/html/liyu/webpage/EmacsWikiZh.html</a> LiYu的主页好像域名
+解析不了直接用ip吧：）</p>
+
+<p><a href="http://sacha.free.net.ph/notebook/wiki/AboutMe.php">http://sacha.free.net.ph/notebook/wiki/AboutMe.php</a></p>
+
+<p><a href="http://grid.tsinghua.edu.cn/home/liulk/publish/WelcomePage.html">http://grid.tsinghua.edu.cn/home/liulk/publish/WelcomePage.html</a></p>
+
+<p><a href="http://staff.ustc.edu.cn/~yoyosu/Default/WelcomePage.html">http://staff.ustc.edu.cn/~yoyosu/Default/WelcomePage.html</a></p>
+
+<p><a href="http://k.thec.cn/Corsair/WelcomePage.html">http://k.thec.cn/Corsair/WelcomePage.html</a></p>
+
+<p><a href="http://ann77.stu.cdut.edu.cn/EmacsWikiNote.html">http://ann77.stu.cdut.edu.cn/EmacsWikiNote.html</a></p>
+
+<p><a href="http://wwwhomes.uni-bielefeld.de/tliu1/oldpages/wiki/emacs_using.html">http://wwwhomes.uni-bielefeld.de/tliu1/oldpages/wiki/emacs_using.html</a></p>
+
+<p><a href="http://www.iamstone.net/publish/note/Emacs.html">http://www.iamstone.net/publish/note/Emacs.html</a></p>
+
+<p><a href="http://people.ku.edu/~yjli/dk/Emacswiki.html">http://people.ku.edu/~yjli/dk/Emacswiki.html</a></p>
+
+<hr />
+<p class="footnote"><a name="fn.1" href="#fnr.1">1.</a>现在我装的版本是3.02.92.arch.193-1</p>
+
+
+
+
+<!-- Page published by Emacs Muse ends here -->
+    <div class="navfoot">
+      <hr>
+      <table summary="Footer navigation" width="100%" border="0" >
+        <col width="33%"><col width="34%" ><col width="33%" >
+	<tbody>
+          <tr>
+          <td align="left">
+	    <span class="footdate">
+	      Updated:
+	      2006-08-26-03:36:42
+	  </td>
+	  <td align="center">
+	    <span class="foothome">
+              [ <a href=./index.html>Home</a> | <a href=index.html>Default</a> | <a href=WikiIndex.html>WikiIndex</a> ]
+	    </span>
+	  </td>
+	  <td align="right">
+	    larisq {at} gmail.com
+	  </td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="http://www.debian.org/"><img style="border: 0em none ;" 
+             src=" ./common/images/powered_by_debian.png " alt="Debian Logo"></a>
+      <a href="http://www.gnu.org/software/emacs/emacs.html">
+	<img style="border: 0em none ;" 
+		src=" ./common/images/powered_by_GNU_Emacs.jpg " alt="Emacs Logo"></a>
+      <a href="http://www.mwolson.org/projects/EmacsMuse.html">
+	<img style="border: 0em none ;" 
+		src=" ./common/images/muse-powered-by.png " alt="Emacs Muse Logo"></a>
+      <a href="http://www.emacswiki.org/"
+         style="text-decoration: none;">
+        <img src=" ./common/images/emacswiki.png " alt="Emacswiki.org Logo"></a>
+      <a href="http://www.getfirefox.com/"><img style="border: 0em none ;" 
+         src=" ./common/images/get_firefox.gif " alt="Firefox Logo"></a>
+      <a href="http://validator.w3.org/check?uri=referer" 
+	 style="text-decoration: none;">
+        <img src=" ./common/images/valid-xh.png " 
+             alt="Valid XHTML 1.0!" height="31" width="88" />
+      </a>
+      <a href="http://jigsaw.w3.org/css-validator/"
+         style="text-decoration: none;">
+
+        <img style="border:0;width:88px;height:31px"
+             src=" ./common/images/vcss.gif " 
+             alt="Valid CSS!" />
+      </a>
+    </div>
+  </body>
+</html>

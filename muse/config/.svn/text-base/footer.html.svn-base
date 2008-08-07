@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn">
+  <head>
+    <title>footer.html</title>
+    <meta name="generator" content="Muse">
+    <meta http-equiv="Content-Type"
+          content="text/xhtml; charset=utf-8">
+    <link rel="stylesheet" type="text/css" charset="utf-8" media="all"
+          href="./common/stylesheets/core.css" />
+    <link rel="made" href="mailto:larisq{at}gmail.com" />
+    <link rel="shortcut icon" href="./common/images/my-icon.ico" >
+  </head>
+  <body>
+    <h1 id=top>footer.html
+   <!-- Google Search -->
+     <div class="searchbar">
+        <form id="searchbar" method="get" action="http://www.google.com/custom" title="My Site Search">
+           <div id="searchbar">
+              <label for="q" title="Search this site">
+                     <img src="./common/images/google.gif" ></label>
+              <input type=hidden name=domains value="http://www.larisq.3322.org/">
+              <input type=hidden name=sitesearch value="http://www.larisq.3322.org/">
+              <input type="text" id="q" name="q" accesskey="s" size="16">
+              <input type="submit" id="submit" value="Go">
+           </div>
+        </form>
+     </div>
+   <!-- Google Search -->
+  </h1>
+   <!-- menu start here -->
+     <div class="menu">
+        <div class="menuitem">
+          <a href=" ./index.html">Home</a>
+        </div>
+        <div class="menuitem">
+          <a href=" ./wiki/index.html">WiKiNotes</a>
+        </div>
+      </div>
+    <!-- menu ends here -->
+ <!-- Page published by Emacs Muse begins here -->
+
+
+<p><a href="/home/laris/muse/publish/common/templates/footer.html">common/templates/footer.html</a></p>
+
+<pre class="sourcecode">
+<span class="comment-delimiter">&lt;!-- </span><span class="comment">Page published by Emacs Muse ends here </span><span class="comment-delimiter">--&gt;</span>
+    &lt;<span class="function-name">div</span> <span class="variable-name">class</span>=<span class="string">"navfoot"</span>&gt;
+      &lt;<span class="function-name">hr</span>&gt;
+      &lt;<span class="function-name">table</span> <span class="variable-name">summary</span>=<span class="string">"Footer navigation"</span> <span class="variable-name">width</span>=<span class="string">"100%"</span> <span class="variable-name">border</span>=<span class="string">"0"</span> &gt;
+        &lt;<span class="function-name">col</span> <span class="variable-name">width</span>=<span class="string">"33%"</span>&gt;&lt;<span class="function-name">col</span> <span class="variable-name">width</span>=<span class="string">"34%"</span> &gt;&lt;<span class="function-name">col</span> <span class="variable-name">width</span>=<span class="string">"33%"</span> &gt;
+        &lt;<span class="function-name">tbody</span>&gt;
+          &lt;<span class="function-name">tr</span>&gt;
+          &lt;<span class="function-name">td</span> <span class="variable-name">align</span>=<span class="string">"left"</span>&gt;
+            &lt;<span class="function-name">span</span> <span class="variable-name">class</span>=<span class="string">"footdate"</span>&gt;
+              Updated:
+              &lt;<span class="function-name">lisp</span>&gt;
+                (format-time-string <span class="string">"%4Y-%2m-%2d-%T"</span>
+                (nth 5 (file-attributes
+                muse-publishing-current-file)))
+              &lt;/<span class="function-name">lisp</span>&gt;
+          &lt;/<span class="function-name">td</span>&gt;
+          &lt;<span class="function-name">td</span> <span class="variable-name">align</span>=<span class="string">"center"</span>&gt;
+            &lt;<span class="function-name">span</span> <span class="variable-name">class</span>=<span class="string">"foothome"</span>&gt;
+              &lt;<span class="function-name">lisp</span>&gt;
+                (concat
+                <span class="string">"[ &lt;a href="</span>
+                (ywb-muse-relative-path <span class="string">"index.html"</span>)
+                <span class="string">"&gt;Home&lt;/a&gt; | &lt;a href="</span>
+                (muse-wiki-resolve-project-page (muse-project))
+                <span class="string">"&gt;"</span> (car (muse-project)) <span class="string">"&lt;/a&gt;"</span>
+                <span class="string">" | &lt;a href="</span>
+                (muse-wiki-resolve-project-page (muse-project) <span class="string">"WikiIndex"</span>)
+                <span class="string">"&gt;WikiIndex&lt;/a&gt; ]"</span>)
+            &lt;/<span class="function-name">lisp</span>&gt;
+            &lt;/<span class="function-name">span</span>&gt;
+          &lt;/<span class="function-name">td</span>&gt;
+          &lt;<span class="function-name">td</span> <span class="variable-name">align</span>=<span class="string">"right"</span>&gt;
+            larisq {at} gmail.com
+          &lt;/<span class="function-name">td</span>&gt;
+          &lt;/<span class="function-name">tr</span>&gt;
+        &lt;/<span class="function-name">tbody</span>&gt;
+      &lt;/<span class="function-name">table</span>&gt;
+      &lt;<span class="function-name">a</span> <span class="variable-name">href</span>=<span class="string">"http://www.debian.org/"</span>&gt;&lt;<span class="function-name">img</span> <span class="variable-name">style</span>=<span class="string">"border: 0em none ;"</span>
+             <span class="variable-name">src</span>=<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path "</span>common/images/powered_by_debian.png<span class="string">")&lt;/lisp&gt; "</span> <span class="variable-name">alt</span>=<span class="string">"Debian Logo"</span>&gt;&lt;/<span class="function-name">a</span>&gt;
+      &lt;<span class="function-name">a</span> <span class="variable-name">href</span>=<span class="string">"http://www.gnu.org/software/emacs/emacs.html"</span>&gt;
+        &lt;<span class="function-name">img</span> <span class="variable-name">style</span>=<span class="string">"border: 0em none ;"</span>
+                <span class="variable-name">src</span>=<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path "</span>common/images/powered_by_GNU_Emacs.jpg<span class="string">")&lt;/lisp&gt; "</span> <span class="variable-name">alt</span>=<span class="string">"Emacs Logo"</span>&gt;&lt;/<span class="function-name">a</span>&gt;
+      &lt;<span class="function-name">a</span> <span class="variable-name">href</span>=<span class="string">"http://www.mwolson.org/projects/EmacsMuse.html"</span>&gt;
+        &lt;<span class="function-name">img</span> <span class="variable-name">style</span>=<span class="string">"border: 0em none ;"</span>
+                <span class="variable-name">src</span>=<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path "</span>common/images/muse-powered-by.png<span class="string">")&lt;/lisp&gt; "</span> <span class="variable-name">alt</span>=<span class="string">"Emacs Muse Logo"</span>&gt;&lt;/<span class="function-name">a</span>&gt;
+      &lt;<span class="function-name">a</span> <span class="variable-name">href</span>=<span class="string">"http://www.emacswiki.org/"</span>
+         <span class="variable-name">style</span>=<span class="string">"text-decoration: none;"</span>&gt;
+        &lt;<span class="function-name">img</span> <span class="variable-name">src</span>=<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path "</span>common/images/emacswiki.png<span class="string">")&lt;/lisp&gt; "</span> <span class="variable-name">alt</span>=<span class="string">"Emacswiki.org Logo"</span>&gt;&lt;/<span class="function-name">a</span>&gt;
+      &lt;<span class="function-name">a</span> <span class="variable-name">href</span>=<span class="string">"http://www.getfirefox.com/"</span>&gt;&lt;<span class="function-name">img</span> <span class="variable-name">style</span>=<span class="string">"border: 0em none ;"</span>
+         <span class="variable-name">src</span>=<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path "</span>common/images/get_firefox.gif<span class="string">")&lt;/lisp&gt; "</span> <span class="variable-name">alt</span>=<span class="string">"Firefox Logo"</span>&gt;&lt;/<span class="function-name">a</span>&gt;
+      &lt;<span class="function-name">a</span> <span class="variable-name">href</span>=<span class="string">"http://validator.w3.org/check?uri=referer"</span>
+         <span class="variable-name">style</span>=<span class="string">"text-decoration: none;"</span>&gt;
+        &lt;<span class="function-name">img</span> <span class="variable-name">src</span>=<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path "</span>common/images/valid-xh.png<span class="string">")&lt;/lisp&gt; "</span>
+             <span class="variable-name">alt</span>=<span class="string">"Valid XHTML 1.0!"</span> <span class="variable-name">height</span>=<span class="string">"31"</span> <span class="variable-name">width</span>=<span class="string">"88"</span> /&gt;
+      &lt;/<span class="function-name">a</span>&gt;
+      &lt;<span class="function-name">a</span> <span class="variable-name">href</span>=<span class="string">"http://jigsaw.w3.org/css-validator/"</span>
+         <span class="variable-name">style</span>=<span class="string">"text-decoration: none;"</span>&gt;
+
+        &lt;<span class="function-name">img</span> <span class="variable-name">style</span>=<span class="string">"border:0;width:88px;height:31px"</span>
+             <span class="variable-name">src</span>=<span class="string">" &lt;lisp&gt; (ywb-muse-relative-path "</span>common/images/vcss.gif<span class="string">")&lt;/lisp&gt; "</span>
+             <span class="variable-name">alt</span>=<span class="string">"Valid CSS!"</span> /&gt;
+      &lt;/<span class="function-name">a</span>&gt;
+    &lt;/<span class="function-name">div</span>&gt;
+  &lt;/<span class="function-name">body</span>&gt;
+&lt;/<span class="function-name">html</span>&gt;
+
+</pre>
+
+<!-- Page published by Emacs Muse ends here -->
+    <div class="navfoot">
+      <hr>
+      <table summary="Footer navigation" width="100%" border="0" >
+        <col width="33%"><col width="34%" ><col width="33%" >
+	<tbody>
+          <tr>
+          <td align="left">
+	    <span class="footdate">
+	      Updated:
+	      2006-08-26-03:30:46
+	  </td>
+	  <td align="center">
+	    <span class="foothome">
+              [ <a href=./index.html>Home</a> | <a href=index.html>Default</a> | <a href=WikiIndex.html>WikiIndex</a> ]
+	    </span>
+	  </td>
+	  <td align="right">
+	    larisq {at} gmail.com
+	  </td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="http://www.debian.org/"><img style="border: 0em none ;" 
+             src=" ./common/images/powered_by_debian.png " alt="Debian Logo"></a>
+      <a href="http://www.gnu.org/software/emacs/emacs.html">
+	<img style="border: 0em none ;" 
+		src=" ./common/images/powered_by_GNU_Emacs.jpg " alt="Emacs Logo"></a>
+      <a href="http://www.mwolson.org/projects/EmacsMuse.html">
+	<img style="border: 0em none ;" 
+		src=" ./common/images/muse-powered-by.png " alt="Emacs Muse Logo"></a>
+      <a href="http://www.emacswiki.org/"
+         style="text-decoration: none;">
+        <img src=" ./common/images/emacswiki.png " alt="Emacswiki.org Logo"></a>
+      <a href="http://www.getfirefox.com/"><img style="border: 0em none ;" 
+         src=" ./common/images/get_firefox.gif " alt="Firefox Logo"></a>
+      <a href="http://validator.w3.org/check?uri=referer" 
+	 style="text-decoration: none;">
+        <img src=" ./common/images/valid-xh.png " 
+             alt="Valid XHTML 1.0!" height="31" width="88" />
+      </a>
+      <a href="http://jigsaw.w3.org/css-validator/"
+         style="text-decoration: none;">
+
+        <img style="border:0;width:88px;height:31px"
+             src=" ./common/images/vcss.gif " 
+             alt="Valid CSS!" />
+      </a>
+    </div>
+  </body>
+</html>

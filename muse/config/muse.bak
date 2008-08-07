@@ -1,0 +1,164 @@
+(require 'muse-html)    ; load publishing styles I use
+(require 'muse-latex)
+(require 'muse-texinfo)
+(require 'muse-docbook)
+(require 'muse-wiki)
+;; (require 'muse-wiki nil t)              ; load Wiki support
+
+;;;;;;;;from http://pluskid.xinwen520.com/MuseLatex2Png.html
+;;;; my extension and customization to muse-latex2png.el
+(require 'muse-latex2png)
+
+;; muse-latex2png.el add `latex' tag to muse-publish-markup-tags, I
+;; only use this tag in html format, so I add this to
+;; muse-html-markup-tags and made my own customization.
+;; I define a new function `kid-muse-latex' in case I want to do some
+;; customization before pass it to `muse-publish-latex-tag' .
+;;
+;; here's my customization:
+;; * support for a scale attributes for latex tag
+(add-to-list 'muse-html-markup-tags
+             '("latex" t t nil kid-muse-html-latex))
+;; I also want to use regexp to markup inline latex equations of the
+;; form `$\alpha$' because I'm too lazy to write
+;; <latex inline="t">$\alpha$</latex>
+(add-to-list 'muse-html-markup-regexps
+             '(1600 "\\$[$]*\\$" 0 kid-muse-html-latex-inline))
+(defvar kid-muse-html-latex-inline-default-scale "1"
+  "default scale for inline formular")
+
+;; the color of the equation is defined in case that I use a
+;; background other than white in my HTML page.
+(setq muse-latex2png-template
+      "\\documentclass{article}
+\\usepackage{fullpage}
+\\usepackage{amssymb}
+\\usepackage[usenames]{color}
+\\usepackage{amsmath}
+\\usepackage{latexsym}
+\\usepackage[mathscr]{eucal}
+%preamble%
+\\pagestyle{empty}
+\\begin{document}
+{%code%}
+\\end{document}\n")
+
+(defun kid-muse-html-latex (beg end attrs)
+  (let* ((scale (cdr (assoc "scale" attrs)))
+         (muse-latex2png-scale-factor
+          (if scale
+              (string-to-number scale)
+              muse-latex2png-scale-factor)))
+    (muse-publish-latex-tag beg end attrs)))
+(defun kid-muse-html-latex-inline ()
+  (let ((attrs `(("scale" . ,kid-muse-html-latex-inline-default-scale)
+                 ("inline" . "true"))))
+    (kid-muse-html-latex (match-beginning 0) (match-end 0) attrs)))
+
+(setq muse-latex2png-scale-factor 1.5)
+(require 'muse-colors)
+(add-to-list 'muse-colors-tags
+             '("latex" t t nil muse-colors-example-tag))
+
+;; 启动就把 C-c C-f 绑定到 muse-project-find-file
+(define-key global-map "\C-c\C-f" 'muse-project-find-file)
+
+;; 自定义的变量
+(setq muse-mode-auto-p nil)
+(setq muse-mode-highlight-p t)
+(setq muse-wiki-ignore-bare-project-names t)
+(setq muse-colors-evaluate-lisp-tags nil)
+(custom-set-variables
+;;  '(muse-colors-autogen-headings (quote outline))
+
+;;  '(muse-colors-inline-image-method (quote muse-colors-use-publishing-directory))
+;;  '(muse-colors-inline-images nil)
+;;  '(muse-file-extension "muse")
+;;  '(muse-file-regexp "[/?]\\|\\.\\(html?\\|pdf\\|mp3\\|el\\|zip\\|org\\|txt\\|tar\\)\\(\\.\\(gz\\|bz2\\)\\)?\\'")
+;;  '(muse-html-charset-default "utf-8")
+;;  '(muse-html-encoding-default (quote utf-8))
+;;  '(muse-html-markup-functions (quote ((anchor . muse-html-markup-anchor)
+;;                                       (table  . muse-html-markup-table)
+;;                                       (footnote . muse-html-markup-footnote))))
+;;  '(muse-html-meta-content-encoding (quote utf-8))
+ '(muse-html-style-sheet "<link rel=\"stylesheet\" type=\"text/css\"charset=\"utf-8\" media=\"all\" href=\"../css/core.css\" />")
+;;   '(muse-latex-header "~/.emacs.d/templates/header.tex")
+;;  '(muse-publish-desc-transforms (quote (muse-wiki-publish-pretty-title
+;;                                         muse-wiki-publish-pretty-interwiki muse-publish-escape-specials-in-string)))
+;;  '(muse-wiki-publish-small-title-words (quote ("the" "and" "at" "on" "of" "for" "in" "an" "a" "page" "anime")))
+ )
+
+;; 设置发布的 html 页面的字符集
+(setq muse-html-meta-content-type "text/html; charset=utf-8")
+
+;; muse 工程
+(require 'muse-project)
+(setq muse-project-alist
+      '(
+        ("CSCW"
+         ("~/note/muse/CSCW" :default "index")
+         (:base "html" :path "~/note/muse/publish/html/CSCW"))
+;;         ("GNU_Linux"
+;;          ("~/data/Muse/src/GNU_Linux" :default "index")
+;;          (:base "html" :path "~/data/Muse/publish/html/GNU_Linux"))
+;;         ("Research"
+;;          ("~/data/Muse/src/Research" :default "index")
+;;          (:base "html" :path "~/data/Muse/publish/html/Research"))
+;;         ("Mess"
+;;          ("~/data/Muse/src/Mess" :default "index")
+;;          (:base "html" :path "~/data/Muse/publish/html/Mess"))
+        ))
+
+;; 让文件名后缀不是 muse 的文件自动使用 muse-mode
+;; (add-to-list 'magic-mode-alist '("#title " . muse-mode))
+
+;;; 可以兼容 org-mode 的 table 格式
+;; (setq muse-table-line-regexp
+;;       "^|?[[:blank:]]*\\(?:[^|\n]+\\||\\)[[:blank:]-]+\\([|+]+\\)\\(?:[[:blank:]-]+\\|$\\)[^|\n].*")
+
+;; 使用 org-mode 的上下标处理简单的数学公式
+(defun ywb-muse-publish-math-tag (beg end attrs)
+  (require 'org)
+  (let ((tag (or (cdr (assoc "tag" attrs)) "span")))
+    (insert (concat "<" tag " class=\"math\">"
+                    (org-export-html-convert-sub-super
+                     (delete-and-extract-region beg end))
+                    "</" tag ">"))
+    (muse-publish-mark-read-only beg (point))))
+(add-to-list 'muse-html-markup-tags
+             '("math" t t ywb-muse-publish-math-tag))
+
+;; 使用 src 标签
+;; (load "~/.emacs.d/htmlize.el")
+;; (setq htmlize-convert-nonascii-to-entities nil) ;防止出现&#开头的不可读码
+;; (load "~/.emacs.d/site-lisp/tp-muse-highlight.el")
+
+;; (defun ywb-muse-publish-src-tag (beg end attrs)
+;;   (let ((mode (cdr (assoc "type" attrs))))
+;;     (tp-muse-fontified-example-tag beg end nil
+;;                                    (intern-soft (concat mode "-mode")))))
+;; (add-to-list 'muse-html-markup-tags
+;;              '("src" t t ywb-muse-publish-src-tag))
+
+;;; 模板设置，可以单独用一个文件。
+;; (setq muse-html-header "~/data/Muse/template/header.html")
+;; (setq muse-html-footer "~/data/Muse/template/foot.html")
+
+;; (setq muse-mode-hook
+;;       (lambda ()
+;;         (footnote-mode)
+;;         (auto-fill-mode 1)
+;;         (modify-syntax-entry ?> ")" muse-mode-syntax-table)
+;;         (modify-syntax-entry ?< "(" muse-mode-syntax-table)
+;;         (define-key muse-mode-map (kbd "C-c C-t") 'ywb-muse-publish-this-file)
+;;         (define-key muse-mode-map (kbd "C-c C-p") 'ywb-muse-publish-project)
+;;         (define-key muse-mode-map (kbd "C-c C-c") 'ywb-muse-preview-source)
+;;         (define-key muse-mode-map (kbd "C-c C-j") 'ywb-muse-preview-html)
+;;         (define-key muse-mode-map (kbd "C-c C-m") 'ywb-muse-preview-with-w3m)
+;;         (define-key muse-mode-map (kbd "C-c /") 'sgml-close-tag)
+;;         (define-key muse-mode-map (kbd "C-c t") 'sgml-tag)
+;;         (define-key muse-mode-map (kbd "<C-return>") 'ywb-html-insert-newline)
+;;         (define-key muse-mode-map (kbd "M-RET") 'ywb-insert-item)
+;;         ))
+
+;; 12.muse.el ends here
