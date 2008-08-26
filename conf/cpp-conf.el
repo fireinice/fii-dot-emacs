@@ -10,9 +10,9 @@
 	    (c-set-offset 'inline-open 0)
 	    (c-set-offset 'friend '-)
 	    (c-set-offset 'substatement-open 0)
-	    (c-set-style "k&r")
+	    (c-set-style "stroustrup")
 	    (setq gdb-many-windows t)
-	    (setq tab-width 4 indent-tabs-mode nil)
+	    (setq tab-width 4 indent-tabs-mode t)
 	    ;; hungry-delete and auto-newline
 	    (c-toggle-auto-hungry-state 1)
 	    (which-function-mode t)

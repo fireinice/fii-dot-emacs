@@ -224,6 +224,22 @@
 	  (goto-char (match-end 0)))
       (c-indent-command))))
 
+(defun ska-point-to-register()
+  "Store cursorposition _fast_ in a register. 
+Use ska-jump-to-register to jump back to the stored 
+position."
+  (interactive)
+  (setq zmacs-region-stays t)
+  (point-to-register 8))
+
+(defun ska-jump-to-register()
+  "Switches between current cursorposition and position
+that was stored with ska-point-to-register."
+  (interactive)
+  (setq zmacs-region-stays t)
+  (let ((tmp (point-marker)))
+        (jump-to-register 8)
+        (set-register 8 tmp)))
 ;;========END
 
 
@@ -239,7 +255,7 @@
 ;; note TAB can be different to <tab> in X mode(not -nw mode).
 ;; the formal is C-i while the latter is the real "Tab" key in
 ;; your keyboard.
-(global-set-key (kbd "C-i") 'kid-c-escape-pair)
+(global-set-key [(control \')] 'kid-c-escape-pair)
 ;; (define-key c++-mode-map (kbd "<tab>") 'c-indent-command)
 ;; tabbar键盘绑定
 (global-set-key (kbd "\C-cbp") 'tabbar-backward-group)
@@ -256,7 +272,7 @@
 (setq hippie-expand-try-functions-list
       '(
 	yas/hippie-try-expand
-	senator-try-expand-semantic
+;; 	senator-try-expand-semantic
 	try-complete-abbrev
 	try-expand-dabbrev-visible
 	try-expand-dabbrev
@@ -340,9 +356,65 @@
 ;;使用ecb: http://blog.csdn.net/xiaoliangbuaa/archive/2007/01/10/1479577.aspx
 
 ;;=========c/c++模式
+;; (add-hook 'c-mode-common-hook
+;;           (lambda()
+;;             (load-file "~/.emacs.d/conf/cpp-conf.el")))
+(autoload 'senator-try-expand-semantic "senator")
+;; (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+;; common config for c&c++
 (add-hook 'c-mode-common-hook
-          (lambda()
-            (load-file "~/.emacs.d/conf/cpp-conf.el")))
+	  (lambda ( )
+	    (c-set-offset 'inline-open 0)
+	    (c-set-offset 'friend '-)
+	    (c-set-offset 'substatement-open 0)
+	    (c-set-style "stroustrup")
+	    (setq gdb-many-windows t)
+	    (setq tab-width 4 indent-tabs-mode t)
+	    ;; hungry-delete and auto-newline
+	    (c-toggle-auto-hungry-state 1)
+	    (which-function-mode t)
+	    (hs-minor-mode 1)
+	    (abbrev-mode t)
+	    (define-key c-mode-base-map [(control \`)] 'hs-toggle-hiding)
+	    (define-key c-mode-base-map [(f7)] 'compile)
+	    (define-key c-mode-base-map [(meta \`)] 'c-indent-command)
+	    (define-key c-mode-base-map [(meta ?/)] 'semantic-ia-complete-symbol-menu)
+	    ;;   (define-key c-mode-base-map (kbd "M-<SPC>") 'semantic-ia-complete-symbol-menu)
+	    (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
+	    (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
+	    ;;预处理设置
+	    (setq c-macro-shrink-window-flag t)
+	    (setq c-macro-preprocessor "cpp")
+	    (setq c-macro-cppflags " ")
+	    (setq c-macro-prompt-flag t)))
+
+(add-hook 'c++-mode-hook
+          (c-subword-mode 1))
+;;;;C/C++语言启动时自动加载semantic对/usr/include的索引数据库
+;; (setq semanticdb-search-system-databases t)
+;;   (add-hook 'c-mode-common-hook
+;;           (lambda ()
+;;             (setq semanticdb-project-system-databases
+;;                   (list (semanticdb-create-database
+;;                            semanticdb-new-database-class
+;;                            "/usr/include")))))
+;; project root path
+(setq semanticdb-project-roots
+          (list
+        (expand-file-name "/")))
+
+;;   (setq hippie-expand-try-functions-list
+;;         '(
+;;           senator-try-expand-semantic
+;;           try-complete-abbrev
+;;           try-expand-dabbrev-visible
+;;           try-expand-dabbrev
+;;           try-expand-dabbrev-all-buffers
+;;           try-expand-dabbrev-from-kill
+;;           try-expand-list
+;;           try-expand-list-all-buffers
+;; 	  try-expand-whole-kill))
 
 ;;========Emacs Muse 模式
 (autoload 'muse-mode "muse-mode")
@@ -594,6 +666,7 @@
 ;; need to bind them explicitly to some key
 (smart-snippet-with-abbrev-tables
  (c++-mode-abbrev-table
+  c-mode-abbrev-table
   java-mode-abbrev-table
 ;;   js2-mode-abbrev-table
   python-mode-abbrev-table)
@@ -604,7 +677,7 @@
  ("\"" "\"$.\"" '(not (c-in-literal)))	
  ("\"" "\\\"$." '(eq (c-in-literal) 'string))
  ;; insert a pair of parenthesis, useful everywhere
- ("(" "( $. )" t)
+ ("(" "($.)" t)
  ;; insert a pair of angular bracket if we are writing templates
  ("<" "<$.>" '(and (not (c-in-literal))
 		   (looking-back "template[[:blank:]]*")))
@@ -612,6 +685,8 @@
  ("[" "[$.]" t)
  ;; a pair of single quote, if not in literal
  ("'" "'$.'" '(not (c-in-literal)))
+ ("," ", " '(not (c-in-literal)))
+
  )
 
 (smart-snippet-with-keymaps
@@ -624,7 +699,8 @@
   ("(" "(")
   ("<" "<")
   ("[" "[")
-  ("'" "'"))
+  ("'" "'")
+  ("," ","))
 
 ;;========lftp
 ;; If you want use with lftp, put this to .emacs
