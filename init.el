@@ -272,7 +272,7 @@ that was stored with ska-point-to-register."
 (setq hippie-expand-try-functions-list
       '(
 	yas/hippie-try-expand
-;; 	senator-try-expand-semantic
+	senator-try-expand-semantic
 	try-complete-abbrev
 	try-expand-dabbrev-visible
 	try-expand-dabbrev
@@ -387,7 +387,19 @@ that was stored with ska-point-to-register."
 	    (setq c-macro-shrink-window-flag t)
 	    (setq c-macro-preprocessor "cpp")
 	    (setq c-macro-cppflags " ")
-	    (setq c-macro-prompt-flag t)))
+	    (setq c-macro-prompt-flag t)
+	    (make-hippie-expand-function
+	     '(
+	       yas/hippie-try-expand
+	       senator-try-expand-semantic
+	       try-complete-abbrev
+	       try-expand-dabbrev-visible
+	       try-expand-dabbrev
+	       try-expand-dabbrev-all-buffers
+	       try-expand-dabbrev-from-kill
+	       try-expand-list
+	       try-expand-list-all-buffers
+	       try-expand-whole-kill))))
 
 (add-hook 'c++-mode-hook
           (c-subword-mode 1))
@@ -404,17 +416,6 @@ that was stored with ska-point-to-register."
           (list
         (expand-file-name "/")))
 
-;;   (setq hippie-expand-try-functions-list
-;;         '(
-;;           senator-try-expand-semantic
-;;           try-complete-abbrev
-;;           try-expand-dabbrev-visible
-;;           try-expand-dabbrev
-;;           try-expand-dabbrev-all-buffers
-;;           try-expand-dabbrev-from-kill
-;;           try-expand-list
-;;           try-expand-list-all-buffers
-;; 	  try-expand-whole-kill))
 
 ;;========Emacs Muse 模式
 (autoload 'muse-mode "muse-mode")
@@ -428,8 +429,8 @@ that was stored with ska-point-to-register."
       gnus-init-file "~/.emacs.d/conf/gnus-conf.el")
 
 ;=========Auctex
-;; (load "auctex.el" nil t t)
-;; (load "preview-latex.el" nil t t)
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
 (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil) 
 (add-hook 'text-mode-hook
@@ -632,21 +633,21 @@ that was stored with ska-point-to-register."
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;==========ELisp 模式
-;; (add-hook 'emacs-lisp-mode-hook
-;;           (setq hippie-expand-try-functions-list
-;;                 '(
-;;                   try-complete-abbrev
-;;                   try-complete-lisp-symbol-partially
-;;                   try-complete-lisp-symbol
-;;                   try-expand-dabbrev-visible
-;;                   try-expand-dabbrev
-;;                   try-expand-dabbrev-all-buffers
-;;                   try-expand-dabbrev-from-kill
-;;                   try-expand-list
-;;                   try-expand-list-all-buffers
-;;                   try-complete-file-name-partially
-;;                   try-complete-file-name
-;;                   try-expand-whole-kill)))
+(add-hook 'emacs-lisp-mode-hook
+          (make-hippie-expand-function
+	   '(
+	     try-complete-abbrev
+	     try-complete-lisp-symbol-partially
+	     try-complete-lisp-symbol
+	     try-expand-dabbrev-visible
+	     try-expand-dabbrev
+	     try-expand-dabbrev-all-buffers
+	     try-expand-dabbrev-from-kill
+	     try-expand-list
+	     try-expand-list-all-buffers
+	     try-complete-file-name-partially
+	     try-complete-file-name
+	     try-expand-whole-kill)))
 
 ;=========Shell 模式
 ;; Put this file into your load-path and the following into your ~/.emacs:
@@ -921,4 +922,3 @@ Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
  '(flymake-errline ((((class color)) (:background "LightPink" :foreground "black"))))
  '(flymake-warnline ((((class color)) (:background "LightBlue2" :foreground "black"))))
  '(regex-tool-matched-face ((t (:background "black" :foreground "Orange" :weight bold)))))
-
