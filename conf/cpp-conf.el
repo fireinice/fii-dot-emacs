@@ -5,9 +5,9 @@
 ;; (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 ;; common config for c&c++
-(add-hook 'c-mode-common-hook
-	  (lambda ( )
-	    (c-set-offset 'inline-open 0)
+;; (add-hook 'c-mode-common-hook
+;; 	  (lambda ( )
+;; 	    (c-set-offset 'inline-open 0)
 	    (c-set-offset 'friend '-)
 	    (c-set-offset 'substatement-open 0)
 	    (c-set-style "stroustrup")
@@ -29,7 +29,8 @@
 	    (setq c-macro-shrink-window-flag t)
 	    (setq c-macro-preprocessor "cpp")
 	    (setq c-macro-cppflags " ")
-	    (setq c-macro-prompt-flag t)))
+	    (setq c-macro-prompt-flag t)
+;; ))
 
 (add-hook 'c++-mode-hook
           (c-subword-mode 1))
@@ -42,20 +43,21 @@
 ;;                            semanticdb-new-database-class
 ;;                            "/usr/include")))))
 ;; project root path
-(setq semanticdb-project-roots
-          (list
-        (expand-file-name "/")))
+;; (setq semanticdb-project-roots
+;;           (list
+;;         (expand-file-name "/")))
 
-;;   (setq hippie-expand-try-functions-list
-;;         '(
-;;           senator-try-expand-semantic
-;;           try-complete-abbrev
-;;           try-expand-dabbrev-visible
-;;           try-expand-dabbrev
-;;           try-expand-dabbrev-all-buffers
-;;           try-expand-dabbrev-from-kill
-;;           try-expand-list
-;;           try-expand-list-all-buffers
-;; 	  try-expand-whole-kill))
+(make-hippie-expand-function
+      '(
+	yas/hippie-try-expand
+	senator-try-expand-semantic
+	try-complete-abbrev
+	try-expand-dabbrev-visible
+	try-expand-dabbrev
+	try-expand-dabbrev-all-buffers
+	try-expand-dabbrev-from-kill
+	try-expand-list
+	try-expand-list-all-buffers
+	try-expand-whole-kill))
 
 

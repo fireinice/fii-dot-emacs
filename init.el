@@ -1,3 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Filename: init.el
+;; Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.;; 
+;; Author: zigler
+;; Description: 
+;; Created: 三  8月 27 09:37:28 2008 (CST)
+;;           By: zigler
+;; Last-Updated: 三  8月 27 15:00:53 2008 (CST)
+;;     Update #: 13
+;; 
+;; 
+;;; Change log:
+;; 
 ;; ========加载路径 start
 (setq load-path (cons "~/.emacs.d/misc/" load-path))
 (setq load-path (cons "~/.emacs.d/sql/" load-path))
@@ -14,10 +27,7 @@
 ;;========调用公用模块
 (load-library "vc-svn")
 (autoload 'senator-try-expand-semantic "senator")
-;; (autoload 'psvn "svn-status")
 (autoload 'two-mode-mode "two mode mode")
-;; (autoload 'cedet "cedet")
-;; (autoload 'smart-compile "smart-compile")
 (autoload 'cl "cl")
 (require 'smart-compile)
 (require 'fvwm-mode)
@@ -37,15 +47,9 @@
 (require 'doxymacs)
 (require 'regex-tool)
 (require 'xcscope)
-;(require 'pylint)
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
-;; (require 'ecb-autoloads) ;;nox
 ;; (require 'two-mode-mode)
-;;(require 'top)
-;; (require 'ruby-mode)
-;; (require 'rails)
-
 ;;========END
 
 
@@ -53,6 +57,7 @@
 
 ;;========仅作用于X下
 (if window-system
+    (require 'ecb-autoloads) ;;nox
     (progn
       (setq default-frame-alist
 	    
@@ -98,13 +103,13 @@
 
 
 ;;=======基本设置 start
-(setq default-major-mode 'text-mode)    ;
+(setq default-major-mode 'text-mode)
 (setq-default abbrev-mode t)
 (setq-default kill-whole-line t)        ; 在行首 C-k 时，同时删除该行。
 (setq-default truncate-partial-width-windows nil) ;;多窗时自动多行显示
 (setq default-fill-column 72)
 (setq ps-multibyte-buffer 'bdf-font-except-latin) ; 打印
-(setq transient-mark-mode t)
+(setq transient-mark-mode t)  ; 高亮当前选中区
 (setq suggest-key-bindings 1) ; 当使用 M-x COMMAND 后，过 1 秒钟显示该 COMMAND 绑定的键。
 ;;下面的这个设置可以让光标指到某个括号的时候显示与它匹配的括号
 (delete-selection-mode 1) ;像windows选区一样对待emacs选区
@@ -138,7 +143,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-(tabbar-mode t)
+(tabbar-mode t) ; 显示tab标签
 (setq inhibit-startup-message t)        ;禁用启动信息
 ;;(hs-minor-mode t)
 ;;设置标题栏
@@ -246,12 +251,14 @@ that was stored with ska-point-to-register."
 
 
 ;;========基本函数绑定
-(setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
-(global-set-key [(control \;)] 'my-comment-or-uncomment-region)
-(global-set-key "\r" 'newline-and-indent)
+
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 (global-set-key [(tab)] 'my-indent-or-complete)
+
+(setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
+(global-set-key [(control \;)] 'my-comment-or-uncomment-region)
+(global-set-key "\r" 'newline-and-indent)
 ;; note TAB can be different to <tab> in X mode(not -nw mode).
 ;; the formal is C-i while the latter is the real "Tab" key in
 ;; your keyboard.
@@ -262,15 +269,17 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "\C-cbn") 'tabbar-forward-group)
 (global-set-key (kbd "\C-cbj") 'tabbar-backward)
 (global-set-key (kbd "\C-cbk") 'tabbar-forward)
-
+(global-set-key (kbd "\C-cm")  'ska-point-to-register)
+(global-set-key (kbd "\C-cp")  'ska-jump-to-register)
 ;;========END
 
 
 
 
 ;;========Hippie-Expand
-(setq hippie-expand-try-functions-list
-      '(
+;; (setq hippie-expand-try-functions-list
+(make-hippie-expand-function
+ '(
 	yas/hippie-try-expand
 	senator-try-expand-semantic
 	try-complete-abbrev
@@ -345,8 +354,6 @@ that was stored with ska-point-to-register."
 (setq ecb-tree-indent 4
       ecb-windows-height 0.5
       ecb-windows-width 0.20
-;;       ecb-auto-compatibility-check nil
-;;       ecb-version-check nil
       inhibit-startup-message t
       ecb-tip-of-the-day nil
       ecb-tree-navigation-by-arrow t);;使用箭头键展开或折叠
@@ -356,66 +363,9 @@ that was stored with ska-point-to-register."
 ;;使用ecb: http://blog.csdn.net/xiaoliangbuaa/archive/2007/01/10/1479577.aspx
 
 ;;=========c/c++模式
-;; (add-hook 'c-mode-common-hook
-;;           (lambda()
-;;             (load-file "~/.emacs.d/conf/cpp-conf.el")))
-(autoload 'senator-try-expand-semantic "senator")
-;; (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-
-;; common config for c&c++
 (add-hook 'c-mode-common-hook
-	  (lambda ( )
-	    (c-set-offset 'inline-open 0)
-	    (c-set-offset 'friend '-)
-	    (c-set-offset 'substatement-open 0)
-	    (c-set-style "stroustrup")
-	    (setq gdb-many-windows t)
-	    (setq tab-width 4 indent-tabs-mode t)
-	    ;; hungry-delete and auto-newline
-	    (c-toggle-auto-hungry-state 1)
-	    (which-function-mode t)
-	    (hs-minor-mode 1)
-	    (abbrev-mode t)
-	    (define-key c-mode-base-map [(control \`)] 'hs-toggle-hiding)
-	    (define-key c-mode-base-map [(f7)] 'compile)
-	    (define-key c-mode-base-map [(meta \`)] 'c-indent-command)
-	    (define-key c-mode-base-map [(meta ?/)] 'semantic-ia-complete-symbol-menu)
-	    ;;   (define-key c-mode-base-map (kbd "M-<SPC>") 'semantic-ia-complete-symbol-menu)
-	    (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
-	    (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
-	    ;;预处理设置
-	    (setq c-macro-shrink-window-flag t)
-	    (setq c-macro-preprocessor "cpp")
-	    (setq c-macro-cppflags " ")
-	    (setq c-macro-prompt-flag t)
-	    (make-hippie-expand-function
-	     '(
-	       yas/hippie-try-expand
-	       senator-try-expand-semantic
-	       try-complete-abbrev
-	       try-expand-dabbrev-visible
-	       try-expand-dabbrev
-	       try-expand-dabbrev-all-buffers
-	       try-expand-dabbrev-from-kill
-	       try-expand-list
-	       try-expand-list-all-buffers
-	       try-expand-whole-kill))))
-
-(add-hook 'c++-mode-hook
-          (c-subword-mode 1))
-;;;;C/C++语言启动时自动加载semantic对/usr/include的索引数据库
-;; (setq semanticdb-search-system-databases t)
-;;   (add-hook 'c-mode-common-hook
-;;           (lambda ()
-;;             (setq semanticdb-project-system-databases
-;;                   (list (semanticdb-create-database
-;;                            semanticdb-new-database-class
-;;                            "/usr/include")))))
-;; project root path
-(setq semanticdb-project-roots
-          (list
-        (expand-file-name "/")))
-
+          (lambda()
+            (load-file "~/.emacs.d/conf/cpp-conf.el")))
 
 ;;========Emacs Muse 模式
 (autoload 'muse-mode "muse-mode")
@@ -433,7 +383,7 @@ that was stored with ska-point-to-register."
 (load "preview-latex.el" nil t t)
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
 (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil) 
-(add-hook 'text-mode-hook
+(add-hook 'tex-mode-hook
 	  (lambda()
 	    (load-file "~/.emacs.d/conf/auctex-conf.el")))
 
@@ -542,11 +492,6 @@ that was stored with ska-point-to-register."
 (add-hook 'python-mode-hook
 	  (lambda ()
 	    (setq tab-width 4 indent-tabs-mode nil)
-;; 	    (local-set-key [(tab)] 'my-indent-or-complete)
-;; 	    (local-set-key "\C-c\C-f"  'py-help-at-point)
-	    ;; hungry-delete and auto-newline
-;; 	    (c-toggle-auto-hungry-state 1)
-;; 	    (which-function-mode t)
 	    (hs-minor-mode 1)
 ;; 	    (py-shell 1)
 	    (abbrev-mode t)
@@ -633,21 +578,21 @@ that was stored with ska-point-to-register."
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;==========ELisp 模式
-(add-hook 'emacs-lisp-mode-hook
-          (make-hippie-expand-function
-	   '(
-	     try-complete-abbrev
-	     try-complete-lisp-symbol-partially
-	     try-complete-lisp-symbol
-	     try-expand-dabbrev-visible
-	     try-expand-dabbrev
-	     try-expand-dabbrev-all-buffers
-	     try-expand-dabbrev-from-kill
-	     try-expand-list
-	     try-expand-list-all-buffers
-	     try-complete-file-name-partially
-	     try-complete-file-name
-	     try-expand-whole-kill)))
+;; (add-hook 'emacs-lisp-mode-hook
+;; 	  (lambda()
+;; 	    (make-hippie-expand-function
+;; 	     '(try-complete-abbrev
+;; 	       try-complete-lisp-symbol-partially
+;; 	       try-complete-lisp-symbol
+;; 	       try-expand-dabbrev-visible
+;; 	     try-expand-dabbrev
+;; 	     try-expand-dabbrev-all-buffers
+;; 	     try-expand-dabbrev-from-kill
+;; 	     try-expand-list
+;; 	     try-expand-list-all-buffers
+;; 	     try-complete-file-name-partially
+;; 	     try-complete-file-name
+;; 	     try-expand-whole-kill))))
 
 ;=========Shell 模式
 ;; Put this file into your load-path and the following into your ~/.emacs:
@@ -669,6 +614,7 @@ that was stored with ska-point-to-register."
  (c++-mode-abbrev-table
   c-mode-abbrev-table
   java-mode-abbrev-table
+  ruby-mode-abbrev-table
 ;;   js2-mode-abbrev-table
   python-mode-abbrev-table)
  ("{" "{$.}" '(not (c-in-literal)))
@@ -687,13 +633,19 @@ that was stored with ska-point-to-register."
  ;; a pair of single quote, if not in literal
  ("'" "'$.'" '(not (c-in-literal)))
  ("," ", " '(not (c-in-literal)))
-
  )
+
+(smart-snippet-with-abbrev-tables
+ (ruby-mode-abbrev-table)
+ ("/" "/$./" '(not (c-in-literal)))
+ )
+
 
 (smart-snippet-with-keymaps
  ((c++-mode-map c++-mode-abbrev-table)
   (c-mode-map c-mode-abbrev-table)
   (java-mode-map java-mode-abbrev-table)
+  (ruby-mode-map ruby-mode-abbrev-table)
   (py-mode-map python-mode-abbrev-table))
   ("{" "{")
   ("\"" "\"")
@@ -702,6 +654,10 @@ that was stored with ska-point-to-register."
   ("[" "[")
   ("'" "'")
   ("," ","))
+
+(smart-snippet-with-keymaps
+ ((ruby-mode-map ruby-mode-abbrev-table))
+  ("/" "/"))
 
 ;;========lftp
 ;; If you want use with lftp, put this to .emacs
@@ -889,6 +845,53 @@ Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
 (load-library "flymake-cursor") 
 (global-set-key "\C-c\C-e" 'flymake-goto-next-error)
 
+(defun flymake-create-temp-intemp (file-name prefix)
+  "Return file name in temporary directory for checking FILE-NAME.
+This is a replacement for `flymake-create-temp-inplace'. The
+difference is that it gives a file name in
+`temporary-file-directory' instead of the same directory as
+FILE-NAME.
+
+For the use of PREFIX see that function.
+
+Note that not making the temporary file in another directory
+\(like here) will not if the file you are checking depends on
+relative paths to other files \(for the type of checks flymake
+makes)."
+  (unless (stringp file-name)
+    (error "Invalid file-name"))
+  (or prefix
+      (setq prefix "flymake"))
+  (let* ((name (concat
+                (file-name-nondirectory
+                 (file-name-sans-extension file-name))
+                "_" prefix))
+         (ext  (concat "." (file-name-extension file-name)))
+         (temp-name (make-temp-file name nil ext))
+         )
+    (flymake-log 3 "create-temp-intemp: file=%s temp=%s" file-name temp-name)
+    temp-name))
+
+;; Invoke ruby with '-c' to get syntax checking
+(defun flymake-ruby-init ()
+  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+	 (local-file  (file-relative-name
+                       temp-file
+                       (file-name-directory buffer-file-name))))
+    (list "ruby" (list "-c" local-file))))
+
+(push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+
+(push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
+
+(add-hook 'ruby-mode-hook
+          '(lambda ()
+	     ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
+	     (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
+		 (flymake-mode))
+	     ))
 
 ;;========git=====================================
  (require 'vc-git)
@@ -922,3 +925,5 @@ Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
  '(flymake-errline ((((class color)) (:background "LightPink" :foreground "black"))))
  '(flymake-warnline ((((class color)) (:background "LightBlue2" :foreground "black"))))
  '(regex-tool-matched-face ((t (:background "black" :foreground "Orange" :weight bold)))))
+
+;;========init.el end here

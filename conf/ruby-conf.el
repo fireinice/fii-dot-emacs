@@ -1,5 +1,4 @@
 ;;加载钩子
-(require 'speedbar)
 (add-hook 'ruby-mode-hook
           (lambda()
             (add-hook 'local-write-file-hooks
