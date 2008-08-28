@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 三  8月 27 15:00:53 2008 (CST)
-;;     Update #: 13
+;; Last-Updated: 四  8月 28 12:51:59 2008 (CST)
+;;     Update #: 15
 ;; 
 ;; 
 ;;; Change log:
@@ -915,6 +915,8 @@ makes)."
  '(regex-tool-backend (quote perl))
  '(regex-tool-new-frame t)
  '(semantic-idle-scheduler-idle-time 432000)
+ )
+ 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
