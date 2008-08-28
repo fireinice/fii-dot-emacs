@@ -915,8 +915,6 @@ makes)."
  '(regex-tool-backend (quote perl))
  '(regex-tool-new-frame t)
  '(semantic-idle-scheduler-idle-time 432000)
- '(weblogger-config-alist (quote (("default" ("user" . "fireinice") ("server-url" . "http://firelines.cn/xmlrpc.php") ("pass" . "zig629") ("weblog" . "1")))))
- '(weblogger-save-password t))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
