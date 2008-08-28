@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 四  8月 28 12:51:59 2008 (CST)
-;;     Update #: 15
+;; Last-Updated: 四  8月 28 12:57:34 2008 (CST)
+;;     Update #: 19
 ;; 
 ;; 
 ;;; Change log:
@@ -47,6 +47,7 @@
 (require 'doxymacs)
 (require 'regex-tool)
 (require 'xcscope)
+(require 'ruby-mode)
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
 ;; (require 'two-mode-mode)
@@ -56,7 +57,7 @@
 
 
 ;;========仅作用于X下
-(if window-system
+;; (if window-system
     (require 'ecb-autoloads) ;;nox
     (progn
       (setq default-frame-alist
@@ -95,7 +96,8 @@
 				       speedbar-buffer nil)
 				 (speedbar-set-timer nil)))))
 	(set-window-buffer (selected-window)
-			   (get-buffer my-speedbar-buffer-name)))))
+			   (get-buffer my-speedbar-buffer-name))))
+;; )
 
 ;;=======End
 
@@ -578,21 +580,21 @@ that was stored with ska-point-to-register."
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;==========ELisp 模式
-;; (add-hook 'emacs-lisp-mode-hook
-;; 	  (lambda()
-;; 	    (make-hippie-expand-function
-;; 	     '(try-complete-abbrev
-;; 	       try-complete-lisp-symbol-partially
-;; 	       try-complete-lisp-symbol
-;; 	       try-expand-dabbrev-visible
-;; 	     try-expand-dabbrev
-;; 	     try-expand-dabbrev-all-buffers
-;; 	     try-expand-dabbrev-from-kill
-;; 	     try-expand-list
-;; 	     try-expand-list-all-buffers
-;; 	     try-complete-file-name-partially
-;; 	     try-complete-file-name
-;; 	     try-expand-whole-kill))))
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda()
+	    (make-hippie-expand-function
+	     '(try-complete-abbrev
+	       try-complete-lisp-symbol-partially
+	       try-complete-lisp-symbol
+	       try-expand-dabbrev-visible
+	     try-expand-dabbrev
+	     try-expand-dabbrev-all-buffers
+	     try-expand-dabbrev-from-kill
+	     try-expand-list
+	     try-expand-list-all-buffers
+	     try-complete-file-name-partially
+	     try-complete-file-name
+	     try-expand-whole-kill))))
 
 ;=========Shell 模式
 ;; Put this file into your load-path and the following into your ~/.emacs:
