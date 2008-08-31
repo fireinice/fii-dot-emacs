@@ -1,0 +1,65 @@
+<!-- Page published by Emacs Muse ends here -->
+    <div class="navfoot">
+      <hr>
+      <table summary="Footer navigation" width="100%" border="0" >
+        <col width="33%"><col width="34%" ><col width="33%" >
+	<tbody>
+          <tr>
+          <td align="left">
+	    <span class="footdate">
+	      Updated:
+	      <lisp>
+		(format-time-string "%4Y-%2m-%2d-%T"
+		(nth 5 (file-attributes
+		muse-publishing-current-file)))
+	      </lisp>
+	  </td>
+	  <td align="center">
+	    <span class="foothome">
+              <lisp>
+		(concat
+                "[ <a href="
+                (ywb-muse-relative-path "index.html")
+                ">Home</a> | <a href="
+                (muse-wiki-resolve-project-page (muse-project))
+                ">" (car (muse-project)) "</a>"
+                " | <a href="
+                (muse-wiki-resolve-project-page (muse-project) "WikiIndex")
+                ">WikiIndex</a> ]")
+            </lisp>
+	    </span>
+	  </td>
+	  <td align="right">
+	    larisq {at} gmail.com
+	  </td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="http://www.debian.org/"><img style="border: 0em none ;" 
+             src=" <lisp> (ywb-muse-relative-path "common/images/powered_by_debian.png")</lisp> " alt="Debian Logo"></a>
+      <a href="http://www.gnu.org/software/emacs/emacs.html">
+	<img style="border: 0em none ;" 
+		src=" <lisp> (ywb-muse-relative-path "common/images/powered_by_GNU_Emacs.jpg")</lisp> " alt="Emacs Logo"></a>
+      <a href="http://www.mwolson.org/projects/EmacsMuse.html">
+	<img style="border: 0em none ;" 
+		src=" <lisp> (ywb-muse-relative-path "common/images/muse-powered-by.png")</lisp> " alt="Emacs Muse Logo"></a>
+      <a href="http://www.emacswiki.org/"
+         style="text-decoration: none;">
+        <img src=" <lisp> (ywb-muse-relative-path "common/images/emacswiki.png")</lisp> " alt="Emacswiki.org Logo"></a>
+      <a href="http://www.getfirefox.com/"><img style="border: 0em none ;" 
+         src=" <lisp> (ywb-muse-relative-path "common/images/get_firefox.gif")</lisp> " alt="Firefox Logo"></a>
+      <a href="http://validator.w3.org/check?uri=referer" 
+	 style="text-decoration: none;">
+        <img src=" <lisp> (ywb-muse-relative-path "common/images/valid-xh.png")</lisp> " 
+             alt="Valid XHTML 1.0!" height="31" width="88" />
+      </a>
+      <a href="http://jigsaw.w3.org/css-validator/"
+         style="text-decoration: none;">
+
+        <img style="border:0;width:88px;height:31px"
+             src=" <lisp> (ywb-muse-relative-path "common/images/vcss.gif")</lisp> " 
+             alt="Valid CSS!" />
+      </a>
+    </div>
+  </body>
+</html>

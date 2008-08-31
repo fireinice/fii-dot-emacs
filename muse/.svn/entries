@@ -1,0 +1,31 @@
+8
+
+dir
+6
+svn://zigler:zigsvn@10.214.59.83:8990/dotConfig/dotEmacs/muse
+svn://zigler:zigsvn@10.214.59.83:8990/dotConfig
+
+
+
+2008-04-19T10:38:47.349258Z
+6
+zigler
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+5e8754ec-c2d6-4aef-b043-2816345dd947
+
+config
+dir
+

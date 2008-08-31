@@ -1,0 +1,70 @@
+(require 'tex-site)
+;; (require 'preview-latex)
+(autoload 'LaTeX-preview-setup "preview")
+(autoload 'reftex-mode "reftex" "RefTeX Minor Mode" t)
+(autoload 'turn-on-reftex "reftex" "RefTeX Minor Mode" nil)
+(autoload 'reftex-citation "reftex-cite" "Make citation" nil)
+(autoload 'reftex-index-phrase-mode "reftex-index" "Phrase mode" t)
+
+;; TeX mode
+(setq TeX-newline-function 'newline-and-indent) ;;回车时自动缩进
+(setq TeX-electric-escape t)
+;; (setq TeX-auto-untabify t) ;; 不使用 TAB字符缩进
+(setq TeX-auto-save nil)
+;; for multi-file-documents, refer to
+;; http://lists.gnu.org/archive/html/auctex/2005-05/msg00014.html
+;; (setq TeX-auto-save t)
+;; (setq TeX-parse-self t)
+;; (setq-default TeX-master nil)
+(add-hook 'TeX-mode-hook
+          (lambda ()
+	    (turn-on-auto-fill)
+	    (setq reftex-plug-into-AUCTeX t)
+            (turn-on-reftex)))
+
+;;LaTeX-mode
+(setq LaTeX-math-mode t)
+(setq LaTeX-document-regexp "document\\|CJK\\*?")  ;; CJK 环境中不缩进
+;; (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+(add-hook 'LaTeX-mode-hook
+	  (lambda()
+	    (turn-on-cdlatex) ; with AUCTeX LaTeX mode
+	    (turn-on-auto-fill)
+	    (turn-on-reftex)
+	    (LaTeX-preview-setup)
+	    (define-key LaTeX-mode-map
+	      (kbd "C-c -") 'cdlatex-item);; CDLaTeX conflicts key bindings [C-c -] with RefTeX.
+	                                  ;; Beacause [C-c =] equals to [C-c -] in RefTeX,
+	                                  ;;so I rebind it to CDLaTeX.
+;; 	    (define-key LaTeX-mode-map [(tab)]  'cdlatex-tab)
+	    (outline-minor-mode)))
+
+(setq fill-column 72) ;;与A4纸一行字数相同
+;;reftex-mode
+;;把beamer的frametitle也放入reftex目录缓冲中，但需要把\frametitle写在行首
+(setq reftex-section-levels
+      '(("part" . 0) ("chapter" . 1) ("section" . 2) ("subsection" . 3)
+        ("frametitle" . 4) ("subsubsection" . 4) ("paragraph" . 5)
+        ("subparagraph" . 6) ("addchap" . -1) ("addsec" . -2)))
+(setq reftex-revisit-to-follow t
+      reftex-auto-recenter-toc t
+      reftex-plug-into-AUCTeX t)
+
+;;bibtex
+(setq bibtex-autokey-names 1
+      bibtex-autokey-names-stretch 1
+      bibtex-autokey-name-separator "-"
+      bibtex-autokey-additional-names "-et.al."
+      bibtex-autokey-name-case-convert 'identity
+      bibtex-autokey-name-year-separator "-"
+      bibtex-autokey-titlewords-stretch 0
+      bibtex-autokey-titlewords 0
+      bibtex-maintain-sorted-entries 'plain
+      bibtex-entry-format '(opts-or-alts numerical-fields))
+
+(add-hook 'TeXinfo-mode-hook 'outline-minor-mode)  
+
+(eval-after-load "tex"
+  '(progn
+     (TeX-global-PDF-mode t)))
+

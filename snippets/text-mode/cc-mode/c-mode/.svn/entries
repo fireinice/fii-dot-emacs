@@ -1,0 +1,40 @@
+8
+
+dir
+6
+svn://zigler:zigsvn@10.214.59.83:8990/dotConfig/dotEmacs/yasnippet/snippets/text-mode/cc-mode/c-mode
+svn://zigler:zigsvn@10.214.59.83:8990/dotConfig
+
+
+
+2008-04-19T10:38:47.349258Z
+6
+zigler
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+5e8754ec-c2d6-4aef-b043-2816345dd947
+
+fopen
+file
+5
+
+
+
+2008-04-18T18:22:16.000000Z
+357eb523af90071e7a1b5038b635e052
+2008-04-19T02:18:58.087221Z
+1
+zigler
+

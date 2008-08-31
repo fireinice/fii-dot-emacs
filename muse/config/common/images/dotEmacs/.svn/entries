@@ -1,0 +1,67 @@
+8
+
+dir
+6
+svn://zigler:zigsvn@10.214.59.83:8990/dotConfig/dotEmacs/muse/config/common/images/dotEmacs
+svn://zigler:zigsvn@10.214.59.83:8990/dotConfig
+
+
+
+2008-04-19T10:38:47.349258Z
+6
+zigler
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+5e8754ec-c2d6-4aef-b043-2816345dd947
+
+hooks
+dir
+
+conf
+dir
+
+db
+dir
+
+format
+file
+5
+
+
+
+2008-04-18T18:22:15.000000Z
+1dcca23355272056f04fe8bf20edfce0
+2008-04-19T02:18:58.087221Z
+1
+zigler
+
+dav
+dir
+
+locks
+dir
+
+README.txt
+file
+5
+
+
+
+2008-04-18T18:22:15.000000Z
+f6853445f59f9c58cfbaa46380724015
+2008-04-19T02:18:58.087221Z
+1
+zigler
+

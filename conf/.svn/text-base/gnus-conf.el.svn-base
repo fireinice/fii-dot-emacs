@@ -1,0 +1,50 @@
+(defun prefer-gb2312 ()
+  (setq mm-coding-system-priorities
+        '(iso-8859-15 gb2312 utf-8)))
+(defun prefer-utf-8 ()
+  (setq mm-coding-system-priorities
+        '(iso-8859-15 utf-8)))
+
+(setq gnus-posting-styles
+      '((".*"
+         (name "fireinice")
+         (From "fireinice#gmail.com")
+         (eval (prefer-gb2312)))
+        ("^cn\\.bbs.*"
+         (name "fireinice")
+         (From "fireinice <fireinice#gmail.com>")
+         (eval (prefer-gb2312)))
+        ("otherbbs"
+         (name "fireinice")
+         (From "fireinice <fireinice#gmail.com>")
+         (eval (prefer-utf-8)))))
+;;用户资料设定
+(setq user-full-name "fireinice")
+(setq user-mail-address "fireinice#gmail.com")
+
+;;服务器的设定
+(setq gnus-select-method '(nntp "news.CN99.com"))
+(add-to-list 'gnus-secondary-select-methods '(nntp "news.newsfan.net"))
+;(add-to-list 'gnus-secondary-select-methods '(nntp "news.php.net"))
+;(add-to-list 'gnus-secondary-select-methods '(nntp "news.newsgroup.com.hk"))
+(add-to-list 'gnus-secondary-select-methods '(nntp "news.yaako.com"))
+(add-to-list 'gnus-secondary-select-methods '(nntp "news.gmane.org"))
+;; (add-to-list 'gnus-secondary-select-methods '(nntp "groups.google.com"))
+
+(setq gnus-default-charset 'cn-gb-2312
+gnus-group-name-charset-group-alist '((".*" . cn-gb-2312))
+;; gnus-group-name-charset-method-alist '(((nntp "news.newsfan.net") . cn-gb-2312))
+gnus-summary-show-article-charset-alist '((1 . cn-gb-2312) (2 . big5))
+;;gnus-newsgroup-ignored-charsets '(unknown-8bit x-unknown iso-8859-1)
+)
+
+;;; Define how Gnus is to read your mail.  We read mail from
+;;; your ISP's POP server.
+;; (setq mail-sources '((pop :server "pop.your-isp.com")))
+
+;;; Say how Gnus is to store the mail.  We use nnml groups.
+;; (setq gnus-secondary-select-methods '((nnml "")))
+
+;;; Make Gnus into an offline newsreader.
+(gnus-agentize) ; The obsolete setting.
+(setq gnus-agent t) ; Now the default.
