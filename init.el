@@ -1,3 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Filename: init.el
+;; Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.;; 
+;; Author: zigler
+;; Description: 
+;; Created: 三  8月 27 09:37:28 2008 (CST)
+;;           By: zigler
+;; Last-Updated: 四  8月 28 12:51:59 2008 (CST)
+;;     Update #: 15
+;; 
+;; 
+;;; Change log:
+;; 
 ;; ========加载路径 start
 (setq load-path (cons "~/.emacs.d/misc/" load-path))
 (setq load-path (cons "~/.emacs.d/sql/" load-path))
@@ -6,16 +19,15 @@
 (setq load-path (cons "~/.emacs.d/python-mode/" load-path))
 (setq load-path (cons "~/.emacs.d/html-helper/" load-path))
 (setq load-path (cons "~/.emacs.d/weblogger" load-path))
+;; add git support(only in debian)
+(setq load-path (cons (expand-file-name "/usr/share/doc/git-core/contrib/emacs") load-path))
 
 
 
 ;;========调用公用模块
 (load-library "vc-svn")
 (autoload 'senator-try-expand-semantic "senator")
-;; (autoload 'psvn "svn-status")
 (autoload 'two-mode-mode "two mode mode")
-;; (autoload 'cedet "cedet")
-;; (autoload 'smart-compile "smart-compile")
 (autoload 'cl "cl")
 (require 'smart-compile)
 (require 'fvwm-mode)
@@ -34,15 +46,10 @@
 (require 'cc-mode)
 (require 'doxymacs)
 (require 'regex-tool)
-;(require 'pylint)
+(require 'xcscope)
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
-;; (require 'ecb-autoloads) ;;nox
 ;; (require 'two-mode-mode)
-;;(require 'top)
-;; (require 'ruby-mode)
-;; (require 'rails)
-
 ;;========END
 
 
@@ -51,8 +58,8 @@
 ;;========仅作用于X下
 (if window-system
     (progn
-       (setq default-frame-alist
-	    
+      (require 'ecb-autoloads) ;;nox
+      (setq default-frame-alist
           (append
            '((top . 0)
              (left . 0)
@@ -95,13 +102,13 @@
 
 
 ;;=======基本设置 start
-(setq default-major-mode 'text-mode)    ;
+(setq default-major-mode 'text-mode)
 (setq-default abbrev-mode t)
 (setq-default kill-whole-line t)        ; 在行首 C-k 时，同时删除该行。
 (setq-default truncate-partial-width-windows nil) ;;多窗时自动多行显示
 (setq default-fill-column 72)
 (setq ps-multibyte-buffer 'bdf-font-except-latin) ; 打印
-(setq transient-mark-mode t)
+(setq transient-mark-mode t)  ; 高亮当前选中区
 (setq suggest-key-bindings 1) ; 当使用 M-x COMMAND 后，过 1 秒钟显示该 COMMAND 绑定的键。
 ;;下面的这个设置可以让光标指到某个括号的时候显示与它匹配的括号
 (delete-selection-mode 1) ;像windows选区一样对待emacs选区
@@ -135,7 +142,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-(tabbar-mode t)
+(tabbar-mode t) ; 显示tab标签
 (setq inhibit-startup-message t)        ;禁用启动信息
 ;;(hs-minor-mode t)
 ;;设置标题栏
@@ -221,37 +228,56 @@
 	  (goto-char (match-end 0)))
       (c-indent-command))))
 
+(defun ska-point-to-register()
+  "Store cursorposition _fast_ in a register. 
+Use ska-jump-to-register to jump back to the stored 
+position."
+  (interactive)
+  (setq zmacs-region-stays t)
+  (point-to-register 8))
+
+(defun ska-jump-to-register()
+  "Switches between current cursorposition and position
+that was stored with ska-point-to-register."
+  (interactive)
+  (setq zmacs-region-stays t)
+  (let ((tmp (point-marker)))
+        (jump-to-register 8)
+        (set-register 8 tmp)))
 ;;========END
 
 
 
 
 ;;========基本函数绑定
-(setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
-(global-set-key [(control \;)] 'my-comment-or-uncomment-region)
-(global-set-key "\r" 'newline-and-indent)
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 (global-set-key [(tab)] 'my-indent-or-complete)
+
+(setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
+(global-set-key [(control \;)] 'my-comment-or-uncomment-region)
+(global-set-key "\r" 'newline-and-indent)
 ;; note TAB can be different to <tab> in X mode(not -nw mode).
 ;; the formal is C-i while the latter is the real "Tab" key in
 ;; your keyboard.
-(global-set-key (kbd "C-i") 'kid-c-escape-pair)
+(global-set-key [(control \')] 'kid-c-escape-pair)
 ;; (define-key c++-mode-map (kbd "<tab>") 'c-indent-command)
 ;; tabbar键盘绑定
 (global-set-key (kbd "\C-cbp") 'tabbar-backward-group)
 (global-set-key (kbd "\C-cbn") 'tabbar-forward-group)
 (global-set-key (kbd "\C-cbj") 'tabbar-backward)
 (global-set-key (kbd "\C-cbk") 'tabbar-forward)
-
+(global-set-key (kbd "\C-cm")  'ska-point-to-register)
+(global-set-key (kbd "\C-cp")  'ska-jump-to-register)
 ;;========END
 
 
 
 
 ;;========Hippie-Expand
-(setq hippie-expand-try-functions-list
-      '(
+;; (setq hippie-expand-try-functions-list
+(make-hippie-expand-function
+ '(
 	yas/hippie-try-expand
 	senator-try-expand-semantic
 	try-complete-abbrev
@@ -353,11 +379,11 @@
       gnus-init-file "~/.emacs.d/conf/gnus-conf.el")
 
 ;=========Auctex
-;; (load "auctex.el" nil t t)
-;; (load "preview-latex.el" nil t t)
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
 (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil) 
-(add-hook 'text-mode-hook
+(add-hook 'tex-mode-hook
 	  (lambda()
 	    (load-file "~/.emacs.d/conf/auctex-conf.el")))
 
@@ -466,10 +492,6 @@
 (add-hook 'python-mode-hook
 	  (lambda ()
 	    (setq tab-width 4 indent-tabs-mode nil)
-;; 	    (local-set-key [(tab)] 'my-indent-or-complete)
-;; 	    (local-set-key "\C-c\C-f"  'py-help-at-point)
-	    ;; hungry-delete and auto-newline
-;; 	    (c-toggle-auto-hungry-state 1)
 ;; 	    (which-function-mode t)
 	    (hs-minor-mode 1)
 ;; 	    (py-shell 1)
@@ -557,21 +579,21 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;==========ELisp 模式
-;; (add-hook 'emacs-lisp-mode-hook
-;;           (setq hippie-expand-try-functions-list
-;;                 '(
-;;                   try-complete-abbrev
-;;                   try-complete-lisp-symbol-partially
-;;                   try-complete-lisp-symbol
-;;                   try-expand-dabbrev-visible
-;;                   try-expand-dabbrev
-;;                   try-expand-dabbrev-all-buffers
-;;                   try-expand-dabbrev-from-kill
-;;                   try-expand-list
-;;                   try-expand-list-all-buffers
-;;                   try-complete-file-name-partially
-;;                   try-complete-file-name
-;;                   try-expand-whole-kill)))
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda()
+	    (make-hippie-expand-function
+	     '(try-complete-abbrev
+	       try-complete-lisp-symbol-partially
+	       try-complete-lisp-symbol
+	       try-expand-dabbrev-visible
+	     try-expand-dabbrev
+	     try-expand-dabbrev-all-buffers
+	     try-expand-dabbrev-from-kill
+	     try-expand-list
+	     try-expand-list-all-buffers
+	     try-complete-file-name-partially
+	     try-complete-file-name
+	     try-expand-whole-kill))))
 
 ;=========Shell 模式
 ;; Put this file into your load-path and the following into your ~/.emacs:
@@ -591,7 +613,9 @@
 ;; need to bind them explicitly to some key
 (smart-snippet-with-abbrev-tables
  (c++-mode-abbrev-table
+  c-mode-abbrev-table
   java-mode-abbrev-table
+  ruby-mode-abbrev-table
 ;;   js2-mode-abbrev-table
   python-mode-abbrev-table)
  ("{" "{$.}" '(not (c-in-literal)))
@@ -601,7 +625,7 @@
  ("\"" "\"$.\"" '(not (c-in-literal)))	
  ("\"" "\\\"$." '(eq (c-in-literal) 'string))
  ;; insert a pair of parenthesis, useful everywhere
- ("(" "( $. )" t)
+ ("(" "($.)" t)
  ;; insert a pair of angular bracket if we are writing templates
  ("<" "<$.>" '(and (not (c-in-literal))
 		   (looking-back "template[[:blank:]]*")))
@@ -609,16 +633,21 @@
  ("[" "[$.]" t)
  ;; a pair of single quote, if not in literal
  ("'" "'$.'" '(not (c-in-literal)))
+ ("," ", " '(not (c-in-literal)))
  )
+
+(smart-snippet-with-abbrev-tables
+ (ruby-mode-abbrev-table)
+ ("/" "/$./" '(not (c-in-literal)))
+ )
+
 
 (smart-snippet-with-keymaps
  ((c++-mode-map c++-mode-abbrev-table)
   (c-mode-map c-mode-abbrev-table)
   (java-mode-map java-mode-abbrev-table)
-;;   (py-mode-map python-mode-abbrev-table)
-  (py-mode-map python-mode-abbrev-table)
-  )
-;;   (python-mode-map python-mode-abbrev-table))
+  (ruby-mode-map ruby-mode-abbrev-table)
+  (py-mode-map python-mode-abbrev-table))
   ("{" "{")
   ("\"" "\"")
   ("(" "(")
@@ -649,49 +678,125 @@
 ;;==========header2
 ;;文件头header设置
 (require 'header2)
-;;(require 'header)
-(setq make-header-hooks
-      '(header-mode-line
-	header-blank
-	header-file-name
-	header-blank
-	header-copyright
-	header-blank
-	header-author
-	header-creation-date
-	header-modification-author
-	header-modification-date
-	header-update-count
-	header-blank
-	header-history
-	header-blank))
-(setq header-copyright-notice "  XXXXXXX" )
+;; // -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:t -*-
+;; /*************************************************************************
+;;  *  Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.     *
+;;  *************************************************************************/
+;; /**
+;;  * \file    CheckURL.cc
+;;  * \brief	Implementation of CheckURL class
+;;  *
+;;  * \author  Xinran Zhou (xzhou@ask.com)
+;;  * \author  Wuyun Kang (wkang@ask.com)
+;;  * \bug     No known bugs
+;;  *
+;;  * $Date: 2007/06/18 06:39:19 $
+;;  * $Revision: 1.1 $
+;;  */
 
-;;========emms
-;; (add-to-list 'load-path "~/emacs/site-lisp/emms/")
-;; (require 'emms)
+(setq header-copyright-notice "Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.")
+(defun zigler-python-mode-config-header ()
+  (interactive)
+  (setq make-header-hook '(header-mode-line
+			   header-copyright
+			   header-blank
+			   header-file-name
+			   header-author
+			   header-creation-date
+			   header-modification-author
+			   header-modification-date
+			   header-update-count
+			   header-blank
+			   header-history
+			   header-blank
+			   )))
+(setq make-header-hook '(header-mode-line
+			 header-file-name
+			 header-copyright
+			 header-blank
+			 header-author
+			 header-description
+			 header-creation-date
+			 header-modification-author
+			 header-modification-date
+			 header-update-count
+			 header-blank
+			 header-history
+			 header-blank
+			 ))
 
-;; ;; (require 'emms-default)
-;; ;; (emms-setup 'cvs "~/music" "~/mp3")
+(defvar wcy-header-project-name "XParser-Cross-Test-Tools")
+(defun wcy-c-mode-config-header ()
+  (interactive)
+  (setq header-copyright-notice "
+Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
+")
+  (make-local-variable 'user-full-name)
+  (make-local-variable 'user-mail-address)
+  (setq user-full-name "ZhiQiang Zhang")
+  (setq user-mail-address "zhiqiang.zhang@ask.com")
 
-;; ;; Show the current track each time EMMS
-;; ;; starts to play a track with "NP : "
-;; (add-hook 'emms-player-started-hook 'emms-show)
-;; (setq emms-show-format "NP: %s")
+  (setq  make-header-hook '(header-mode-line
+                             header-blank
+                             wcy-header-file-name
+                             wcy-header-project-name
+                             wcy-header-file-description
+                             header-creation-date
+                             header-author
+                             wcy-header-author-email
+                             ;;header-modification-author
+                             ;;header-modification-date
+                             ;;header-update-count
+                             header-blank
+                             header-copyright
+                             header-blank
+                             ;;header-status
+                             ;; Re-enable the following lines if you wish
+                             header-blank
+                             ;;header-history
+                             ;;header-purpose
+                             ;;header-toc
+                             header-blank
+                             wcy-header-end-comment
+                             ))
+  (setq file-header-update-alist nil)
+  (progn
+    (register-file-header-action "[ \t]Update Count[ \t]*: "
+                                 'update-write-count)
+    (register-file-header-action "[ \t]Last Modified By[ \t]*: "
+                                 'update-last-modifier)
+    (register-file-header-action "[ \t]Last Modified On[ \t]*: "
+                                 'update-last-modified-date)
+    (register-file-header-action " File            : *\\(.*\\) *$" 'wcy-update-file-name)
+    ))
 
-;; (setq emms-info-mp3info-program-name "~/bin/mp3info")
-;; ;; When asked for emms-play-directory,
-;; ;; always start from this one
-;; ;; (setq emms-source-file-default-directory "~/music/")
 
-;; ;; Want to use alsa with mpg321 ?
-;; ;; (setq emms-player-mpg321-parameters '("-o" "alsa"))
+(defun wcy-header-file-name ()
+  "Places the buffer's file name and leaves room for a description."
+  (insert header-prefix-string "File            : " (buffer-name) "\n")
+  (setq return-to (1- (point))))
+(defun wcy-header-project-name ()
+  (insert header-prefix-string "Program/Library : " wcy-header-project-name "\n"))
+(defun wcy-header-file-description()
+  (insert header-prefix-string "Description     : \n"))
+(defun wcy-header-author-email ()
+  (insert header-prefix-string "Mail            : " user-mail-address "\n"))
 
-;; (global-set-key [C-f12] 'emms-pbi-popup-playlist)
-
-;; the motd looks more nice this way.  make sure the image exists
-;; (setq mldonkey-image "~/./mldonkey.jpg")
-
+(defun wcy-header-end-comment ()
+  (if comment-end
+      (insert  comment-end "\n")))
+(defun wcy-update-file-name ()
+  (beginning-of-line)
+  ;; verify that we are looking at a file name for this mode
+  (if (looking-at
+       (concat (regexp-quote (header-prefix-string)) "File            : *\\(.*\\) *$"))
+      (progn
+        (goto-char (match-beginning 1))
+        (delete-region (match-beginning 1) (match-end 1))
+        (insert (file-name-nondirectory (buffer-file-name)) )
+        )))
+(add-hook 'write-file-hooks 'update-file-header)
+(add-hook 'emacs-lisp-mode-hook 'auto-make-header)
 ;=========Top mode
 ;; (defun top-mode-solaris-generate-top-command (user)
 ;;   (if (not user)
@@ -743,6 +848,63 @@
 ;;echo error in minibuffer instead moving mouse on it
 (load-library "flymake-cursor") 
 (global-set-key "\C-c\C-e" 'flymake-goto-next-error)
+
+(defun flymake-create-temp-intemp (file-name prefix)
+  "Return file name in temporary directory for checking FILE-NAME.
+This is a replacement for `flymake-create-temp-inplace'. The
+difference is that it gives a file name in
+`temporary-file-directory' instead of the same directory as
+FILE-NAME.
+
+For the use of PREFIX see that function.
+
+Note that not making the temporary file in another directory
+\(like here) will not if the file you are checking depends on
+relative paths to other files \(for the type of checks flymake
+makes)."
+  (unless (stringp file-name)
+    (error "Invalid file-name"))
+  (or prefix
+      (setq prefix "flymake"))
+  (let* ((name (concat
+                (file-name-nondirectory
+                 (file-name-sans-extension file-name))
+                "_" prefix))
+         (ext  (concat "." (file-name-extension file-name)))
+         (temp-name (make-temp-file name nil ext))
+         )
+    (flymake-log 3 "create-temp-intemp: file=%s temp=%s" file-name temp-name)
+    temp-name))
+
+;; Invoke ruby with '-c' to get syntax checking
+(defun flymake-ruby-init ()
+  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+	 (local-file  (file-relative-name
+                       temp-file
+                       (file-name-directory buffer-file-name))))
+    (list "ruby" (list "-c" local-file))))
+
+(push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+
+(push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
+
+(add-hook 'ruby-mode-hook
+          '(lambda ()
+	     ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
+	     (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
+		 (flymake-mode))
+	     ))
+
+;;========git=====================================
+ (require 'vc-git)
+ (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
+ (require 'git)
+ (autoload 'git-blame-mode "git-blame"
+           "Minor mode for incremental blame for Git." t)
+
+
 ;;========Custom Configure End HERE====================
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -757,8 +919,8 @@
  '(regex-tool-backend (quote perl))
  '(regex-tool-new-frame t)
  '(semantic-idle-scheduler-idle-time 432000)
- '(weblogger-config-alist (quote (("default" ("user" . "fireinice") ("server-url" . "http://firelines.cn/xmlrpc.php") ("pass" . "zig629") ("weblog" . "1")))))
- '(weblogger-save-password t))
+ )
+ 
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
@@ -768,3 +930,4 @@
  '(flymake-warnline ((((class color)) (:background "LightBlue2" :foreground "black"))))
  '(regex-tool-matched-face ((t (:background "black" :foreground "Orange" :weight bold)))))
 
+;;========init.el end here

@@ -1,0 +1,10 @@
+#name : try{ ... }catch(exception){ ... }
+# --
+try 
+{
+    $1
+}
+catch (std::exception& $2) 
+{
+    $3
+}

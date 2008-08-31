@@ -74,12 +74,6 @@
          :force-publish ("index"))
          (:base "wiki-xhtml" :path "~/note/muse/publish/Language/Python"))
 
-	("Latex"
-	 ("~/note/muse/Language/shell"
-         :Default "index"
-         :force-publish ("index"))
-         (:base "wiki-xhtml" :path "~/note/muse/publish/Latex"))
-
 	("Muse"
 	 ("~/muse/source/wiki/gnu/emacs/muse"
          :default "index"

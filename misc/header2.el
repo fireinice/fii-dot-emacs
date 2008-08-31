@@ -10,9 +10,9 @@
 ;; Copyright (C) 1988 Lynn Randolph Slater, Jr.
 ;; Created: Tue Aug  4 17:06:46 1987
 ;; Version: 21.0
-;; Last-Updated: Fri Mar 14 08:11:27 2008 (Pacific Daylight Time)
+;; Last-Updated: Fri Jul 11 08:16:16 2008 (Pacific Daylight Time)
 ;;           By: dradams
-;;     Update #: 1630
+;;     Update #: 1642
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/header2.el
 ;; Keywords: tools, docs, maint, abbrev, local
 ;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
@@ -162,6 +162,9 @@
 ;;
 ;;; Change log:
 ;;
+;; 2008/07/11 dadams
+;;     header-title, header-file-name, header-eof:
+;;       Use buffer-file-name, if available.  Thx Juan Miguel Cejuela for suggestion.
 ;; 2008/03/14 dadams
 ;;     header-free-software: Update version 2 -> version 3 of GPL.
 ;; 2008/01/18 dadams
@@ -494,12 +497,19 @@ In `emacs-lisp-mode', this should produce the title line for library
 packages."
   (insert (concat comment-start (and (= 1 (length comment-start))
                                      header-prefix-string)
-                  (buffer-name) " --- " "\n"))
+                  (if (buffer-file-name)
+                      (file-name-nondirectory (buffer-file-name))
+                    (buffer-name))
+                  " --- " "\n"))
   (setq return-to (1- (point))))
 
 (defsubst header-file-name ()
   "Insert \"Filename: \" line, using buffer's file name."
-  (insert header-prefix-string "Filename: " (buffer-name) "\n"))
+  (insert header-prefix-string "Filename: "
+          (if (buffer-file-name)
+              (file-name-nondirectory (buffer-file-name))
+            (buffer-name))
+          "\n"))
 
 (defsubst header-description ()
   "Insert \"Description: \" line."
@@ -607,7 +617,11 @@ Without this, `make-revision' inserts `header-history-label' after the header."
   (unless comment-end-p (header-end-line))
   (insert comment-start
           (concat (and (= 1 (length comment-start)) header-prefix-string)
-                  (buffer-name) " ends here" (if comment-end-p comment-end "\n"))))
+                  (if (buffer-file-name)
+                      (file-name-nondirectory (buffer-file-name))
+                    (buffer-name))
+                  " ends here"
+                  (if comment-end-p comment-end "\n"))))
 
 (defsubst header-modification-date ()
   "Insert todays date as the time of last modification.
