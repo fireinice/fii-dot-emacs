@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 四  8月 28 12:51:59 2008 (CST)
-;;     Update #: 15
+;; Last-Updated: 日  8月 31 19:32:13 2008 (CST)
+;;     Update #: 17
 ;; 
 ;; 
 ;;; Change log:
@@ -47,6 +47,7 @@
 (require 'doxymacs)
 (require 'regex-tool)
 (require 'xcscope)
+(require 'ruby-mode)
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
 ;; (require 'two-mode-mode)
@@ -545,7 +546,6 @@ that was stored with ska-point-to-register."
 ;;如果文件后缀名不为.rb，但是脚本第一行有#!ruby之类的说明
 ;;也相应调用此ruby模式
 (autoload 'ruby-electric "ruby electric")
-(autoload 'ruby-mode "ruby-mode" "Ruby editing mode." t)
 (autoload 'rails "rails mode")
 ;;调用inf-ruby
 (autoload 'run-ruby "inf-ruby"
