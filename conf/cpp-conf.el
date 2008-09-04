@@ -4,15 +4,17 @@
 (autoload 'senator-try-expand-semantic "senator")
 ;; (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-;; common config for c&c++
-;; (add-hook 'c-mode-common-hook
-;; 	  (lambda ( )
-;; 	    (c-set-offset 'inline-open 0)
+(add-hook 'c-mode-common-hook
+	  (lambda ()
+	    (c-set-offset 'inline-open 0)
 	    (c-set-offset 'friend '-)
 	    (c-set-offset 'substatement-open 0)
 	    (c-set-style "stroustrup")
-	    (setq gdb-many-windows t)
-	    (setq tab-width 4 indent-tabs-mode t)
+	    (setq tab-width 2 indent-tabs-mode t)
+
+))
+;; common config for c&c++
+(setq gdb-many-windows t)
 	    ;; hungry-delete and auto-newline
 	    (c-toggle-auto-hungry-state 1)
 	    (which-function-mode t)

@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 四  8月 28 12:57:34 2008 (CST)
-;;     Update #: 19
+;; Last-Updated: 一  9月  1 13:04:25 2008 (CST)
+;;     Update #: 21
 ;; 
 ;; 
 ;;; Change log:
@@ -57,9 +57,9 @@
 
 
 ;;========仅作用于X下
-;; (if window-system
-    (require 'ecb-autoloads) ;;nox
+(if window-system
     (progn
+      (require 'ecb-autoloads) ;;nox
       (setq default-frame-alist
 	    
           (append
@@ -97,7 +97,7 @@
 				 (speedbar-set-timer nil)))))
 	(set-window-buffer (selected-window)
 			   (get-buffer my-speedbar-buffer-name))))
-;; )
+)
 
 ;;=======End
 
@@ -917,6 +917,8 @@ makes)."
  '(regex-tool-backend (quote perl))
  '(regex-tool-new-frame t)
  '(semantic-idle-scheduler-idle-time 432000)
+ '(weblogger-config-alist (quote (("default" ("user" . "fireinice") ("server-url" . "http://firelines.cn/xmlrpc.php")("pass" . "zig629")))))
+ '(weblogger-save-password t)
  )
  
 (custom-set-faces

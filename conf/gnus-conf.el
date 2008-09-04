@@ -8,20 +8,20 @@
 (setq gnus-posting-styles
       '((".*"
          (name "fireinice")
-         (From "fireinice#gmail.com")
+         (From "fireinice@gmail.com")
 ;; 	 (signature-file "~/.sig/default")
          (eval (prefer-gb2312)))
         ("^cn\\.bbs.*"
          (name "fireinice")
-         (From "fireinice <fireinice#gmail.com>")
+         (From "fireinice <fireinice@gmail.com>")
          (eval (prefer-gb2312)))
         ("otherbbs"
          (name "fireinice")
-         (From "fireinice <fireinice#gmail.com>")
+         (From "fireinice <fireinice@gmail.com>")
          (eval (prefer-utf-8)))))
 ;;用户资料设定
 (setq user-full-name "fireinice")
-(setq user-mail-address "fireinice#gmail.com")
+(setq user-mail-address "fireinice@gmail.com")
 
 ;;服务器的设定
 (setq gnus-select-method '(nntp "news.CN99.com"))
@@ -29,7 +29,7 @@
 ;(add-to-list 'gnus-secondary-select-methods '(nntp "news.php.net"))
 ;(add-to-list 'gnus-secondary-select-methods '(nntp "news.newsgroup.com.hk"))
 ;; (add-to-list 'gnus-secondary-select-methods '(nntp "news.yaako.com"))
-(add-to-list 'gnus-secondary-select-methods '(nntp "groups.google.com"))
+;; (add-to-list 'gnus-secondary-select-methods '(nntp "groups.google.com"))
 (add-to-list 'gnus-secondary-select-methods '(nntp "news.gmane.org"))
 ;; (add-to-list 'gnus-secondary-select-methods '(nntp "groups.google.com"))
 
