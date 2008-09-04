@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 四  9月  4 13:03:20 2008 (CST)
-;;     Update #: 22
+;; Last-Updated: 四  9月  4 13:16:12 2008 (CST)
+;;     Update #: 23
 ;; 
 ;; 
 ;;; Change log:
@@ -920,8 +920,6 @@ makes)."
  '(regex-tool-backend (quote perl))
  '(regex-tool-new-frame t)
  '(semantic-idle-scheduler-idle-time 432000)
- '(weblogger-config-alist (quote (("default" ("user" . "fireinice") ("server-url" . "http://firelines.cn/xmlrpc.php")("pass" . "zig629")))))
- '(weblogger-save-password t)
  )
  
 (custom-set-faces
