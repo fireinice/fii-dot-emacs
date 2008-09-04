@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 一  9月  1 13:04:25 2008 (CST)
-;;     Update #: 21
+;; Last-Updated: 四  9月  4 13:03:20 2008 (CST)
+;;     Update #: 22
 ;; 
 ;; 
 ;;; Change log:
@@ -61,12 +61,11 @@
     (progn
       (require 'ecb-autoloads) ;;nox
       (setq default-frame-alist
-	    
           (append
            '((top . 0)
              (left . 0)
-             (width . 165)
-             (height . 67))
+             (width . 100)
+             (height . 49))
            default-frame-alist))
       (setq x-select-enable-clipboard t) ;;使用剪切板
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
@@ -253,7 +252,6 @@ that was stored with ska-point-to-register."
 
 
 ;;========基本函数绑定
-
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 (global-set-key [(tab)] 'my-indent-or-complete)
@@ -356,6 +354,8 @@ that was stored with ska-point-to-register."
 (setq ecb-tree-indent 4
       ecb-windows-height 0.5
       ecb-windows-width 0.20
+;;       ecb-auto-compatibility-check nil
+;;       ecb-version-check nil
       inhibit-startup-message t
       ecb-tip-of-the-day nil
       ecb-tree-navigation-by-arrow t);;使用箭头键展开或折叠
@@ -494,6 +494,7 @@ that was stored with ska-point-to-register."
 (add-hook 'python-mode-hook
 	  (lambda ()
 	    (setq tab-width 4 indent-tabs-mode nil)
+;; 	    (which-function-mode t)
 	    (hs-minor-mode 1)
 ;; 	    (py-shell 1)
 	    (abbrev-mode t)
@@ -546,7 +547,6 @@ that was stored with ska-point-to-register."
 ;;如果文件后缀名不为.rb，但是脚本第一行有#!ruby之类的说明
 ;;也相应调用此ruby模式
 (autoload 'ruby-electric "ruby electric")
-(autoload 'ruby-mode "ruby-mode" "Ruby editing mode." t)
 (autoload 'rails "rails mode")
 ;;调用inf-ruby
 (autoload 'run-ruby "inf-ruby"
@@ -654,12 +654,15 @@ that was stored with ska-point-to-register."
   ("(" "(")
   ("<" "<")
   ("[" "[")
-  ("'" "'")
-  ("," ","))
-
-(smart-snippet-with-keymaps
- ((ruby-mode-map ruby-mode-abbrev-table))
-  ("/" "/"))
+  ("'" "'"))
+;; (local-set-key "("
+;;                '(lambda ()
+;;                   (interactive)
+;;                   (yas/expand-snippet (point) (point) "($0)"))) 
+;; (local-set-key "\""
+;;                '(lambda ()
+;;                   (interactive)
+;;                   (yas/expand-snippet (point) (point) "\"$0\""))) 
 
 ;;========lftp
 ;; If you want use with lftp, put this to .emacs
