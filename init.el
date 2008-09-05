@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 五  9月  5 15:12:44 2008 (CST)
-;;     Update #: 30
+;; Last-Updated: 五  9月  5 16:47:23 2008 (CST)
+;;     Update #: 39
 ;; 
 ;; 
 ;;; Change log:
@@ -240,6 +240,15 @@ that was stored with ska-point-to-register."
   (let ((tmp (point-marker)))
         (jump-to-register 8)
         (set-register 8 tmp)))
+
+(add-hook 'after-save-hook
+	  (lambda ()
+	    (mapcar
+	     (lambda (file)
+	       (setq file (expand-file-name file))
+	       (when (string= file (buffer-file-name))
+		 (save-excursion (byte-compile-file file))))
+	     '("~/.emacs.d/*.el" "~/.emacs.d/conf/*.el"))))
 ;;========END
 
 
@@ -593,6 +602,7 @@ that was stored with ska-point-to-register."
 ;=========Shell 模式
 ;; Put this file into your load-path and the following into your ~/.emacs:
 (require 'shell-completion)
+(require 'shell-history)
 
 ;;=========yasnipet mode
 (require 'yasnippet) ;; not yasnippet-bundle
@@ -914,7 +924,7 @@ makes)."
  '(regex-tool-backend (quote perl))
  '(regex-tool-new-frame t)
  '(semantic-idle-scheduler-idle-time 432000)
- )
+ '(weblogger-save-password t))
  
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
