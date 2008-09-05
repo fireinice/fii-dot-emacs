@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 四  9月  4 13:16:12 2008 (CST)
-;;     Update #: 23
+;; Last-Updated: 五  9月  5 15:12:44 2008 (CST)
+;;     Update #: 30
 ;; 
 ;; 
 ;;; Change log:
@@ -25,6 +25,7 @@
 
 
 ;;========调用公用模块
+(load-file "~/.emacs.d/myinfo.el") ;;私人信息,if you are not author please comment this line
 (load-library "vc-svn")
 (autoload 'senator-try-expand-semantic "senator")
 (autoload 'two-mode-mode "two mode mode")
@@ -60,13 +61,6 @@
 (if window-system
     (progn
       (require 'ecb-autoloads) ;;nox
-      (setq default-frame-alist
-          (append
-           '((top . 0)
-             (left . 0)
-             (width . 100)
-             (height . 49))
-           default-frame-alist))
       (setq x-select-enable-clipboard t) ;;使用剪切板
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
       (defvar my-speedbar-buffer-name ;;{{{  speedbar within frame

@@ -16,11 +16,12 @@
 ;; (setq TeX-auto-save t)
 ;; (setq TeX-parse-self t)
 ;; (setq-default TeX-master nil)
-(add-hook 'TeX-mode-hook
-          (lambda ()
+;; (add-hook 'TeX-mode-hook
+;;           (lambda ()
 	    (turn-on-auto-fill)
 	    (setq reftex-plug-into-AUCTeX t)
-            (turn-on-reftex)))
+            (turn-on-reftex)
+;; ))
 
 ;;LaTeX-mode
 (setq LaTeX-math-mode t)

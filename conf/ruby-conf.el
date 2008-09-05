@@ -1,6 +1,6 @@
 ;;加载钩子
-(add-hook 'ruby-mode-hook
-          (lambda()
+;; (add-hook 'ruby-mode-hook
+;;           (lambda()
             (add-hook 'local-write-file-hooks
                       '(lambda()
                          (save-excursion
@@ -10,9 +10,10 @@
             (set (make-local-variable 'indent-tabs-mode) 'nil)
             (set (make-local-variable 'tab-width) 2)
             (imenu-add-to-menubar "IMENU")
-            (ruby-electric-mode t)
+;;             (ruby-electric-mode t)
             (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
-            (inf-ruby-keys)))
+            (inf-ruby-keys)
+;; ))
 
 (defun ruby-eval-buffer ()
   (interactive)
