@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: zigler
-;; Last-Updated: 五  9月  5 16:47:23 2008 (CST)
-;;     Update #: 39
+;; Last-Updated: 一  9月  8 13:49:11 2008 (CST)
+;;     Update #: 59
 ;; 
 ;; 
 ;;; Change log:
@@ -248,7 +248,15 @@ that was stored with ska-point-to-register."
 	       (setq file (expand-file-name file))
 	       (when (string= file (buffer-file-name))
 		 (save-excursion (byte-compile-file file))))
-	     '("~/.emacs.d/*.el" "~/.emacs.d/conf/*.el"))))
+	     '("~/.emacs.d/init.el" "~/.emacs.d/conf/*.el"))))
+
+;删除匹配括号间内容
+(defun kill-match-paren (arg)
+(interactive "p")
+(cond ((looking-at "[([{]") (kill-sexp 1) (backward-char))
+((looking-at "[])}]") (forward-char) (backward-kill-sexp 1))
+(t (self-insert-command (or arg 1)))))
+(global-set-key (kbd "C-x %") 'kill-match-paren)
 ;;========END
 
 
@@ -433,7 +441,58 @@ that was stored with ska-point-to-register."
 ;; ;    (asy-mode               .       (call-interactively 'asy-compile-view))
         (muse-mode      .   (call-interactively 'muse-project-publish))))
 
+(setq my-shebang-patterns
+      (list "^#!/usr/.*/perl\\(\\( \\)\\|\\( .+ \\)\\)-w *.*"
+        "^#!/usr/.*/sh"
+        "^#!/usr/.*/bash"
+        "^#!/bin/sh"
+        "^#!/.*/perl"
+        "^#!/.*/awk"
+        "^#!/.*/sed"
+        "^#!/bin/bash"
+        "^#!/bin/python"
+	"^#!/bin/ruby"
+	"^#!/bin/env *"))
+(add-hook
+ 'after-save-hook
+ (lambda ()
+ (if (not (= (shell-command (concat "test -x " (buffer-file-name))) 0))
+     (progn
+       ;; This puts message in *Message* twice, but minibuffer
+       ;; output looks better.
+       (message (concat "Wrote " (buffer-file-name)))
+       (save-excursion
+         (goto-char (point-min))
+         ;; Always checks every pattern even after
+         ;; match.  Inefficient but easy.
+         (dolist (my-shebang-pat my-shebang-patterns)
+           (if (looking-at my-shebang-pat)
+               (if (= (shell-command
+                       (concat "chmod u+x " (buffer-file-name)))
+                      0)
+                   (message (concat
+                             "Wrote and made executable "
+                             (buffer-file-name))))))))
+   ;; This puts message in *Message* twice, but minibuffer output
+   ;; looks better.
+   (message (concat "Wrote " (buffer-file-name))))))
 
+(define-auto-insert 'cperl-mode  "perl.tpl" )
+(define-auto-insert 'sh-mode '(nil "#!/bin/bash\n\n"))
+; 也可以是,不过我没有试过
+; (define-auto-insert "\\.pl"  "perl.tpl" )
+(add-hook 'find-file-hooks 'auto-insert)
+
+;; 自动为 C/C++ 的头文件添加 #define 保护。
+(define-auto-insert
+  '("\\.\\([Hh]\\|hh\\|hxx\\|hpp\\)\\'" . "C / C++ header")
+  '((upcase (concat "_"
+                    (replace-regexp-in-string
+                     "[^a-zA-Z0-9]" "_"
+                     (format "%s_%d_" (file-name-nondirectory buffer-file-name) (random)))))
+    "#ifndef " str \n
+    "#define " str "\n\n"
+    _ "\n\n#endif"))
 
 ;;========ido 模式
 (ido-mode t)
@@ -802,14 +861,6 @@ Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
         )))
 (add-hook 'write-file-hooks 'update-file-header)
 (add-hook 'emacs-lisp-mode-hook 'auto-make-header)
-;=========Top mode
-;; (defun top-mode-solaris-generate-top-command (user)
-;;   (if (not user)
-;;       "top -b"
-;;     (format "top -b -U%s" user)))
-;; (setq top-mode-generate-top-command-function
-;;       'top-mode-solaris-generate-top-command)
-;; (setq top-mode-strace-command "truss")
 
 
 ;;;; anything.el

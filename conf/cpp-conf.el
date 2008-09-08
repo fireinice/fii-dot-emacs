@@ -1,4 +1,3 @@
-(require 'xcscope)
 (require 'eassist)
 (require 'doxymacs)
 (autoload 'senator-try-expand-semantic "senator")
@@ -52,5 +51,17 @@
 	try-expand-list
 	try-expand-list-all-buffers
 	try-expand-whole-kill))
+
+;; 自动为 C/C++ 的头文件添加 #define 保护。
+(define-auto-insert
+  '("\\.\\([Hh]\\|hh\\|hxx\\|hpp\\)\\'" . "C / C++ header")
+  '((upcase (concat "_"
+                    (replace-regexp-in-string
+                     "[^a-zA-Z0-9]" "_"
+                     (format "%s_" (file-name-nondirectory buffer-file-name)))))
+    "#ifndef " str \n
+    "#define " str "\n\n"
+    _ "\n\n#endif"))
+
 
 
