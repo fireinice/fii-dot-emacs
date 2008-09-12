@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 五  9月 12 10:15:00 2008 (CST)
-;;     Update #: 77
+;; Last-Updated: 五  9月 12 16:53:06 2008 (CST)
+;;     Update #: 110
 ;; 
 ;; 
 ;;; Change log:
@@ -140,6 +140,9 @@
 (menu-bar-mode -1)
 (tabbar-mode t) ; 显示tab标签
 (setq inhibit-startup-message t)        ;禁用启动信息
+;; WoMan 不打开新的 frame
+(setq woman-use-own-frame nil)
+
 ;;(hs-minor-mode t)
 ;;设置标题栏
 ;; (setq frame-title-format "emacs@%b")
@@ -155,6 +158,10 @@
 ;; (add-to-list 'tramp-default-method-alist
 ;;              '("\\`localhost\\'" "" "su"))
 (setq tramp-default-method "")
+
+;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
+;; 这个文件中
+(setq custom-file "~/.emacs.d/myinfo.el")
 
 ;;emacs23
 ;; (set-default-font "Consolas-16")
@@ -254,6 +261,14 @@ that was stored with ska-point-to-register."
   (cond ((looking-at "[([{]") (kill-sexp 1) (backward-char))
 	((looking-at "[])}]") (forward-char) (backward-kill-sexp 1))
 	(t (self-insert-command (or arg 1)))))
+
+(defun zzq-wrap-region-with-paren ( start end)
+  (interactive "r")
+  (goto-char start)
+  (insert "(")
+  (goto-char (+ 1 end))
+  (insert ")"))
+
 ;;========END
 
 
@@ -278,7 +293,10 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "\C-cbk") 'tabbar-forward)
 (global-set-key (kbd "\C-cm")  'ska-point-to-register)
 (global-set-key (kbd "\C-cp")  'ska-jump-to-register)
+(global-set-key (kbd "\C-cu")  'revert-buffer)
+(global-set-key (kbd "\C-cr")  'smart-run) 
 (global-set-key (kbd "C-x %") 'kill-match-paren)
+(global-set-key (kbd "C-(")	'zzq-wrap-region-with-paren)
 ;;========END
 
 
@@ -437,6 +455,40 @@ that was stored with ska-point-to-register."
 ;; ;    (haskell-mode           .       "ghc -o %n %f")
 ;; ;    (asy-mode               .       (call-interactively 'asy-compile-view))
         (muse-mode      .   (call-interactively 'muse-project-publish))))
+
+
+(setq smart-run-alist
+      '(("\\.c$"          . "./%n")
+        ("\\.[Cc]+[Pp]*$" . "./%n")
+        ("\\.java$"       . "java %n")
+        ("\\.php$"        . "php %f")
+        ("\\.m$"          . "%f")
+        ("\\.scm"         . "%f")
+        ("\\.tex$"        . "dvisvga %n.dvi")
+        ("\\.py$"         . "python %f")
+        ("\\.pl$"         . "perl \"%f\"")
+        ("\\.pm$"         . "perl \"%f\"")
+        ("\\.bat$"        . "%f")
+        ("\\.mp$"         . "mpost %f")
+        ("\\.ahk$"        . "start d:\\Programs\\AutoHotkey\\AutoHotkey %f")
+        ("\\.sh$"         . "./%f")))
+
+(setq smart-executable-alist
+      '("%n.class"
+        "%n.exe"
+        "%n"
+        "%n.mp"
+        "%n.m"
+        "%n.php"
+        "%n.scm"
+        "%n.dvi"
+        "%n.py"
+        "%n.pl"
+        "%n.ahk"
+        "%n.pm"
+        "%n.bat"
+        "%n.sh"))
+
 
 (setq my-shebang-patterns
       (list "^#!/usr/.*/perl\\(\\( \\)\\|\\( .+ \\)\\)-w *.*"
@@ -646,22 +698,22 @@ that was stored with ska-point-to-register."
 	       try-complete-lisp-symbol-partially
 	       try-complete-lisp-symbol
 	       try-expand-dabbrev-visible
-	     try-expand-dabbrev
-	     try-expand-dabbrev-all-buffers
-	     try-expand-dabbrev-from-kill
-	     try-expand-list
-	     try-expand-list-all-buffers
-	     try-complete-file-name-partially
-	     try-complete-file-name
-	     try-expand-whole-kill))))
+	       try-expand-dabbrev
+	       try-expand-dabbrev-all-buffers
+	       try-expand-dabbrev-from-kill
+	       try-expand-list
+	       try-expand-list-all-buffers
+	       try-complete-file-name-partially
+	       try-complete-file-name
+	       try-expand-whole-kill))))
 
 ;=========Shell 模式
 ;; Put this file into your load-path and the following into your ~/.emacs:
 (require 'shell-completion)
 (require 'shell-history)
-(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-(setq ansi-color-for-comint-mode t)
+;; (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+;; (setq ansi-color-for-comint-mode t)
 
 ;;=========yasnipet mode
 (require 'yasnippet) ;; not yasnippet-bundle
