@@ -4,9 +4,9 @@
 ;; Author: zigler
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
-;;           By: zigler
-;; Last-Updated: 日  8月 31 19:32:13 2008 (CST)
-;;     Update #: 17
+;;           By: Zhiqiang.Zhang
+;; Last-Updated: 五  9月 12 16:53:06 2008 (CST)
+;;     Update #: 110
 ;; 
 ;; 
 ;;; Change log:
@@ -25,6 +25,7 @@
 
 
 ;;========调用公用模块
+(load-file "~/.emacs.d/myinfo.el") ;;私人信息,if you are not author please comment this line
 (load-library "vc-svn")
 (autoload 'senator-try-expand-semantic "senator")
 (autoload 'two-mode-mode "two mode mode")
@@ -60,13 +61,6 @@
 (if window-system
     (progn
       (require 'ecb-autoloads) ;;nox
-      (setq default-frame-alist
-          (append
-           '((top . 0)
-             (left . 0)
-             (width . 100)
-             (height . 49))
-           default-frame-alist))
       (setq x-select-enable-clipboard t) ;;使用剪切板
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
       (defvar my-speedbar-buffer-name ;;{{{  speedbar within frame
@@ -95,7 +89,8 @@
 				       speedbar-buffer nil)
 				 (speedbar-set-timer nil)))))
 	(set-window-buffer (selected-window)
-			   (get-buffer my-speedbar-buffer-name)))))
+			   (get-buffer my-speedbar-buffer-name))))
+)
 
 ;;=======End
 
@@ -145,6 +140,9 @@
 (menu-bar-mode -1)
 (tabbar-mode t) ; 显示tab标签
 (setq inhibit-startup-message t)        ;禁用启动信息
+;; WoMan 不打开新的 frame
+(setq woman-use-own-frame nil)
+
 ;;(hs-minor-mode t)
 ;;设置标题栏
 ;; (setq frame-title-format "emacs@%b")
@@ -160,6 +158,10 @@
 ;; (add-to-list 'tramp-default-method-alist
 ;;              '("\\`localhost\\'" "" "su"))
 (setq tramp-default-method "")
+
+;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
+;; 这个文件中
+(setq custom-file "~/.emacs.d/myinfo.el")
 
 ;;emacs23
 ;; (set-default-font "Consolas-16")
@@ -245,6 +247,28 @@ that was stored with ska-point-to-register."
   (let ((tmp (point-marker)))
         (jump-to-register 8)
         (set-register 8 tmp)))
+(add-hook 'after-save-hook
+	  (lambda ()
+	    (mapcar
+	     (lambda (file)
+	       (setq file (expand-file-name file))
+	       (when (string= file (buffer-file-name))
+		 (save-excursion (byte-compile-file file))))
+	     '("~/.emacs.d/init.el" "~/.emacs.d/myinfo.el" "~/.emacs.d/conf/cpp-conf.el"))))
+;删除匹配括号间内容
+(defun kill-match-paren (arg)
+  (interactive "p")
+  (cond ((looking-at "[([{]") (kill-sexp 1) (backward-char))
+	((looking-at "[])}]") (forward-char) (backward-kill-sexp 1))
+	(t (self-insert-command (or arg 1)))))
+
+(defun zzq-wrap-region-with-paren ( start end)
+  (interactive "r")
+  (goto-char start)
+  (insert "(")
+  (goto-char (+ 1 end))
+  (insert ")"))
+
 ;;========END
 
 
@@ -254,7 +278,6 @@ that was stored with ska-point-to-register."
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 (global-set-key [(tab)] 'my-indent-or-complete)
-
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
 (global-set-key [(control \;)] 'my-comment-or-uncomment-region)
 (global-set-key "\r" 'newline-and-indent)
@@ -270,14 +293,18 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "\C-cbk") 'tabbar-forward)
 (global-set-key (kbd "\C-cm")  'ska-point-to-register)
 (global-set-key (kbd "\C-cp")  'ska-jump-to-register)
+(global-set-key (kbd "\C-cu")  'revert-buffer)
+(global-set-key (kbd "\C-cr")  'smart-run) 
+(global-set-key (kbd "C-x %") 'kill-match-paren)
+(global-set-key (kbd "C-(")	'zzq-wrap-region-with-paren)
 ;;========END
 
 
 
 
 ;;========Hippie-Expand
-;; (setq hippie-expand-try-functions-list
-(make-hippie-expand-function
+(setq hippie-expand-try-functions-list
+;; (make-hippie-expand-function
  '(
 	yas/hippie-try-expand
 	senator-try-expand-semantic
@@ -430,6 +457,91 @@ that was stored with ska-point-to-register."
         (muse-mode      .   (call-interactively 'muse-project-publish))))
 
 
+(setq smart-run-alist
+      '(("\\.c$"          . "./%n")
+        ("\\.[Cc]+[Pp]*$" . "./%n")
+        ("\\.java$"       . "java %n")
+        ("\\.php$"        . "php %f")
+        ("\\.m$"          . "%f")
+        ("\\.scm"         . "%f")
+        ("\\.tex$"        . "dvisvga %n.dvi")
+        ("\\.py$"         . "python %f")
+        ("\\.pl$"         . "perl \"%f\"")
+        ("\\.pm$"         . "perl \"%f\"")
+        ("\\.bat$"        . "%f")
+        ("\\.mp$"         . "mpost %f")
+        ("\\.ahk$"        . "start d:\\Programs\\AutoHotkey\\AutoHotkey %f")
+        ("\\.sh$"         . "./%f")))
+
+(setq smart-executable-alist
+      '("%n.class"
+        "%n.exe"
+        "%n"
+        "%n.mp"
+        "%n.m"
+        "%n.php"
+        "%n.scm"
+        "%n.dvi"
+        "%n.py"
+        "%n.pl"
+        "%n.ahk"
+        "%n.pm"
+        "%n.bat"
+        "%n.sh"))
+
+
+(setq my-shebang-patterns
+      (list "^#!/usr/.*/perl\\(\\( \\)\\|\\( .+ \\)\\)-w *.*"
+        "^#!/usr/.*/sh"
+        "^#!/usr/.*/bash"
+        "^#!/bin/sh"
+        "^#!/.*/perl"
+        "^#!/.*/awk"
+        "^#!/.*/sed"
+        "^#!/bin/bash"
+        "^#!/bin/python"
+	"^#!/bin/ruby"
+	"^#!/bin/env *"))
+(add-hook
+ 'after-save-hook
+ (lambda ()
+   (if (not (= (shell-command (concat "test -x " (buffer-file-name))) 0))
+       (progn
+	 ;; This puts message in *Message* twice, but minibuffer
+	 ;; output looks better.
+	 (message (concat "Wrote " (buffer-file-name)))
+	 (save-excursion
+	   (goto-char (point-min))
+	   ;; Always checks every pattern even after
+	   ;; match.  Inefficient but easy.
+	   (dolist (my-shebang-pat my-shebang-patterns)
+	     (if (looking-at my-shebang-pat)
+		 (if (= (shell-command
+			 (concat "chmod u+x " (buffer-file-name)))
+			0)
+		     (message (concat
+			       "Wrote and made executable "
+			       (buffer-file-name))))))))
+     ;; This puts message in *Message* twice, but minibuffer output
+     ;; looks better.
+     (message (concat "Wrote " (buffer-file-name))))))
+
+(define-auto-insert 'cperl-mode  "perl.tpl" )
+(define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
+					; 也可以是,不过我没有试过
+					; (define-auto-insert "\\.pl"  "perl.tpl" )
+(add-hook 'find-file-hooks 'auto-insert)
+
+;; 自动为 C/C++ 的头文件添加 #define 保护。
+(define-auto-insert
+  '("\\.\\([Hh]\\|hh\\|hxx\\|hpp\\)\\'" . "C / C++ header")
+  '((upcase (concat "_"
+                    (replace-regexp-in-string
+                     "[^a-zA-Z0-9]" "_"
+                     (format "%s_%d_" (file-name-nondirectory buffer-file-name) (random)))))
+    "#ifndef " str \n
+    "#define " str "\n\n"
+    _ "\n\n#endif"))
 
 ;;========ido 模式
 (ido-mode t)
@@ -586,18 +698,22 @@ that was stored with ska-point-to-register."
 	       try-complete-lisp-symbol-partially
 	       try-complete-lisp-symbol
 	       try-expand-dabbrev-visible
-	     try-expand-dabbrev
-	     try-expand-dabbrev-all-buffers
-	     try-expand-dabbrev-from-kill
-	     try-expand-list
-	     try-expand-list-all-buffers
-	     try-complete-file-name-partially
-	     try-complete-file-name
-	     try-expand-whole-kill))))
+	       try-expand-dabbrev
+	       try-expand-dabbrev-all-buffers
+	       try-expand-dabbrev-from-kill
+	       try-expand-list
+	       try-expand-list-all-buffers
+	       try-complete-file-name-partially
+	       try-complete-file-name
+	       try-expand-whole-kill))))
 
 ;=========Shell 模式
 ;; Put this file into your load-path and the following into your ~/.emacs:
 (require 'shell-completion)
+(require 'shell-history)
+;; (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+;; (setq ansi-color-for-comint-mode t)
 
 ;;=========yasnipet mode
 (require 'yasnippet) ;; not yasnippet-bundle
@@ -797,14 +913,6 @@ Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
         )))
 (add-hook 'write-file-hooks 'update-file-header)
 (add-hook 'emacs-lisp-mode-hook 'auto-make-header)
-;=========Top mode
-;; (defun top-mode-solaris-generate-top-command (user)
-;;   (if (not user)
-;;       "top -b"
-;;     (format "top -b -U%s" user)))
-;; (setq top-mode-generate-top-command-function
-;;       'top-mode-solaris-generate-top-command)
-;; (setq top-mode-strace-command "truss")
 
 
 ;;;; anything.el
@@ -911,7 +1019,6 @@ makes)."
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(canlock-password "69d4b0236bee5175fe24279b2799c0126960ae5f")
  '(ecb-options-version "2.32")
  '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.pl\\'" flymake-perl-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.py\\'" flymake-pylint-init) ("\\.idl\\'" flymake-simple-make-init))))
  '(js2-highlight-level 3)
@@ -919,7 +1026,7 @@ makes)."
  '(regex-tool-backend (quote perl))
  '(regex-tool-new-frame t)
  '(semantic-idle-scheduler-idle-time 432000)
- )
+ '(weblogger-save-password t))
  
 (custom-set-faces
   ;; custom-set-faces was added by Custom.

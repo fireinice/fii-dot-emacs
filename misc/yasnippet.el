@@ -1,3 +1,4 @@
+
 ;;; yasnippet.el --- Yet another snippet extension for Emacs.
 
 ;; Copyright 2008 pluskid
@@ -1273,9 +1274,9 @@ handle the end-of-buffer error fired in it by calling
 ;; Copyright (C) 2008 Jaeyoun Chung
 ;; Created: Sun Mar 16 11:20:45 2008 (Pacific Daylight Time)
 ;; Version: 
-;; Last-Updated: Sun Mar 16 12:19:49 2008 (Pacific Daylight Time)
-;;           By: dradams
-;;     Update #: 43
+;; Last-Updated: 三  9月 10 13:36:14 2008 (CST)
+;;           By: zigler
+;;     Update #: 44
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/dropdown-list.el
 ;; Keywords: convenience menu
 ;; Compatibility: GNU Emacs 21.x, GNU Emacs 22.x
