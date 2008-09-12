@@ -4,9 +4,9 @@
 ;; Author: zigler
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
-;;           By: zigler
-;; Last-Updated: 一  9月  8 13:49:11 2008 (CST)
-;;     Update #: 59
+;;           By: Zhiqiang.Zhang
+;; Last-Updated: 五  9月 12 10:15:00 2008 (CST)
+;;     Update #: 77
 ;; 
 ;; 
 ;;; Change log:
@@ -240,7 +240,6 @@ that was stored with ska-point-to-register."
   (let ((tmp (point-marker)))
         (jump-to-register 8)
         (set-register 8 tmp)))
-
 (add-hook 'after-save-hook
 	  (lambda ()
 	    (mapcar
@@ -248,15 +247,13 @@ that was stored with ska-point-to-register."
 	       (setq file (expand-file-name file))
 	       (when (string= file (buffer-file-name))
 		 (save-excursion (byte-compile-file file))))
-	     '("~/.emacs.d/init.el" "~/.emacs.d/conf/*.el"))))
-
+	     '("~/.emacs.d/init.el" "~/.emacs.d/myinfo.el" "~/.emacs.d/conf/cpp-conf.el"))))
 ;删除匹配括号间内容
 (defun kill-match-paren (arg)
-(interactive "p")
-(cond ((looking-at "[([{]") (kill-sexp 1) (backward-char))
-((looking-at "[])}]") (forward-char) (backward-kill-sexp 1))
-(t (self-insert-command (or arg 1)))))
-(global-set-key (kbd "C-x %") 'kill-match-paren)
+  (interactive "p")
+  (cond ((looking-at "[([{]") (kill-sexp 1) (backward-char))
+	((looking-at "[])}]") (forward-char) (backward-kill-sexp 1))
+	(t (self-insert-command (or arg 1)))))
 ;;========END
 
 
@@ -266,7 +263,6 @@ that was stored with ska-point-to-register."
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 (global-set-key [(tab)] 'my-indent-or-complete)
-
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
 (global-set-key [(control \;)] 'my-comment-or-uncomment-region)
 (global-set-key "\r" 'newline-and-indent)
@@ -282,14 +278,15 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "\C-cbk") 'tabbar-forward)
 (global-set-key (kbd "\C-cm")  'ska-point-to-register)
 (global-set-key (kbd "\C-cp")  'ska-jump-to-register)
+(global-set-key (kbd "C-x %") 'kill-match-paren)
 ;;========END
 
 
 
 
 ;;========Hippie-Expand
-;; (setq hippie-expand-try-functions-list
-(make-hippie-expand-function
+(setq hippie-expand-try-functions-list
+;; (make-hippie-expand-function
  '(
 	yas/hippie-try-expand
 	senator-try-expand-semantic
@@ -456,31 +453,31 @@ that was stored with ska-point-to-register."
 (add-hook
  'after-save-hook
  (lambda ()
- (if (not (= (shell-command (concat "test -x " (buffer-file-name))) 0))
-     (progn
-       ;; This puts message in *Message* twice, but minibuffer
-       ;; output looks better.
-       (message (concat "Wrote " (buffer-file-name)))
-       (save-excursion
-         (goto-char (point-min))
-         ;; Always checks every pattern even after
-         ;; match.  Inefficient but easy.
-         (dolist (my-shebang-pat my-shebang-patterns)
-           (if (looking-at my-shebang-pat)
-               (if (= (shell-command
-                       (concat "chmod u+x " (buffer-file-name)))
-                      0)
-                   (message (concat
-                             "Wrote and made executable "
-                             (buffer-file-name))))))))
-   ;; This puts message in *Message* twice, but minibuffer output
-   ;; looks better.
-   (message (concat "Wrote " (buffer-file-name))))))
+   (if (not (= (shell-command (concat "test -x " (buffer-file-name))) 0))
+       (progn
+	 ;; This puts message in *Message* twice, but minibuffer
+	 ;; output looks better.
+	 (message (concat "Wrote " (buffer-file-name)))
+	 (save-excursion
+	   (goto-char (point-min))
+	   ;; Always checks every pattern even after
+	   ;; match.  Inefficient but easy.
+	   (dolist (my-shebang-pat my-shebang-patterns)
+	     (if (looking-at my-shebang-pat)
+		 (if (= (shell-command
+			 (concat "chmod u+x " (buffer-file-name)))
+			0)
+		     (message (concat
+			       "Wrote and made executable "
+			       (buffer-file-name))))))))
+     ;; This puts message in *Message* twice, but minibuffer output
+     ;; looks better.
+     (message (concat "Wrote " (buffer-file-name))))))
 
 (define-auto-insert 'cperl-mode  "perl.tpl" )
-(define-auto-insert 'sh-mode '(nil "#!/bin/bash\n\n"))
-; 也可以是,不过我没有试过
-; (define-auto-insert "\\.pl"  "perl.tpl" )
+(define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
+					; 也可以是,不过我没有试过
+					; (define-auto-insert "\\.pl"  "perl.tpl" )
 (add-hook 'find-file-hooks 'auto-insert)
 
 ;; 自动为 C/C++ 的头文件添加 #define 保护。
@@ -662,6 +659,9 @@ that was stored with ska-point-to-register."
 ;; Put this file into your load-path and the following into your ~/.emacs:
 (require 'shell-completion)
 (require 'shell-history)
+(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(setq ansi-color-for-comint-mode t)
 
 ;;=========yasnipet mode
 (require 'yasnippet) ;; not yasnippet-bundle
@@ -967,7 +967,6 @@ makes)."
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(canlock-password "69d4b0236bee5175fe24279b2799c0126960ae5f")
  '(ecb-options-version "2.32")
  '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.pl\\'" flymake-perl-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.py\\'" flymake-pylint-init) ("\\.idl\\'" flymake-simple-make-init))))
  '(js2-highlight-level 3)

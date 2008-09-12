@@ -1,5 +1,11 @@
 (require 'eassist)
 (require 'doxymacs)
+(add-hook 'font-lock-mode-hook
+	  (lambda()
+	    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+		(doxymacs-font-lock))))
+
+(doxymacs-mode 1)
 (autoload 'senator-try-expand-semantic "senator")
 (c-set-offset 'inline-open 0)
 (c-set-offset 'friend '-)
