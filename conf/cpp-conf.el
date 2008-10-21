@@ -6,12 +6,10 @@
 		(doxymacs-font-lock))))
 
 (doxymacs-mode 1)
-(autoload 'senator-try-expand-semantic "senator")
-(c-set-offset 'inline-open 0)
-(c-set-offset 'friend '-)
-(c-set-offset 'substatement-open 0)
+;; (autoload 'senator-try-expand-semantic "senator")
 (c-set-style "stroustrup")
-(setq tab-width 2 indent-tabs-mode t)
+(c-set-offset 'substatement-open 0)
+(setq tab-width 4 indent-tabs-mode t)
 (setq gdb-many-windows t)
 ;; hungry-delete and auto-newline
 (c-toggle-auto-hungry-state 1)
@@ -31,7 +29,9 @@
 (setq c-macro-prompt-flag t)
 
 (add-hook 'c++-mode-hook
-          (c-subword-mode 1))
+          (c-subword-mode 1)
+	  (c-set-offset 'inline-open 0)
+	  (c-set-offset 'friend '-))
 ;;;;C/C++语言启动时自动加载semantic对/usr/include的索引数据库
 ;; (setq semanticdb-search-system-databases t)
 ;;   (add-hook 'c-mode-common-hook
@@ -48,7 +48,6 @@
 (make-hippie-expand-function
       '(
 	yas/hippie-try-expand
-	senator-try-expand-semantic
 	try-complete-abbrev
 	try-expand-dabbrev-visible
 	try-expand-dabbrev
@@ -57,17 +56,4 @@
 	try-expand-list
 	try-expand-list-all-buffers
 	try-expand-whole-kill))
-
-;; 自动为 C/C++ 的头文件添加 #define 保护。
-(define-auto-insert
-  '("\\.\\([Hh]\\|hh\\|hxx\\|hpp\\)\\'" . "C / C++ header")
-  '((upcase (concat "_"
-                    (replace-regexp-in-string
-                     "[^a-zA-Z0-9]" "_"
-                     (format "%s_" (file-name-nondirectory buffer-file-name)))))
-    "#ifndef " str \n
-    "#define " str "\n\n"
-    _ "\n\n#endif"))
-
-
 

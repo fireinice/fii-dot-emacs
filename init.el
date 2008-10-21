@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 五  9月 12 16:53:06 2008 (CST)
-;;     Update #: 110
+;; Last-Updated: 二 10月 21 14:08:51 2008 (CST)
+;;     Update #: 128
 ;; 
 ;; 
 ;;; Change log:
@@ -27,9 +27,10 @@
 ;;========调用公用模块
 (load-file "~/.emacs.d/myinfo.el") ;;私人信息,if you are not author please comment this line
 (load-library "vc-svn")
-(autoload 'senator-try-expand-semantic "senator")
+;; (autoload 'senator-try-expand-semantic "senator")
 (autoload 'two-mode-mode "two mode mode")
 (autoload 'cl "cl")
+(require 'magit)
 (require 'smart-compile)
 (require 'fvwm-mode)
 (require 'html-helper-mode)
@@ -49,12 +50,46 @@
 (require 'regex-tool)
 (require 'xcscope)
 (require 'ruby-mode)
+(require 'ede)
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
 ;; (require 'two-mode-mode)
 ;;========END
 
 
+
+;;========semantic
+;; (setq semanticdb-project-roots
+;;         (list
+;;         (expand-file-name "/")))
+;; (setq semantic-load-turn-everything-on t) 
+;; (add-hook 'semantic-init-hooks
+;; 	  (lambda ()
+;; 	    'semantic-idle-completions-mode
+;; 	    'semantic-mru-bookmark-mode))
+;; ;; 指定semantic临时文件的路径，避免到处都是临时文件
+;; (setq semanticdb-default-save-directory "~/.auto-save/semantic")
+;; ;; Enabling various SEMANTIC minor modes. See semantic/INSTALL for more ideas.
+;; ;; Select one of the following:
+
+;; ;; * This enables the database and idle reparse engines
+;; ;;(semantic-load-enable-minimum-features)
+
+;; ;; * This enables some tools useful for coding, such as summary mode
+;; ;;   imenu support, and the semantic navigator
+;; ;;(semantic-load-enable-code-helpers)
+
+;; ;; * This enables even more coding tools such as the nascent intellisense mode
+;; ;;   decoration mode, and stickyfunc mode (plus regular code helpers)
+;; ;;(semantic-load-enable-guady-code-helpers)
+
+;; ;; * This turns on which-func support (Plus all other code helpers)
+;; (semantic-load-enable-excessive-code-helpers)
+
+;; ;; This turns on modes that aid in grammar writing and semantic tool
+;; ;; development. It does not enable any other features such as code
+;; ;; helpers above.
+;; ;; (semantic-load-enable-semantic-debugging-helpers)
 
 
 ;;========仅作用于X下
@@ -117,6 +152,8 @@
 (modify-coding-system-alist 'file "\\.nfo\\'" 'cp437) ;;打开nfo文件
 ;; 若要将注释改为斜体，可采用以下代码：
 ;;(font-lock-comment-face ((t (:italic t))))
+(global-ede-mode t) 			;使用ede管理项目
+
 
 (setq backup-directory-alist '(("." . "~/.auto-save"))) ;将备份文件放至~/tmp下
 ;; Emacs 中，改变文件时，默认都会产生备份文件(以 ~ 结尾的文件)。可以完全去掉
@@ -276,6 +313,7 @@ that was stored with ska-point-to-register."
 
 ;;========基本函数绑定
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
+(define-key magit-mode-map [(tab)] 'magit-toggle-section) ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 (global-set-key [(tab)] 'my-indent-or-complete)
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
@@ -297,6 +335,8 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "\C-cr")  'smart-run) 
 (global-set-key (kbd "C-x %") 'kill-match-paren)
 (global-set-key (kbd "C-(")	'zzq-wrap-region-with-paren)
+(global-set-key (kbd "\C-cv")	'magit-status)
+
 ;;========END
 
 
@@ -307,7 +347,6 @@ that was stored with ska-point-to-register."
 ;; (make-hippie-expand-function
  '(
 	yas/hippie-try-expand
-	senator-try-expand-semantic
 	try-complete-abbrev
 	try-expand-dabbrev-visible
 	try-expand-dabbrev
@@ -342,39 +381,6 @@ that was stored with ska-point-to-register."
 ;; w3 link listings
 (autoload 'w3-speedbar-buttons "sb-w3" "s3 specific speedbar button generator.") 
 
-
-;;========semantic
-(setq semanticdb-project-roots
-        (list
-        (expand-file-name "/")))
-(setq semantic-load-turn-everything-on t) 
-(add-hook 'semantic-init-hooks
-	  (lambda ()
-	    'semantic-idle-completions-mode
-	    'semantic-mru-bookmark-mode))
-;; 指定semantic临时文件的路径，避免到处都是临时文件
-(setq semanticdb-default-save-directory "~/.auto-save/semantic")
-;; Enabling various SEMANTIC minor modes. See semantic/INSTALL for more ideas.
-;; Select one of the following:
-
-;; * This enables the database and idle reparse engines
-;;(semantic-load-enable-minimum-features)
-
-;; * This enables some tools useful for coding, such as summary mode
-;;   imenu support, and the semantic navigator
-;;(semantic-load-enable-code-helpers)
-
-;; * This enables even more coding tools such as the nascent intellisense mode
-;;   decoration mode, and stickyfunc mode (plus regular code helpers)
-;;(semantic-load-enable-guady-code-helpers)
-
-;; * This turns on which-func support (Plus all other code helpers)
-(semantic-load-enable-excessive-code-helpers)
-
-;; This turns on modes that aid in grammar writing and semantic tool
-;; development. It does not enable any other features such as code
-;; helpers above.
-;; (semantic-load-enable-semantic-debugging-helpers)
 
 ;;===========ecb配置
 (setq ecb-tree-indent 4
@@ -411,7 +417,7 @@ that was stored with ska-point-to-register."
 (load "preview-latex.el" nil t t)
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
 (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil) 
-(add-hook 'tex-mode-hook
+(add-hook 'TeX-mode-hook
 	  (lambda()
 	    (load-file "~/.emacs.d/conf/auctex-conf.el")))
 
@@ -530,24 +536,30 @@ that was stored with ska-point-to-register."
 (define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
 					; 也可以是,不过我没有试过
 					; (define-auto-insert "\\.pl"  "perl.tpl" )
-(add-hook 'find-file-hooks 'auto-insert)
-
 ;; 自动为 C/C++ 的头文件添加 #define 保护。
 (define-auto-insert
   '("\\.\\([Hh]\\|hh\\|hxx\\|hpp\\)\\'" . "C / C++ header")
   '((upcase (concat "_"
                     (replace-regexp-in-string
                      "[^a-zA-Z0-9]" "_"
-                     (format "%s_%d_" (file-name-nondirectory buffer-file-name) (random)))))
+                     (format "%s_" (file-name-nondirectory buffer-file-name)))))
     "#ifndef " str \n
     "#define " str "\n\n"
     _ "\n\n#endif"))
+
+(add-hook 'find-file-hooks 'auto-insert)
 
 ;;========ido 模式
 (ido-mode t)
 (add-hook 'ido-setup-hook
 	  (lambda()
-	    (define-key ido-completion-map [(tab)] 'ido-complete)))
+	    (define-key ido-completion-map [(tab)] 'ido-complete)
+	    (add-to-list 'ido-ignore-files "\\`\\.svn/")
+	    (add-to-list 'ido-ignore-files "\\`TAGS")
+	    (add-to-list 'ido-ignore-buffers "\\`\\.bbdb")
+	    (add-to-list 'ido-ignore-buffers "\\`\\.newsrc.dribble")
+	    (add-to-list 'ido-ignore-buffers "\\`*Completions*")
+	    (add-to-list 'ido-ignore-buffers "\\`*svn-process*")))
 
 ;;=========w3m
 (require 'w3m)
@@ -1014,27 +1026,27 @@ makes)."
 
 
 ;;========Custom Configure End HERE====================
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(ecb-options-version "2.32")
- '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.pl\\'" flymake-perl-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.py\\'" flymake-pylint-init) ("\\.idl\\'" flymake-simple-make-init))))
- '(js2-highlight-level 3)
- '(pylint-options "--output-format=parseable --include-ids=yes")
- '(regex-tool-backend (quote perl))
- '(regex-tool-new-frame t)
- '(semantic-idle-scheduler-idle-time 432000)
- '(weblogger-save-password t))
+;; (custom-set-variables
+;;   ;; custom-set-variables was added by Custom.
+;;   ;; If you edit it by hand, you could mess it up, so be careful.
+;;   ;; Your init file should contain only one such instance.
+;;   ;; If there is more than one, they won't work right.
+;;  '(ecb-options-version "2.32")
+;;  '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.pl\\'" flymake-perl-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.py\\'" flymake-pylint-init) ("\\.idl\\'" flymake-simple-make-init))))
+;;  '(js2-highlight-level 3)
+;;  '(pylint-options "--output-format=parseable --include-ids=yes")
+;;  '(regex-tool-backend (quote perl))
+;;  '(regex-tool-new-frame t)
+;;  '(semantic-idle-scheduler-idle-time 432000)
+;;  '(weblogger-save-password t))
  
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(flymake-errline ((((class color)) (:background "LightPink" :foreground "black"))))
- '(flymake-warnline ((((class color)) (:background "LightBlue2" :foreground "black"))))
- '(regex-tool-matched-face ((t (:background "black" :foreground "Orange" :weight bold)))))
+;; (custom-set-faces
+;;   ;; custom-set-faces was added by Custom.
+;;   ;; If you edit it by hand, you could mess it up, so be careful.
+;;   ;; Your init file should contain only one such instance.
+;;   ;; If there is more than one, they won't work right.
+;;  '(flymake-errline ((((class color)) (:background "LightPink" :foreground "black"))))
+;;  '(flymake-warnline ((((class color)) (:background "LightBlue2" :foreground "black"))))
+;;  '(regex-tool-matched-face ((t (:background "black" :foreground "Orange" :weight bold)))))
 
 ;;========init.el end here

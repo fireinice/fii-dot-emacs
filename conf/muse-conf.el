@@ -8,6 +8,8 @@
 (require 'muse-texinfo)  ; load Info publishing style
 (require 'outline nil t)
 (require 'sgml-mode)
+(footnote-mode t)
+(setq tab-width 4 indent-tabs-mode t)
 ;(require 'muse-xml)      ; load XML support
 ;;(require 'muse-journal)  ; load journal module
 ;(require 'muse-message)  ; load message support (experimental)
@@ -37,6 +39,12 @@
          :default "index"
          :force-publish ("index"))
          (:base "wiki-xhtml" :path "~/note/muse/publish/CSCW"))
+
+	("Mozilla"
+         ("~/note/muse/Mozilla"
+         :default "index"
+         :force-publish ("index"))
+         (:base "wiki-xhtml" :path "~/note/muse/publish/Mozilla"))
 
         ("Emacs"
          ("~/note/muse/Emacs"
