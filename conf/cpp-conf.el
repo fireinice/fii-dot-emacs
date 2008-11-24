@@ -48,6 +48,7 @@
 (make-hippie-expand-function
       '(
 	yas/hippie-try-expand
+;; 	senator-try-expand-semantic
 	try-complete-abbrev
 	try-expand-dabbrev-visible
 	try-expand-dabbrev

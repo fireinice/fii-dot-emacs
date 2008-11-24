@@ -34,13 +34,14 @@
 ;; accurate anymore.
 
 ;; configure these:
-(defvar default-mode (list "HTML" 'html-mode))
+(defvar default-mode (list "HTML" 'html-helper-mode))
 (defvar second-modes (list
 		      (list "Erlang" "<erl>" "</erl>" 'erlang-mode)
                       (list "C++" "<?php" "?>" 'c++-mode)
                       (list "Python" "<?python" "?>" 'python-mode)
 		      (list "Tcl" "<?" "?>" 'tcl-mode)
 		      (list "Ruby" "<%" "%>" 'ruby-mode)
+		      (list "CSS" "<style type=\"text/css\">" "</style>" 'css-mode)
 		      ))
 ;; ----------------
 

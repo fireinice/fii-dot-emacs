@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 二 10月 21 14:18:23 2008 (CST)
-;;     Update #: 130
+;; Last-Updated: 一 11月 24 16:38:11 2008 (CST)
+;;     Update #: 214
 ;; 
 ;; 
 ;;; Change log:
@@ -19,18 +19,28 @@
 (setq load-path (cons "~/.emacs.d/python-mode/" load-path))
 (setq load-path (cons "~/.emacs.d/html-helper/" load-path))
 (setq load-path (cons "~/.emacs.d/weblogger" load-path))
+(setq load-path (cons "~/.emacs.d/nxhtml" load-path))
 ;; add git support(only in debian)
 (setq load-path (cons (expand-file-name "/usr/share/doc/git-core/contrib/emacs") load-path))
 
 
 
 ;;========调用公用模块
-(load-file "~/.emacs.d/myinfo.el") ;;私人信息,if you are not author please comment this line
+;;私人信息,if you are not author please comment this line
+(load-file "~/.emacs.d/myinfo.el")
+(load-file "~/.emacs.d/conf/projects-conf.el") ;;porjects
+;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
+;; 这个文件中
+(setq custom-file "~/.emacs.d/myinfo.el")
+;; end of 私人信息
 (load-library "vc-svn")
 ;; (autoload 'senator-try-expand-semantic "senator")
-(autoload 'two-mode-mode "two mode mode")
+;; (autoload 'two-mode-mode "two mode mode")
 (autoload 'cl "cl")
-(require 'magit)
+(autoload 'magit-status "magit" nil t)
+(require 'linum)
+(require 'grep-edit)
+(require 'color-moccur)
 (require 'smart-compile)
 (require 'fvwm-mode)
 (require 'html-helper-mode)
@@ -43,14 +53,13 @@
 (require 'ange-ftp)
 (require 'speedbar)
 (require 'tabbar)
-;; 加载显示行号的功能
-(require 'setnu)
 (require 'cc-mode)
 (require 'doxymacs)
 (require 'regex-tool)
 (require 'xcscope)
 (require 'ruby-mode)
 (require 'ede)
+(require 'uniquify)
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
 ;; (require 'two-mode-mode)
@@ -58,11 +67,11 @@
 
 
 
-;;========semantic
+;; ;;========semantic
 ;; (setq semanticdb-project-roots
 ;;         (list
 ;;         (expand-file-name "/")))
-;; (setq semantic-load-turn-everything-on t) 
+;; ;; (setq semantic-load-turn-everything-on t) 
 ;; (add-hook 'semantic-init-hooks
 ;; 	  (lambda ()
 ;; 	    'semantic-idle-completions-mode
@@ -133,6 +142,7 @@
 
 
 ;;=======基本设置 start
+(server-start)
 (setq default-major-mode 'text-mode)
 (setq-default abbrev-mode t)
 (setq-default kill-whole-line t)        ; 在行首 C-k 时，同时删除该行。
@@ -190,15 +200,17 @@
 (set-cursor-color "steelblue")
 (set-cursor-color "red")
 (set-mouse-color "slateblue")
-
+(add-to-list 'default-frame-alist '(background-color . "grey25"))
+(add-to-list 'default-frame-alist '(foreground-color . "grey85"))
+(add-to-list 'default-frame-alist '(cursor-color . "red"))
+(add-to-list 'default-frame-alist '(mouse-color . "slateblue"))
 ;; 修改默认的tramp方法为空，否则会出现ssh:sudo: unkown service错误，即把sudo作为参数传给ssh
 ;; (add-to-list 'tramp-default-method-alist
 ;;              '("\\`localhost\\'" "" "su"))
 (setq tramp-default-method "")
 
-;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
-;; 这个文件中
-(setq custom-file "~/.emacs.d/myinfo.el")
+;; 保证文件名相同的时候buffer名称是目录名+文件名
+(setq uniquify-buffer-name-style 'forward)
 
 ;;emacs23
 ;; (set-default-font "Consolas-16")
@@ -313,7 +325,10 @@ that was stored with ska-point-to-register."
 
 ;;========基本函数绑定
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
-(define-key magit-mode-map [(tab)] 'magit-toggle-section) ;;对M-x仍使用原样式
+(add-hook 'magit-mode-hook
+	  (lambda()
+	    (define-key magit-mode-map [(tab)] 'magit-toggle-section)))
+ ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 (global-set-key [(tab)] 'my-indent-or-complete)
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
@@ -329,14 +344,17 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "\C-cbn") 'tabbar-forward-group)
 (global-set-key (kbd "\C-cbj") 'tabbar-backward)
 (global-set-key (kbd "\C-cbk") 'tabbar-forward)
-(global-set-key (kbd "\C-cm")  'ska-point-to-register)
-(global-set-key (kbd "\C-cp")  'ska-jump-to-register)
-(global-set-key (kbd "\C-cu")  'revert-buffer)
-(global-set-key (kbd "\C-cr")  'smart-run) 
+(global-set-key (kbd "\C-crm")  'ska-point-to-register)
+(global-set-key (kbd "\C-crj")  'ska-jump-to-register)
+(global-set-key (kbd "\C-ccu")  'revert-buffer)
+(global-set-key (kbd "\C-ccr")  'smart-run) 
 (global-set-key (kbd "C-x %") 'kill-match-paren)
 (global-set-key (kbd "C-(")	'zzq-wrap-region-with-paren)
-(global-set-key (kbd "\C-cv")	'magit-status)
-
+(global-set-key (kbd "\C-cvg")	'magit-status)
+(global-set-key (kbd "\C-cvc")	'cvs-status)
+(global-set-key (kbd "\C-cpl")  'project-load)
+(global-set-key (kbd "\C-cpc")  'project-compile)
+(global-set-key (kbd "\C-ccf")	'ffap)
 ;;========END
 
 
@@ -568,17 +586,58 @@ that was stored with ska-point-to-register."
             (load-file "~/.emacs.d/conf/w3m-conf.el")))
 
 ;=========HTML 模式
-;; (require 'tempo)
-(defvar html-mode-abbrev-table nil
-  "Abbrev table in use in `html-mode' buffers.")
-(define-abbrev-table 'html-mode-abbrev-table ())
-(setq auto-mode-alist (cons '("\\.html$" . html-helper-mode) auto-mode-alist))
-(add-hook 'html-helper-load-hook
-	  (lambda ()
-	    (require 'sb-html) ;;speedbar 支持
-	    (setq tempo-interactive t)
-	    (setq html-helper-build-new-buffer t)
-	    (define-key html-helper-mode-map [(tab)] 'tempo-complete-tag)))
+(load "~/.emacs.d/nxhtml/autostart.el")
+(add-to-list 'auto-mode-alist
+             '("\\.html$" . zzq-html-mode))
+;; only special background in submode
+;; (setq mumamo-chunk-coloring 'submode-colored)
+(setq nxhtml-skip-welcome t)
+ 
+;; do not turn on rng-validate-mode automatically, I don't like
+;; the anoying red underlines
+;; (setq rng-nxml-auto-validate-flag nil)
+ 
+;; force to load another css-mode, the css-mode in nxml package
+;; seems failed to load under my Emacs 23
+;; (let ((load-path (cons "~/emacs/extension/"
+;;                        load-path)))
+;;   (require 'css-mode))
+ 
+(defun zzq-html-mode ()
+  (nxhtml-mode)
+  ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
+  ;; define this dummy variable
+  (make-local-variable 'cua-inhibit-cua-keys)
+;;   (setq mumamo-current-chunk-family '("eRuby nXhtml Family" nxhtml-mode
+;;                                       (mumamo-chunk-eruby
+;;                                        mumamo-chunk-inlined-style
+;;                                        mumamo-chunk-inlined-script
+;;                                        mumamo-chunk-style=
+;;                                        mumamo-chunk-onjs=)))
+  (mumamo-mode)
+;;   (rails-minor-mode t)
+  (auto-fill-mode -1)
+  (setq tab-width 2)
+  (setq indent-tabs-mode nil))
+;; ;; (require 'tempo)
+;; (defvar html-mode-abbrev-table nil
+;;   "Abbrev table in use in `html-mode' buffers.")
+;; (define-abbrev-table 'html-mode-abbrev-table ())
+;; (setq auto-mode-alist
+;;       (cons '("\\.html$" . two-mode-mode) auto-mode-alist))
+;; ;; (setq auto-mode-alist 
+;; ;;       (cons '("\\.html$" . html-helper-mode) auto-mode-alist))
+;; ;; (setq two-mode-rmatch "<style*>"
+;; ;;       two-mode-lmatch "</style>"
+;; ;;       default-mode '(html-helper-mode "html-helper-mode")
+;; ;;       second-mode '(css-mode "css"))
+;; ;; (two-mode-mode)				
+;; (add-hook 'html-helper-load-hook
+;; 	  (lambda ()
+;; 	    (require 'sb-html) ;;speedbar 支持
+;; 	    (setq tempo-interactive t)
+;; 	    (setq html-helper-build-new-buffer t)
+;; 	    (define-key html-helper-mode-map [(tab)] 'tempo-complete-tag)))
 
 ;;========JavaScript 模式
 ;; (autoload 'javascript-mode "javascritp mode")
@@ -606,12 +665,12 @@ that was stored with ska-point-to-register."
   (defun flymake-pylint-init ()
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
 		       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
+	   (local-file (file-relative-name
+			temp-file
+			(file-name-directory buffer-file-name))))
       (list "epylint" (list local-file))))
   (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pylint-init)))
+	       '("\\.py\\'" flymake-pylint-init)))
 (add-hook 'find-file-hook 'flymake-find-file-hook)
 
 (add-hook 'python-mode-hook
@@ -624,7 +683,6 @@ that was stored with ska-point-to-register."
 	    (set (make-variable-buffer-local 'beginning-of-defun-function)
 		 'py-beginning-of-def-or-class)
 	    (setq outline-regexp "def\\|class ")
-;; 	    (flymake-mode 1) ;;!!flymake-allowed-file-name should be hacked
 ))
 
 ;; Pychecker
@@ -1024,29 +1082,26 @@ makes)."
  (autoload 'git-blame-mode "git-blame"
            "Minor mode for incremental blame for Git." t)
 
-
-;;========Custom Configure End HERE====================
-;; (custom-set-variables
-;;   ;; custom-set-variables was added by Custom.
-;;   ;; If you edit it by hand, you could mess it up, so be careful.
-;;   ;; Your init file should contain only one such instance.
-;;   ;; If there is more than one, they won't work right.
-;;  '(ecb-options-version "2.32")
-;;  '(flymake-allowed-file-name-masks (quote (("\\.c\\'" flymake-simple-make-init) ("\\.cpp\\'" flymake-simple-make-init) ("\\.xml\\'" flymake-xml-init) ("\\.html?\\'" flymake-xml-init) ("\\.cs\\'" flymake-simple-make-init) ("\\.pl\\'" flymake-perl-init) ("\\.h\\'" flymake-master-make-header-init flymake-master-cleanup) ("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) ("[0-9]+\\.tex\\'" flymake-master-tex-init flymake-master-cleanup) ("\\.tex\\'" flymake-simple-tex-init) ("\\.py\\'" flymake-pylint-init) ("\\.idl\\'" flymake-simple-make-init))))
-;;  '(js2-highlight-level 3)
-;;  '(pylint-options "--output-format=parseable --include-ids=yes")
-;;  '(regex-tool-backend (quote perl))
-;;  '(regex-tool-new-frame t)
-;;  '(semantic-idle-scheduler-idle-time 432000)
-;;  '(weblogger-save-password t))
- 
-;; (custom-set-faces
-;;   ;; custom-set-faces was added by Custom.
-;;   ;; If you edit it by hand, you could mess it up, so be careful.
-;;   ;; Your init file should contain only one such instance.
-;;   ;; If there is more than one, they won't work right.
-;;  '(flymake-errline ((((class color)) (:background "LightPink" :foreground "black"))))
-;;  '(flymake-warnline ((((class color)) (:background "LightBlue2" :foreground "black"))))
-;;  '(regex-tool-matched-face ((t (:background "black" :foreground "Orange" :weight bold)))))
+;;=======color-moccur=============================
+(load "color-moccur")
+(setq *moccur-buffer-name-exclusion-list*
+      '(".+TAGS.+" "*Completions*" "*Messages*"
+        "newsrc.eld" ".bbdb"))
+(setq moccur-split-word t)
+;; (setq dmoccur-use-list t)
+;; (setq dmoccur-use-project t)
+;; (setq dmoccur-list
+;;       '(
+;;         ("dir" default-directory (".*") dir)
+;;         ("soft" "~/www/soft/" ("\\.texi$") nil)
+;;         ("config" "~/mylisp/"  ("\\.js" "\\.el$") nil)
+;;         ("1.99" "d:/unix/Meadow2/1.99a6/" (".*") sub)
+;;         ))
+;; (global-set-key "\C-x\C-o" 'occur-by-moccur)
+;; (define-key Buffer-menu-mode-map "O" 'Buffer-menu-moccur)
+;; (define-key dired-mode-map "O" 'dired-do-moccur)
+;; (global-set-key "\C-c\C-x\C-o" 'moccur)
+;; (global-set-key "\M-f" 'grep-buffers)
+;; (global-set-key "\C-c\C-o" 'search-buffers)
 
 ;;========init.el end here
