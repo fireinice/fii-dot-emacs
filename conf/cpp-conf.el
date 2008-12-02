@@ -58,3 +58,7 @@
 	try-expand-list-all-buffers
 	try-expand-whole-kill))
 
+;;    (font-lock-add-keywords 'c-mode
+;;     '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
+;;       ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
+

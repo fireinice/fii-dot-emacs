@@ -5,8 +5,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 一 11月 24 16:38:11 2008 (CST)
-;;     Update #: 214
+;; Last-Updated: 二 12月  2 10:20:49 2008 (CST)
+;;     Update #: 245
 ;; 
 ;; 
 ;;; Change log:
@@ -43,7 +43,7 @@
 (require 'color-moccur)
 (require 'smart-compile)
 (require 'fvwm-mode)
-(require 'html-helper-mode)
+;; (require 'html-helper-mode)
 (require 'weblogger)
 (require 'unicad)
 (require 'muse)
@@ -513,42 +513,18 @@ that was stored with ska-point-to-register."
         "%n.bat"
         "%n.sh"))
 
-
-(setq my-shebang-patterns
-      (list "^#!/usr/.*/perl\\(\\( \\)\\|\\( .+ \\)\\)-w *.*"
-        "^#!/usr/.*/sh"
-        "^#!/usr/.*/bash"
-        "^#!/bin/sh"
-        "^#!/.*/perl"
-        "^#!/.*/awk"
-        "^#!/.*/sed"
-        "^#!/bin/bash"
-        "^#!/bin/python"
-	"^#!/bin/ruby"
-	"^#!/bin/env *"))
-(add-hook
- 'after-save-hook
- (lambda ()
-   (if (not (= (shell-command (concat "test -x " (buffer-file-name))) 0))
-       (progn
-	 ;; This puts message in *Message* twice, but minibuffer
-	 ;; output looks better.
-	 (message (concat "Wrote " (buffer-file-name)))
-	 (save-excursion
-	   (goto-char (point-min))
-	   ;; Always checks every pattern even after
-	   ;; match.  Inefficient but easy.
-	   (dolist (my-shebang-pat my-shebang-patterns)
-	     (if (looking-at my-shebang-pat)
-		 (if (= (shell-command
-			 (concat "chmod u+x " (buffer-file-name)))
-			0)
-		     (message (concat
-			       "Wrote and made executable "
-			       (buffer-file-name))))))))
-     ;; This puts message in *Message* twice, but minibuffer output
-     ;; looks better.
-     (message (concat "Wrote " (buffer-file-name))))))
+(add-hook 'after-save-hook
+        #'(lambda ()
+        (and (save-excursion
+               (save-restriction
+                 (widen)
+                 (goto-char (point-min))
+                 (save-match-data
+                   (looking-at "^#!"))))
+             (not (file-executable-p buffer-file-name))
+             (shell-command (concat "chmod u+x " buffer-file-name))
+             (message
+              (concat "Saved as script: " buffer-file-name)))))
 
 (define-auto-insert 'cperl-mode  "perl.tpl" )
 (define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
@@ -587,10 +563,11 @@ that was stored with ska-point-to-register."
 
 ;=========HTML 模式
 (load "~/.emacs.d/nxhtml/autostart.el")
+
 (add-to-list 'auto-mode-alist
              '("\\.html$" . zzq-html-mode))
 ;; only special background in submode
-;; (setq mumamo-chunk-coloring 'submode-colored)
+(setq mumamo-chunk-coloring 'submode-colored)
 (setq nxhtml-skip-welcome t)
  
 ;; do not turn on rng-validate-mode automatically, I don't like
@@ -601,20 +578,22 @@ that was stored with ska-point-to-register."
 ;; seems failed to load under my Emacs 23
 ;; (let ((load-path (cons "~/emacs/extension/"
 ;;                        load-path)))
-;;   (require 'css-mode))
+;; (require 'css-mode)
  
 (defun zzq-html-mode ()
-  (nxhtml-mode)
+;;   (define-key nxml-mode-map [(alt \/)] 'nxml-complete)
+  (nxhtml-mumamo-mode)
   ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
   ;; define this dummy variable
+;;   (define-key nxhtml-mode-map  "\eh" 'nxml-complete)
   (make-local-variable 'cua-inhibit-cua-keys)
-;;   (setq mumamo-current-chunk-family '("eRuby nXhtml Family" nxhtml-mode
-;;                                       (mumamo-chunk-eruby
-;;                                        mumamo-chunk-inlined-style
-;;                                        mumamo-chunk-inlined-script
-;;                                        mumamo-chunk-style=
-;;                                        mumamo-chunk-onjs=)))
-  (mumamo-mode)
+  (setq mumamo-current-chunk-family '("eRuby nXhtml Family" nxhtml-mode
+                                      (mumamo-chunk-eruby
+                                       mumamo-chunk-inlined-style
+                                       mumamo-chunk-inlined-script
+                                       mumamo-chunk-style=
+                                       mumamo-chunk-onjs=)))
+;;   (mumamo-mode)
 ;;   (rails-minor-mode t)
   (auto-fill-mode -1)
   (setq tab-width 2)
