@@ -1,12 +1,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Filename: init.el
-;; Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.;; 
 ;; Author: zigler
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 二 12月  2 10:20:49 2008 (CST)
-;;     Update #: 245
+;; Last-Updated: 四 12月  4 13:27:34 2008 (CST)
+;;     Update #: 250
 ;; 
 ;; 
 ;;; Change log:
@@ -60,6 +59,7 @@
 (require 'ruby-mode)
 (require 'ede)
 (require 'uniquify)
+(require 'sr-speedbar)
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
 ;; (require 'two-mode-mode)
@@ -106,36 +106,7 @@
     (progn
       (require 'ecb-autoloads) ;;nox
       (setq x-select-enable-clipboard t) ;;使用剪切板
-      (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-      (defvar my-speedbar-buffer-name ;;{{{  speedbar within frame
-	(if (buffer-live-p speedbar-buffer)
-	    (buffer-name speedbar-buffer)
-	  "*SpeedBar*"))
-      (defun my-speedbar-no-separate-frame ()
-	(interactive)
-	(when (not (buffer-live-p speedbar-buffer))
-	  (setq speedbar-buffer (get-buffer-create my-speedbar-buffer-name)
-		speedbar-frame (selected-frame)
-		dframe-attached-frame (selected-frame)
-		speedbar-select-frame-method 'attached
-		speedbar-verbosity-level 0
-		speedbar-last-selected-file nil)
-	  (set-buffer speedbar-buffer)
-	  (speedbar-mode)
-	  (speedbar-reconfigure-keymaps)
-	  (speedbar-update-contents)
-	  (speedbar-set-timer 1)
-	  (make-local-hook 'kill-buffer-hook)
-	  (add-hook 'kill-buffer-hook
-		    (lambda () (when (eq (current-buffer) speedbar-buffer)
-				 (setq speedbar-frame nil
-				       dframe-attached-frame nil
-				       speedbar-buffer nil)
-				 (speedbar-set-timer nil)))))
-	(set-window-buffer (selected-window)
-			   (get-buffer my-speedbar-buffer-name))))
-)
-
+      (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)))
 ;;=======End
 
 
@@ -225,6 +196,7 @@
 ;;=======基本函数
 (defun try-complete-abbrev (old)
   (if (expand-abbrev) t nil))
+
 (defun my-indent-or-complete ()
   (interactive)
   (if (looking-at "\\>")
@@ -268,6 +240,7 @@
                (forward-char)))))
     (message "English words: %d\nNon-English characters: %d"
              eng non-eng))) 
+
 ;;jump out from a pair(like quote, parenthesis, etc.)
 (defun kid-c-escape-pair ()
   (interactive)
@@ -385,7 +358,7 @@ that was stored with ska-point-to-register."
 ;;=========speedbar
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t) 
 (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t) 
-(global-set-key [(f4)] 'speedbar-get-focus) 
+(global-set-key [(f4)] 'sr-speedbar-toggle) 
 (define-key-after (lookup-key global-map [menu-bar tools]) 
   [speedbar]
   '("Speedbar" . speedbar-frame-mode)
