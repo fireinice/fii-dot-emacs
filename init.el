@@ -4,21 +4,21 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 四 12月  4 13:27:34 2008 (CST)
-;;     Update #: 250
+;; Last-Updated: 五 12月  5 13:23:25 2008 (CST)
+;;     Update #: 254
 ;; 
 ;; 
 ;;; Change log:
 ;; 
 ;; ========加载路径 start
-(setq load-path (cons "~/.emacs.d/misc/" load-path))
-(setq load-path (cons "~/.emacs.d/sql/" load-path))
-(setq load-path (cons "~/.emacs.d/emacs-rails/" load-path))
-;; (setq load-path (cons "~/.emacs.d/tramp/" load-path))
-(setq load-path (cons "~/.emacs.d/python-mode/" load-path))
-(setq load-path (cons "~/.emacs.d/html-helper/" load-path))
-(setq load-path (cons "~/.emacs.d/weblogger" load-path))
-(setq load-path (cons "~/.emacs.d/nxhtml" load-path))
+(add-to-list 'load-path "~/.emacs.d/misc/")
+(add-to-list 'load-path "~/.emacs.d/sql/")
+(add-to-list 'load-path "~/.emacs.d/emacs-rails/")
+(add-to-list 'load-path "~/.emacs.d/python-mode/")
+(add-to-list 'load-path "~/.emacs.d/html-helper/")
+(add-to-list 'load-path "~/.emacs.d/weblogger/")
+(add-to-list 'load-path "~/.emacs.d/nxhtml/")
+
 ;; add git support(only in debian)
 (setq load-path (cons (expand-file-name "/usr/share/doc/git-core/contrib/emacs") load-path))
 
@@ -156,6 +156,8 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(setq use-file-dialog nil)
+
 (tabbar-mode t) ; 显示tab标签
 (setq inhibit-startup-message t)        ;禁用启动信息
 ;; WoMan 不打开新的 frame
@@ -416,9 +418,9 @@ that was stored with ska-point-to-register."
 (add-hook 'ediff-mode-hook
           (lambda()
 	    ;;将ediff的默认buffer排列改为左右而非上下
-	    (setq ediff-split-window-function 'split-window-horizontally)
+	    (setq ediff-split-window-function 'split-window-horizontally
 	    ;;ediff不单独打开一个窗口输入命令
-	    (setq ediff-window-setup-function 'ediff-setup-windows-plain)))
+		  ediff-window-setup-function 'ediff-setup-windows-plain)))
 
 ;;=========smart-compile
 ;; 智能编译:支持c/c++/elisp/html/muse 绑定到 F9
