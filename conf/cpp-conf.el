@@ -4,8 +4,12 @@
 	  (lambda()
 	    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
 		(doxymacs-font-lock))))
+(local-set-key (kbd "M-/") 'semantic-complete-analyze-inline)
+(local-set-key "." 'semantic-complete-self-insert)
+(local-set-key ">" 'semantic-complete-self-insert) 
 
 (doxymacs-mode 1)
+
 ;; (autoload 'senator-try-expand-semantic "senator")
 (c-set-style "stroustrup")
 (c-set-offset 'substatement-open 0)
@@ -28,11 +32,12 @@
 (setq c-macro-cppflags " ")
 (setq c-macro-prompt-flag t)
 
-(add-hook 'c++-mode-hook
+;; (add-hook 'c++-mode-hook
           (c-subword-mode 1)
 	  (c-set-offset 'inline-open 0)
-	  (c-set-offset 'friend '-))
-;;;;C/C++语言启动时自动加载semantic对/usr/include的索引数据库
+	  (c-set-offset 'friend '-)
+;; )
+;; C/C++语言启动时自动加载semantic对/usr/include的索引数据库
 ;; (setq semanticdb-search-system-databases t)
 ;;   (add-hook 'c-mode-common-hook
 ;;           (lambda ()
@@ -40,7 +45,7 @@
 ;;                   (list (semanticdb-create-database
 ;;                            semanticdb-new-database-class
 ;;                            "/usr/include")))))
-;; project root path
+;; ;; project root path
 ;; (setq semanticdb-project-roots
 ;;           (list
 ;;         (expand-file-name "/")))

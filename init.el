@@ -1,23 +1,27 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Filename: init.el
 ;; Author: zigler
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 五 12月  5 13:23:25 2008 (CST)
-;;     Update #: 254
+;; Last-Updated: 五 12月 26 15:32:03 2008 (CST)
+;;     Update #: 344
 ;; 
 ;; 
 ;;; Change log:
 ;; 
 ;; ========加载路径 start
+(if (string-match "22" (emacs-version))
+    (add-to-list 'load-path "~/.emacs.d/nxhtml/")
+  (require 'linum))
+;;default for 23
 (add-to-list 'load-path "~/.emacs.d/misc/")
 (add-to-list 'load-path "~/.emacs.d/sql/")
 (add-to-list 'load-path "~/.emacs.d/emacs-rails/")
 (add-to-list 'load-path "~/.emacs.d/python-mode/")
 (add-to-list 'load-path "~/.emacs.d/html-helper/")
 (add-to-list 'load-path "~/.emacs.d/weblogger/")
-(add-to-list 'load-path "~/.emacs.d/nxhtml/")
+(add-to-list 'load-path "~/.emacs.d/icicles/")
 
 ;; add git support(only in debian)
 (setq load-path (cons (expand-file-name "/usr/share/doc/git-core/contrib/emacs") load-path))
@@ -25,24 +29,16 @@
 
 
 ;;========调用公用模块
-;;私人信息,if you are not author please comment this line
-(load-file "~/.emacs.d/myinfo.el")
-(load-file "~/.emacs.d/conf/projects-conf.el") ;;porjects
-;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
-;; 这个文件中
-(setq custom-file "~/.emacs.d/myinfo.el")
-;; end of 私人信息
 (load-library "vc-svn")
 ;; (autoload 'senator-try-expand-semantic "senator")
 ;; (autoload 'two-mode-mode "two mode mode")
 (autoload 'cl "cl")
 (autoload 'magit-status "magit" nil t)
-(require 'linum)
+(require 'paredit)
 (require 'grep-edit)
 (require 'color-moccur)
 (require 'smart-compile)
 (require 'fvwm-mode)
-;; (require 'html-helper-mode)
 (require 'weblogger)
 (require 'unicad)
 (require 'muse)
@@ -57,17 +53,70 @@
 (require 'regex-tool)
 (require 'xcscope)
 (require 'ruby-mode)
-(require 'ede)
+;; (require 'ede)
 (require 'uniquify)
 (require 'sr-speedbar)
+(require 'icicles)
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
 ;; (require 'two-mode-mode)
+
+;;私人信息,if you are not author please comment this line
+(load-file "~/.emacs.d/conf/projects-conf.el") ;;porjects
+;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
+;; 这个文件中
+(setq custom-file "~/.emacs.d/myinfo.el")
+(load custom-file)
+;; end of 私人信息
+
 ;;========END
 
 
 
-;; ;;========semantic
+;;========CEDET
+;; http://www.linuxforum.net/forum/showflat.php?Board=vim&Number=687565
+;; Load CEDET.
+;; See cedet/common/cedet.info for configuration details.
+(load-file "~/.emacs.d/cedet/common/cedet.elc")
+
+;; Enable EDE (Project Management) features
+(global-ede-mode 1)
+;; (ede-minor-mode t)
+;; Enable EDE for a pre-existing C++ project
+;; (ede-cpp-root-project "NAME" :file "~/myproject/Makefile")
+
+;; Enabling Semantic (code-parsing, smart completion) features
+;; Select one of the following:
+
+;; * This enables the database and idle reparse engines
+(semantic-load-enable-minimum-features)
+
+;; * This enables some tools useful for coding, such as summary mode
+;;   imenu support, and the semantic navigator
+;; (semantic-load-enable-code-helpers)
+
+;; * This enables even more coding tools such as the nascent intellisense mode
+;;   decoration mode, and stickyfunc mode (plus regular code helpers)
+(semantic-load-enable-gaudy-code-helpers)
+
+;; * This enables the use of Exuberent ctags if you have it installed.
+;; (semantic-load-enable-all-exuberent-ctags-support)
+
+;; Enable SRecode (Template management) minor-mode.
+;; (global-srecode-minor-mode 1)
+
+(eval-after-load "semantic-c" 
+  '(dolist (d (list "/usr/include/c++/4.3"
+		    "/usr/include/c++/4.3/i486-linux-gnu"
+		    "/usr/include/c++/4.3/backward"
+		    "/usr/local/include"
+		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include"
+		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed"
+		    "/usr/include"))
+     (semantic-add-system-include d)))
+(eval-after-load "semantic-complete"
+  '(setq semantic-complete-inline-analyzer-displayor-class
+	 semantic-displayor-ghost)) 
 ;; (setq semanticdb-project-roots
 ;;         (list
 ;;         (expand-file-name "/")))
@@ -77,34 +126,12 @@
 ;; 	    'semantic-idle-completions-mode
 ;; 	    'semantic-mru-bookmark-mode))
 ;; ;; 指定semantic临时文件的路径，避免到处都是临时文件
-;; (setq semanticdb-default-save-directory "~/.auto-save/semantic")
-;; ;; Enabling various SEMANTIC minor modes. See semantic/INSTALL for more ideas.
-;; ;; Select one of the following:
-
-;; ;; * This enables the database and idle reparse engines
-;; ;;(semantic-load-enable-minimum-features)
-
-;; ;; * This enables some tools useful for coding, such as summary mode
-;; ;;   imenu support, and the semantic navigator
-;; ;;(semantic-load-enable-code-helpers)
-
-;; ;; * This enables even more coding tools such as the nascent intellisense mode
-;; ;;   decoration mode, and stickyfunc mode (plus regular code helpers)
-;; ;;(semantic-load-enable-guady-code-helpers)
-
-;; ;; * This turns on which-func support (Plus all other code helpers)
-;; (semantic-load-enable-excessive-code-helpers)
-
-;; ;; This turns on modes that aid in grammar writing and semantic tool
-;; ;; development. It does not enable any other features such as code
-;; ;; helpers above.
-;; ;; (semantic-load-enable-semantic-debugging-helpers)
-
-
+(setq semanticdb-default-save-directory "~/.auto-save/semantic")
+(setq semantic-idle-summary-function 'semantic-format-tag-uml-prototype) ;;让idle-summary的提醒包括参数名
 ;;========仅作用于X下
 (if window-system
     (progn
-      (require 'ecb-autoloads) ;;nox
+;;      (require 'ecb-autoloads) ;;nox
       (setq x-select-enable-clipboard t) ;;使用剪切板
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)))
 ;;=======End
@@ -115,17 +142,15 @@
 ;;=======基本设置 start
 (server-start)
 (setq default-major-mode 'text-mode)
-(setq-default abbrev-mode t)
-(setq-default kill-whole-line t)        ; 在行首 C-k 时，同时删除该行。
-(setq-default truncate-partial-width-windows nil) ;;多窗时自动多行显示
-(setq default-fill-column 72)
-(setq ps-multibyte-buffer 'bdf-font-except-latin) ; 打印
+(setq-default abbrev-mode t
+	      kill-whole-line t        			; 在行首 C-k 时，同时删除该行。
+	      truncate-partial-width-windows nil) 	;;多窗时自动多行显示
+(setq ps-multibyte-buffer 'bdf-font-except-latin) 	; 打印
 (setq transient-mark-mode t)  ; 高亮当前选中区
-(setq suggest-key-bindings 1) ; 当使用 M-x COMMAND 后，过 1 秒钟显示该 COMMAND 绑定的键。
+(setq suggest-key-bindings t) ; 当使用 M-x COMMAND 后，过 1 秒钟显示该 COMMAND 绑定的键。
 ;;下面的这个设置可以让光标指到某个括号的时候显示与它匹配的括号
-(delete-selection-mode 1) ;像windows选区一样对待emacs选区
 (show-paren-mode t)
-(setq show-paren-style 'parentheses)
+(setq show-paren-style 'parenthesis)
 ;; 当有两个文件名相同的缓冲时，使用前缀的目录名做 buffer 名字，不用原来的
 ;; foobar<?> 形式。
 (setq uniquify-buffer-name-style 'forward)
@@ -133,24 +158,25 @@
 (modify-coding-system-alist 'file "\\.nfo\\'" 'cp437) ;;打开nfo文件
 ;; 若要将注释改为斜体，可采用以下代码：
 ;;(font-lock-comment-face ((t (:italic t))))
-(global-ede-mode t) 			;使用ede管理项目
+;; (icy-mode)
 
-
-(setq backup-directory-alist '(("." . "~/.auto-save"))) ;将备份文件放至~/tmp下
+;将备份文件放至~/tmp下
 ;; Emacs 中，改变文件时，默认都会产生备份文件(以 ~ 结尾的文件)。可以完全去掉
 ;; (并不可取)，也可以制定备份的方式。这里采用的是，把所有的文件备份都放在一
 ;; 个固定的地方("~/var/tmp")。对于每个备份文件，保留最原始的两个版本和最新的
 ;; 五个版本。并且备份的时候，备份文件是复本，而不是原件。
-(setq version-control t)
-(setq kept-old-versions 2)
-(setq kept-new-versions 5)
-(setq delete-old-versions t)
-(setq backup-by-copying t)
+(setq backup-directory-alist '(("." . "~/.auto-save")) 
+      version-control t
+      kept-old-versions 2
+      kept-new-versions 5
+      delete-old-versions t
+      backup-by-copying t)
 
-(global-font-lock-mode t)               ;语法高亮
-(setq font-lock-maximum-decoration t)
-(setq font-lock-verbose t)
-(setq font-lock-maximum-size '((t . 1048576) (vm-mode . 5250000)))
+;语法高亮
+(setq global-font-lock-mode t               
+      font-lock-maximum-decoration t
+      font-lock-verbose t
+      font-lock-maximum-size '((t . 1048576) (vm-mode . 5250000)))
 
 ;; 不要 tool-bar / scroll-bar / menu-bar
 (scroll-bar-mode -1)
@@ -168,11 +194,6 @@
 ;; (setq frame-title-format "emacs@%b")
 
 ;; 设置前景，,背景色 list-colors-display看颜色
-(set-background-color "grey25")
-(set-foreground-color "grey85")
-(set-cursor-color "steelblue")
-(set-cursor-color "red")
-(set-mouse-color "slateblue")
 (add-to-list 'default-frame-alist '(background-color . "grey25"))
 (add-to-list 'default-frame-alist '(foreground-color . "grey85"))
 (add-to-list 'default-frame-alist '(cursor-color . "red"))
@@ -185,10 +206,29 @@
 ;; 保证文件名相同的时候buffer名称是目录名+文件名
 (setq uniquify-buffer-name-style 'forward)
 
+;;==============auto-fill
+;;把 fill-column 设为 80. 这样的文字更好读。
+(setq default-fill-column 80)
+;;;; 解决中英文混排不能正确fill的问题
+;;(put-charset-property ’chinese-cns11643-5 ’nospace-between-words t)
+;;(put-charset-property ’chinese-cns11643-6 ’nospace-between-words t)
+;;(put-charset-property ’chinese-cns11643-7 ‘nospace-between-words t)
+;; ;;解决段首空格缩进的问题
+;; (setq adaptive-fill-mode nil)
+;; ;;解决fill时候不能识别汉字符号的问题
+;; (setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]* \\($\\|[ \t]\\)\\)[ \t\n]*")
+;; (setq sentence-end-double-space nil)
+;; ;设置输入自动补全
+;; ;;(setq-default auto-fill-function 'do-auto-fill)
+;; (setq-default auto-fill-function
+;; 	      (lambda ()
+;; 		;; (add-blank-in-chinese-and-english (point-at-bol) (point-at-eol))
+;; 		(do-auto-fill))) 
+
 ;;emacs23
 ;; (set-default-font "Consolas-16")
 ;; (set-fontset-font (frame-parameter nil 'font)
-;; 		  'han '("SimSun" . "unicode-bmp"))
+;; 		  'han '("SimSun". "unicode-bmp"))
 ;;=======End
 
 
@@ -278,8 +318,29 @@ that was stored with ska-point-to-register."
 	       (setq file (expand-file-name file))
 	       (when (string= file (buffer-file-name))
 		 (save-excursion (byte-compile-file file))))
-	     '("~/.emacs.d/init.el" "~/.emacs.d/myinfo.el" "~/.emacs.d/conf/cpp-conf.el"))))
-;删除匹配括号间内容
+	     '("~/.emacs.d/init.el" "~/.emacs.d/myinfo.el"
+  "~/.emacs.d/conf/cpp-conf.el"))))
+
+;;中英文之间自动加空格
+;; (defun add-blank-in-chinese-and-english (&optional start end)
+;;   “automaticall add a blank between English and Chinese words.”
+;;    (interactive)
+;;    (save-excursion
+;;      (progn
+;;        (if (not start)
+;; 	   (setq start (point-min)))
+;;        (if (not end)
+;; 	   (setq end (point-max)))
+;;        (goto-char start)
+;;        (while (and (re-search-forward ”\\(\\cc\\)\\([0-9-]*[a-z]\\)”  nil t)
+;; 		   (<= (match-end 0) end ))
+;; 	 (replace-match "\\1 \\2" nil nil))
+;;        (goto-char start)
+;;        (while (and (re-search-forward "\\([a-z][0-9-]*\\)\\(\\cc\\)"  nil t)
+;; 		   (<= (match-end 0) end ))
+;; 	 (replace-match "\\1 \\2" nil nil)))))
+
+;删除匹配括号间内容 all should substitute to paredit-mode
 (defun kill-match-paren (arg)
   (interactive "p")
   (cond ((looking-at "[([{]") (kill-sexp 1) (backward-char))
@@ -531,10 +592,10 @@ that was stored with ska-point-to-register."
 	    (add-to-list 'ido-ignore-buffers "\\`*svn-process*")))
 
 ;;=========w3m
-(require 'w3m)
-(add-hook 'w3m-mode-hook
-          (lambda()
-            (load-file "~/.emacs.d/conf/w3m-conf.el")))
+;; (require 'w3m)
+;; (add-hook 'w3m-mode-hook
+;;           (lambda()
+;;             (load-file "~/.emacs.d/conf/w3m-conf.el")))
 
 ;=========HTML 模式
 (load "~/.emacs.d/nxhtml/autostart.el")
@@ -554,7 +615,19 @@ that was stored with ska-point-to-register."
 ;; (let ((load-path (cons "~/emacs/extension/"
 ;;                        load-path)))
 ;; (require 'css-mode)
- 
+
+;;在html和css模式下将#XXXXXX按所代表的颜色着色
+
+(defvar hexcolour-keywords
+   '(("#[abcdef[:digit:]]\\{6\\}"
+      (0 (put-text-property (match-beginning 0)
+                            (match-end 0)
+                            'face (list :background
+                                        (match-string-no-properties 0)))))))
+ (defun hexcolour-add-to-font-lock ()
+   (font-lock-add-keywords nil hexcolour-keywords))
+(add-hook 'nxhtml-mumamo-mode 'hexcolour-add-to-font-lock)
+
 (defun zzq-html-mode ()
 ;;   (define-key nxml-mode-map [(alt \/)] 'nxml-complete)
   (nxhtml-mumamo-mode)
@@ -605,7 +678,7 @@ that was stored with ska-point-to-register."
 (setq js2-use-font-lock-faces t)
 
 ;=========python mode
-;; (require 'pymacs)
+(require 'pymacs)
 ;; (require 'pymacs-load)
 ;; (autoload 'py-complete-init "py-complete")
 ;; (add-hook 'python-mode-hook 'py-complete-init)
@@ -717,6 +790,7 @@ that was stored with ska-point-to-register."
 ;==========ELisp 模式
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda()
+	    'turn-on-eldoc-mode
 	    (make-hippie-expand-function
 	     '(try-complete-abbrev
 	       try-complete-lisp-symbol-partially

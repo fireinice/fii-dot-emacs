@@ -1397,7 +1397,9 @@ in log buffer."
   (magit-create-buffer-sections
     (magit-insert-section 'commitbuf nil
 			  'magit-wash-commit nil
-			  "git" "log" "--max-count=1" "--cc" "-p" commit)))
+			  "git" "log" "--max-count=1"
+                          "--pretty=medium"
+                          "--cc" "-p" commit)))
 
 (defun magit-show-commit (commit &optional scroll)
   (when (magit-section-p commit)
@@ -1444,7 +1446,7 @@ in log buffer."
 
 (defun magit-marked-commit ()
   (or magit-marked-commit
-      (error "Not commit marked")))
+      (error "No commit marked")))
 
 (defun magit-insert-unpulled-commits (remote branch)
   (magit-insert-section 'unpulled
