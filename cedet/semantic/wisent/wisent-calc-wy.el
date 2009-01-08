@@ -3,7 +3,7 @@
 ;; Copyright (C) 2002, 2003 David Ponce
 
 ;; Author: zigler <zigler@localhost.localdomain>
-;; Created: 2008-12-25 15:59:09+0800
+;; Created: 2009-01-08 16:41:39+0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

@@ -1,9 +1,9 @@
 ;;; ede-locate.el --- Locate support
 
-;; Copyright (C) 2008 Eric M. Ludlam
+;; Copyright (C) 2008, 2009 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
-;; X-RCS: $Id: ede-locate.el,v 1.2 2008/12/19 22:46:48 zappo Exp $
+;; X-RCS: $Id: ede-locate.el,v 1.4 2009/01/06 20:43:14 zappo Exp $
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -45,12 +45,19 @@
 ;;
 ;; How to use:
 ;;
+;; Configure `ede-locate-setup-options' to add the types of locate
+;; features you have available.  EDE will then enable the correct one
+;; when it is available.
 
 (require 'ede)
 (eval-when-compile (require 'data-debug)
 		   (require 'eieio-datadebug)
-		   (require 'cedet-global)
-		   (require 'locate))
+		   (require 'cedet-global))
+
+;; Older [X]Emacs don't have locate
+(condition-case nil
+    (require 'locate)
+  (error nil))
 
 ;;; Code:
 (defcustom ede-locate-setup-options

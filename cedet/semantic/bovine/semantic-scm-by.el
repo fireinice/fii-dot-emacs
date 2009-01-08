@@ -3,7 +3,7 @@
 ;; Copyright (C) 2001, 2003 Eric M. Ludlam
 
 ;; Author: zigler <zigler@localhost.localdomain>
-;; Created: 2008-12-25 15:59:18+0800
+;; Created: 2009-01-08 16:41:48+0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

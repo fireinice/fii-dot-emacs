@@ -1,10 +1,10 @@
 ;;; semanticdb.el --- Semantic tag database manager
 
-;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Eric M. Ludlam
+;;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
-;; X-RCS: $Id: semanticdb.el,v 1.128 2008/12/22 19:31:17 zappo Exp $
+;; X-RCS: $Id: semanticdb.el,v 1.130 2009/01/04 11:28:19 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -883,7 +883,11 @@ DONTLOAD does not affect the creation of new database objects."
 	nil)
        ((not dontload) ;; We must load the file.
 	;; Full file should have been set by now.  Debug why not?
-	(when (and (not tab) (not fullfile)) (debug))
+	(when (and (not tab) (not fullfile))
+	  ;; This case is if a 'nil is erroneously put into the hash table.  This
+	  ;; would need fixing
+	  (setq fullfile (file-truename file))
+	  )
 	
 	;; If we have a table, but no fullfile, that's ok.  Lets get the filename
 	;; from the table which is pre-truenamed.
@@ -901,7 +905,11 @@ DONTLOAD does not affect the creation of new database objects."
 	tab)
        (t
 	;; Full file should have been set by now.  Debug why not?
-	(when (not fullfile) (debug))
+	;; One person found this.  Is it a file that failed to parse
+	;; in the past?
+	(when (not fullfile)
+	  (setq fullfile (file-truename file)))
+
 	;; We were asked not to load the file in and parse it.
 	;; Instead just create a database table with no tags
 	;; and a claim of being empty.

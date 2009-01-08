@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (eassist-list-methods eassist-switch-h-cpp) "eassist"
-;;;;;;  "eassist.el" (18368 33706))
+;;;;;;  "eassist.el" (18771 15984))
 ;;; Generated autoloads from eassist.el
 
 (defvar eassist-header-switches (quote (("h" "cpp" "cc" "c") ("hpp" "cpp" "cc") ("cpp" "h" "hpp") ("c" "h") ("C" "H") ("H" "C" "CPP" "CC") ("cc" "h" "hpp"))) "\
@@ -28,7 +28,7 @@ This function is recommended to be bound to some convinient hotkey.
 
 ;;;***
 
-;;;### (autoloads nil "ede-gnustep" "ede-gnustep.el" (18752 36975))
+;;;### (autoloads nil "ede-gnustep" "ede-gnustep.el" (18786 58639))
 ;;; Generated autoloads from ede-gnustep.el
 
 (add-to-list (quote ede-project-class-files) (ede-project-autoload "edegnustep" :name "GNUstep-Make" :file (quote ede-gnustep) :proj-file "ProjStep.ede" :load-type (quote ede-step-load) :class-sym (quote ede-step-project)) t)
@@ -39,7 +39,7 @@ This function is recommended to be bound to some convinient hotkey.
 
 ;;;### (autoloads (semantic-tag-folding-mode global-semantic-tag-folding-mode
 ;;;;;;  global-semantic-tag-folding-mode) "semantic-tag-folding"
-;;;;;;  "semantic-tag-folding.el" (17213 40189))
+;;;;;;  "semantic-tag-folding.el" (18771 15984))
 ;;; Generated autoloads from semantic-tag-folding.el
 
 (defvar global-semantic-tag-folding-mode nil "\
@@ -70,7 +70,7 @@ minor mode is enabled.
 ;;;***
 
 ;;;### (autoloads (wisent-csharp-default-setup) "wisent-csharp" "wisent-csharp.el"
-;;;;;;  (17880 37474))
+;;;;;;  (18771 15984))
 ;;; Generated autoloads from wisent-csharp.el
 
 (autoload (quote wisent-csharp-default-setup) "wisent-csharp" "\
@@ -83,7 +83,7 @@ Not documented
 ;;;***
 
 ;;;### (autoloads (wisent-php-default-setup) "wisent-php" "wisent-php.el"
-;;;;;;  (18540 11866))
+;;;;;;  (18771 15984))
 ;;; Generated autoloads from wisent-php.el
 
 (autoload (quote wisent-php-default-setup) "wisent-php" "\
@@ -97,7 +97,7 @@ Use the alternate LALR(1) parser.
 ;;;***
 
 ;;;### (autoloads nil nil ("cedet-contrib-load.el" "cedet-contrib.el"
-;;;;;;  "wisent-ruby.el") (18771 15713 865647))
+;;;;;;  "wisent-ruby.el") (18789 48217 78164))
 
 ;;;***
 

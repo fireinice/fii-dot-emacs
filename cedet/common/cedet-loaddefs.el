@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (cedet-update-autoloads) "cedet-autogen" "cedet-autogen.el"
-;;;;;;  (18540 13339))
+;;;;;;  (18771 15984))
 ;;; Generated autoloads from cedet-autogen.el
 
 (autoload (quote cedet-update-autoloads) "cedet-autogen" "\
@@ -20,7 +20,7 @@ exists.
 
 ;;;***
 
-;;;### (autoloads nil "cedet-edebug" "cedet-edebug.el" (18411 2781))
+;;;### (autoloads nil "cedet-edebug" "cedet-edebug.el" (18771 15984))
 ;;; Generated autoloads from cedet-edebug.el
 
 (add-hook (quote edebug-setup-hook) (lambda nil (require (quote cedet-edebug)) (defalias (quote edebug-prin1-to-string) (quote cedet-edebug-prin1-to-string)) (define-key edebug-mode-map "A" (quote data-debug-edebug-expr))))
@@ -32,7 +32,7 @@ exists.
 ;;;### (autoloads (cedet-gnu-global-version-check cedet-gnu-global-root
 ;;;;;;  cedet-gnu-global-show-root cedet-gnu-global-expand-filename
 ;;;;;;  cedet-gnu-global-search cedet-global-command) "cedet-global"
-;;;;;;  "cedet-global.el" (18760 28296))
+;;;;;;  "cedet-global.el" (18771 15984))
 ;;; Generated autoloads from cedet-global.el
 
 (defvar cedet-global-command "global" "\
@@ -78,7 +78,7 @@ Check the version of the installed GNU Global command.
 ;;;***
 
 ;;;### (autoloads (cedet-utest) "cedet-utests" "cedet-utests.el"
-;;;;;;  (18740 19080))
+;;;;;;  (18771 15984))
 ;;; Generated autoloads from cedet-utests.el
 
 (autoload (quote cedet-utest) "cedet-utests" "\
@@ -90,7 +90,7 @@ Run the CEDET unittests.
 
 ;;;### (autoloads (data-debug-edebug-expr data-debug-new-buffer data-debug-mode
 ;;;;;;  data-debug-insert-thing data-debug-insert-stuff-list data-debug-insert-property-list)
-;;;;;;  "data-debug" "data-debug.el" (18752 15333))
+;;;;;;  "data-debug" "data-debug.el" (18771 15984))
 ;;; Generated autoloads from data-debug.el
 
 (autoload (quote data-debug-insert-property-list) "data-debug" "\
@@ -133,7 +133,7 @@ Dump out the contets of some expression EXPR in edebug with ddebug.
 
 ;;;***
 
-;;;### (autoloads (define-fame-channel) "fame" "fame.el" (17213 39681))
+;;;### (autoloads (define-fame-channel) "fame" "fame.el" (18771 15984))
 ;;; Generated autoloads from fame.el
 
 (autoload (quote define-fame-channel) "fame" "\
@@ -156,7 +156,7 @@ messages to CHANNEL.
 
 ;;;### (autoloads (inversion-upgrade-package inversion-add-to-load-path
 ;;;;;;  inversion-find-version inversion-require-emacs inversion-require)
-;;;;;;  "inversion" "inversion.el" (18678 36027))
+;;;;;;  "inversion" "inversion.el" (18771 15984))
 ;;; Generated autoloads from inversion.el
 
 (autoload (quote inversion-require) "inversion" "\
@@ -208,7 +208,7 @@ Try to upgrade PACKAGE in DIRECTORY is available.
 ;;;***
 
 ;;;### (autoloads (mode-local-read-function) "mode-local" "mode-local.el"
-;;;;;;  (18604 27035))
+;;;;;;  (18771 15984))
 ;;; Generated autoloads from mode-local.el
 
 (autoload (quote mode-local-read-function) "mode-local" "\
@@ -220,7 +220,7 @@ PROMPT, INITIAL, HIST, and DEFAULT are the same as for `completing-read'.
 ;;;***
 
 ;;;### (autoloads (pprint-function pprint pprint-to-string) "pprint"
-;;;;;;  "pprint.el" (17213 39693))
+;;;;;;  "pprint.el" (18771 15984))
 ;;; Generated autoloads from pprint.el
 
 (autoload (quote pprint-to-string) "pprint" "\
@@ -252,7 +252,7 @@ See a pretty-printed representation of FUNCTION-NAME.
 ;;;### (autoloads (pulse-line-hook-function pulse-toggle-integration-advice
 ;;;;;;  pulse-momentary-highlight-region pulse-momentary-highlight-one-line
 ;;;;;;  pulse-momentary-highlight-overlay pulse) "pulse" "pulse.el"
-;;;;;;  (18757 45636))
+;;;;;;  (18771 15984))
 ;;; Generated autoloads from pulse.el
 
 (autoload (quote pulse) "pulse" "\
@@ -309,8 +309,8 @@ Only pulses the line if `pulse-command-advice-flag' is non-nil.
 ;;;***
 
 ;;;### (autoloads nil nil ("cedet-compat.el" "cedet-files.el" "cedet-load.el"
-;;;;;;  "cedet.el" "ezimage.el" "sformat.el" "working.el") (18771
-;;;;;;  15676 923266))
+;;;;;;  "cedet.el" "ezimage.el" "sformat.el" "working.el") (18789
+;;;;;;  48177 458944))
 
 ;;;***
 

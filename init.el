@@ -4,8 +4,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 五 12月 26 15:32:03 2008 (CST)
-;;     Update #: 344
+;; Last-Updated: 四  1月  8 16:42:10 2009 (CST)
+;;     Update #: 355
 ;; 
 ;; 
 ;;; Change log:
@@ -57,6 +57,9 @@
 (require 'uniquify)
 (require 'sr-speedbar)
 (require 'icicles)
+(require 'install-elisp)
+(setq install-elisp-repository-directory "~/.emacs.d/misc/")
+
 ;; (require 'ecb)
 ;; (require 'setnu+)			;
 ;; (require 'two-mode-mode)
@@ -77,7 +80,7 @@
 ;; http://www.linuxforum.net/forum/showflat.php?Board=vim&Number=687565
 ;; Load CEDET.
 ;; See cedet/common/cedet.info for configuration details.
-(load-file "~/.emacs.d/cedet/common/cedet.elc")
+(load-file "~/.emacs.d/cedet/common/cedet.el")
 
 ;; Enable EDE (Project Management) features
 (global-ede-mode 1)
@@ -143,6 +146,7 @@
 (server-start)
 (setq default-major-mode 'text-mode)
 (setq-default abbrev-mode t
+	      paredit-mode t
 	      kill-whole-line t        			; 在行首 C-k 时，同时删除该行。
 	      truncate-partial-width-windows nil) 	;;多窗时自动多行显示
 (setq ps-multibyte-buffer 'bdf-font-except-latin) 	; 打印
@@ -340,19 +344,22 @@ that was stored with ska-point-to-register."
 ;; 		   (<= (match-end 0) end ))
 ;; 	 (replace-match "\\1 \\2" nil nil)))))
 
-;删除匹配括号间内容 all should substitute to paredit-mode
+;删除匹配括号间内容 
 (defun kill-match-paren (arg)
   (interactive "p")
   (cond ((looking-at "[([{]") (kill-sexp 1) (backward-char))
 	((looking-at "[])}]") (forward-char) (backward-kill-sexp 1))
 	(t (self-insert-command (or arg 1)))))
 
-(defun zzq-wrap-region-with-paren ( start end)
-  (interactive "r")
-  (goto-char start)
-  (insert "(")
-  (goto-char (+ 1 end))
-  (insert ")"))
+
+;; substitute by paredit-mode
+;; (defun zzq-wrap-region-with-paren ( start end)
+;;   (interactive "r")
+;;   (goto-char start)
+;;   (insert "(")
+;;   (goto-char (+ 1 end))
+;;   (insert ")"))
+;; (global-set-key (kbd "C-(")	'zzq-wrap-region-with-paren)
 
 ;;========END
 
@@ -385,7 +392,6 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "\C-ccu")  'revert-buffer)
 (global-set-key (kbd "\C-ccr")  'smart-run) 
 (global-set-key (kbd "C-x %") 'kill-match-paren)
-(global-set-key (kbd "C-(")	'zzq-wrap-region-with-paren)
 (global-set-key (kbd "\C-cvg")	'magit-status)
 (global-set-key (kbd "\C-cvc")	'cvs-status)
 (global-set-key (kbd "\C-cpl")  'project-load)
@@ -641,30 +647,10 @@ that was stored with ska-point-to-register."
                                        mumamo-chunk-inlined-script
                                        mumamo-chunk-style=
                                        mumamo-chunk-onjs=)))
-;;   (mumamo-mode)
 ;;   (rails-minor-mode t)
   (auto-fill-mode -1)
   (setq tab-width 2)
   (setq indent-tabs-mode nil))
-;; ;; (require 'tempo)
-;; (defvar html-mode-abbrev-table nil
-;;   "Abbrev table in use in `html-mode' buffers.")
-;; (define-abbrev-table 'html-mode-abbrev-table ())
-;; (setq auto-mode-alist
-;;       (cons '("\\.html$" . two-mode-mode) auto-mode-alist))
-;; ;; (setq auto-mode-alist 
-;; ;;       (cons '("\\.html$" . html-helper-mode) auto-mode-alist))
-;; ;; (setq two-mode-rmatch "<style*>"
-;; ;;       two-mode-lmatch "</style>"
-;; ;;       default-mode '(html-helper-mode "html-helper-mode")
-;; ;;       second-mode '(css-mode "css"))
-;; ;; (two-mode-mode)				
-;; (add-hook 'html-helper-load-hook
-;; 	  (lambda ()
-;; 	    (require 'sb-html) ;;speedbar 支持
-;; 	    (setq tempo-interactive t)
-;; 	    (setq html-helper-build-new-buffer t)
-;; 	    (define-key html-helper-mode-map [(tab)] 'tempo-complete-tag)))
 
 ;;========JavaScript 模式
 ;; (autoload 'javascript-mode "javascritp mode")
@@ -815,7 +801,6 @@ that was stored with ska-point-to-register."
 
 ;;=========yasnipet mode
 (require 'yasnippet) ;; not yasnippet-bundle
-(require 'smart-snippet)
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets/")
 (if window-system
@@ -823,6 +808,7 @@ that was stored with ska-point-to-register."
       (setq yas/window-system-popup-function
 	    'yas/x-popup-menu-for-template)))
 
+(require 'smart-snippet)
 ;; those non-word snippet can't be triggered by abbrev expand, we
 ;; need to bind them explicitly to some key
 (smart-snippet-with-abbrev-tables

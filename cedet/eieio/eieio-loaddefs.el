@@ -3,7 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads (call-tree) "call-tree" "call-tree.el" (17213 40289))
+;;;### (autoloads (call-tree) "call-tree" "call-tree.el" (18771 15984))
 ;;; Generated autoloads from call-tree.el
 
 (autoload (quote call-tree) "call-tree" "\
@@ -13,7 +13,7 @@ Build a call tree to show all functions called by FUNC.
 
 ;;;***
 
-;;;### (autoloads (chart-test-it-all) "chart" "chart.el" (18671 49602))
+;;;### (autoloads (chart-test-it-all) "chart" "chart.el" (18771 15984))
 ;;; Generated autoloads from chart.el
 
 (autoload (quote chart-test-it-all) "chart" "\
@@ -25,7 +25,7 @@ Test out various charting features.
 
 ;;;### (autoloads (data-debug-show data-debug-insert-object-button
 ;;;;;;  data-debug-insert-object-slots) "eieio-datadebug" "eieio-datadebug.el"
-;;;;;;  (18641 4730))
+;;;;;;  (18771 15984))
 ;;; Generated autoloads from eieio-datadebug.el
 
 (autoload (quote data-debug-insert-object-slots) "eieio-datadebug" "\
@@ -49,8 +49,8 @@ Run ddebug against any EIEIO object OBJ
 ;;;***
 
 ;;;### (autoloads (eieio-describe-generic eieio-build-class-alist
-;;;;;;  eieio-describe-class eieio-browse) "eieio-opt" "eieio-opt.el"
-;;;;;;  (18756 32718))
+;;;;;;  eieio-describe-constructor eieio-describe-class eieio-browse)
+;;;;;;  "eieio-opt" "eieio-opt.el" (18786 58640))
 ;;; Generated autoloads from eieio-opt.el
 
 (autoload (quote eieio-browse) "eieio-opt" "\
@@ -65,8 +65,15 @@ variable `eieio-default-superclass'.
 (autoload (quote eieio-describe-class) "eieio-opt" "\
 Describe a CLASS defined by a string or symbol.
 If CLASS is actually an object, then also display current values of that obect.
+Optional HEADERFCN should be called to insert a few bits of info first.
 
-\(fn CLASS)" t nil)
+\(fn CLASS &optional HEADERFCN)" t nil)
+
+(autoload (quote eieio-describe-constructor) "eieio-opt" "\
+Describe the constructor function FCN.
+Uses `eieio-describe-class' to describe the class being constructed.
+
+\(fn FCN)" t nil)
 
 (autoload (quote eieio-build-class-alist) "eieio-opt" "\
 Return an alist of all currently active classes for completion purposes.
@@ -92,7 +99,7 @@ Also extracts information about all methods specific to this generic.
 ;;;***
 
 ;;;### (autoloads (eieio-perftest-onemethodcall eieio-perftest-methodcall)
-;;;;;;  "eieio-perftest" "eieio-perftest.el" (18757 43756))
+;;;;;;  "eieio-perftest" "eieio-perftest.el" (18771 15984))
 ;;; Generated autoloads from eieio-perftest.el
 
 (autoload (quote eieio-perftest-methodcall) "eieio-perftest" "\
@@ -107,8 +114,8 @@ Test and time performance of method invocation.
 
 ;;;***
 
-;;;### (autoloads (object-write-xml) "eieio-xml" "eieio-xml.el" (18656
-;;;;;;  8049))
+;;;### (autoloads (object-write-xml) "eieio-xml" "eieio-xml.el" (18771
+;;;;;;  15984))
 ;;; Generated autoloads from eieio-xml.el
 
 (autoload (quote object-write-xml) "eieio-xml" "\
@@ -122,7 +129,7 @@ this object.
 ;;;***
 
 ;;;### (autoloads (enable-visual-studio-bookmarks) "linemark" "linemark.el"
-;;;;;;  (17880 50543))
+;;;;;;  (18786 58640))
 ;;; Generated autoloads from linemark.el
 
 (autoload (quote enable-visual-studio-bookmarks) "linemark" "\
@@ -138,7 +145,7 @@ Bind the viss bookmark functions to F2 related keys.
 ;;;***
 
 ;;;### (autoloads (lmcompile-do-highlight) "lmcompile" "lmcompile.el"
-;;;;;;  (17213 40340))
+;;;;;;  (18771 15984))
 ;;; Generated autoloads from lmcompile.el
 
 (autoload (quote lmcompile-do-highlight) "lmcompile" "\
@@ -150,7 +157,7 @@ Works on grep, compile, or other type mode.
 ;;;***
 
 ;;;### (autoloads (directory-tree-thing eieio-class-tree tree-test-it-all)
-;;;;;;  "tree" "tree.el" (17213 40344))
+;;;;;;  "tree" "tree.el" (18771 15984))
 ;;; Generated autoloads from tree.el
 
 (autoload (quote tree-test-it-all) "tree" "\
@@ -177,8 +184,8 @@ Argument PPATH is the path to the directory we are going to analyze.
 ;;;;;;  "e-config.el" "ecfg-menu.el" "eieio-base.el" "eieio-comp.el"
 ;;;;;;  "eieio-custom.el" "eieio-doc.el" "eieio-load.el" "eieio-speedbar.el"
 ;;;;;;  "eieio-test-methodinvoke.el" "eieio-tests.el" "eieio.el"
-;;;;;;  "eieiocomp.el" "psql.el" "widget-d.el" "widget-i.el") (18771
-;;;;;;  15679 714203))
+;;;;;;  "eieiocomp.el" "psql.el" "widget-d.el" "widget-i.el") (18789
+;;;;;;  48181 50985))
 
 ;;;***
 
