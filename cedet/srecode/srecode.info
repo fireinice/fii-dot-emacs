@@ -152,8 +152,8 @@ else's template, or writing large new templates of their own.
 new `.srt' files *note Template Writing::.
 
    While the template system was designed for SRecode based
-applications it can be used independently for simple template insertion
-during typical coding.
+applications it can also be used independently for simple template
+insertion during typical coding.
 
 3.2 Template Manager
 ====================
@@ -163,6 +163,8 @@ templates is needed.  The template manager has a loader for finding
 template files, and determining which templates are relevant to the
 current buffer.  Template files are sorted by priority, with user
 templates being found first, and system level default templates last.
+Templates are also sorted by application.  Each application has it's
+own templates, and are kept seperate from the generic templates.
 
 3.3 Dictionary
 ==============
@@ -190,26 +192,19 @@ arguments.
 
 A context can be provided for templates in a file.  This helps
 auto-selection of templates by name, or allows templates in different
-contexts to have the same name.
+contexts to have the same name.  Some standard contexts are `file',
+`declaration', and `classdecl'.
 
    A context can be automatically derived as well based on the parsing
 state from Semantic.  *note Semantic Manual: (semantic)Top.
 
-3.6 Multiple Positioning system
-===============================
-
-Not written or implemented
-
-   The basic idea is a way to record multiple locations so that SRecode
-applications can inserted multiple related templates in multiple places.
-
-3.7 Applications
+3.6 Applications
 ================
 
-Commands that do a particular user task which involves writing code.
-Applications are at the top layer.  These applications have their own
-template files and logic needed to fill in dictionaries or position a
-cursor.
+Commands that do a particular user task which involves also writing
+Emacs Lisp code.  Applications are at the top layer.  These
+applications have their own template files and logic needed to fill in
+dictionaries or position a cursor.
 
 
 File: srecode.info,  Node: SRecode Minor Mode,  Next: Template Writing,  Prev: Parts of SRecode,  Up: Top
@@ -225,18 +220,22 @@ simple access to different templates or template applications.
    The most important key is bound to `srecode-insert' which is <C-c /
 />.  *note Quick Start::.
 
-   NOTE: At this time there isn't much in srecode-minor-mode.  The plan
-is the following:
+   Major keybindings are:
 
 <C-c / <lower case letter>>
      Reserved for direct binding of simple templates to keys using a
      keybinding command in the template file.
 
 <C-c / <upper case letter>>
-     Reserved for template applications (Such as get/set inserter.)
+     Reserved for template applications (Such as comment or get/set
+     inserter.)
 
-<C-c / <punctuation>>
-     SRecode template management keys.
+<C-c / E>
+     Edit the code of a template.
+
+<C-c / .>
+     Insert template again.  This will cause the previously inserted
+     template to be inserted again.
 
 
 File: srecode.info,  Node: Template Writing,  Next: Dictionaries,  Prev: SRecode Minor Mode,  Up: Top
@@ -275,7 +274,7 @@ have string like values.
 * Menu:
 
 * String Values::       Basic Variable values
-* Multi-string Values::     Complex variable values
+* Multi-string Values:: Complex variable values
 * Section Show::        Enabling the display of a named section.
 * Special Variables::   Variables with special names
 * Automatic Loop Variables:: Variables automatically set in section loops.
@@ -464,7 +463,7 @@ File: srecode.info,  Node: Template Section Dictionaries,  Next: Template Macros
 5.2.1 Template Section Dictionaries
 -----------------------------------
 
-To add variable values to section dictionaries used withing a specific
+To add variable values to section dictionaries used within a specific
 template, you can add them to the beginning of the template declaration
 like this:
 
@@ -483,7 +482,7 @@ it is inside section A.  The outer scoped NAME will be empty.
 
    This is particularly useful while using an include macro to pull in a
 second template.  In this way, you can pass values known from one
-template to a subordinate template where some value is not know.
+template to a subordinate template where some value is not known.
 
    From the Emacs Lisp default template file, a syntax table is just a
 variable with a specialized value.
@@ -575,8 +574,16 @@ dictionary, then the user should be queried for the NAME variable.  If
 NAME appears again in the macro, the original value specified by the
 user will be inserted again.
 
-   In addition, the macro {{^}} indicates that after the template is
-inserted, the cursor should be placed at that macro location.
+   If the text from a dictionary value is to be placed in column format,
+you can use the "|" symbol to indicate you want column control.  For
+example:
+
+        | this | that |{{#A}}
+        | {{|THIS:4}} | {{|THAT:4}} |{{/A}}
+
+   For each repeated section "#A" the dictionary values for THIS and
+THAT will be inserted and either trimmed to, or expanded to 4
+characters in width.
 
    Macros that are prefixed with the "#" symbol denote a section.  A
 macro of the same name with a "\\" prefix denotes the end of that
@@ -881,18 +888,18 @@ File: srecode.info,  Node: Creating new Arguments,  Next: Template Argument Dict
 
 You can create new arguments for use in template files by writing new
 Emacs Lisp functions.  Doing so is easy.  Here is an example for the
-`:blank' argument:
+`:user' argument:
 
-     (defun srecode-semantic-handle-:blank (dict)
-       "Add macros into the dictionary DICT specifying blank line spacing.
-     The wrapgap means make sure the first and last lines of the macro
-     do not contain any text from preceeding or following text."
-       (srecode-dictionary-set-value dict "BLANK" t)
+     (defun srecode-semantic-handle-:user (dict)
+       "Add macros into the dictionary DICT based on the current :user."
+       (srecode-dictionary-set-value dict "AUTHOR" (user-full-name))
+       (srecode-dictionary-set-value dict "LOGIN" (user-login-name))
+        ;; ...
        )
 
    In this case, a function with the name prefix
-`srecode-semantic-handle-' that ends in `:blank' creates a new argument
-`:blank' that can be used in a template.
+`srecode-semantic-handle-' that ends in `:user' creates a new argument
+`:user' that can be used in a template.
 
    Your argument handler must take one argument DICT, which is the
 dictionary to fill in.  Inside your function, you can do whatever you
@@ -947,8 +954,8 @@ the insertion point is not on a line by itself.
 6.6.2.1 Argument :region
 ........................
 
-If there is an active region via transient-mark-mode, or
-mouse-drag-region, then the `REGION' section will be enabled.
+If there is an active region via `transient-mark-mode', or
+`mouse-drag-region', then the `REGION' section will be enabled.
 
    In addition, `REGIONTEXT' will be set the the text in the region,
 and that region of text will be "killed" from the current buffer.
@@ -975,8 +982,7 @@ Sets up variables about the current user.
      Current Emacs users login name.
 
 `EMACSINITFILE'
-     I'm not sure when this is handy, but it is this Emacs sessions'
-     init file.
+     This Emacs sessions' init file.
 
 6.6.2.3 Argument :time
 ......................
@@ -1129,13 +1135,16 @@ entries.
      The string name of the parent of this function, if the function is
      a method of some class.
 
+`THROWS'
+     In each THROWS entry, the NAME of the signal thrown is specified.
+
    If TAG is a variable, you will get these dictionary entries.
 
 `DEFAULTVALUE'
      Enabled if there is a VALUE.
 
 `VALUE'
-     An entry in the DEFAULTVALUE subdictionary that represents the
+     An entry in the HAVEDEFAULT subdictionary that represents the
      textual representation of the default value of this variable.
 
    If TAG is a datatype, you will get these dictionary entries.
@@ -1185,7 +1194,18 @@ Used for SRecoder template files.
 `FILENAME_SYMBOL'
      The current filename reformatted as a C friendly symbol.
 
-6.6.4.3 Argument :el
+6.6.5 Argument :java
+--------------------
+
+`FILENAME_AS_PACKAGE'
+     Converts the filename into text that would be suitable as a package
+     name.
+
+`FILENAME_AS_CLASS'
+     Converts the filename into text that would be suitable as a
+     class-name for the main class in the file.
+
+6.6.5.1 Argument :el
 ....................
 
 Sets `PRENAME'.  This would be a common prefix from all the tags in the
@@ -1194,7 +1214,7 @@ current buffer.
    Most Emacs Lisp packages have some common prefix used in a way
 similar to namespaces in other languages.
 
-6.6.4.4 Argument :el-custom
+6.6.5.2 Argument :el-custom
 ...........................
 
 `GROUP'
@@ -1205,7 +1225,7 @@ similar to namespaces in other languages.
      The name of the Emacs Custom group that faces delcared with
      `defface' ought to use.
 
-6.6.4.5 Argument :texi
+6.6.5.3 Argument :texi
 ......................
 
 `LEVEL'
@@ -1215,7 +1235,7 @@ similar to namespaces in other languages.
      The next level down, so if `LEVEL' is `chapter', then `NEXTLEVEL'
      would be `section'.
 
-6.6.4.6 Argument :texitag
+6.6.5.4 Argument :texitag
 .........................
 
 The `:texitag' argument is like the `:tag' argument, except that
@@ -1524,48 +1544,48 @@ Ref: srecode-insert2436
 Node: User Templates2829
 Ref: srecode-map-save-file3211
 Node: Parts of SRecode4720
-Node: SRecode Minor Mode7804
-Node: Template Writing8614
-Ref: `SRecode-template-mode'8758
-Node: Variables9133
-Node: String Values10023
-Node: Multi-string Values10452
-Node: Section Show11184
-Node: Special Variables11701
-Node: Automatic Loop Variables13653
-Node: Compound Variable Values14292
-Node: Templates14774
-Node: Template Section Dictionaries15651
-Node: Template Macros18104
-Node: Contexts21000
-Node: Prompts22018
-Node: Dictionaries23892
-Node: Create a Dictionary24754
-Ref: srecode-create-dictionary24963
-Node: Setting Dictionary Values25233
-Ref: srecode-dictionary-set-value25705
-Ref: srecode-dictionary-show-section25936
-Ref: srecode-dictionary-add-section-dictionary26113
-Node: Compound Dictionary Values27037
-Ref: srecode-dictionary-compound-value27506
-Ref: srecode-compound-toString27967
-Ref: srecode-dump28335
-Node: Argument Resolution29329
-Ref: srecode-resolve-arguments29728
-Node: Creating new Arguments29842
-Node: Template Argument Dictionary Entries30881
-Node: Base Arguments31508
-Node: Semantic Arguments34816
-Ref: srecode-semantic-selected-tag35455
-Node: Language Arguments37120
-Node: Developing Template Functions38926
-Ref: srecode-read-template-name41355
-Ref: srecode-insert-fcn41719
-Node: Template Naming Conventions41824
-Node: Inserting Tag Lists45481
-Ref: srecode-semantic-insert-tag46070
-Node: Application Writing47754
-Ref: srecode-load-tables-for-mode48683
-Node: Index49008
+Node: SRecode Minor Mode7789
+Node: Template Writing8650
+Ref: `SRecode-template-mode'8794
+Node: Variables9169
+Node: String Values10055
+Node: Multi-string Values10484
+Node: Section Show11216
+Node: Special Variables11733
+Node: Automatic Loop Variables13685
+Node: Compound Variable Values14324
+Node: Templates14806
+Node: Template Section Dictionaries15683
+Node: Template Macros18136
+Node: Contexts21280
+Node: Prompts22298
+Node: Dictionaries24172
+Node: Create a Dictionary25034
+Ref: srecode-create-dictionary25243
+Node: Setting Dictionary Values25513
+Ref: srecode-dictionary-set-value25985
+Ref: srecode-dictionary-show-section26216
+Ref: srecode-dictionary-add-section-dictionary26393
+Node: Compound Dictionary Values27317
+Ref: srecode-dictionary-compound-value27786
+Ref: srecode-compound-toString28247
+Ref: srecode-dump28615
+Node: Argument Resolution29609
+Ref: srecode-resolve-arguments30008
+Node: Creating new Arguments30122
+Node: Template Argument Dictionary Entries31119
+Node: Base Arguments31746
+Node: Semantic Arguments35010
+Ref: srecode-semantic-selected-tag35649
+Node: Language Arguments37394
+Node: Developing Template Functions39484
+Ref: srecode-read-template-name41913
+Ref: srecode-insert-fcn42277
+Node: Template Naming Conventions42382
+Node: Inserting Tag Lists46039
+Ref: srecode-semantic-insert-tag46628
+Node: Application Writing48312
+Ref: srecode-load-tables-for-mode49241
+Node: Index49566
 
 End Tag Table

@@ -4,8 +4,7 @@
 ;; Inspired by code Copyright (C) 2001 by Simon Kittle.
 ;; Parts Copyright (C) 2007 Wickersheimer Jeremy.
 
-;; Author: Mark A. Hershberger <mah@everybody.org>
-;; Version: 1.2
+;; Original Author: Mark A. Hershberger <mah@everybody.org>
 ;; Created: 2002 Oct 11
 ;; Keywords: weblog blogger cms movable type openweblog blog
 ;; URL: http://elisp.info/package/weblogger/
@@ -125,6 +124,10 @@
 ;;  * Weblog creation using OpenWeblog.com
 ;;  * Menus
 ;;  * Toolbar
+;;  * Comments
+;;  * More robust support for metaWebBlog API
+;;  * Support more than just the metaWebBlog API
+;;  * WordPress "Page" selection and "Tag" support
 ;;
 ;; Bugs/Features:
 ;;
@@ -134,6 +137,8 @@
 ;;  * If the server isn't reachable, (weblogger-determine-capabilities)
 ;;    will get the wrong information.
 ;;  * Changed titles aren't put in the weblogger post ring.
+;;  * Dependency issues: Use GnuTLS (gnutls-cli) for SSL encryption
+;;  ** Otherwise, you may get /a lot/ of terminal beeps and errors
 
 (require 'xml-rpc)
 (require 'message)
@@ -297,7 +302,7 @@ haven't set one.  Set to nil for no category.")
 
 (defvar menu-bar-weblogger-menu nil)
 
-(defconst weblogger-version "1.3"
+(defconst weblogger-version "wiki"
   "Current version of weblogger.el")
 
 (unless weblogger-entry-mode-map
@@ -455,8 +460,8 @@ the filename in weblogger-config-file."
 (defun weblogger-entry-mode ()
   "Major mode for editing text for Weblogger.  Based on message-mode."
   (interactive)
-  (html-mode)
-;;   (message-disassociate-draft)
+  (message-mode)
+  (message-disassociate-draft)
   (use-local-map weblogger-entry-mode-map)
   (setq mode-name "weblogger-entry")
   (setq major-mode 'weblogger-entry-mode)
@@ -520,7 +525,6 @@ With a prefix, it will check the available weblogs on the server
 and prompt for the weblog to post to if multiple ones are
 available."
   (interactive "P")
-  (message "header")
   (if prompt (weblogger-weblog-id prompt))
   (unless weblogger-entry-ring
     (setq weblogger-entry-ring (make-ring weblogger-max-entries-in-ring)))
@@ -1017,9 +1021,11 @@ Otherwise, open a new entry."
       (insert (cdr (assoc "content" entry))))
   (run-hooks 'weblogger-start-edit-entry-hook)
   (set-buffer-modified-p nil)
+  (message-goto-keywords)   ;; Create Keywords field in new entries
   (if (message-fetch-field "Subject")
-      (message-goto-body)
-    (message-goto-subject))
+      (message-goto-body)   ;; If Subject exists, move cursor to message body
+    (message-goto-subject)) ;; Else, drop cursor on Subject header
+  (message-fetch-field "Keywords")
   (pop-to-buffer *weblogger-entry*))
 
 (defun weblogger-response-to-struct (response)
@@ -1031,11 +1037,12 @@ like."
 	(userid      (cdr (assoc-ignore-case "userid" response)))
 	(title       (cdr (assoc-ignore-case "title" response)))
 	(dateCreated (cdr (assoc-ignore-case "datecreated" response)))
-	(content     (assoc-ignore-case "content" response))
+	(content          (assoc-ignore-case "content" response))
 	(trackbacks  (cdr (assoc-ignore-case "mt_tb_ping_urls" response)))
 	(textType    (cdr (assoc-ignore-case "mt_convert_breaks" response)))
 	(url         (cdr (assoc-ignore-case "link" response)))
-	(description (assoc-ignore-case "description" response))
+	(description      (assoc-ignore-case "description" response))
+	(extended         (assoc-ignore-case "mt_text_more" response))
 	(categories  (cdr (assoc-ignore-case "categories" response))))
     
     (cond (content
@@ -1073,7 +1080,12 @@ like."
 		      (when trackbacks
 			(cons "trackbacks"   trackbacks))
 		      (when description
-			(cons "content"      (cdr description)))
+			(cond ((cdr extended)
+			  (cons "content"   (concat (cdr description)
+			    "<!--more-->"
+			    (cdr extended))))
+			  (t 
+			    (cons "content" (cdr description)))))
 		      (when title
 			(cons "title"        title))
 		      (when url

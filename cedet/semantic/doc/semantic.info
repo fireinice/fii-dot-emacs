@@ -68,7 +68,7 @@ identifying components in a programming language source for purposes
 such as color highlighting.  This approach has proved is usefulness,
 but have limitations.
 
-semantic provides a new intrastructure that goes far beyond text
+semantic provides a new infrastructure that goes far beyond text
 analysis based on regular expressions.
 
 semantic uses "parsers" to analyze programming language sources.  For
@@ -216,9 +216,9 @@ enabling your preferred subset individually in your `.emacs' file.
  -- Command: semantic-load-enable-minimum-features
      Enable the minimum number of semantic features for basic usage.
 
-     These minimum features are designed to allow semantic to to
-     maintain the parsing data necessary needed by various tools while
-     intruding on your typical editing practices as little as possible.
+     These minimum features are designed to allow semantic to maintain
+     the parsing data necessary needed by various tools while intruding
+     on your typical editing practices as little as possible.
 
      The features enabled are:
     "semantic-idle-scheduler-mode"
@@ -249,7 +249,7 @@ enabling your preferred subset individually in your `.emacs' file.
           faster first-time parsing of files for supported languages,
           such as C/C++.
 
-    buffer parsing using ectags for somoe modes.
+    buffer parsing using ectags for some modes.
           Some languages do not have regular all Lisp Semantic parsers.
           This command enables the use of Exuberent ctags as the main
           parser for some languages, such as for Borne Shell scripts.
@@ -457,8 +457,8 @@ You can inhibit parsing using the `semantic-inhibit-functions' variable.
      a buffer.  If any of these functions returns non-`nil', the
      current buffer is not setup to use Semantic.
 
-You could have this inihibit parsing in very large files, or files
-which cause particular problems to semantic.
+You could have this inhibit parsing in very large files, or files which
+cause particular problems to semantic.
 
 2.3.2 Parsing in idle time
 --------------------------
@@ -596,7 +596,7 @@ File: semantic.info,  Node: Tag handling,  Next: Semanticdb,  Prev: Parser code,
 4.2 Tag handling
 ================
 
-A tag represents an indivudual item found in a buffer, such as a
+A tag represents an individual item found in a buffer, such as a
 function or variable.  Tag handling is handled in several source files.
 
 `semantic-tag.el'
@@ -632,8 +632,8 @@ function or variable.  Tag handling is handled in several source files.
 `semantic-sort.el'
      Sorting lists of tags in different ways.  Includes sorting a plain
      list of tags forward or backward.  Includes binning tags based on
-     attributues (bucketize), and tag adoption for multiple references
-     to the same thing.
+     attributes (bucketize), and tag adoption for multiple references to
+     the same thing.
 
 `semantic-doc.el'
      Capture documentation comments from near a tag.
@@ -1301,39 +1301,39 @@ Node: Semantic Components6180
 Node: Installation/Basic Configuration7600
 Node: Canned Configuration8212
 Ref: semantic-load-enable-minimum-features8798
-Ref: semantic-enable-all-exuberent-ctags-support9955
-Ref: semantic-load-enable-code-helpers10618
-Ref: semantic-load-enable-gaudy-code-helpers11951
-Ref: semantic-load-enable-excessive-code-helpers13166
-Ref: semantic-load-enable-semantic-debugging-helpers13687
-Node: Search Optimization14292
-Node: Parsing Optimization17870
-Ref: semantic-inhibit-functions18470
-Node: Semantic manuals19761
-Node: Semantic Internals20582
-Node: Parser code21299
-Node: Tag handling23053
-Node: Semanticdb24723
-Node: Analyzer26815
-Node: Tools28738
-Node: Tests30415
-Node: Glossary30873
-Ref: BNF31030
-Ref: bovinate31229
-Ref: bovine lambda31318
-Ref: bovine parser31501
-Ref: context31627
-Ref: LALR31636
-Ref: lexer31642
-Ref: LL31856
-Ref: nonterminal31860
-Ref: overloadable32051
-Ref: parser32159
-Ref: tag32212
-Ref: token32557
-Ref: token stream32675
-Ref: wisent parser32754
-Node: GNU Free Documentation License32921
-Node: Index52641
+Ref: semantic-enable-all-exuberent-ctags-support9952
+Ref: semantic-load-enable-code-helpers10614
+Ref: semantic-load-enable-gaudy-code-helpers11947
+Ref: semantic-load-enable-excessive-code-helpers13162
+Ref: semantic-load-enable-semantic-debugging-helpers13683
+Node: Search Optimization14288
+Node: Parsing Optimization17866
+Ref: semantic-inhibit-functions18466
+Node: Semantic manuals19756
+Node: Semantic Internals20577
+Node: Parser code21294
+Node: Tag handling23048
+Node: Semanticdb24717
+Node: Analyzer26809
+Node: Tools28732
+Node: Tests30409
+Node: Glossary30867
+Ref: BNF31024
+Ref: bovinate31223
+Ref: bovine lambda31312
+Ref: bovine parser31495
+Ref: context31621
+Ref: LALR31630
+Ref: lexer31636
+Ref: LL31850
+Ref: nonterminal31854
+Ref: overloadable32045
+Ref: parser32153
+Ref: tag32206
+Ref: token32551
+Ref: token stream32669
+Ref: wisent parser32748
+Node: GNU Free Documentation License32915
+Node: Index52635
 
 End Tag Table

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2002, 2003 Vladimir G. Sekissov
 
 ;; Author: zigler <zigler@localhost.localdomain>
-;; Created: 2009-01-08 16:41:48+0800
+;; Created: 2009-01-23 14:43:47+0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

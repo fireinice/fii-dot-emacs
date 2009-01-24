@@ -1,9 +1,9 @@
 ;;; semantic-c-by.el --- Generated parser support file
 
-;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Eric M. Ludlam
+;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Eric M. Ludlam
 
 ;; Author: zigler <zigler@localhost.localdomain>
-;; Created: 2009-01-08 16:41:47+0800
+;; Created: 2009-01-23 14:43:46+0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -2015,20 +2015,29 @@
       close-paren)
      ) ;; end type-cast-list
 
-    (function-call
+    (opt-function-call-args
+     (semantic-list
+      "^(")
+     ( ;;EMPTY
+      )
+     ) ;; end opt-function-call-args
+
+    (multi-stage-dereference
      (namespace-symbol
+      opt-function-call-args
       punctuation
       "\\`[.]\\'"
-      function-call)
+      multi-stage-dereference)
      (namespace-symbol
+      opt-function-call-args
       punctuation
       "\\`[-]\\'"
       punctuation
       "\\`[>]\\'"
-      function-call)
+      multi-stage-dereference)
      (namespace-symbol
-      semantic-list)
-     ) ;; end function-call
+      opt-function-call-args)
+     ) ;; end multi-stage-dereference
 
     (string-seq
      (string
@@ -2065,21 +2074,22 @@
 	 (identity start)
 	 (identity end)))
       )
-     (function-call
+     (multi-stage-dereference
       ,(semantic-lambda
 	(list
 	 (identity start)
 	 (identity end)))
       )
      (NEW
-      function-call
+      multi-stage-dereference
       ,(semantic-lambda
 	(list
 	 (identity start)
 	 (identity end)))
       )
      (NEW
-      namespace-symbol
+      builtintype-types
+      semantic-list
       ,(semantic-lambda
 	(list
 	 (identity start)

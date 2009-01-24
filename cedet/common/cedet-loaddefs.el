@@ -20,6 +20,13 @@ exists.
 
 ;;;***
 
+;;;### (autoloads nil "cedet-compat" "cedet-compat.el" (18804 36702))
+;;; Generated autoloads from cedet-compat.el
+
+(if (or (featurep (quote xemacs)) (inversion-test (quote emacs) "22.0")) (defalias (quote cedet-split-string) (quote cedet-split-string-1)) (defalias (quote cedet-split-string) (quote split-string)))
+
+;;;***
+
 ;;;### (autoloads nil "cedet-edebug" "cedet-edebug.el" (18771 15984))
 ;;; Generated autoloads from cedet-edebug.el
 
@@ -32,7 +39,7 @@ exists.
 ;;;### (autoloads (cedet-gnu-global-version-check cedet-gnu-global-root
 ;;;;;;  cedet-gnu-global-show-root cedet-gnu-global-expand-filename
 ;;;;;;  cedet-gnu-global-search cedet-global-command) "cedet-global"
-;;;;;;  "cedet-global.el" (18771 15984))
+;;;;;;  "cedet-global.el" (18804 36702))
 ;;; Generated autoloads from cedet-global.el
 
 (defvar cedet-global-command "global" "\
@@ -72,25 +79,37 @@ If a default starting DIR is not specified, the current buffer's
 
 (autoload (quote cedet-gnu-global-version-check) "cedet-global" "\
 Check the version of the installed GNU Global command.
+If optional programatic argument NOERROR is non-nil, then
+instead of throwing an error if Global isn't available, then
+return nil.
 
-\(fn)" t nil)
+\(fn &optional NOERROR)" t nil)
 
 ;;;***
 
-;;;### (autoloads (cedet-utest) "cedet-utests" "cedet-utests.el"
-;;;;;;  (18771 15984))
+;;;### (autoloads (cedet-utest-batch cedet-utest) "cedet-utests"
+;;;;;;  "cedet-utests.el" (18809 26358))
 ;;; Generated autoloads from cedet-utests.el
 
 (autoload (quote cedet-utest) "cedet-utests" "\
 Run the CEDET unittests.
+Exit-on-error causes an error to be thrown on an error, instead
+of just logging the error.
 
-\(fn)" t nil)
+\(fn &optional EXIT-ON-ERROR)" t nil)
+
+(autoload (quote cedet-utest-batch) "cedet-utests" "\
+Run the CEDET unit tests in BATCH mode.
+
+\(fn)" nil nil)
 
 ;;;***
 
-;;;### (autoloads (data-debug-edebug-expr data-debug-new-buffer data-debug-mode
-;;;;;;  data-debug-insert-thing data-debug-insert-stuff-list data-debug-insert-property-list)
-;;;;;;  "data-debug" "data-debug.el" (18771 15984))
+;;;### (autoloads (data-debug-eval-expression data-debug-edebug-expr
+;;;;;;  data-debug-new-buffer data-debug-mode data-debug-insert-thing
+;;;;;;  data-debug-insert-stuff-list data-debug-insert-hash-table
+;;;;;;  data-debug-insert-property-list) "data-debug" "data-debug.el"
+;;;;;;  (18809 26358))
 ;;; Generated autoloads from data-debug.el
 
 (autoload (quote data-debug-insert-property-list) "data-debug" "\
@@ -99,6 +118,11 @@ Each line starts with PREFIX.
 The attributes belong to the tag PARENT.
 
 \(fn PROPLIST PREFIX &optional PARENT)" nil nil)
+
+(autoload (quote data-debug-insert-hash-table) "data-debug" "\
+Insert the contents of HASH-TABLE inserting PREFIX before each element.
+
+\(fn HASH-TABLE PREFIX)" nil nil)
 
 (autoload (quote data-debug-insert-stuff-list) "data-debug" "\
 Insert all the parts of STUFFLIST.
@@ -131,6 +155,13 @@ Dump out the contets of some expression EXPR in edebug with ddebug.
 
 \(fn EXPR)" t nil)
 
+(autoload (quote data-debug-eval-expression) "data-debug" "\
+Evaluate EXPR and display the value.
+If the result is something simple, show it in the echo area.
+If the result is a list or vector, then use the data debugger to display it.
+
+\(fn EXPR)" t nil)
+
 ;;;***
 
 ;;;### (autoloads (define-fame-channel) "fame" "fame.el" (18771 15984))
@@ -156,7 +187,7 @@ messages to CHANNEL.
 
 ;;;### (autoloads (inversion-upgrade-package inversion-add-to-load-path
 ;;;;;;  inversion-find-version inversion-require-emacs inversion-require)
-;;;;;;  "inversion" "inversion.el" (18771 15984))
+;;;;;;  "inversion" "inversion.el" (18804 36703))
 ;;; Generated autoloads from inversion.el
 
 (autoload (quote inversion-require) "inversion" "\
@@ -208,7 +239,7 @@ Try to upgrade PACKAGE in DIRECTORY is available.
 ;;;***
 
 ;;;### (autoloads (mode-local-read-function) "mode-local" "mode-local.el"
-;;;;;;  (18771 15984))
+;;;;;;  (18804 36703))
 ;;; Generated autoloads from mode-local.el
 
 (autoload (quote mode-local-read-function) "mode-local" "\
@@ -251,8 +282,8 @@ See a pretty-printed representation of FUNCTION-NAME.
 
 ;;;### (autoloads (pulse-line-hook-function pulse-toggle-integration-advice
 ;;;;;;  pulse-momentary-highlight-region pulse-momentary-highlight-one-line
-;;;;;;  pulse-momentary-highlight-overlay pulse) "pulse" "pulse.el"
-;;;;;;  (18771 15984))
+;;;;;;  pulse-momentary-highlight-overlay pulse-test pulse) "pulse"
+;;;;;;  "pulse.el" (18809 26358))
 ;;; Generated autoloads from pulse.el
 
 (autoload (quote pulse) "pulse" "\
@@ -262,6 +293,12 @@ instead of `pulse-highlight-start-face'.
 Be sure to call `pulse-reset-face' after calling pulse.
 
 \(fn &optional FACE)" nil nil)
+
+(autoload (quote pulse-test) "pulse" "\
+Test the lightening function for pulsing a line.
+When optional NO-ERROR Don't throw an error if we can't run tests.
+
+\(fn &optional NO-ERROR)" t nil)
 
 (autoload (quote pulse-momentary-highlight-overlay) "pulse" "\
 Pulse the overlay O, unhighlighting before next command.
@@ -308,9 +345,8 @@ Only pulses the line if `pulse-command-advice-flag' is non-nil.
 
 ;;;***
 
-;;;### (autoloads nil nil ("cedet-compat.el" "cedet-files.el" "cedet-load.el"
-;;;;;;  "cedet.el" "ezimage.el" "sformat.el" "working.el") (18789
-;;;;;;  48177 458944))
+;;;### (autoloads nil nil ("cedet-files.el" "cedet-load.el" "cedet.el"
+;;;;;;  "ezimage.el" "sformat.el" "working.el") (18809 26373 649607))
 
 ;;;***
 

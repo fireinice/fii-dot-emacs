@@ -1,9 +1,9 @@
 ;;; srecode-template-wy.el --- Generated parser support file
 
-;; Copyright (C) 2005, 2007, 2008 Eric M. Ludlam
+;; Copyright (C) 2005, 2007, 2008, 2009 Eric M. Ludlam
 
 ;; Author: zigler <zigler@localhost.localdomain>
-;; Created: 2009-01-08 16:41:51+0800
+;; Created: 2009-01-23 14:43:50+0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -249,7 +249,7 @@
 ;;
 (define-lex-simple-regex-analyzer srecode-template-property-analyzer
   "Detect and create a dynamic argument properties."
-  ":\\(\\w\\|\\s_\\)+" 'property 0)
+  ":\\(\\w\\|\\s_\\)*" 'property 0)
 
 (define-lex-regex-analyzer srecode-template-separator-block
   "Detect and create a template quote block."

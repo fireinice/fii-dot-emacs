@@ -25,7 +25,7 @@ Test out various charting features.
 
 ;;;### (autoloads (data-debug-show data-debug-insert-object-button
 ;;;;;;  data-debug-insert-object-slots) "eieio-datadebug" "eieio-datadebug.el"
-;;;;;;  (18771 15984))
+;;;;;;  (18809 26358))
 ;;; Generated autoloads from eieio-datadebug.el
 
 (autoload (quote data-debug-insert-object-slots) "eieio-datadebug" "\
@@ -50,7 +50,7 @@ Run ddebug against any EIEIO object OBJ
 
 ;;;### (autoloads (eieio-describe-generic eieio-build-class-alist
 ;;;;;;  eieio-describe-constructor eieio-describe-class eieio-browse)
-;;;;;;  "eieio-opt" "eieio-opt.el" (18786 58640))
+;;;;;;  "eieio-opt" "eieio-opt.el" (18804 36703))
 ;;; Generated autoloads from eieio-opt.el
 
 (autoload (quote eieio-browse) "eieio-opt" "\
@@ -129,7 +129,7 @@ this object.
 ;;;***
 
 ;;;### (autoloads (enable-visual-studio-bookmarks) "linemark" "linemark.el"
-;;;;;;  (18786 58640))
+;;;;;;  (18804 36703))
 ;;; Generated autoloads from linemark.el
 
 (autoload (quote enable-visual-studio-bookmarks) "linemark" "\
@@ -145,7 +145,7 @@ Bind the viss bookmark functions to F2 related keys.
 ;;;***
 
 ;;;### (autoloads (lmcompile-do-highlight) "lmcompile" "lmcompile.el"
-;;;;;;  (18771 15984))
+;;;;;;  (18804 36703))
 ;;; Generated autoloads from lmcompile.el
 
 (autoload (quote lmcompile-do-highlight) "lmcompile" "\
@@ -184,8 +184,8 @@ Argument PPATH is the path to the directory we are going to analyze.
 ;;;;;;  "e-config.el" "ecfg-menu.el" "eieio-base.el" "eieio-comp.el"
 ;;;;;;  "eieio-custom.el" "eieio-doc.el" "eieio-load.el" "eieio-speedbar.el"
 ;;;;;;  "eieio-test-methodinvoke.el" "eieio-tests.el" "eieio.el"
-;;;;;;  "eieiocomp.el" "psql.el" "widget-d.el" "widget-i.el") (18789
-;;;;;;  48181 50985))
+;;;;;;  "eieiocomp.el" "psql.el" "widget-d.el" "widget-i.el") (18809
+;;;;;;  26377 813380))
 
 ;;;***
 
