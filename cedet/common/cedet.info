@@ -687,7 +687,7 @@ file like this:
 ======================
 
 The EDE project system can use GNU Global to accelerate finding files
-withing a project.  The EDE command to `ede-find-file' bound to `C-c .
+within a project.  The EDE command to `ede-find-file' bound to `C-c .
 f' is one direct application.  semantic also makes heavy use of of the
 feature to find header files.
 
@@ -696,7 +696,7 @@ Something like this can work in your `.emacs' file.
 
      (setq ede-locate-setup-options
            '(ede-locate-global
-     	ede-locate-base))
+             ede-locate-base))
 
 9.2 semantic Database
 =====================
@@ -707,6 +707,10 @@ enable it, use:
      (semanticdb-enable-gnu-global-databases 'c++-mode)
 
    where the first argument is a `major-mode' in which to use it.
+
+   GNU Global will then be used for project-wide searches as a backup
+when pre-existing semantic database searches may not have parsed all
+your files.
 
 9.3 semantic
 ============
@@ -1126,7 +1130,7 @@ Ref: semantic-lex-c-preprocessor-symbol-map21558
 Ref: semantic-lex-c-preprocessor-symbol-file22911
 Ref: semantic-c-obey-conditional-section-parsing-flag23504
 Node: GNU Global24870
-Node: GNU Free Documentation License26771
-Node: Index46493
+Node: GNU Free Documentation License26929
+Node: Index46651
 
 End Tag Table

@@ -8,7 +8,7 @@
 ;;;;;;  ede-documentation-files ede-description ede-name project-make-dist
 ;;;;;;  project-compile-target project-compile-project project-edit-file-target
 ;;;;;;  ede-compile-target ede-remove-file global-ede-mode) "ede"
-;;;;;;  "ede.el" (18809 26358))
+;;;;;;  "ede.el" (18827 51279))
 ;;; Generated autoloads from ede.el
 
 (eieio-defclass-autoload (quote ede-project-autoload) (quote nil) "ede" "Class representing minimal knowledge set to run preliminary EDE functions.\nWhen more advanced functionality is needed from a project type, that projects\ntype is required and the load function used.")
@@ -170,8 +170,8 @@ ROOTPROJ is nil, since there is only one project.
 
 ;;;***
 
-;;;### (autoloads (ede-find-file) "ede-files" "ede-files.el" (18809
-;;;;;;  26358))
+;;;### (autoloads (ede-find-file) "ede-files" "ede-files.el" (18827
+;;;;;;  51279))
 ;;; Generated autoloads from ede-files.el
 
 (autoload (quote ede-find-file) "ede-files" "\
@@ -207,7 +207,7 @@ ROOTPROJ is nil, since there is only one project.
 ;;;***
 
 ;;;### (autoloads (ede-enable-locate-on-project) "ede-locate" "ede-locate.el"
-;;;;;;  (18809 26358))
+;;;;;;  (18827 51279))
 ;;; Generated autoloads from ede-locate.el
 
 (autoload (quote ede-enable-locate-on-project) "ede-locate" "\
@@ -299,7 +299,7 @@ Argument NEWVERSION is the version number to use in the current project.
 ;;;;;;  "ede-proj-info.el" "ede-proj-misc.el" "ede-proj-obj.el" "ede-proj-prog.el"
 ;;;;;;  "ede-proj-scheme.el" "ede-proj-shared.el" "ede-proj-skel.el"
 ;;;;;;  "ede-source.el" "ede-speedbar.el" "ede-system.el" "project-am.el")
-;;;;;;  (18809 26410 162313))
+;;;;;;  (18827 51525 305532))
 
 ;;;***
 

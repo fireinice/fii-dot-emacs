@@ -36,6 +36,17 @@ exists.
 
 ;;;***
 
+;;;### (autoloads (cedet-files-utest) "cedet-files" "cedet-files.el"
+;;;;;;  (18827 51279))
+;;; Generated autoloads from cedet-files.el
+
+(autoload (quote cedet-files-utest) "cedet-files" "\
+Test out some file name conversions.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads (cedet-gnu-global-version-check cedet-gnu-global-root
 ;;;;;;  cedet-gnu-global-show-root cedet-gnu-global-expand-filename
 ;;;;;;  cedet-gnu-global-search cedet-global-command) "cedet-global"
@@ -88,7 +99,7 @@ return nil.
 ;;;***
 
 ;;;### (autoloads (cedet-utest-batch cedet-utest) "cedet-utests"
-;;;;;;  "cedet-utests.el" (18809 26358))
+;;;;;;  "cedet-utests.el" (18827 51279))
 ;;; Generated autoloads from cedet-utests.el
 
 (autoload (quote cedet-utest) "cedet-utests" "\
@@ -109,7 +120,7 @@ Run the CEDET unit tests in BATCH mode.
 ;;;;;;  data-debug-new-buffer data-debug-mode data-debug-insert-thing
 ;;;;;;  data-debug-insert-stuff-list data-debug-insert-hash-table
 ;;;;;;  data-debug-insert-property-list) "data-debug" "data-debug.el"
-;;;;;;  (18809 26358))
+;;;;;;  (18810 29392))
 ;;; Generated autoloads from data-debug.el
 
 (autoload (quote data-debug-insert-property-list) "data-debug" "\
@@ -345,8 +356,8 @@ Only pulses the line if `pulse-command-advice-flag' is non-nil.
 
 ;;;***
 
-;;;### (autoloads nil nil ("cedet-files.el" "cedet-load.el" "cedet.el"
-;;;;;;  "ezimage.el" "sformat.el" "working.el") (18809 26373 649607))
+;;;### (autoloads nil nil ("cedet-load.el" "cedet.el" "ezimage.el"
+;;;;;;  "sformat.el" "working.el") (18827 51491 919247))
 
 ;;;***
 

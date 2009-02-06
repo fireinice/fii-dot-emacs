@@ -5,10 +5,10 @@
 ;; Copyright (C) 95,96,98,99,2000,01,02,03,04,05,06,07,08,09 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.org>
-;; RCS: $Id: eieio.el,v 1.181 2009/01/13 23:59:29 zappo Exp $
+;; RCS: $Id: eieio.el,v 1.183 2009/02/01 20:26:44 scymtym Exp $
 ;; Keywords: OO, lisp
 
-(defvar eieio-version "1.1"
+(defvar eieio-version "1.2"
   "Current version of EIEIO.")
 
 ;;
@@ -2514,8 +2514,8 @@ Called from the constructor routine."
       (let ((rn (eieio-initarg-to-attribute (object-class-fast obj)
 					    (car slots))))
 	(if (not rn)
-	    (slot-missing obj (car slots) 'oset (car (cdr slots))))
-	(eieio-oset obj rn (car (cdr slots))))
+	    (slot-missing obj (car slots) 'oset (car (cdr slots)))
+	  (eieio-oset obj rn (car (cdr slots)))))
       (setq slots (cdr (cdr slots))))))
 
 (defgeneric initialize-instance (this &optional slots)

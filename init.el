@@ -4,8 +4,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 五  1月 23 14:42:26 2009 (CST)
-;;     Update #: 370
+;; Last-Updated: 五  2月  6 13:17:28 2009 (CST)
+;;     Update #: 374
 ;; 
 ;; 
 ;;; Change log:
@@ -709,7 +709,9 @@ that was stored with ska-point-to-register."
 		 'py-beginning-of-def-or-class)
 	    (setq outline-regexp "def\\|class ")
 	    (set (make-local-variable 'ac-sources)
-		 (append ac-sources '(ac-source-rope) '(ac-source-yasnippet)))
+		 (append ac-sources '(ac-source-rope)
+			 '(ac-source-yasnippet)))
+			 ;; ))
 	    (set (make-local-variable 'ac-find-function) 'ac-python-find)
 	    (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
 	    (set (make-local-variable 'ac-auto-start) nil)))
@@ -782,7 +784,7 @@ that was stored with ska-point-to-register."
 (defadvice ac-cleanup (after advice-turn-off-auto-start activate)
   (set (make-local-variable 'ac-auto-start) nil))
  
-(define-key python-mode-map "\t" 'ryan-python-tab)
+(define-key python-mode-map [(tab)] 'ryan-python-tab)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
 ;;; End Auto Completion                                                                                        
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -935,7 +937,7 @@ that was stored with ska-point-to-register."
   (c-mode-map c-mode-abbrev-table)
   (java-mode-map java-mode-abbrev-table)
   (ruby-mode-map ruby-mode-abbrev-table)
-  (py-mode-map python-mode-abbrev-table))
+  (python-mode-map python-mode-abbrev-table))
   ("{" "{")
   ("\"" "\"")
   ("(" "(")

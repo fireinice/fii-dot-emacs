@@ -3,7 +3,7 @@
 ;; Copyright (C) 2008, 2009 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
-;; X-RCS: $Id: semantic-analyze-debug.el,v 1.7 2009/01/09 23:03:46 zappo Exp $
+;; X-RCS: $Id: semantic-analyze-debug.el,v 1.9 2009/02/01 16:12:12 zappo Exp $
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -243,13 +243,13 @@ with the command:
 	  (if (or (not (semantic-equivalent-tag-p ots dt))
 		  (not (save-excursion
 			 (set-buffer orig-buffer)
-			 (semantic-analyze-dereference-metatype
-			  ots (oref ctxt scope)))))
+			 (car (semantic-analyze-dereference-metatype
+			  ots (oref ctxt scope))))))
 	      (let ((lasttype ots)
 		    (nexttype (save-excursion
 				(set-buffer orig-buffer)
-				(semantic-analyze-dereference-metatype
-				 ots (oref ctxt scope)))))
+				(car (semantic-analyze-dereference-metatype
+				 ots (oref ctxt scope))))))
 		(if (eq nexttype lasttype)
 		    (princ "\n  [ Debugger error trying to help with metatypes ]")
 		
@@ -271,8 +271,8 @@ with the command:
 			nexttype
 			(save-excursion
 			  (set-buffer orig-buffer)
-			  (semantic-analyze-dereference-metatype
-			   nexttype (oref ctxt scope))))
+			  (car (semantic-analyze-dereference-metatype
+			   nexttype (oref ctxt scope)))))
 		  )
 		(when (not nexttype)
 		  (princ "   nil\n\n")
@@ -386,7 +386,43 @@ or implementing a version specific to ")
 	 (save-excursion
 	   (set-buffer (semanticdb-get-buffer table))
 	   semanticdb-find-lost-includes))
+	(ip
+	 (save-excursion
+	   (set-buffer (semanticdb-get-buffer table))
+	   semantic-dependency-system-include-path))
+	(edeobj
+	 (save-excursion
+	   (set-buffer (semanticdb-get-buffer table))
+	   ede-object))
+	(edeproj
+	 (save-excursion
+	   (set-buffer (semanticdb-get-buffer table))
+	   ede-object-project))
 	)
+
+    (princ "\n\nInclude Path Summary:")
+    (when edeobj
+	(princ "\n\nThis file's project include search is handled by the EDE object:\n")
+	(princ "  Buffer Target:  ")
+	(princ (object-print edeobj))
+	(princ "\n")
+	(when (not (eq edeobj edeproj))
+	  (princ "  Buffer Project: ")
+	  (princ (object-print edeproj))
+	  (princ "\n"))
+	(when edeproj
+	  (let ((loc (ede-get-locator-object edeproj)))
+	    (princ "  Backup Locator: ")
+	    (princ (object-print loc))
+	    (princ "\n")))
+	)
+
+    (princ "\n\nThe system include path is:\n")
+    (dolist (dir ip)
+      (princ "  ")
+      (princ dir)
+      (princ "\n"))
+
     (princ "\n\nInclude Summary: ")
     (princ (semanticdb-full-filename table))
     (princ "\n\n")

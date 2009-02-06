@@ -245,6 +245,17 @@ Insert get/set methods for the current class.
 
 ;;;***
 
+;;;### (autoloads (srecode-field-utest) "srecode-fields" "srecode-fields.el"
+;;;;;;  (18827 46593))
+;;; Generated autoloads from srecode-fields.el
+
+(autoload (quote srecode-field-utest) "srecode-fields" "\
+Test the srecode field manager.
+
+\(fn)" t nil)
+
+;;;***
+
 ;;;### (autoloads (srecode-comment-prefix) "srecode-filters" "srecode-filters.el"
 ;;;;;;  (18804 36703))
 ;;; Generated autoloads from srecode-filters.el
@@ -361,7 +372,7 @@ FILENAME_AS_CLASS - file converted to a Java class name.
 ;;;***
 
 ;;;### (autoloads (srecode-adebug-maps srecode-get-maps) "srecode-map"
-;;;;;;  "srecode-map.el" (18804 36703))
+;;;;;;  "srecode-map.el" (18827 51280))
 ;;; Generated autoloads from srecode-map.el
 
 (autoload (quote srecode-get-maps) "srecode-map" "\
@@ -563,7 +574,7 @@ Major-mode for writing srecode macros.
 ;;;***
 
 ;;;### (autoloads (srecode-utest-template-output) "srecode-test"
-;;;;;;  "srecode-test.el" (18809 26359))
+;;;;;;  "srecode-test.el" (18827 51280))
 ;;; Generated autoloads from srecode-test.el
 
 (autoload (quote srecode-utest-template-output) "srecode-test" "\
@@ -574,7 +585,7 @@ Test various template insertion options.
 ;;;***
 
 ;;;### (autoloads (srecode-utest-getset-output) "srecode-test-getset"
-;;;;;;  "srecode-test-getset.el" (18809 26359))
+;;;;;;  "srecode-test-getset.el" (18827 51280))
 ;;; Generated autoloads from srecode-test-getset.el
 
 (autoload (quote srecode-utest-getset-output) "srecode-test-getset" "\
@@ -615,7 +626,7 @@ Adds the following:
 ;;;***
 
 ;;;### (autoloads nil nil ("srecode-document-vars.el" "srecode-extract.el"
-;;;;;;  "srecode-load.el" "srecode.el") (18809 26405 851821))
+;;;;;;  "srecode-load.el" "srecode.el") (18827 51521 729550))
 
 ;;;***
 

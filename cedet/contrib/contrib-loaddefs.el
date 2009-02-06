@@ -83,7 +83,7 @@ Not documented
 ;;;***
 
 ;;;### (autoloads (wisent-php-default-setup) "wisent-php" "wisent-php.el"
-;;;;;;  (18771 15984))
+;;;;;;  (18827 51279))
 ;;; Generated autoloads from wisent-php.el
 
 (autoload (quote wisent-php-default-setup) "wisent-php" "\
@@ -97,7 +97,7 @@ Use the alternate LALR(1) parser.
 ;;;***
 
 ;;;### (autoloads nil nil ("cedet-contrib-load.el" "cedet-contrib.el"
-;;;;;;  "wisent-ruby.el") (18809 26417 620710))
+;;;;;;  "wisent-ruby.el") (18827 51532 612251))
 
 ;;;***
 

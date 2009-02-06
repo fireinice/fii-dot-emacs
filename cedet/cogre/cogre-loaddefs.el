@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads (cogre-load-graph cogre) "cogre" "cogre.el" (18809
-;;;;;;  26358))
+;;;### (autoloads (cogre-load-graph cogre) "cogre" "cogre.el" (18827
+;;;;;;  51279))
 ;;; Generated autoloads from cogre.el
 
 (eieio-defclass-autoload (quote cogre-graph) (quote (eieio-persistent)) "cogre" "A Connected Graph.\na connected graph contains a series of nodes and links which are\nrendered in a buffer, or serialized to disk.")
@@ -41,7 +41,7 @@ Connected Graph Editor Mode.
 
 ;;;***
 
-;;;### (autoloads nil "cogre-uml" "cogre-uml.el" (18809 26358))
+;;;### (autoloads nil "cogre-uml" "cogre-uml.el" (18827 51279))
 ;;; Generated autoloads from cogre-uml.el
 
 (eieio-defclass-autoload (quote cogre-package) (quote (cogre-node)) "cogre-uml" "A Package node.\nPackages represent other class diagrams, and list the major nodes\nwithin them.  They can be linked by dependency links.")
@@ -55,7 +55,7 @@ Connected Graph Editor Mode.
 ;;;***
 
 ;;;### (autoloads (cogre-uml-utest cogre-utest) "cogre-utest" "cogre-utest.el"
-;;;;;;  (18809 26358))
+;;;;;;  (18827 51279))
 ;;; Generated autoloads from cogre-utest.el
 
 (autoload (quote cogre-utest) "cogre-utest" "\
@@ -102,7 +102,7 @@ Setup buffer for parse.
 ;;;***
 
 ;;;### (autoloads nil nil ("cogre-load.el" "picture-hack.el" "wisent-dot-wy.el")
-;;;;;;  (18809 26414 632377))
+;;;;;;  (18827 51529 599211))
 
 ;;;***
 

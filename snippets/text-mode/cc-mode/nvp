@@ -1,0 +1,4 @@
+#name : do { ... } while (...)
+# --
+	{	"${1:test}",${2: }				XParser::CssPropKeywordVal::${1:test}			},
+$0
