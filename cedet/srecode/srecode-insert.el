@@ -3,7 +3,7 @@
 ;;; Copyright (C) 2005, 2007, 2008, 2009 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
-;; X-RCS: $Id: srecode-insert.el,v 1.26 2009/01/14 02:48:20 zappo Exp $
+;; X-RCS: $Id: srecode-insert.el,v 1.31 2009/04/04 03:09:20 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -32,8 +32,27 @@
 (require 'srecode-compile)
 (require 'srecode-find)
 (require 'srecode-dictionary)
+(eval-when-compile
+  (require 'srecode-fields))
 
 ;;; Code:
+
+(defcustom srecode-insert-ask-variable-method 'ask
+  "Determine how to ask for a dictionary value when inserting a template.
+Only the ASK style inserter will query the user for a value.
+Dictionary value references that ask begin with the ? character.
+Possible values are:
+  'ask   - Prompt in the minibuffer as the value is inserted.
+  'field - Use the dictionary macro name as the inserted value,
+           and place a field there.  Matched fields change together.
+
+NOTE: The field feature does not yet work with XEmacs."
+  :group 'srecode
+  :type '(choice (const :tag "Ask" ask)
+		 (cons :tag "Field" field)))
+
+(defvar srecode-insert-with-fields-in-progress nil
+  "Non-nil means that we are actively inserting a template with fields.")
 
 ;;; INSERTION COMMANDS
 ;;
@@ -75,15 +94,19 @@ DICT-ENTRIES are additional dictionary values to add."
     ))
 
 ;;;###autoload
-(defun srecode-insert-fcn (template dictionary &optional stream)
-  "Insert TEMPLATE using DICTIONARY into STREAM."
+(defun srecode-insert-fcn (template dictionary &optional stream skipresolver)
+  "Insert TEMPLATE using DICTIONARY into STREAM.
+Optional SKIPRESOLVER means to avoid refreshing the tag list,
+or resolving any template arguments.  It is assumed the caller
+has set everything up already."
   ;; Perform the insertion.
   (let ((standard-output (or stream (current-buffer)))
 	(end-mark nil))
-    ;; Make sure the semantic tags are up to date.
-    (semantic-fetch-tags)
-    ;; Resolve the arguments
-    (srecode-resolve-arguments template dictionary)
+    (unless skipresolver
+      ;; Make sure the semantic tags are up to date.
+      (semantic-fetch-tags)
+      ;; Resolve the arguments
+      (srecode-resolve-arguments template dictionary))
     ;; Insert
     (if (bufferp standard-output)
 	;; If there is a buffer, turn off various hooks.  This will cause
@@ -104,7 +127,7 @@ DICT-ENTRIES are additional dictionary values to add."
 	  (let ((inhibit-point-motion-hooks t)
 		(inhibit-modification-hooks t)
 		)
-	    (srecode-insert-method template dictionary)
+	    (srecode--insert-into-buffer template dictionary)
 	    )
 	  ;; Now call those after change functions.
 	  (run-hook-with-args 'after-change-functions
@@ -119,8 +142,53 @@ DICT-ENTRIES are additional dictionary values to add."
       (setq end-mark (point-marker))
       (goto-char  (oref srecode-template-inserter-point point)))
     (oset-default 'srecode-template-inserter-point point eieio-unbound)
+
+    ;; Return the end-mark.
     (or end-mark (point)))
   )
+
+(defun srecode--insert-into-buffer (template dictionary)
+  "Insert a TEMPLATE with DICTIONARY into a buffer.
+Do not call this function yourself.  Instead use:
+  `srecode-insert' - Inserts by name.
+  `srecode-insert-fcn' - Insert with objects.
+This function handles the case from one of the above functions when
+the template is inserted into a buffer.  It looks
+at `srecode-insert-ask-variable-method' to decide if unbound dictionary
+entries ask questions or insert editable fields.
+
+Buffer based features related to change hooks is handled one level up."
+  ;; This line prevents the field archive from being let bound
+  ;; while the field insert tool is loaded via autoloads during
+  ;; the insert.
+  (when (eq srecode-insert-ask-variable-method 'field)
+    (require 'srecode-fields))
+
+  (let ((srecode-field-archive nil) ; Prevent field leaks during insert
+	(start (point)) ; Beginning of the region.
+	)
+    ;; This sub-let scopes the 'in-progress' piece so we know
+    ;; when to setup the end-template.
+    (let ((srecode-insert-with-fields-in-progress
+	   (if (eq srecode-insert-ask-variable-method 'field) t nil))
+	  )
+      (srecode-insert-method template dictionary)
+      )
+    ;; If we are not in-progress, and we insert fields, then
+    ;; create the end-template with fields editable area.
+    (when (and (not srecode-insert-with-fields-in-progress)
+	       (eq srecode-insert-ask-variable-method 'field) ; Only if user asked
+	       srecode-field-archive ; Only if there were fields created
+	       )
+      (let ((reg
+	     ;; Create the field-driven editable area.
+	     (srecode-template-inserted-region
+	      "TEMPLATE" :start start :end (point))))
+	(srecode-overlaid-activate reg))
+      )
+    ;; We return with 'point being the end of the template insertion
+    ;; area.  Return value is not important.
+    ))
 
 ;;; TEMPLATE ARGUMENTS
 ;;
@@ -371,6 +439,7 @@ If SECONDNAME is nil, return VALUE."
 	 (fcnpart (oref sti :secondname))
 	 (val (srecode-dictionary-lookup-name 
 	       dictionary name))
+	 (do-princ t)
 	 )
     ;; Alert if a macro wasn't found.
     (when (not val)
@@ -387,7 +456,11 @@ If SECONDNAME is nil, return VALUE."
 	(when fcnpart (setq fcnpart (read fcnpart)))
 	;; Convert compound value to a string with the fcn.
 	(setq val (srecode-compound-toString val fcnpart dictionary))
-	(if (not val) (setq val ""))
+	;; If the value returned is nil, then it may be a special
+	;; field inserter that requires us to set do-princ to nil.
+	(when (not val)
+	  (setq do-princ nil)
+	  )
 	)
        ;; Dictionaries... not allowed in this style
        ((srecode-dictionary-child-p val)
@@ -399,8 +472,10 @@ If SECONDNAME is nil, return VALUE."
 	;;(if (and val (not (stringp val)))
 	;;    (setq val (format "%S" val))))
 	))
-    ;; Output the dumb thing
-    (princ val)))
+    ;; Output the dumb thing unless the type of thing specifically
+    ;; did the inserting forus.
+    (when do-princ
+      (princ val))))
 
 (defclass srecode-template-inserter-ask (srecode-template-inserter-variable)
   ((key :initform ??
@@ -452,53 +527,91 @@ Loop over the prompts to see if we have a match."
     (if val
 	;; Does some extra work.  Oh well.
 	(call-next-method)
-      (let* ((prompt (oref sti prompt))
-	     (defaultfcn (oref sti :defaultfcn))
-	     (default (cond ((stringp defaultfcn)
-			     defaultfcn)
-			    ((functionp defaultfcn)
-			     (funcall defaultfcn))
-			    ((and (listp defaultfcn)
-				  (eq (car defaultfcn) 'macro))
-			      (srecode-dictionary-lookup-name
-			       dictionary (cdr defaultfcn)))
-			    ((null defaultfcn)
-			     "")
-			    (t
-			     (error "Unknown default for prompt: %S"
-				    defaultfcn))))
-	     (reader (oref sti :read-fcn))
-	     )
-	(cond ((eq reader 'y-or-n-p)
-	       (if (y-or-n-p (or prompt
-				 (format "%s? "
-					 (oref sti :object-name))))
-		   (setq val default)
-		 (setq val "")))
-	      ((eq reader 'read-char)
-	       (setq val (format
-			  "%c"
-			  (read-char (or prompt
-					 (format "Char for %s: "
-						 (oref sti :object-name))))))
-	       )
-	      (t
-	       (save-excursion
-		 (setq val (funcall reader
-				    (or prompt
-					(format "Specify %s: "
-						(oref sti :object-name)))
-				    default
-				    )))))
-	)
+
+      ;; How is our -ask value determined?
+      (if srecode-insert-with-fields-in-progress
+	  ;; Setup editable fields.
+	  (setq val (srecode-insert-method-field sti dictionary))
+	;; Ask the question...
+	(setq val (srecode-insert-method-ask sti dictionary)))
+
       ;; After asking, save in the dictionary so that
       ;; the user can use the same name again later.
       (srecode-dictionary-set-value 
        (srecode-root-dictionary dictionary)
        (oref sti :object-name) val)
+
       ;; Now that this value is safely stowed in the dictionary,
       ;; we can do what regular inserters do.
       (call-next-method))))
+
+(defmethod srecode-insert-ask-default ((sti srecode-template-inserter-ask)
+				       dictionary)
+  "Derive the default value for an askable inserter STI.
+DICTIONARY is used to derive some values."
+  (let ((defaultfcn (oref sti :defaultfcn)))
+    (cond ((stringp defaultfcn)
+	   defaultfcn)
+	  ((functionp defaultfcn)
+	   (funcall defaultfcn))
+	  ((and (listp defaultfcn)
+		(eq (car defaultfcn) 'macro))
+	   (srecode-dictionary-lookup-name
+	    dictionary (cdr defaultfcn)))
+	  ((null defaultfcn)
+	   "")
+	  (t
+	   (error "Unknown default for prompt: %S"
+		  defaultfcn)))))
+
+(defmethod srecode-insert-method-ask ((sti srecode-template-inserter-ask)
+				      dictionary)
+  "Do the \"asking\" for the template inserter STI.
+Use DICTIONARY to resolve values."
+  (let* ((prompt (oref sti prompt))
+	 (default (srecode-insert-ask-default sti dictionary))
+	 (reader (oref sti :read-fcn))
+	 (val nil)
+	 )
+    (cond ((eq reader 'y-or-n-p)
+	   (if (y-or-n-p (or prompt
+			     (format "%s? "
+				     (oref sti :object-name))))
+	       (setq val default)
+	     (setq val "")))
+	  ((eq reader 'read-char)
+	   (setq val (format
+		      "%c"
+		      (read-char (or prompt
+				     (format "Char for %s: "
+					     (oref sti :object-name))))))
+	   )
+	  (t
+	   (save-excursion
+	     (setq val (funcall reader
+				(or prompt
+				    (format "Specify %s: "
+					    (oref sti :object-name)))
+				default
+				)))))
+    ;; Return our derived value.
+    val)
+  )
+
+(defmethod srecode-insert-method-field ((sti srecode-template-inserter-ask)
+					dictionary)
+  "Create an editable field for the template inserter STI.
+Use DICTIONARY to resolve values."
+  (let* ((default (srecode-insert-ask-default sti dictionary))
+	 (compound-value
+	  (srecode-field-value (oref sti :object-name)
+			       :firstinserter sti
+			       :defaultvalue default))
+	 )
+    ;; Return this special compound value as the thing to insert.
+    ;; This special compound value will repeat our asked question
+    ;; across multiple locations.
+    compound-value))
 
 (defmethod srecode-dump ((ins srecode-template-inserter-ask) indent)
   "Dump the state of the SRecode template inserter INS."

@@ -5,7 +5,7 @@
 ;; Copyright (C) 95,96,98,99,2000,01,02,03,04,05,06,07,08,09 Eric M. Ludlam
 ;;
 ;; Author: <zappo@gnu.org>
-;; RCS: $Id: eieio.el,v 1.183 2009/02/01 20:26:44 scymtym Exp $
+;; RCS: $Id: eieio.el,v 1.185 2009/06/20 12:00:10 zappo Exp $
 ;; Keywords: OO, lisp
 
 (defvar eieio-version "1.2"
@@ -104,11 +104,7 @@ introduced."
 ;;
 
 (defvar eieio-hook nil
-  "*This hook is executed, then cleared each time `defclass' is called.
-The immediate effect is that I can safely keep track of common-lisp
-`setf' definitions regardless of the order.  Users can add hooks to
-this variable without worrying about weather this package has been
-loaded or not.")
+  "*This hook is executed, then cleared each time `defclass' is called.")
 
 (defvar eieio-error-unsupported-class-tags nil
   "*Non nil to throw an error if an encountered tag us unsupported.
@@ -820,7 +816,8 @@ OPTIONS-AND-DOC as the toplevel documentation for this class."
       (aset newc class-default-object-cache cache))
 
     ;; Return our new class object
-    newc
+    ;; newc
+    cname
     ))
 
 (defun eieio-perform-slot-validation-for-default (slot spec value skipnil)
@@ -843,7 +840,10 @@ we must override it's value for a default.
 Optional argument SKIPNIL indicates if type checking should be skipped
 if default value is nil."
   ;; Make sure we duplicate those items that are sequences.
-  (if (sequencep d) (setq d (copy-sequence d)))
+  (condition-case nil
+      (if (sequencep d) (setq d (copy-sequence d)))
+    ;; This copy can fail on a cons cell with a non-cons in the cdr.  Lets skip it if it doesn't work.
+    (error nil))
   (if (sequencep type) (setq type (copy-sequence type)))
   (if (sequencep cust) (setq cust (copy-sequence cust)))
   (if (sequencep custg) (setq custg (copy-sequence custg)))

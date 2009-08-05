@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Eric M. Ludlam
 
-;; Author: zigler <zigler@localhost.localdomain>
-;; Created: 2009-02-06 13:23:10+0800
+;; Author: zigler <zigler@ZiglerAsk>
+;; Created: 2009-08-05 10:39:01+0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -93,10 +93,8 @@
      ("double" . DOUBLE)
      ("bool" . BOOL)
      ("_P" . UNDERP)
-     ("__P" . UNDERUNDERP)
-     ("__attribute__" . __ATTRIBUTE__))
-   '(("__attribute__" summary "<cdecl> __attribute__ ((<attributeoption>))")
-     ("__P" summary "Common macro to eliminate prototype compatibility on some compilers")
+     ("__P" . UNDERUNDERP))
+   '(("__P" summary "Common macro to eliminate prototype compatibility on some compilers")
      ("_P" summary "Common macro to eliminate prototype compatibility on some compilers")
      ("bool" summary "Primitive boolean type")
      ("double" summary "Primitive floating-point type (double-precision 64-bit IEEE 754)")
@@ -167,6 +165,7 @@
      ("number"
       (ZERO . "^0$"))
      ("string"
+      (CPP . "\"C\\+\\+\"")
       (C . "\"C\""))
      ("punctuation"
       (OR . "\\`[|]\\'")
@@ -223,6 +222,16 @@
      (define)
      (codeblock-var-or-fun)
      (type)
+     (using
+      ,(semantic-lambda
+	(semantic-tag
+	 (car
+	  (car
+	   (nth 0 vals)))
+	 'using :type
+	 (car
+	  (nth 0 vals))))
+      )
      ) ;; end codeblock
 
     (extern-c-contents
@@ -256,7 +265,29 @@
       )
      (EXTERN
       string
+      "\"C\\+\\+\""
+      semantic-list
+      ,(semantic-lambda
+	(semantic-tag
+	 "C"
+	 'extern :members
+	 (semantic-parse-region
+	  (car
+	   (nth 2 vals))
+	  (cdr
+	   (nth 2 vals))
+	  'extern-c-contents
+	  1)))
+      )
+     (EXTERN
+      string
       "\"C\""
+      ,(semantic-lambda
+	(list nil))
+      )
+     (EXTERN
+      string
+      "\"C\\+\\+\""
       ,(semantic-lambda
 	(list nil))
       )
@@ -440,7 +471,7 @@
      ( ;;EMPTY
       ,(semantic-lambda
 	(list
-	 "private"))
+	 "unspecified"))
       )
      ) ;; end opt-class-protection
 
@@ -543,15 +574,6 @@
 	 ""))
       )
      ) ;; end opt-name
-
-    (opt-class-declmods
-     (symbol
-      declespec
-      semantic-list)
-     (symbol)
-     ( ;;EMPTY
-      )
-     ) ;; end opt-class-declmods
 
     (typesimple
      (struct-or-class
@@ -678,7 +700,6 @@
 
     (type
      (typesimple
-      opt-attribute
       punctuation
       "\\`[;]\\'"
       ,(semantic-lambda
@@ -702,18 +723,6 @@
 	 (nth 1 vals) nil))
       )
      ) ;; end type
-
-    (opt-attribute
-     (__ATTRIBUTE__
-      semantic-list
-      ,(semantic-lambda
-	(list nil))
-      )
-     ( ;;EMPTY
-      ,(semantic-lambda
-	(list nil))
-      )
-     ) ;; end opt-attribute
 
     (using
      (USING
@@ -825,6 +834,17 @@
       namespace-symbol
       ,(semantic-lambda
 	(nth 2 vals))
+      )
+     (semantic-list
+      ,(semantic-lambda
+	(list
+	 (nth 0 vals)))
+      )
+     (SIZEOF
+      semantic-list
+      ,(semantic-lambda
+	(list
+	 (nth 1 vals)))
       )
      ) ;; end template-var
 
@@ -1967,8 +1987,7 @@
      ) ;; end function-pointer
 
     (fun-or-proto-end
-     (opt-attribute
-      punctuation
+     (punctuation
       "\\`[;]\\'"
       ,(semantic-lambda
 	(list t))
@@ -2041,28 +2060,30 @@
       close-paren)
      ) ;; end type-cast-list
 
-    (opt-function-call-args
+    (opt-stuff-after-symbol
      (semantic-list
       "^(")
+     (semantic-list
+      "\\[.*\\]$")
      ( ;;EMPTY
       )
-     ) ;; end opt-function-call-args
+     ) ;; end opt-stuff-after-symbol
 
     (multi-stage-dereference
      (namespace-symbol
-      opt-function-call-args
+      opt-stuff-after-symbol
       punctuation
       "\\`[.]\\'"
       multi-stage-dereference)
      (namespace-symbol
-      opt-function-call-args
+      opt-stuff-after-symbol
       punctuation
       "\\`[-]\\'"
       punctuation
       "\\`[>]\\'"
       multi-stage-dereference)
      (namespace-symbol
-      opt-function-call-args)
+      opt-stuff-after-symbol)
      ) ;; end multi-stage-dereference
 
     (string-seq

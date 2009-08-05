@@ -3,7 +3,7 @@
 ;; Copyright (C) 2008, 2009 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
-;; X-RCS: $Id: cedet-utests.el,v 1.7 2009/01/24 05:59:30 zappo Exp $
+;; X-RCS: $Id: cedet-utests.el,v 1.20 2009/04/11 06:55:23 zappo Exp $
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -30,6 +30,10 @@
 ;;; Code:
 (defvar cedet-utest-test-alist
   '(
+    ;;
+    ;; COMMON
+    ;;
+
     ;; Test inversion
     ("inversion" . inversion-unit-test)
 
@@ -37,18 +41,23 @@
     ("ezimage associations" . ezimage-image-association-dump)
     ("ezimage images" . ezimage-image-dump)
 
-    ;; WORKGING interactive tests.
+    ;; Workging interactive tests.
     ("working: wait-for-keypress" .
      (lambda ()
        (if (cedet-utest-noninteractive)
 	   (message " ** Skipping test in noninteractive mode.")
 	 (working-wait-for-keypress))))
-    ("working: sleep" . working-verify-sleep)
+    ;("working: sleep" . working-verify-sleep)
 
-    ;; PULSE
+    ;; Pulse
     ("pulse interactive test" . (lambda () (pulse-test t)))
 
-    ;; The EIEIO unit test suite.
+    ;; Files
+    ("cedet file conversion" . cedet-files-utest)
+
+    ;;
+    ;; EIEIO
+    ;;
     ("eieio" . (lambda () (let ((lib (locate-library "eieio-tests.el"
 						     t)))
 			    (load-file lib))))
@@ -60,16 +69,17 @@
 			(if (cedet-utest-noninteractive)
 			    (message " ** Skipping test in noninteractive mode.")
 			  (chart-test-it-all))))
-    ;; SEMANTIC tests
-    ("semantic: lex spp table write" .
-     (lambda ()
-       (let* ((sem (locate-library "semantic.el"))
-	      (dir (file-name-directory sem)))
-       (save-excursion
-	 (set-buffer (find-file-noselect
-		      (expand-file-name "tests/testsppreplace.c"
-					dir)))
-	 (semantic-lex-spp-write-test)))))
+    ;;
+    ;; EDE
+    ;;
+    
+    ;; @todo - Currently handled in the integration tests.  Need
+    ;;         some simpler unit tests here.
+
+    ;;
+    ;; SEMANTIC
+    ;;
+    ("semantic: lex spp table write" . semantic-lex-spp-write-utest)
     ("semantic: multi-lang parsing" . semantic-utest-main)
     ("semantic: C preprocessor" . semantic-utest-c)
     ("semantic: analyzer tests" . semantic-ia-utest)
@@ -80,30 +90,44 @@
 	   (message " ** Skipping test in noninteractive mode.")
 	 (semantic-test-throw-on-input))))
 
-    ;; SRecode
+    ("semantic: gcc: output parse test" . semantic-gcc-test-output-parser)
+    ;;
+    ;; SRECODE
+    ;;
+    ("srecode: fields" . srecode-field-utest)
     ("srecode: templates" . srecode-utest-template-output)
     ("srecode: show maps" . srecode-get-maps)
     ("srecode: getset" . srecode-utest-getset-output)
 
+    ;;
     ;; COGRE
+    ;;
     ("cogre: graph" . cogre-utest)
-    ("cogre: uml" . cogre-uml-utest)
-
+    ("cogre: periodic & ascii" . cogre-periodic-utest)
+    ("cogre: conversion/export tests" . cogre-export-utest)
+    ("cogre: uml-quick-class" . cogre-utest-quick-class)
    )
-  "Alist of all the ttests in CEDET we should run.")
+  "Alist of all the tests in CEDET we should run.")
+
+(defvar cedet-running-master-tests nil
+  "Non-nil when CEDET-utest is running all the tests.")
 
 ;;;###autoload
 (defun cedet-utest (&optional exit-on-error)
   "Run the CEDET unittests.
-Exit-on-error causes an error to be thrown on an error, instead
+EXIT-ON-ERROR causes the test suite to exit on an error, instead
 of just logging the error."
   (interactive)
+  (if (or (not (featurep 'semanticdb-mode))
+	  (not (semanticdb-minor-mode-p)))
+      (error "CEDET Tests require: M-x semantic-load-enable-minimum-features"))
   (cedet-utest-log-setup "ALL TESTS")
   (let ((tl cedet-utest-test-alist)
 	(notes nil)
 	(err nil)
 	(start (current-time))
 	(end nil)
+	(cedet-running-master-tests t)
 	)
     (dolist (T tl)
       (cedet-utest-add-log-item-start (car T))
@@ -116,8 +140,19 @@ of just logging the error."
 	 (setq err (format "ERROR: %S" Cerr))
 	 ;;(message "Error caught: %s" Cerr)
 	 ))
+
+      ;; Cleanup stray input and events that are in the way.
+      ;; Not doing this causes sit-for to not refresh the screen.
+      ;; Doing this causes the user to need to press keys more frequently.
+      (when (and (interactive-p) (input-pending-p))
+	(if (fboundp 'read-event)
+	    (read-event)
+	  (read-char)))
+
       (cedet-utest-add-log-item-done notes err)
       (when (and exit-on-error err)
+	(message "to debug this test point, execute:")
+	(message "%S" (cdr T))
 	(message "\n ** Exiting Test Suite. ** \n")
 	(throw 'cedet-utest-exit-on-error t)
 	)
@@ -134,18 +169,31 @@ of just logging the error."
 
 ;;;###autoload
 (defun cedet-utest-batch ()
-  "Run the CEDET unit tests in BATCH mode."
+  "Run the CEDET unit test in BATCH mode."
   (unless (cedet-utest-noninteractive)
     (error "`cedet-utest-batch' is to be used only with -batch"))
   (condition-case err
       (when (catch 'cedet-utest-exit-on-error
+	      ;; Get basic semantic features up.
 	      (semantic-load-enable-minimum-features)
+	      ;; Disables all caches related to semantic DB so all
+	      ;; tests run as if we have bootstrapped CEDET for the
+	      ;; first time.
+	      (setq-default semanticdb-new-database-class 'semanticdb-project-database)
+	      (message "Disabling existing Semantic Database Caches.")
+
+	      ;; Disabling the srecoder map, we won't load a pre-existing one
+	      ;; and will be forced to bootstrap a new one.
+	      (setq srecode-map-save-file nil)
+
+	      ;; Run the tests
 	      (cedet-utest t)
 	      )
 	(kill-emacs 1))
     (error
      (error "Error in unit test harness:\n  %S" err))
-    ))
+    )
+  )
 
 ;;; Logging utility.
 ;;
@@ -183,8 +231,9 @@ Optional argument TITLE is the title of this testing session."
     (save-excursion
       (set-buffer cedet-utest-buffer)
       (setq cedet-utest-last-log-item nil)
-      (erase-buffer)
-      (insert "Setting up "
+      (when (not cedet-running-master-tests)
+	(erase-buffer))
+      (insert "\n\nSetting up "
 	      (or title "")
 	      " tests to run @ " (current-time-string) "\n\n"))
     (let ((oframe (selected-frame)))
@@ -230,7 +279,7 @@ ERRORCONDITION is some error that may have occured durinig testing."
 	      "     Elapsed Time "
 	      (number-to-string
 	       (cedet-utest-elapsed-time startime endtime))
-	      " Seconds"))
+	      " Seconds\n * "))
     ))
 
 (defun cedet-utest-show-log-end ()
@@ -238,7 +287,8 @@ ERRORCONDITION is some error that may have occured durinig testing."
   (unless (cedet-utest-noninteractive)
     (let* ((cb (current-buffer))
 	   (cf (selected-frame))
-	   (bw (get-buffer-window cedet-utest-buffer t))
+	   (bw (or (get-buffer-window cedet-utest-buffer t)
+		   (get-buffer-window (switch-to-buffer cedet-utest-buffer) t)))
 	   (lf (window-frame bw))
 	   )
       (select-frame lf)

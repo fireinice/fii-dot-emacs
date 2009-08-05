@@ -1,4 +1,4 @@
-This is srecode.info, produced by makeinfo version 4.11 from srecode.texi.
+This is srecode.info, produced by makeinfo version 4.13 from srecode.texi.
 
 START-INFO-DIR-ENTRY
 * srecode: (srecode).       Template code generator
@@ -206,6 +206,14 @@ Emacs Lisp code.  Applications are at the top layer.  These
 applications have their own template files and logic needed to fill in
 dictionaries or position a cursor.
 
+3.7 Field Editing
+=================
+
+If the variable `srecode-insert-ask-variable-method' is set to 'field,
+then variables that would normally ask a question, will instead create
+"fields" in the buffer.  A field-editing layer provides simple
+interaction through the fields.
+
 
 File: srecode.info,  Node: SRecode Minor Mode,  Next: Template Writing,  Prev: Parts of SRecode,  Up: Top
 
@@ -217,8 +225,11 @@ simple access to different templates or template applications.
 
    The key prefix is <C-c />.
 
+   If the variable `srecode-takeover-INS-key' is set, the the key
+<<insert>> can also be used.
+
    The most important key is bound to `srecode-insert' which is <C-c /
-/>.  *note Quick Start::.
+/>, or <insert insert>.  *note Quick Start::.
 
    Major keybindings are:
 
@@ -236,6 +247,39 @@ simple access to different templates or template applications.
 <C-c / .>
      Insert template again.  This will cause the previously inserted
      template to be inserted again.
+
+4.1 Field Editing
+=================
+
+By default, when inserting a template, if the user needs to enter text
+to fill in a part of the template, then the minibuffer is used to query
+for that information.  SRecode also supports a field-edting mode that
+can be used instead.  To enable it set:
+
+ -- Function: srecode-insert-ask-variable-method
+     Determine how to ask for a dictionary value when inserting a
+     template.  Only the ASK style inserter will query the user for a
+     value.  Dictionary value references that ask begin with the ?
+     character.  Possible values are:   `'ask'   - Prompt in the
+     minibuffer as the value is inserted.    `'field' - Use the
+     dictionary macro name as the inserted value,            and place
+     a field there.  Matched fields change together.
+
+     NOTE: The field feature does not yet work with XEmacs.
+
+   Field editing mode is supported in newever versions of Emacs.  You
+will not be prompted to fill in values while the template is inserted.
+Instead, short regions will be highlighted, and the cursor placed in a
+field.  Typing in the field will then fill in the value.  Several
+fields might be linked together.  In that case, typing in one area will
+modify the other linked areas.  Pressing TAB will move between editable
+fields in the template.
+
+   Once the cursor moves out of the are inserted by the template, all
+the fields are cancelled.
+
+   Of note: Some conveniences in templates, such as completion, or
+character restrictins are lost when using field editing mode.
 
 
 File: srecode.info,  Node: Template Writing,  Next: Dictionaries,  Prev: SRecode Minor Mode,  Up: Top
@@ -746,7 +790,7 @@ the *note Template Argument Dictionary Entries:: section.
 * Create a Dictionary::
 * Setting Dictionary Values::	Basic dictionary values
 * Compound Dictionary Values::	Complex dictionary values
-* Argument Resolution::	        Automatic argument resolution
+* Argument Resolution::	        Automatic template argument resolution
 * Creating new Arguments::      Create new arguments for use in templates
 * Template Argument Dictionary Entries:: Catalog of arguments
 
@@ -872,9 +916,11 @@ File: srecode.info,  Node: Argument Resolution,  Next: Creating new Arguments,  
 6.4 Argument Resolution
 =======================
 
-Additional dictionary entries can be set via template arguments in the
-template declaration.  You can resolve an argument list into a
-dictionary with this routine:
+Some dictionary entries can be set via template arguments in the
+template declaration.  For examples of template arguments, see *note
+Template Argument Dictionary Entries::.
+
+   You can resolve an argument list into a dictionary with:
 
  -- Function: srecode-resolve-arguments temp dict
      Resolve all the arguments needed by the template TEMP.  Apply
@@ -1254,9 +1300,9 @@ File: srecode.info,  Node: Developing Template Functions,  Next: Template Naming
 You can develop your own custom template insertion functions.  Doing so
 is relatively simple, and requires that you write an Emacs Lisp command.
 
-   If the built in commands don't insert provide enough options, you
-will need to write your own function in order to provide your
-dictionaries with the values needed for custom templates.
+   If the built in commands don't provide enough options, you will need
+to write your own function in order to provide your dictionaries with
+the values needed for custom templates.
 
    In this way, you can build your own code generator for any language
 based on a set of predefined macros whos values you need to derive from
@@ -1380,7 +1426,7 @@ have a corresponding template.
    In order for the SRecode function `srecode-semantic-insert-tag' to
 work, you can create templates similar to those mentioned above, except
 with `-tag' appended to the end.  This lets a template like `function'
-have user conveniences while referencing `function-tag', while also
+have user conveniences when referencing `function-tag', while also
 allowing the tag inserter to do it's job with a simpler template.
 
 8.3 Context: Classdef
@@ -1544,48 +1590,49 @@ Ref: srecode-insert2436
 Node: User Templates2829
 Ref: srecode-map-save-file3211
 Node: Parts of SRecode4720
-Node: SRecode Minor Mode7789
-Node: Template Writing8650
-Ref: `SRecode-template-mode'8794
-Node: Variables9169
-Node: String Values10055
-Node: Multi-string Values10484
-Node: Section Show11216
-Node: Special Variables11733
-Node: Automatic Loop Variables13685
-Node: Compound Variable Values14324
-Node: Templates14806
-Node: Template Section Dictionaries15683
-Node: Template Macros18136
-Node: Contexts21280
-Node: Prompts22298
-Node: Dictionaries24172
-Node: Create a Dictionary25034
-Ref: srecode-create-dictionary25243
-Node: Setting Dictionary Values25513
-Ref: srecode-dictionary-set-value25985
-Ref: srecode-dictionary-show-section26216
-Ref: srecode-dictionary-add-section-dictionary26393
-Node: Compound Dictionary Values27317
-Ref: srecode-dictionary-compound-value27786
-Ref: srecode-compound-toString28247
-Ref: srecode-dump28615
-Node: Argument Resolution29609
-Ref: srecode-resolve-arguments30008
-Node: Creating new Arguments30122
-Node: Template Argument Dictionary Entries31119
-Node: Base Arguments31746
-Node: Semantic Arguments35010
-Ref: srecode-semantic-selected-tag35649
-Node: Language Arguments37394
-Node: Developing Template Functions39484
-Ref: srecode-read-template-name41913
-Ref: srecode-insert-fcn42277
-Node: Template Naming Conventions42382
-Node: Inserting Tag Lists46039
-Ref: srecode-semantic-insert-tag46628
-Node: Application Writing48312
-Ref: srecode-load-tables-for-mode49241
-Node: Index49566
+Node: SRecode Minor Mode8064
+Ref: srecode-insert-ask-variable-method9381
+Node: Template Writing10573
+Ref: `SRecode-template-mode'10717
+Node: Variables11092
+Node: String Values11978
+Node: Multi-string Values12407
+Node: Section Show13139
+Node: Special Variables13656
+Node: Automatic Loop Variables15608
+Node: Compound Variable Values16247
+Node: Templates16729
+Node: Template Section Dictionaries17606
+Node: Template Macros20059
+Node: Contexts23203
+Node: Prompts24221
+Node: Dictionaries26095
+Node: Create a Dictionary26966
+Ref: srecode-create-dictionary27175
+Node: Setting Dictionary Values27445
+Ref: srecode-dictionary-set-value27917
+Ref: srecode-dictionary-show-section28148
+Ref: srecode-dictionary-add-section-dictionary28325
+Node: Compound Dictionary Values29249
+Ref: srecode-dictionary-compound-value29718
+Ref: srecode-compound-toString30179
+Ref: srecode-dump30547
+Node: Argument Resolution31541
+Ref: srecode-resolve-arguments32011
+Node: Creating new Arguments32125
+Node: Template Argument Dictionary Entries33122
+Node: Base Arguments33749
+Node: Semantic Arguments37013
+Ref: srecode-semantic-selected-tag37652
+Node: Language Arguments39397
+Node: Developing Template Functions41487
+Ref: srecode-read-template-name43909
+Ref: srecode-insert-fcn44273
+Node: Template Naming Conventions44378
+Node: Inserting Tag Lists48034
+Ref: srecode-semantic-insert-tag48623
+Node: Application Writing50307
+Ref: srecode-load-tables-for-mode51236
+Node: Index51561
 
 End Tag Table

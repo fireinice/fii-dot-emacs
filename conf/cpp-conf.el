@@ -5,8 +5,8 @@
 	    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
 		(doxymacs-font-lock))))
 (local-set-key (kbd "M-/") 'semantic-complete-analyze-inline)
-(local-set-key "." 'semantic-complete-self-insert)
-(local-set-key ">" 'semantic-complete-self-insert) 
+;; (local-set-key "." 'semantic-complete-self-insert)
+;; (local-set-key ">" 'semantic-complete-self-insert) 
 
 (doxymacs-mode 1)
 

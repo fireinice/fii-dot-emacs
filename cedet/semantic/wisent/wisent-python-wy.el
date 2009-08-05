@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2002, 2003, 2004, 2007 Richard Kim
 
-;; Author: zigler <zigler@localhost.localdomain>
-;; Created: 2009-02-06 13:23:06+0800
+;; Author: zigler <zigler@ZiglerAsk>
+;; Created: 2009-08-05 10:38:55+0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

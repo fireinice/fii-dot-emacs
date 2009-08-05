@@ -1,9 +1,9 @@
 ;;; ede-cpp-root.el --- A simple way to wrap a C++ project with a single root
 
-;; Copyright (C) 2007, 2008 Eric M. Ludlam
+;; Copyright (C) 2007, 2008, 2009 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
-;; X-RCS: $Id: ede-cpp-root.el,v 1.16 2008/12/19 22:51:15 zappo Exp $
+;; X-RCS: $Id: ede-cpp-root.el,v 1.20 2009/03/05 02:39:05 zappo Exp $
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -21,6 +21,9 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
+;;
+;; NOTE: ede-cpp-root.el has been commented so as to also make it
+;;       useful for learning how to make similar project types.
 ;;
 ;; Not everyone can use automake, or an EDE project type.  For
 ;; pre-existing code, it is often helpful jut to be able to wrap the
@@ -58,7 +61,9 @@
 ;;     :include-path '( "/include" "../include" "/c/include" )
 ;;     :system-include-path '( "/usr/include/c++/3.2.2/" )
 ;;     :spp-table '( ("MOOSE" . "")
-;;                   ("CONST" . "const") ) )
+;;                   ("CONST" . "const") )
+;;     :spp-files '( "include/config.h" )
+;;     ) 
 ;;
 ;;  In this case each item in the include path list is searched.  If
 ;;  the directory starts with "/", then that expands to the project
@@ -76,6 +81,12 @@
 ;;  The :spp-table provides a list of project specific #define style
 ;;  macros that are unique to this project, passed in to the compiler
 ;;  on the command line, or are in special headers.
+;;
+;;  The :spp-files option is like :spp-table, except you can provide a
+;;  file name for a header in your project where most of your CPP
+;;  macros reside.  Doing this can be easier than listing everything in
+;;  the :spp-table option.  The files listed in :spp-files should not
+;;  start with a /, and are relative to something in :include-path.;;  
 ;;
 ;; If you want to override the file-finding tool with your own
 ;; function you can do this:
@@ -128,10 +139,38 @@
 ;; 	      :class-sym 'ede-cpp-root)
 ;; 	     t)
 ;; 
+;;; TODO
+;;
+;; Need a way to reconfigure a project, and have it affect all open buffers.
+;; From Tobias Gerdin:
+;;   
+;;   >>3) Is there any way to refresh a ede-cpp-root-project dynamically? I have
+;;   >>some file open part of the project, fiddle with the include paths and would
+;;   >>like the open buffer to notice this when I re-evaluate the
+;;   >>ede-cpp-root-project constructor.
+;;   >
+;;   > Another good idea.  The easy way is to "revert-buffer" as needed.  The
+;;   > ede "project local variables" does this already, so it should be easy
+;;   > to adapt something.
+;;   
+;;   I actually tried reverting the buffer but Semantic did not seem to pick
+;;   up the differences (the "include summary" reported the same include paths).
 
 (require 'ede)
 
 ;;; Code:
+
+;;; PROJECT CACHE:
+;;
+;; cpp-root projects are created in a .emacs or other config file, but
+;; there still needs to be a way for a particular file to be
+;; identified against it.  The cache is where we look to map a file
+;; against a project.
+;;
+;; Setting up a simple in-memory cache of active projects allows the
+;; user to re-load their configuration file several times without
+;; messing up the active project set.
+;;
 (defvar ede-cpp-root-project-list nil
   "List of projects created by option `ede-cpp-root-project'.")
 
@@ -147,6 +186,24 @@ DIR is the directory to search from."
       (setq projs (cdr projs)))
     ans))
 
+;;; PROJECT AUTOLOAD CONFIG
+;;
+;; Each project type registers itself into the project-class list.
+;; This way, each time a file is loaded, EDE can map that file to a
+;; project.  This project type checks files against the internal cache
+;; of projects created by the user.
+;;
+;; EDE asks two kinds of questions.  One is, does this DIR belong to a
+;; project.  If it does, it then asks, what is the ROOT directory to
+;; the project in DIR.  This is easy for cpp-root projects, but more
+;; complex for multiply nested projects.
+;;
+;; If EDE finds out that a project exists for DIR, it then loads that
+;; project.  The LOAD routine can either create a new project object
+;; (if it needs to load it off disk) or more likely can return an
+;; existing object for the discovered directory.  cpp-root always uses
+;; the second case.
+
 ;;;###autoload
 (defun ede-cpp-root-project-file-for-dir (&optional dir)
   "Return a full file name to the project file stored in DIR."
@@ -154,7 +211,9 @@ DIR is the directory to search from."
     (when proj (oref proj :file))))
 
 (defvar ede-cpp-root-count 0
-  "Count number of hits to the cpp root thing.")
+  "Count number of hits to the cpp root thing.
+This is a debugging variable to test various optimizations in file
+lookup in the main EDE logic.")
 
 ;;;###autoload
 (defun ede-cpp-root-project-root (&optional dir)
@@ -189,6 +248,21 @@ ROOTPROJ is nil, since there is only one project."
 
 ;;; CLASSES
 ;;
+;; EDE sets up projects with two kinds of objects.
+;;
+;; The PROJECT is a class that represents everything under a directory
+;; hierarchy.  A TARGET represents a subset of files within a project.
+;; A project can have multiple targets, and multiple sub-projects.
+;; Sub projects should map to sub-directories.
+;;
+;; The CPP-ROOT project maps any file in C or C++ mode to a target for
+;; C files.
+;;
+;; When creating a custom project the project developer an opportunity
+;; to run code to setup various tools whenever an associated buffer is
+;; loaded.  The CPP-ROOT project spends most of its time setting up C
+;; level include paths, and PreProcessor macro tables.
+
 (defclass ede-cpp-root-target (ede-target)
   ()
   "EDE cpp-root project target.
@@ -225,10 +299,19 @@ semantic path is not modified.")
 	      :type list
 	      :documentation
 	      "C Preprocessor macros for your files.
+Preprocessor symbols will be used while parsing your files.
 These macros might be passed in through the command line compiler, or
 are critical symbols derived from header files.  Providing header files
 macro values through this slot improves accuracy and performance.
-See `semantic-lex-c-preprocessor-symbol-map' for more.")
+Use `:spp-files' to use these files directly.")
+   (spp-files :initarg :spp-files
+	      :initform nil
+	      :type list
+	      :documentation
+	      "C header file with Preprocessor macros for your files.
+The PreProcessor symbols appearing in these files will be used while
+parsing files in this project.
+See `semantic-lex-c-preprocessor-symbol-map' for more on how this works.")
    (header-match-regexp :initarg :header-match-regexp
 			:initform
 			"\\.\\(h\\(h\\|xx\\|pp\\|\\+\\+\\)?\\|H\\)$\\|\\<\\w+$"
@@ -252,6 +335,13 @@ exist, it should return nil."
    )
   "EDE cpp-root project class.
 Each directory needs a a project file to control it.")
+
+;;; INIT
+;;
+;; Most projects use `initialize-instance' to do special setup
+;; on the object when it is created.  In this case, EDE-CPP-ROOT can
+;; find previous copies of this project, and make sure that one of the
+;; objects is deleted.
 
 (defmethod initialize-instance ((this ede-cpp-root-project)
 				&rest fields)
@@ -282,6 +372,9 @@ Each directory needs a a project file to control it.")
 
 ;;; SUBPROJ Management.
 ;;
+;; This is a way to allow a subdirectory to point back to the root
+;; project, simplifying authoring new single-point projects.
+
 (defmethod ede-find-subproject-for-directory ((proj ede-cpp-root-project)
 					      dir)
   "Return PROJ, for handling all subdirs below DIR."
@@ -289,6 +382,9 @@ Each directory needs a a project file to control it.")
 
 ;;; TARGET MANAGEMENT
 ;;
+;; Creating new targets on a per directory basis is a good way to keep
+;; files organized.  See ede-emacs for an example with multiple file
+;; types.
 (defmethod ede-find-target ((proj ede-cpp-root-project) buffer)
   "Find an EDE target in PROJ for BUFFER.
 If one doesn't exist, create a new one for this directory."
@@ -306,11 +402,14 @@ If one doesn't exist, create a new one for this directory."
       )
     ans))
 
-(defmethod ede-cpp-root-header-file-p ((proj ede-cpp-root-project) name)
-  "Non nil if in PROJ the filename NAME is a header."
-  (save-match-data
-    (string-match (oref proj header-match-regexp) name)))
-
+;;; FILE NAMES
+;;
+;; One of the more important jobs of EDE is to find files in a
+;; directory structure.  cpp-root has tricks it knows about how most C
+;; projects are set up with include paths.
+;;
+;; This tools also uses the ede-locate setup for augmented file name
+;; lookup using external tools.
 (defmethod ede-expand-filename-impl ((proj ede-cpp-root-project) name)
   "Within this project PROJ, find the file NAME.
 This knows details about or source tree."
@@ -320,8 +419,7 @@ This knows details about or source tree."
   (let ((ans (call-next-method)))
     (unless ans
       (let* ((lf (oref proj locate-fcn))
-	     (file (oref proj file))
-	     (dir (file-name-directory file)))
+	     (dir (file-name-directory (oref proj file))))
 	(if lf
 	    (setq ans (funcall lf name dir))
 	  (if (ede-cpp-root-header-file-p proj name)
@@ -329,12 +427,9 @@ This knows details about or source tree."
 	      (let ((ip (oref proj include-path))
 		    (tmp nil))
 		(while ip
-		  (setq tmp (car ip))
-		  (if (and (not (string= tmp "")) (= (aref tmp 0) ?/))
-		      ;; Check relative to root
-		      (setq tmp (expand-file-name (substring tmp 1)
-						  dir))
-		    (setq tmp (expand-file-name tmp)))
+		  ;; Translate
+		  (setq tmp (ede-cpp-root-translate-file proj (car ip)))
+		  ;; Test this name.
 		  (setq tmp (expand-file-name name tmp))
 		  (if (file-exists-p tmp)
 		      (setq ans tmp))
@@ -352,8 +447,32 @@ This knows details about or source tree."
   "Return my root."
   (file-name-directory (oref this file)))
 
-;;; Special Init
+;;; C/CPP SPECIFIC CODE
 ;;
+;; The following code is specific to setting up header files,
+;; include lists, and Preprocessor symbol tables.
+
+(defmethod ede-cpp-root-header-file-p ((proj ede-cpp-root-project) name)
+  "Non nil if in PROJ the filename NAME is a header."
+  (save-match-data
+    (string-match (oref proj header-match-regexp) name)))
+
+(defmethod ede-cpp-root-translate-file ((proj ede-cpp-root-project) filename)
+  "For PROJ, translate a user specified FILENAME.
+This is for project include paths and spp source files."
+  ;; Step one: Root of this project.
+  (let ((dir (file-name-directory (oref proj file))))
+
+    ;; Step two: Analyze first char, and rehost
+    (if (and (not (string= filename "")) (= (aref filename 0) ?/))
+	;; Check relative to root of project
+	(setq filename (expand-file-name (substring filename 1)
+					 dir))
+      ;; Relative to current directory.
+      (setq filename (expand-file-name filename)))
+
+    filename))
+
 (defmethod ede-set-project-variables ((project ede-cpp-root-project) &optional buffer)
   "Set variables local to PROJECT in BUFFER.
 Also set up the lexical preprocessor map."
@@ -361,10 +480,7 @@ Also set up the lexical preprocessor map."
   (when (and (featurep 'semantic-c) (featurep 'semantic-lex-spp))
     (setq semantic-lex-spp-project-macro-symbol-obarray
 	  (semantic-lex-make-spp-table (oref project spp-table)))
-    ))  
-
-;;; C++ special options.
-;;
+    ))
 
 (defmethod ede-system-include-path ((this ede-cpp-root-project))
   "Get the system include path used by project THIS."
@@ -372,7 +488,22 @@ Also set up the lexical preprocessor map."
   
 (defmethod ede-preprocessor-map ((this ede-cpp-root-project))
   "Get the pre-processor map for project THIS."
-  (oref this spp-table))
+  (let ((spp (oref this spp-table))
+	(root (ede-project-root this))
+	)
+    (mapc
+     (lambda (F)
+       (let* ((expfile (ede-expand-filename root F))
+	      (table (when expfile
+		       (semanticdb-file-table-object expfile)))
+	      )
+	 (when (not table)
+	   (message "Cannot find file %s in project." F))
+	 (when (and table (semanticdb-needs-refresh-p table))
+	   (semanticdb-refresh-table table))
+	 (setq spp (append spp (oref table lexical-table)))))
+     (oref this spp-files))
+    spp))
 
 (defmethod ede-system-include-path ((this ede-cpp-root-target))
   "Get the system include path used by project THIS."

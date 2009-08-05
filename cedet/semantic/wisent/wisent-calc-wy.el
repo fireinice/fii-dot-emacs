@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2002, 2003 David Ponce
 
-;; Author: zigler <zigler@localhost.localdomain>
-;; Created: 2009-02-06 13:23:01+0800
+;; Author: zigler <zigler@ZiglerAsk>
+;; Created: 2009-08-05 10:38:46+0800
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

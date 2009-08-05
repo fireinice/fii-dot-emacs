@@ -1,18 +1,18 @@
-;;; xml-rpc.el -- An elisp implementation of clientside XML-RPC
+;;; xml-rpc.el --- An elisp implementation of clientside XML-RPC
 
 ;; Copyright (C) 2001 CodeFactory AB.
 ;; Copyright (C) 2001 Daniel Lundin.
+;; Parts Copyright (C) 2002-2005 Mark A. Hershberger
+
 ;; Copyright (C) 2006 Shun-ichi Goto
 ;;   Modified for non-ASCII character handling.
-;; Copyright (C) 2007 Wickersheimer Jeremy <jwickers@gmail.com>
-;; Copyright (C) 2002-2007 Mark A. Hershberger
 
 ;; Author: Daniel Lundin <daniel@codefactory.se>
 ;; Maintainer: Mark A. Hershberger <mah@everybody.org>
-;; Version: 1.6.4
+;; Version: 1.6.4.1
 ;; Created: May 13 2001
 ;; Keywords: xml rpc network
-;; URL: http://elisp.info/package/xml-rpc/
+;; URL: http://emacswiki.org/emacs/xml-rpc.el
 
 ;; This file is NOT (yet) part of GNU Emacs.
 
@@ -48,9 +48,10 @@
 ;; Requirements
 ;; ------------
 
-;; xml-rpc.el uses the url package for http handling and xml.el for XML
-;; parsing. url is a part of the W3 browser package (but now as a separate
-;; module in the CVS repository).
+;; xml-rpc.el uses the url package for http handling and xml.el for
+;; XML parsing. url is a part of the W3 browser package.  The url
+;; package that is part of Emacs 22+ works great.
+;;
 ;; xml.el is a part of GNU Emacs 21, but can also be downloaded from
 ;; here: <URL:ftp://ftp.codefactory.se/pub/people/daniel/elisp/xml.el>
 
@@ -63,7 +64,6 @@
 ;;       string:  "foo"
 ;;        array:  '(1 2 3 4)   '(1 2 3 (4.1 4.2))
 ;;       struct:  '(("name" . "daniel") ("height" . 6.1))
-;; struct with array values: '(:struct "name" "daniel" "john" "riek")
 
 
 ;; Examples
@@ -112,8 +112,7 @@
 
 ;;; History:
 
-;; 1.6.3   - Updated to handle vectors and ISO Dates
-;;           (Thanks Wickersheimer Jeremy <jwickers@gmail.com>!)
+;; 1.6.4.1 - Updated to work with both Emacs22 and Emacs23.
 
 ;; 1.6.2.2 - Modified to allow non-ASCII string again.
 ;;           It can handle non-ASCII page name and comment
@@ -202,10 +201,6 @@ Set it higher to get some info in the *Messages* buffer")
 ;; Value type handling functions
 ;;
 
-(defun xml-rpc-value-datep (value)
-  "Return t if VALUE is a date."
-  (string-match "[0-9]\\{8\\}T\\([0-9]\\{2\\}:\\)\\{2\\}[0-9]\\{2\\}" value))
-
 (defun xml-rpc-value-intp (value)
   "Return t if VALUE is an integer."
   (integerp value))
@@ -230,9 +225,8 @@ Set it higher to get some info in the *Messages* buffer")
 (defun xml-rpc-caddar-safe (list)
   (car-safe (cdr-safe (cdr-safe (car-safe list)))))
 
-;; An XML-RPC struct is a list where every car is one one of:
-;; 1. a list of length 1 or 2 and has a string for car.
-;; 2. a list with the property :struct as a 1st member
+;; An XML-RPC struct is a list where every car is a list of length 1 or 2 and
+;; has a string for car.
 (defsubst xml-rpc-value-structp (value)
   "Return t if VALUE is an XML-RPC struct."
   (and (listp value)
@@ -242,9 +236,8 @@ Set it higher to get some info in the *Messages* buffer")
 	 (while (and vals result)
 	   (setq result (and
 			 (setq curval (car-safe vals))
-			 (or (and (listp curval) (symbolp (car curval)) (string= (car curval) :struct))
-			     (and (memq (safe-length curval) '(1 2))
-				  (stringp (car-safe curval))))))
+			 (memq (safe-length curval) '(1 2))
+			 (stringp (car-safe curval))))
 	   (setq vals (cdr-safe vals)))
 	 result)))
 
@@ -318,24 +311,17 @@ functions in xml.el."
 					;    nil)
    ((xml-rpc-value-booleanp value)
     `((value nil (boolean nil ,(xml-rpc-boolean-to-string value)))))
-   ;; might be a vector
-   ((vectorp value)
-    (xml-rpc-value-to-xml-list (append value nil)))
    ((listp value)
     (let ((result nil)
 	  (xmlval nil))
       (if (xml-rpc-value-structp value)
 	  ;; Value is a struct
 	  (progn
-	    (while
-		(progn
-		  (when (and (symbolp (caar value)) (string= (caar value) :struct))
-		    (setq value (cons (cdar value) (cdr value))))
-		  (setq xmlval `((member nil (name nil ,(caar value))
-					 ,(car (xml-rpc-value-to-xml-list
-						(cdar value)))))
-			result (if t (append result xmlval) (car xmlval))
-			value (cdr value))))
+	    (while (setq xmlval `((member nil (name nil ,(caar value))
+					  ,(car (xml-rpc-value-to-xml-list
+						 (cdar value)))))
+			 result (if t (append result xmlval) (car xmlval))
+			 value (cdr value)))
 	    `((value nil ,(append '(struct nil) result))))
 	;; Value is an array
 	(while (setq xmlval (xml-rpc-value-to-xml-list (car value))
@@ -346,17 +332,13 @@ functions in xml.el."
    ;; Value is a scalar
    ((xml-rpc-value-intp value)
     `((value nil (int nil ,(int-to-string value)))))
-   ;; Value is a Date ...
-   ((xml-rpc-value-datep value)
-    `((value nil (dateTime.iso8601 nil ,value))))
-   ;; Value is a String
    ((xml-rpc-value-stringp value)
     (let ((charset-list (find-charset-string value)))
       (if (or xml-rpc-allow-unicode-string
 	      (and (eq 1 (length charset-list))
 		   (eq 'ascii (car charset-list)))
 	      (not xml-rpc-base64-encode-unicode))
-	  `((value nil (string nil ,(url-insert-entities-in-string value))))
+	  `((value nil (string nil ,value)))
 	`((value nil (base64 nil ,(base64-encode-string
 				   (encode-coding-string value 'utf-8))))))))
    ((xml-rpc-value-doublep value)
@@ -623,50 +605,64 @@ parameters."
 	   (xml-rpc-xml-to-response response)))))
 
 (eval-when-compile
-  (unless (fboundp 'xml-print)
+  (unless (fboundp 'xml-escape-string)
     (defun xml-debug-print (xml &optional indent-string)
       "Outputs the XML in the current buffer.
 XML can be a tree or a list of nodes.
 The first line is indented with the optional INDENT-STRING."
       (setq indent-string (or indent-string ""))
       (dolist (node xml)
-	(xml-debug-print-internal node indent-string)))
+        (xml-debug-print-internal node indent-string)))
 
     (defalias 'xml-print 'xml-debug-print)
+
+    (defun xml-escape-string (string)
+      "Return the string with entity substitutions made from
+xml-entity-alist."
+      (mapconcat (lambda (byte)
+                   (let ((char (char-to-string byte)))
+                     (if (rassoc char xml-entity-alist)
+                         (concat "&" (car (rassoc char xml-entity-alist)) ";")
+                       char)))
+                 ;; This differs from the non-unicode branch.  Just
+                 ;; grabbing the string works here.
+                 string ""))
 
     (defun xml-debug-print-internal (xml indent-string)
       "Outputs the XML tree in the current buffer.
 The first line is indented with INDENT-STRING."
       (let ((tree xml)
-	    attlist)
-	(insert indent-string ?< (symbol-name (xml-node-name tree)))
+            attlist)
+        (insert indent-string ?< (symbol-name (xml-node-name tree)))
 
-	;;  output the attribute list
-	(setq attlist (xml-node-attributes tree))
-	(while attlist
-	  (insert ?\  (symbol-name (caar attlist)) "=\"" (cdar attlist) ?\")
-	  (setq attlist (cdr attlist)))
+        ;;  output the attribute list
+        (setq attlist (xml-node-attributes tree))
+        (while attlist
+          (insert ?\  (symbol-name (caar attlist)) "=\""
+                  (xml-escape-string (cdar attlist)) ?\")
+          (setq attlist (cdr attlist)))
 
-	(setq tree (xml-node-children tree))
+        (setq tree (xml-node-children tree))
 
-	(if (null tree)
-	    (insert ?/ ?>)
-	  (insert ?>)
+        (if (null tree)
+            (insert ?/ ?>)
+          (insert ?>)
 
-	  ;;  output the children
-	  (dolist (node tree)
-	    (cond
-	     ((listp node)
-	      (insert ?\n)
-	      (xml-debug-print-internal node (concat indent-string "  ")))
-	     ((stringp node) (insert node))
-	     (t
-	      (error "Invalid XML tree"))))
+          ;;  output the children
+          (dolist (node tree)
+            (cond
+             ((listp node)
+              (insert ?\n)
+              (xml-debug-print-internal node (concat indent-string "  ")))
+             ((stringp node)
+              (insert (xml-escape-string node)))
+             (t
+              (error "Invalid XML tree"))))
 
-	  (when (not (and (null (cdr tree))
-			  (stringp (car tree))))
-	    (insert ?\n indent-string))
-	  (insert ?< ?/ (symbol-name (xml-node-name xml)) ?>))))))
+          (when (not (and (null (cdr tree))
+                          (stringp (car tree))))
+            (insert ?\n indent-string))
+          (insert ?< ?/ (symbol-name (xml-node-name xml)) ?>))))))
     
 (provide 'xml-rpc)
 

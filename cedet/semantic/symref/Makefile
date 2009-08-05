@@ -9,10 +9,11 @@
 top=../
 ede_FILES=Project.ede Makefile
 
-symref_LISP=semantic-symref.el semantic-symref-global.el semantic-symref-grep.el semantic-symref-list.el
+symref_LISP=semantic-symref.el semantic-symref-global.el semantic-symref-grep.el semantic-symref-list.el semantic-symref-idutils.el semantic-symref-cscope.el semantic-symref-filter.el
 EMACS=emacs
-LOADPATH= ../../speedbar/ ../../ede/ ../../common/ ../bovine/ ../ ../../eieio/
-VERSION=2.0pre6
+EMACSFLAGS=-batch --no-site-file
+LOADPATH= ../../srecode/ ../../speedbar/ ../../ede/ ../../common/ ../bovine/ ../ ../../eieio/
+VERSION=2.0pre7
 DISTDIR=$(top)semantic-$(VERSION)/symref
 
 
@@ -26,7 +27,7 @@ symref: $(symref_LISP)
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
 	done;
 	@echo "(setq debug-on-error t)" >> $@-compile-script
-	"$(EMACS)" -batch --no-site-file -l $@-compile-script -f batch-byte-compile $^
+	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
 tags: 
 

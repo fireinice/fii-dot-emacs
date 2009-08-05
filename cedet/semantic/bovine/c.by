@@ -7,7 +7,7 @@
 ;;         David Ponce <david@dponce.com>
 ;;         Klaus Berndl <klaus.berndl@sdm.de>
 ;;
-;; X-RCS: $Id: c.by,v 1.52 2009/02/02 01:38:33 zappo Exp $
+;; X-RCS: $Id: c.by,v 1.58 2009/07/12 21:37:28 zappo Exp $
 ;;
 ;; c.by is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@
 %token <punctuation>   HAT        "\\`\\^\\'"
 %token <punctuation>   OR         "\\`[|]\\'"
 %token <string>        C          "\"C\""
+%token <string>        CPP        "\"C\\+\\+\""
 %token <number>        ZERO       "^0$"
 %token <symbol>        RESTRICT   "\\<\\(__\\)?restrict\\>"
 %token <open-paren>    LPAREN     "("
@@ -183,10 +184,6 @@
 %put UNDERP summary "Common macro to eliminate prototype compatibility on some compilers"
 %put UNDERUNDERP summary "Common macro to eliminate prototype compatibility on some compilers"
 
-;; GCC
-%token __ATTRIBUTE__ "__attribute__"
-%put __ATTRIBUTE__ summary "<cdecl> __attribute__ ((<attributeoption>))"
-
 %%
 
 declaration
@@ -206,6 +203,8 @@ codeblock
   : define
   | codeblock-var-or-fun
   | type ;; type is less likely to be used here.
+  | using ;; Using  statements are ok.
+    (TAG (car (car $1)) 'using :type (car $1))
   ;
 
 extern-c-contents
@@ -223,9 +222,13 @@ extern-c
  ;; list of entries.  This must be done via the function
  ;; that expands singular nonterminals, such as int x,y;
     (TAG "C" 'extern :members (EXPANDFULL $3 extern-c-contents) )
+  | EXTERN CPP semantic-list
+    (TAG "C" 'extern :members (EXPANDFULL $3 extern-c-contents) )
   | EXTERN C
  ;; A plain extern "C" call should add something to the token,
  ;; but just strip it from the buffer here for now.
+    ( nil )
+  | EXTERN CPP
     ( nil )
   ;
 
@@ -334,7 +337,7 @@ opt-class-protection
   : class-protection
     ( ,$1 )
   | ;;EMPTY - Same as private
-    ( "private" )
+    ( "unspecified" )
   ;
 
 namespaceparts
@@ -380,12 +383,6 @@ opt-name
   : symbol
   | ;;EMPTY
     ( "" )
-  ;
-
-opt-class-declmods
-  : symbol declespec semantic-list
-  | symbol
-  | ;;EMPTY
   ;
 
 typesimple
@@ -437,7 +434,7 @@ struct-or-class
   ;
 
 type
-  : typesimple opt-attribute SEMICOLON
+  : typesimple SEMICOLON
     ( ,$1 )
  ;; named namespaces like "namespace XXX {"
   | NAMESPACE symbol namespaceparts
@@ -445,13 +442,6 @@ type
  ;; unnamed namespaces like "namespace {"
   | NAMESPACE namespaceparts
     (TYPE-TAG "unnamed" $1 $2 nil )
-  ;
-
-opt-attribute
-  : __ATTRIBUTE__ semantic-list
-    ( nil )
-  | ;; EMPTY
-    ( nil )
   ;
 
 ;; Klaus Berndl: We must parse "using namespace XXX" too
@@ -533,6 +523,12 @@ template-var
  ;; (*).  Example map<ClassX, ClassY, *size_var_ptr> sized_map_var.
   | opt-stars opt-ref namespace-symbol
     ( ,$3 )
+ ;; Some code can compile down into a number, but starts out as an
+ ;; expression, such as "sizeof(a)", or (sizeof(a)/sizeof(b))
+  | semantic-list
+    ( $1 )
+  | SIZEOF semantic-list
+    ( $2 )
   ;
 
 opt-template-equal
@@ -1078,7 +1074,7 @@ function-pointer
   ;
 
 fun-or-proto-end
-  : opt-attribute SEMICOLON
+  : SEMICOLON
     ( t )
   | semantic-list
     ( nil )
@@ -1112,16 +1108,16 @@ type-cast-list
   : open-paren typeformbase close-paren
   ;
 
-;; Klaus Berndl: symbol -> namespace-symbol!
-opt-function-call-args
+opt-stuff-after-symbol
   : PAREN_BLCK
+  | BRACK_BLCK
   | ;; EMPTY 
   ;
 
 multi-stage-dereference
-  : namespace-symbol opt-function-call-args PERIOD multi-stage-dereference ;; method call
-  | namespace-symbol opt-function-call-args MINUS GREATER multi-stage-dereference ;;method call
-  | namespace-symbol opt-function-call-args
+  : namespace-symbol opt-stuff-after-symbol PERIOD multi-stage-dereference ;; method call
+  | namespace-symbol opt-stuff-after-symbol MINUS GREATER multi-stage-dereference ;;method call
+  | namespace-symbol opt-stuff-after-symbol
   ;
 
 string-seq

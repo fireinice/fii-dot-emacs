@@ -5,7 +5,7 @@
 ## Author: David Ponce <david@dponce.com>
 ## Maintainer: CEDET developers <http://sf.net/projects/cedet>
 ## Created: 12 Sep 2003
-## X-RCS: $Id: Makefile,v 1.20 2009/01/29 02:58:26 zappo Exp $
+## X-RCS: $Id: Makefile,v 1.24 2009/06/24 23:15:18 zappo Exp $
 ##
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU General Public License as
@@ -28,7 +28,7 @@
 CEDET_HOME="$(CURDIR)"
 
 ## The CEDET's packages installed
-CEDET_PACKAGES=\
+CEDET_ELISP_PACKAGES=\
 common \
 speedbar \
 eieio \
@@ -36,11 +36,15 @@ semantic \
 srecode \
 ede \
 cogre \
-contrib \
+contrib
+
+CEDET_PACKAGES=\
+$(CEDET_ELISP_PACKAGES) \
 tests
 
 ## Path to your Emacs
 EMACS=emacs
+EMACSFLAGS=-batch --no-site-file
 
 ## Your shell (On Windows/Cygwin I recommend to use bash)
 #SHELL=bash
@@ -64,9 +68,9 @@ DIST_ROOT=cedet-$(CEDET_VERSION)
 DIST_DIR=$(CEDET_HOME)/$(DIST_ROOT)
 DIST_FILE=$(DIST_DIR).tar.gz
 
-__BUILD_AUTOLOADS=$(patsubst %,%-autoloads,$(CEDET_PACKAGES))
+__BUILD_AUTOLOADS=$(patsubst %,%-autoloads,$(CEDET_ELISP_PACKAGES))
 __CLEAN_AUTOLOADS=$(patsubst %,clean-%,$(__BUILD_AUTOLOADS))
-__DOMAKE=$(MAKE) $(MFLAGS) EMACS="$(EMACS)" SHELL="$(SHELL)"
+__DOMAKE=$(MAKE) $(MFLAGS) EMACS="$(EMACS)" EMACSFLAGS="$(EMACSFLAGS)" SHELL="$(SHELL)"
 
 ## Build
 ##
@@ -81,6 +85,10 @@ packages: $(CEDET_PACKAGES)
 $(CEDET_PACKAGES):
 	cd $(CEDET_HOME)/$@ && $(__DOMAKE)
 
+.PHONY: ebuild
+ebuild:
+	$(EMACS) -q -batch --no-site-file -l cedet-build.el -f cedet-build
+
 ## Update
 ##
 
@@ -93,7 +101,7 @@ $(__BUILD_AUTOLOADS):
 
 recompile: autoloads
 	cd $(CEDET_HOME) && \
-	"$(EMACS)" -batch -q --no-site-file -l common/cedet.el \
+	"$(EMACS)" $(EMACSFLAGS) -l common/cedet.el \
 	-f batch-byte-recompile-directory $(CEDET_PACKAGES)
 
 ## Cleanup
@@ -132,9 +140,12 @@ clean-all: clean clean-elc clean-info clean-grammars clean-autoloads
 
 ### UNIT TEST Harness
 ## Run the master CEDET unit-test suite.
-.PHONY: utest
+.PHONY: utest itest
 utest:
-	$(EMACS) -batch -l "common/cedet.el" -f cedet-utest-batch
+	$(EMACS) $(EMACSFLAGS) -l "common/cedet.el" -f cedet-utest-batch
+
+itest:
+	cd tests; ./cit-test.sh
 
 ### Install info files
 ## Thanks Stefano Sabatini for the info install patch.

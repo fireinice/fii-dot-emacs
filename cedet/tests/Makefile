@@ -9,12 +9,13 @@
 top=
 ede_FILES=Project.ede Makefile
 
-Lisp_LISP=cedet-integ-test.el cit-cpp.el cit-el.el cit-texi.el cit-load.el cit-srec.el cit-gnustep.el
+Lisp_LISP=cedet-integ-test.el cit-cpp.el cit-el.el cit-texi.el cit-load.el cit-srec.el cit-gnustep.el cit-uml.el
 EMACS=emacs
-LOADPATH= ../contrib/ ../ede/ ../srecode/ ../semantic/wisent/ ../semantic/bovine/ ../semantic/ ../eieio/ ../common/
+EMACSFLAGS=-batch --no-site-file
+LOADPATH= ../speedbar/ ../cogre/ ../contrib/ ../ede/ ../srecode/ ../semantic/wisent/ ../semantic/bovine/ ../semantic/ ../eieio/ ../common/
 templates_MISC=cit-extra-cpp.srt
 scripts_MISC=cit-test.sh
-Misc_MISC=README
+Misc_MISC=README ChangeLog cit-uml.cgr
 VERSION=1.0
 DISTDIR=$(top)cit-$(VERSION)
 
@@ -29,7 +30,7 @@ Lisp: $(Lisp_LISP)
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
 	done;
 	@echo "(setq debug-on-error t)" >> $@-compile-script
-	"$(EMACS)" -batch --no-site-file -l $@-compile-script -f batch-byte-compile $^
+	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
 templates: 
 	@

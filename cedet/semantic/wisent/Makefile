@@ -11,6 +11,7 @@ ede_FILES=Project.ede Makefile
 
 tools_LISP=bison-wisent.el
 EMACS=emacs
+EMACSFLAGS=-batch --no-site-file
 wisent_LISP=wisent.el semantic-wisent.el wisent-comp.el wisent-expr.el wisent-grammar.el wisent-debug.el wisent-grammar-macros.el
 LOADPATH= ../../speedbar/ ../../common/ ../bovine/ ../\
     ../../ede/ ../../eieio/
@@ -18,7 +19,7 @@ wy_SEMANTIC_GRAMMAR=wisent-java-tags.wy wisent-awk.wy wisent-calc.wy wisent-cim.
 EMACS=emacs
 wy_SEMANTIC_GRAMMAR_EL=wisent-java-tags-wy.el wisent-awk-wy.el wisent-calc-wy.el wisent-cim-wy.el wisent-java-wy.el wisent-python-wy.el wisent-javascript-jv-wy.el
 languages_LISP=wisent-calc.el wisent-java.el wisent-java-tags.el wisent-python.el wisent-javascript.el
-VERSION=2.0pre6
+VERSION=2.0pre7
 DISTDIR=$(top)semantic-$(VERSION)/wisent
 
 
@@ -32,7 +33,7 @@ tools: $(tools_LISP)
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
 	done;
 	@echo "(setq debug-on-error t)" >> $@-compile-script
-	"$(EMACS)" -batch --no-site-file -l $@-compile-script -f batch-byte-compile $^
+	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
 .PHONY: wisent
 wisent: $(wisent_LISP)
@@ -41,7 +42,7 @@ wisent: $(wisent_LISP)
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
 	done;
 	@echo "(setq debug-on-error t)" >> $@-compile-script
-	"$(EMACS)" -batch --no-site-file -l $@-compile-script -f batch-byte-compile $^
+	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
 .PHONY: wy
 wy: $(wy_SEMANTIC_GRAMMAR)
@@ -60,7 +61,7 @@ languages: $(languages_LISP)
 	   echo "(add-to-list 'load-path \"$$loadpath\")" >> $@-compile-script; \
 	done;
 	@echo "(setq debug-on-error t)" >> $@-compile-script
-	"$(EMACS)" -batch --no-site-file -l $@-compile-script -f batch-byte-compile $^
+	"$(EMACS)" $(EMACSFLAGS) -l $@-compile-script -f batch-byte-compile $^
 
 tags: 
 

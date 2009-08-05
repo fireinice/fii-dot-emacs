@@ -4,7 +4,7 @@
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Keywords: tags
-;; X-RCS: $Id: semanticdb.el,v 1.132 2009/01/31 18:09:26 zappo Exp $
+;; X-RCS: $Id: semanticdb.el,v 1.134 2009/07/04 13:51:21 zappo Exp $
 
 ;; This file is not part of GNU Emacs.
 
@@ -510,10 +510,13 @@ other than :table."
 
 ;;; REFRESH
 
-(defmethod semanticdb-refresh-table ((obj semanticdb-table))
+(defmethod semanticdb-refresh-table ((obj semanticdb-table) &optional force)
   "If the tag list associated with OBJ is loaded, refresh it.
+Optional argument FORCE will force a refresh even if the file in question
+is not in a buffer.  Avoid using FORCE for most uses, as an old cache
+may be sufficient for the general case.  Forced updates can be slow.
 This will call `semantic-fetch-tags' if that file is in memory."
-  (when (semanticdb-in-buffer-p obj)
+  (when (or (semanticdb-in-buffer-p obj) force)
     (save-excursion
       (semanticdb-set-buffer obj)
       (semantic-fetch-tags))))
@@ -940,7 +943,10 @@ This should take a filename to be parsed.")
   "Create a table for the file FILENAME.
 If there are no language specific configurations, this
 function will read in the buffer, parse it, and kill the buffer."
-  (if semanticdb-out-of-buffer-create-table-fcn
+  (if (and semanticdb-out-of-buffer-create-table-fcn
+	   (not (file-remote-p filename)))
+      ;; Use external parser only of the file is accessible to the
+      ;; local file system.
       (funcall semanticdb-out-of-buffer-create-table-fcn filename)
     (save-excursion
       (let* ( ;; Remember the buffer to kill

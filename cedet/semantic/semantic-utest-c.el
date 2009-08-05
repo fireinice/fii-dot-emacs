@@ -1,9 +1,9 @@
 ;;; semantic-utest-c.el --- C based parsing tests.
 
-;; Copyright (C) 2008 Eric M. Ludlam
+;; Copyright (C) 2008, 2009 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
-;; X-RCS: $Id: semantic-utest-c.el,v 1.2 2008/05/03 14:24:05 zappo Exp $
+;; X-RCS: $Id: semantic-utest-c.el,v 1.4 2009/07/12 13:48:58 zappo Exp $
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -37,6 +37,7 @@
   (dolist (fp semantic-utest-c-comparisons)
     (let* ((sem (locate-library "semantic"))
 	   (sdir (file-name-directory sem))
+	   (semantic-lex-c-nested-namespace-ignore-second nil)
 	   (tags-actual
 	    (save-excursion
 	      (set-buffer (find-file-noselect (expand-file-name (concat "tests/" (car fp)) sdir)))
@@ -51,11 +52,14 @@
       (dolist (tag tags-actual)
 	(if (and (semantic-tag-of-class-p tag 'variable)
 		 (semantic-tag-variable-constant-p tag))
-	    nil; skip the macros.
+	    nil				; skip the macros.
 	  (if (semantic-tag-similar-with-subtags-p tag (car tags-expected))
 	      (setq tags-expected (cdr tags-expected))
-	    (error "Tag mismatch: %S -- %S"
-		   tag (car tags-expected)))
+	    (with-mode-local c-mode
+	      (error "Tag mismatch: %s -- %s"
+		     (semantic-format-tag-prototype tag nil t)
+		     (semantic-format-tag-prototype (car tags-expected) nil t)
+		     )))
 	  ))
       ;; Passed?
       (message "PASSED!")

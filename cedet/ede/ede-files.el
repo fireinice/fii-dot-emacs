@@ -3,7 +3,7 @@
 ;; Copyright (C) 2008, 2009 Eric M. Ludlam
 
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
-;; X-RCS: $Id: ede-files.el,v 1.12 2009/02/05 15:11:45 zappo Exp $
+;; X-RCS: $Id: ede-files.el,v 1.16 2009/03/08 19:59:51 zappo Exp $
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -98,16 +98,28 @@ the current buffer."
 (defmethod ede-find-subproject-for-directory ((proj ede-project-placeholder)
 					      dir)
   "Find a subproject of PROJ that corresponds to DIR."
-  (let ((ans nil)
-	(inode (ede--inode-for-dir dir)))
-    (ede-map-subprojects 
-     proj
-     (lambda (SP)
-       (when (not ans)
-	 (if (equal (ede--project-inode SP) inode)
-	     (setq ans SP)
-	   (ede-find-subproject-for-directory SP dir)))))
-    ans))
+  (if ede--disable-inode
+      (let ((ans nil))
+	;; Try to find the right project w/out inodes.
+	(ede-map-subprojects 
+	 proj
+	 (lambda (SP)
+	   (when (not ans)
+	     (if (string= (file-truename dir) (oref SP :directory))
+		 (setq ans SP)
+	       (ede-find-subproject-for-directory SP dir)))))
+	ans)
+    ;; We can use inodes, so lets try it.
+    (let ((ans nil)
+	  (inode (ede--inode-for-dir dir)))
+      (ede-map-subprojects 
+       proj
+       (lambda (SP)
+	 (when (not ans)
+	   (if (equal (ede--project-inode SP) inode)
+	       (setq ans SP)
+	     (ede-find-subproject-for-directory SP dir)))))
+      ans)))
 
 ;;; DIRECTORY IN OPEN PROJECT
 ;;
@@ -151,21 +163,25 @@ If DIR is the root project, then it is the same."
   (let* ((inode (ede--inode-for-dir dir))
 	 (ft (file-name-as-directory (expand-file-name dir)))
 	 (proj (ede--inode-get-toplevel-open-project inode))
-	 (ans proj))
+	 (ans nil))
     ;; Try file based search.
     (when (not proj)
       (setq proj (ede-directory-get-toplevel-open-project ft)))
+    ;; Default answer is this project
+    (setq ans proj)
     ;; Save.
     (when rootreturn (set rootreturn proj))
     ;; Find subprojects.
-    (when (and proj (not (equal inode (ede--project-inode proj))))
+    (when (and proj (or ede--disable-inode 
+			(not (equal inode (ede--project-inode proj)))))
       (setq ans (ede-find-subproject-for-directory proj ft)))
     ans))
 
 (defun ede--inode-get-toplevel-open-project (inode)
   "Return an already open toplevel project that is managing INODE.
 Does not check subprojects."
-  (when (and (numberp inode) (/= inode 0))
+  (when (or (and (numberp inode) (/= inode 0))
+	    (consp inode))
     (let ((all ede-projects)
 	  (found nil)
 	  )
@@ -194,7 +210,7 @@ Does not check subprojects."
 	 ;; Exact inode match.  Useful with symlinks or complex automounters.
 	 ((let ((pin (ede--project-inode (car all)))
 		(inode (ede--inode-for-dir dir)))
-	    (and (/= pin 0) (equal pin inode)))
+	    (and (not (eql pin 0)) (equal pin inode)))
 	  (setq ans (car all)))
 	 ;; Subdir via truename - slower by far, but faster than a traditional lookup.
 	 ((let ((ftn (file-truename ft))
@@ -240,15 +256,17 @@ Do this whenever a new project is created, as opposed to loaded."
     (puthash dir desc ede-project-directory-hash)
     desc))
 
-(defun ede-directory-project-p (dir)
+(defun ede-directory-project-p (dir &optional force)
   "Return a project description object if DIR has a project.
+Optional argument FORCE means to ignore a hash-hit of 'nomatch.
 This depends on an up to date `ede-project-class-files' variable."
   (let* ((dirtest (expand-file-name dir))
 	 (match (ede-directory-project-from-hash dirtest)))
     (cond
-     ((eq match 'nomatch)
+     ((and (eq match 'nomatch) (not force))
       nil)
-     (match match)
+     ((and match (not (eq match 'nomatch)))
+      match)
      (t
       (let ((types ede-project-class-files)
 	    (ret nil))
@@ -284,8 +302,13 @@ nil is returned if the current directory is not a part ofa project."
       ;; Try the local buffer cache first.
       (oref ede-object-root-project :directory)
     ;; Otherwise do it the hard way.
-    (let* ((ans (ede-directory-get-toplevel-open-project dir)))
-      (if ans
+    (let* ((thisdir (ede-directory-project-p dir))
+	   (ans (ede-directory-get-toplevel-open-project dir)))
+      (if (and ans ;; We have an answer
+	       (or (not thisdir) ;; this dir isn't setup
+		   (and (object-of-class-p ;; Same as class for this dir?
+			 ans (oref thisdir :class-sym)))
+		   ))
 	  (oref ans :directory)
 	(let* ((toppath (expand-file-name dir))
 	       (newpath toppath)
