@@ -4,8 +4,8 @@
 ;; Description: 
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
-;; Last-Updated: 五  2月  6 13:17:28 2009 (CST)
-;;     Update #: 374
+;; Last-Updated: 二  8月  4 11:09:44 2009 (CST)
+;;     Update #: 383
 ;; 
 ;; 
 ;;; Change log:
@@ -57,7 +57,13 @@
 (require 'uniquify)
 (require 'sr-speedbar)
 (require 'install-elisp)
+(require 'template)
+(template-initialize)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
+(dolist (cmd '(ido-select-text ido-magic-forward-char
+                               ido-exit-minibuffer))
+  (add-to-list 'template-find-file-commands cmd))
+
 
 ;; (require 'ecb)
 ;; (require 'setnu+)	
@@ -685,17 +691,6 @@ that was stored with ska-point-to-register."
 (setq interpreter-mode-alist (cons '("python" . python-mode)
 				   interpreter-mode-alist))
 ;; (require 'python)
-(when (load "flymake" t)
-  (defun flymake-pylint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-		       'flymake-create-temp-inplace))
-	   (local-file (file-relative-name
-			temp-file
-			(file-name-directory buffer-file-name))))
-      (list "epylint" (list local-file))))
-  (add-to-list 'flymake-allowed-file-name-masks
-	       '("\\.py\\'" flymake-pylint-init)))
-(add-hook 'find-file-hook 'flymake-find-file-hook)
 
 (add-hook 'python-mode-hook
 	  (lambda ()
@@ -704,6 +699,7 @@ that was stored with ska-point-to-register."
 ;; 	    (which-function-mode t)
 	    (hs-minor-mode 1)
 ;; 	    (py-shell 1)
+	    (eldoc-mode 1)
 	    (abbrev-mode t)
 	    (set (make-variable-buffer-local 'beginning-of-defun-function)
 		 'py-beginning-of-def-or-class)
@@ -715,7 +711,21 @@ that was stored with ska-point-to-register."
 	    (set (make-local-variable 'ac-find-function) 'ac-python-find)
 	    (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
 	    (set (make-local-variable 'ac-auto-start) nil)))
- 
+
+(defun my-python-documentation (w)
+  "Launch PyDOC on the Word at Point"
+  (interactive
+   (list (let* ((word (thing-at-point 'word))
+		(input (read-string 
+			(format "pydoc entry%s: " 
+				(if (not word) "" (format " (default %s)" word))))))
+	   (if (string= input "") 
+	       (if (not word) (error "No pydoc args given")
+		 word) ;sinon word
+	     input)))) ;sinon input
+  (shell-command (concat py-python-command " -c \"from pydoc import help;help(\'" w "\')\"") "*PYDOCS*")
+  (view-buffer-other-window "*PYDOCS*" t 'kill-buffer-and-window))
+  
 ;; http://www.enigmacurry.com/2009/01/21/autocompleteel-python-code-completion-in-emacs/
 ;; Initialize Rope                                                                         
 (pymacs-load "ropemacs" "rope-")
@@ -788,29 +798,6 @@ that was stored with ska-point-to-register."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
 ;;; End Auto Completion                                                                                        
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Pychecker
-;; (defun py-pychecker-run (command)
-;;   "*Run pychecker (default on the file currently visited)."
-;;   (interactive
-;;    (let ((default
-;;            (format "%s %s %s" py-pychecker-command
-;; 		   (mapconcat 'identity py-pychecker-command-args " ")
-;; 		   (buffer-file-name)))
-;; 	 (last (when py-pychecker-history
-;; 		 (let* ((lastcmd (car py-pychecker-history))
-;; 			(cmd (cdr (reverse (split-string lastcmd))))
-;; 			(newcmd (reverse (cons (buffer-file-name) cmd))))
-;; 		   (mapconcat 'identity newcmd " ")))))
-
-;;      (list
-;;       (read-shell-command "Run pychecker like this: "
-;;                           (if last
-;; 			      last
-;; 			    default)
-;;                           'py-pychecker-history))))
-;;   (save-some-buffers (not py-ask-about-save) nil)
-;;   (compile-internal command "No more errors"))
-
 ;; (defun my-python-documentation (w)
 ;;     "Launch PyDOC on the Word at Point"
 ;;     (interactive
@@ -885,6 +872,8 @@ that was stored with ska-point-to-register."
 ;; Put this file into your load-path and the following into your ~/.emacs:
 (require 'shell-completion)
 (require 'shell-history)
+(require 'flymake-shell)
+(add-hook 'sh-mode-hook 'flymake-shell-load)
 ;; (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 ;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 ;; (setq ansi-color-for-comint-mode t)
@@ -965,130 +954,6 @@ that was stored with ska-point-to-register."
 ;; (setq weblogger-entry-mode-hook 'html-mode)
 (global-set-key "\C-cbs" 'weblogger-start-entry)
 
-;;==========header2
-;;文件头header设置
-(require 'header2)
-;; // -*- mode:C++; tab-width:4; c-basic-offset:4; indent-tabs-mode:t -*-
-;; /*************************************************************************
-;;  *  Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.     *
-;;  *************************************************************************/
-;; /**
-;;  * \file    CheckURL.cc
-;;  * \brief	Implementation of CheckURL class
-;;  *
-;;  * \author  Xinran Zhou (xzhou@ask.com)
-;;  * \author  Wuyun Kang (wkang@ask.com)
-;;  * \bug     No known bugs
-;;  *
-;;  * $Date: 2007/06/18 06:39:19 $
-;;  * $Revision: 1.1 $
-;;  */
-
-(setq header-copyright-notice "Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.")
-(defun zigler-python-mode-config-header ()
-  (interactive)
-  (setq make-header-hook '(header-mode-line
-			   header-copyright
-			   header-blank
-			   header-file-name
-			   header-author
-			   header-creation-date
-			   header-modification-author
-			   header-modification-date
-			   header-update-count
-			   header-blank
-			   header-history
-			   header-blank
-			   )))
-(setq make-header-hook '(header-mode-line
-			 header-file-name
-			 header-copyright
-			 header-blank
-			 header-author
-			 header-description
-			 header-creation-date
-			 header-modification-author
-			 header-modification-date
-			 header-update-count
-			 header-blank
-			 header-history
-			 header-blank
-			 ))
-
-(defvar wcy-header-project-name "XParser-Cross-Test-Tools")
-(defun wcy-c-mode-config-header ()
-  (interactive)
-  (setq header-copyright-notice "
-Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
-")
-  (make-local-variable 'user-full-name)
-  (make-local-variable 'user-mail-address)
-  (setq user-full-name "ZhiQiang Zhang")
-  (setq user-mail-address "zhiqiang.zhang@ask.com")
-
-  (setq  make-header-hook '(header-mode-line
-                             header-blank
-                             wcy-header-file-name
-                             wcy-header-project-name
-                             wcy-header-file-description
-                             header-creation-date
-                             header-author
-                             wcy-header-author-email
-                             ;;header-modification-author
-                             ;;header-modification-date
-                             ;;header-update-count
-                             header-blank
-                             header-copyright
-                             header-blank
-                             ;;header-status
-                             ;; Re-enable the following lines if you wish
-                             header-blank
-                             ;;header-history
-                             ;;header-purpose
-                             ;;header-toc
-                             header-blank
-                             wcy-header-end-comment
-                             ))
-  (setq file-header-update-alist nil)
-  (progn
-    (register-file-header-action "[ \t]Update Count[ \t]*: "
-                                 'update-write-count)
-    (register-file-header-action "[ \t]Last Modified By[ \t]*: "
-                                 'update-last-modifier)
-    (register-file-header-action "[ \t]Last Modified On[ \t]*: "
-                                 'update-last-modified-date)
-    (register-file-header-action " File            : *\\(.*\\) *$" 'wcy-update-file-name)
-    ))
-
-
-(defun wcy-header-file-name ()
-  "Places the buffer's file name and leaves room for a description."
-  (insert header-prefix-string "File            : " (buffer-name) "\n")
-  (setq return-to (1- (point))))
-(defun wcy-header-project-name ()
-  (insert header-prefix-string "Program/Library : " wcy-header-project-name "\n"))
-(defun wcy-header-file-description()
-  (insert header-prefix-string "Description     : \n"))
-(defun wcy-header-author-email ()
-  (insert header-prefix-string "Mail            : " user-mail-address "\n"))
-
-(defun wcy-header-end-comment ()
-  (if comment-end
-      (insert  comment-end "\n")))
-(defun wcy-update-file-name ()
-  (beginning-of-line)
-  ;; verify that we are looking at a file name for this mode
-  (if (looking-at
-       (concat (regexp-quote (header-prefix-string)) "File            : *\\(.*\\) *$"))
-      (progn
-        (goto-char (match-beginning 1))
-        (delete-region (match-beginning 1) (match-end 1))
-        (insert (file-name-nondirectory (buffer-file-name)) )
-        )))
-(add-hook 'write-file-hooks 'update-file-header)
-(add-hook 'emacs-lisp-mode-hook 'auto-make-header)
-
-
 ;;;; anything.el
 
 ;; my setup and configuration for anything.el
@@ -1128,6 +993,7 @@ Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.
 
 ;;========Flymake=====================================
 ;;echo error in minibuffer instead moving mouse on it
+(require 'flymake)
 (load-library "flymake-cursor") 
 (global-set-key "\C-c\C-e" 'flymake-goto-next-error)
 
@@ -1178,6 +1044,18 @@ makes)."
 	     (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
 		 (flymake-mode))
 	     ))
+
+(when (load "flymake" t)
+      (defun flymake-pylint-init ()
+        (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                           'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+          (list "epylint" (list local-file))))
+    
+      (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.py\\'" flymake-pylint-init)))
 
 ;;========git=====================================
  (require 'vc-git)
