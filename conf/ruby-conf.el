@@ -14,6 +14,8 @@
             (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
             (inf-ruby-keys)
 ;; ))
+(define-key ruby-mode-map "\r" 'newline-and-indent)
+
 
 (defun ruby-eval-buffer ()
   (interactive)

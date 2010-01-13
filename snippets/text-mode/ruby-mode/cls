@@ -1,5 +1,7 @@
 #name : class ... end
 # --
-class ${Name}
-  $0
+class ${1:Name}
+  def initialize(${2:args})
+    $0
+  end
 end

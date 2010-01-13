@@ -16,15 +16,20 @@
   (require 'linum))
 ;;default for 23
 (add-to-list 'load-path "~/.emacs.d/misc/")
+(add-to-list 'load-path "~/.emacs.d/git-emacs/")
 (add-to-list 'load-path "~/.emacs.d/sql/")
 (add-to-list 'load-path "~/.emacs.d/emacs-rails/")
 (add-to-list 'load-path "~/.emacs.d/python-mode/")
 (add-to-list 'load-path "~/.emacs.d/html-helper/")
 (add-to-list 'load-path "~/.emacs.d/weblogger/")
 (add-to-list 'load-path "~/.emacs.d/icicles/")
+(add-to-list 'load-path "~/.emacs.d/pylookup/")
+(add-to-list 'load-path "~/.emacs.d/yaml-mode/")
+(setq ri-ruby-script "/home/zigler/.emacs.d/misc/ri-emacs.rb")
+(autoload 'ri "/home/zigler/.emacs.d/misc/ri-ruby.el" nil t)
 
 ;; add git support(only in debian)
-(setq load-path (cons (expand-file-name "/usr/share/doc/git-core/contrib/emacs") load-path))
+;; (setq load-path (cons (expand-file-name "/usr/share/doc/git-core/contrib/emacs") load-path))
 
 
 
@@ -33,7 +38,7 @@
 ;; (autoload 'senator-try-expand-semantic "senator")
 ;; (autoload 'two-mode-mode "two mode mode")
 (autoload 'cl "cl")
-(autoload 'magit-status "magit" nil t)
+;; (autoload 'magit-status "magit" nil t)
 ;; (require 'paredit)
 (require 'grep-edit)
 (require 'color-moccur)
@@ -58,6 +63,9 @@
 (require 'sr-speedbar)
 (require 'install-elisp)
 (require 'template)
+(require 'git-emacs)
+(require 'git-status)
+
 (template-initialize)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
 (dolist (cmd '(ido-select-text ido-magic-forward-char
@@ -139,9 +147,7 @@
 ;;========仅作用于X下
 (if window-system
     (progn
-      
       (require 'icicles)
-
       ;;      (require 'ecb-autoloads) ;;nox
       (setq x-select-enable-clipboard t) ;;使用剪切板
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)))
@@ -217,6 +223,23 @@
 
 ;; 保证文件名相同的时候buffer名称是目录名+文件名
 (setq uniquify-buffer-name-style 'forward)
+
+;; 当你从不同的文件copy时保证重新indent
+(defadvice yank (after indent-region activate)
+  (if (member major-mode
+              '(emacs-lisp-mode scheme-mode lisp-mode
+                                c-mode c++-mode objc-mode
+                                latex-mode plain-tex-mode))
+      (let ((mark-even-if-inactive t))
+        (indent-region (region-beginning) (region-end) nil))))
+ 
+(defadvice yank-pop (after indent-region activate)
+  (if (member major-mode
+              '(emacs-lisp-mode scheme-mode lisp-mode
+                                c-mode c++-mode objc-mode
+                                latex-mode plain-tex-mode))
+      (let ((mark-even-if-inactive t))
+        (indent-region (region-beginning) (region-end) nil))))
 
 ;;==============auto-fill
 ;;把 fill-column 设为 80. 这样的文字更好读。
@@ -376,9 +399,9 @@ that was stored with ska-point-to-register."
 
 ;;========基本函数绑定
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
-(add-hook 'magit-mode-hook
-	  (lambda()
-	    (define-key magit-mode-map [(tab)] 'magit-toggle-section)))
+;; (add-hook 'magit-mode-hook
+;; 	  (lambda()
+;; 	    (define-key magit-mode-map [(tab)] 'magit-toggle-section)))
  ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 (global-set-key [(tab)] 'my-indent-or-complete)
@@ -389,6 +412,7 @@ that was stored with ska-point-to-register."
 ;; the formal is C-i while the latter is the real "Tab" key in
 ;; your keyboard.
 (global-set-key [(control \')] 'kid-c-escape-pair)
+(global-set-key  (kbd "C-x C-b") 'ibuffer-other-window)
 ;; (define-key c++-mode-map (kbd "<tab>") 'c-indent-command)
 ;; tabbar键盘绑定
 (global-set-key (kbd "\C-cbp") 'tabbar-backward-group)
@@ -430,6 +454,9 @@ that was stored with ska-point-to-register."
         try-complete-lisp-symbol
         try-expand-whole-kill))
 
+
+;;=========ibuffer
+(setq ibuffer-default-sorting-mode 'major-mode)
 
 
 ;;=========speedbar
@@ -524,7 +551,7 @@ that was stored with ska-point-to-register."
 	("\\.texi\\'"       . "makeinfo %f")
 ;; 	("\\.mp\\'"         . "mptopdf %f")
 	("\\.pl\\'"         . "perl -cw %f")
-	("\\.rb\\'"         . "ruby -cw %f")
+	("\\.rb\\'"         . "ruby %f")
 ;; ;    ("\\.skb$"              .       "skribe %f -o %n.html")
 ;; ;    (haskell-mode           .       "ghc -o %n %f")
 ;; ;    (asy-mode               .       (call-interactively 'asy-compile-view))
@@ -595,6 +622,8 @@ that was stored with ska-point-to-register."
 
 ;;========ido 模式
 (ido-mode t)
+(setq ido-enable-flex-matching t)
+(ido-everywhere t)
 (add-hook 'ido-setup-hook
 	  (lambda()
 	    (define-key ido-completion-map [(tab)] 'ido-complete)
@@ -698,8 +727,8 @@ that was stored with ska-point-to-register."
 	    (setq tab-width 4 indent-tabs-mode nil)
 ;; 	    (which-function-mode t)
 	    (hs-minor-mode 1)
+	    (flymake-mode 1)
 ;; 	    (py-shell 1)
-	    (eldoc-mode 1)
 	    (abbrev-mode t)
 	    (set (make-variable-buffer-local 'beginning-of-defun-function)
 		 'py-beginning-of-def-or-class)
@@ -711,20 +740,19 @@ that was stored with ska-point-to-register."
 	    (set (make-local-variable 'ac-find-function) 'ac-python-find)
 	    (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
 	    (set (make-local-variable 'ac-auto-start) nil)))
+(require 'pylookup)
+(setq pylookup-dir "/home/zigler/.emacs.d/pylookup")
+;; set executable file and db file
+(setq pylookup-program (concat pylookup-dir "/pylookup.py"))
+(setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
+(print 'pylookup-db-file)
+;; to speedup, just load it on demand
+(autoload 'pylookup-lookup "pylookup"
+  "Lookup SEARCH-TERM in the Python HTML indexes." t)
 
-(defun my-python-documentation (w)
-  "Launch PyDOC on the Word at Point"
-  (interactive
-   (list (let* ((word (thing-at-point 'word))
-		(input (read-string 
-			(format "pydoc entry%s: " 
-				(if (not word) "" (format " (default %s)" word))))))
-	   (if (string= input "") 
-	       (if (not word) (error "No pydoc args given")
-		 word) ;sinon word
-	     input)))) ;sinon input
-  (shell-command (concat py-python-command " -c \"from pydoc import help;help(\'" w "\')\"") "*PYDOCS*")
-  (view-buffer-other-window "*PYDOCS*" t 'kill-buffer-and-window))
+(autoload 'pylookup-update "pylookup" 
+  "Run pylookup-update and create the database at `pylookup-db-file'." t)
+
   
 ;; http://www.enigmacurry.com/2009/01/21/autocompleteel-python-code-completion-in-emacs/
 ;; Initialize Rope                                                                         
@@ -798,21 +826,6 @@ that was stored with ska-point-to-register."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
 ;;; End Auto Completion                                                                                        
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (defun my-python-documentation (w)
-;;     "Launch PyDOC on the Word at Point"
-;;     (interactive
-;;      (list (let* ((word (thing-at-point 'word))
-;;                                 (input (read-string 
-;;                                                 (format "pydoc entry%s: " 
-;;                                                                 (if (not word) "" (format " (default %s)" word))))))
-;;                    (if (string= input "") 
-;;                            (if (not word) (error "No pydoc args given")
-;;                                  word) ;sinon word
-;;                          input)))) ;sinon input
-;;     (shell-command (concat py-python-command " -c \"from pydoc import help;help(\'" w "\')\"") "*PYDOCS*")
-;;     (view-buffer-other-window "*PYDOCS*" t 'kill-buffer-and-window))
-
-;; (define-key py-mode-map  [(tab)] 'py-complete)
 
 ;=========Ruby 模式
 ;;如果文件后缀名不为.rb，但是脚本第一行有#!ruby之类的说明
@@ -847,7 +860,8 @@ that was stored with ska-point-to-register."
   (sql-mysql-completion-init)))
 
 ;==========YAML 模式
-(autoload 'yaml-mode "yaml mode")
+(require 'yaml-mode)  
+(add-hook 'yaml-mode-hook '(lambda () (define-key yaml-mode-map "\C-m" 'newline-and-indent))) 
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;==========ELisp 模式
@@ -869,14 +883,10 @@ that was stored with ska-point-to-register."
 	       try-expand-whole-kill))))
 
 ;=========Shell 模式
-;; Put this file into your load-path and the following into your ~/.emacs:
 (require 'shell-completion)
 (require 'shell-history)
-(require 'flymake-shell)
-(add-hook 'sh-mode-hook 'flymake-shell-load)
-;; (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-;; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-;; (setq ansi-color-for-comint-mode t)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on) ;; make the shell mode highlight
+(setq comint-prompt-read-only t) ;; to make the the shell prompt readonly
 
 ;;=========yasnipet mode
 (require 'yasnippet) ;; not yasnippet-bundle
@@ -996,6 +1006,7 @@ that was stored with ska-point-to-register."
 (require 'flymake)
 (load-library "flymake-cursor") 
 (global-set-key "\C-c\C-e" 'flymake-goto-next-error)
+(setq flymake-gui-warnings-enabled nil)
 
 (defun flymake-create-temp-intemp (file-name prefix)
   "Return file name in temporary directory for checking FILE-NAME.
@@ -1024,10 +1035,13 @@ makes)."
     (flymake-log 3 "create-temp-intemp: file=%s temp=%s" file-name temp-name)
     temp-name))
 
+(require 'flymake-shell)
+(add-hook 'sh-mode-hook 'flymake-shell-load)
+
 ;; Invoke ruby with '-c' to get syntax checking
 (defun flymake-ruby-init ()
   (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
+                       'flymake-create-temp-intemp))
 	 (local-file  (file-relative-name
                        temp-file
                        (file-name-directory buffer-file-name))))
@@ -1045,24 +1059,37 @@ makes)."
 		 (flymake-mode))
 	     ))
 
-(when (load "flymake" t)
-      (defun flymake-pylint-init ()
-        (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                           'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-          (list "epylint" (list local-file))))
-    
-      (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pylint-init)))
+(defun flymake-pylint-init ()
+  (let* ((temp-file (flymake-init-create-temp-buffer-copy
+		     'flymake-create-temp-intemp))
+	 (local-file (file-relative-name
+		      temp-file
+		      (file-name-directory buffer-file-name))))
+    (list "epylint" (list local-file))))
 
+
+;; (add-to-list 'flymake-allowed-file-name-masks
+;; 	     '("\\.py\\'" flymake-pylint-init))
+
+(when (load "flymake" t) 
+  (defun flymake-pyflakes-init () 
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy 
+		       'flymake-create-temp-intemp)) 
+	   (local-file (file-relative-name 
+			temp-file 
+			(file-name-directory buffer-file-name)))) 
+      (list "pyflakes" (list local-file)))) 
+
+  (add-to-list 'flymake-allowed-file-name-masks 
+	       '("\\.py\\'" flymake-pyflakes-init))) 
+
+(add-hook 'find-file-hook 'flymake-find-file-hook)
 ;;========git=====================================
- (require 'vc-git)
- (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
- (require 'git)
- (autoload 'git-blame-mode "git-blame"
-           "Minor mode for incremental blame for Git." t)
+ ;; (require 'vc-git)
+ ;; (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
+ ;; (require 'git)
+ ;; (autoload 'git-blame-mode "git-blame"
+ ;;           "Minor mode for incremental blame for Git." t)
 
 ;;=======color-moccur=============================
 (load "color-moccur")
@@ -1087,3 +1114,12 @@ makes)."
 ;; (global-set-key "\C-c\C-o" 'search-buffers)
 
 ;;========init.el end here
+
+;;========org mode==============================
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-hide-leading-stars t)
+(setq org-log-done t)
+(require 'jira)
+;;=======org mode end here======================
