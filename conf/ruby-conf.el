@@ -14,8 +14,7 @@
             (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
             (inf-ruby-keys)
 ;; ))
-(define-key ruby-mode-map "\r" 'newline-and-indent)
-
+(define-key ruby-mode-map "\r" 'ruby-reindent-then-newline-and-indent)
 
 (defun ruby-eval-buffer ()
   (interactive)
@@ -43,3 +42,4 @@
        (format "Error found in file \"%s\" on line %s. "  file line))
       (find-file (concat rails-root file))
       (goto-line (string-to-number line)))))
+

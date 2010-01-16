@@ -23,9 +23,11 @@
 (add-to-list 'load-path "~/.emacs.d/html-helper/")
 (add-to-list 'load-path "~/.emacs.d/weblogger/")
 (add-to-list 'load-path "~/.emacs.d/icicles/")
-(add-to-list 'load-path "~/.emacs.d/pylookup/")
+;; (add-to-list 'load-path "~/.emacs.d/pylookup/")
 (add-to-list 'load-path "~/.emacs.d/yaml-mode/")
-(setq ri-ruby-script "/home/zigler/.emacs.d/misc/ri-emacs.rb")
+(defvar ri-ruby-script "/home/zigler/.emacs.d/misc/ri-emacs.rb"
+  "RI ruby script")
+
 (autoload 'ri "/home/zigler/.emacs.d/misc/ri-ruby.el" nil t)
 
 ;; add git support(only in debian)
@@ -158,7 +160,7 @@
 
 ;;=======基本设置 start
 (server-start)
-(setq default-major-mode 'text-mode)
+(setq major-mode 'text-mode)
 (setq-default abbrev-mode t
 	      ;; paredit-mode t
 	      kill-whole-line t        			; 在行首 C-k 时，同时删除该行。
@@ -243,7 +245,7 @@
 
 ;;==============auto-fill
 ;;把 fill-column 设为 80. 这样的文字更好读。
-(setq default-fill-column 80)
+(setq fill-column 80)
 ;;;; 解决中英文混排不能正确fill的问题
 ;;(put-charset-property ’chinese-cns11643-5 ’nospace-between-words t)
 ;;(put-charset-property ’chinese-cns11643-6 ’nospace-between-words t)
@@ -551,7 +553,7 @@ that was stored with ska-point-to-register."
 	("\\.texi\\'"       . "makeinfo %f")
 ;; 	("\\.mp\\'"         . "mptopdf %f")
 	("\\.pl\\'"         . "perl -cw %f")
-	("\\.rb\\'"         . "ruby %f")
+	("\\.rb\\'"         . "ruby -w %f")
 ;; ;    ("\\.skb$"              .       "skribe %f -o %n.html")
 ;; ;    (haskell-mode           .       "ghc -o %n %f")
 ;; ;    (asy-mode               .       (call-interactively 'asy-compile-view))
@@ -740,7 +742,7 @@ that was stored with ska-point-to-register."
 	    (set (make-local-variable 'ac-find-function) 'ac-python-find)
 	    (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
 	    (set (make-local-variable 'ac-auto-start) nil)))
-(require 'pylookup)
+;; (require 'pylookup)
 (setq pylookup-dir "/home/zigler/.emacs.d/pylookup")
 ;; set executable file and db file
 (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
@@ -851,6 +853,16 @@ that was stored with ska-point-to-register."
           (lambda()
             (load-file "~/.emacs.d/conf/ruby-conf.el")))
 
+(when (locate-library "irbsh")
+  (autoload 'irbsh "irbsh" "irbsh - IRB.extend ShellUtilities" t)
+  (autoload 'irbsh-oneliner-with-completion "irbsh" "irbsh oneliner" t))
+(when (locate-library "irbsh-toggle")
+  (autoload 'irbsh-toggle "irbsh-toggle" 
+    "Toggles between the *irbsh*1 buffer and whatever buffer you are editing."
+    t)
+  (autoload 'irbsh-toggle-cd "irbsh-toggle" 
+    "Pops up a irbsh-buffer and insert a \"cd <file-dir>\" command." t))
+
 ;=========SQL模式
 (autoload 'mysql "mysql")
 (autoload 'sql-completion "sql completion")
@@ -888,69 +900,6 @@ that was stored with ska-point-to-register."
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on) ;; make the shell mode highlight
 (setq comint-prompt-read-only t) ;; to make the the shell prompt readonly
 
-;;=========yasnipet mode
-(require 'yasnippet) ;; not yasnippet-bundle
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/snippets/")
-(if window-system
-    (progn
-      (setq yas/window-system-popup-function
-	    'yas/x-popup-menu-for-template)))
-
-(require 'smart-snippet)
-;; those non-word snippet can't be triggered by abbrev expand, we
-;; need to bind them explicitly to some key
-(smart-snippet-with-abbrev-tables
- (c++-mode-abbrev-table
-  c-mode-abbrev-table
-  java-mode-abbrev-table
-  ruby-mode-abbrev-table
-;;   js2-mode-abbrev-table
-  python-mode-abbrev-table)
- ("{" "{$.}" '(not (c-in-literal)))
- ("{" "{$>\n$>$.\n}$>" 'bol?)
- ;; if not in comment or other stuff(see `c-in-literal'), then
- ;; inser a pair of quote. if already in string, insert `\"'
- ("\"" "\"$.\"" '(not (c-in-literal)))	
- ("\"" "\\\"$." '(eq (c-in-literal) 'string))
- ;; insert a pair of parenthesis, useful everywhere
- ("(" "($.)" t)
- ;; insert a pair of angular bracket if we are writing templates
- ("<" "<$.>" '(and (not (c-in-literal))
-		   (looking-back "template[[:blank:]]*")))
- ;; a pair of square bracket, also useful everywhere
- ("[" "[$.]" t)
- ;; a pair of single quote, if not in literal
- ("'" "'$.'" '(not (c-in-literal)))
- ("," ", " '(not (c-in-literal)))
- )
-
-(smart-snippet-with-abbrev-tables
- (ruby-mode-abbrev-table)
- ("/" "/$./" '(not (c-in-literal)))
- )
-
-
-(smart-snippet-with-keymaps
- ((c++-mode-map c++-mode-abbrev-table)
-  (c-mode-map c-mode-abbrev-table)
-  (java-mode-map java-mode-abbrev-table)
-  (ruby-mode-map ruby-mode-abbrev-table)
-  (python-mode-map python-mode-abbrev-table))
-  ("{" "{")
-  ("\"" "\"")
-  ("(" "(")
-  ("<" "<")
-  ("[" "[")
-  ("'" "'"))
-;; (local-set-key "("
-;;                '(lambda ()
-;;                   (interactive)
-;;                   (yas/expand-snippet (point) (point) "($0)"))) 
-;; (local-set-key "\""
-;;                '(lambda ()
-;;                   (interactive)
-;;                   (yas/expand-snippet (point) (point) "\"$0\""))) 
 
 ;;========lftp
 ;; If you want use with lftp, put this to .emacs
@@ -1121,5 +1070,74 @@ makes)."
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-hide-leading-stars t)
 (setq org-log-done t)
-(require 'jira)
+;; (require 'jira)
 ;;=======org mode end here======================
+
+;;=========yasnipet mode
+(require 'yasnippet) ;; not yasnippet-bundle
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/snippets/")
+(if window-system
+    (progn
+      (setq yas/window-system-popup-function
+	    'yas/x-popup-menu-for-template)))
+
+(require 'smart-snippet)
+;; those non-word snippet can't be triggered by abbrev expand, we
+;; need to bind them explicitly to some key
+(smart-snippet-with-abbrev-tables
+ (c++-mode-abbrev-table
+  c-mode-abbrev-table
+  java-mode-abbrev-table
+  ruby-mode-abbrev-table
+  ;;   js2-mode-abbrev-table
+  python-mode-abbrev-table)
+ ("{" "{$.}" '(not (c-in-literal)))
+ ("{" "{$>\n$>$.\n}$>" 'bol?)
+ ;; if not in comment or other stuff(see `c-in-literal'), then
+ ;; inser a pair of quote. if already in string, insert `\"'
+ ("\"" "\"$.\"" '(not (c-in-literal)))	
+ ("\"" "\\\"$." '(eq (c-in-literal) 'string))
+ ;; insert a pair of parenthesis, useful everywhere
+ ("(" "($.)" t)
+ ;; insert a pair of angular bracket if we are writing templates
+ ("<" "<$.>" '(and (not (c-in-literal))
+		   (looking-back "template[[:blank:]]*")))
+ ;; a pair of square bracket, also useful everywhere
+ ("[" "[$.]" t)
+ ;; a pair of single quote, if not in literal
+ ("'" "'$.'" '(not (c-in-literal)))
+ ("," ", " '(not (c-in-literal)))
+ )
+
+(smart-snippet-with-abbrev-tables
+ (ruby-mode-abbrev-table)
+ ("/" "/$./" '(not (c-in-literal)))
+ ("|" "|$.|" '(not (c-in-literal)))
+ )
+
+(smart-snippet-with-keymaps
+ ((ruby-mode-map ruby-mode-abbrev-table))
+ ("/" "/")
+ ("|" "|"))
+
+(smart-snippet-with-keymaps
+ ((c++-mode-map c++-mode-abbrev-table)
+  (c-mode-map c-mode-abbrev-table)
+  (java-mode-map java-mode-abbrev-table)
+  (ruby-mode-map ruby-mode-abbrev-table)
+  (python-mode-map python-mode-abbrev-table))
+ ("{" "{")
+ ("\"" "\"")
+ ("(" "(")
+ ("<" "<")
+ ("[" "[")
+ ("'" "'"))
+;; (local-set-key "("
+;;                '(lambda ()
+;;                   (interactive)
+;;                   (yas/expand-snippet (point) (point) "($0)"))) 
+;; (local-set-key "\""
+;;                '(lambda ()
+;;                   (interactive)
+;;                   (yas/expand-snippet (point) (point) "\"$0\""))) 
