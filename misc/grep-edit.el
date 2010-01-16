@@ -1,7 +1,7 @@
 ;;; grep-edit --- edit grep buffer and apply the changes to files
 ;; -*- Mode: Emacs-Lisp -*-
 
-;;  $Id: grep-edit.el,v 2.6 2007/11/04 13:37:15 akihisa Exp $
+;;  $Id: grep-edit.el,v 2.11 2009-10-20 12:12:55 akihisa Exp $
 
 ;; Author: Matsushita Akihisa <akihisa@mail.ne.jp>
 ;; Keywords: grep edit
@@ -37,18 +37,35 @@
 ;; The latest version of this program can be downloaded from
 ;; http://www.bookshelf.jp/elc/grep-edit.el
 
+;; related my elisp
+;; http://www.bookshelf.jp/elc/color-grep.el
+;; http://www.bookshelf.jp/elc/color-moccur.el
+;; http://www.bookshelf.jp/elc/moccur-edit.el
+
 ;; Usage:
-;; You can start editing the text on *grep* buffer. And the changed
-;; text is highlighted
-;; C-c C-e : apply the highlighting changes to file.
-;; C-c C-u : abort
-;; C-c C-r : Remove the highlight in the region
+;; You can edit the text on *grep* buffer, and the changed text is
+;; highlighted. Then, type C-c C-e to apply the highlighting changes
+;; to files.
+
+;; C-c C-e : apply the highlighting changes to files.
+;; C-c C-u : All changes are ignored
+;; C-c C-r : Remove the highlight in the region (The Changes doesn't
+;; apply to files. Of course, if you type C-c C-e, the remained
+;; highlight changes are applied to files.)
 
 ;;; History:
 
 ;; grep-edit 1.0 was released to the net on 12/03/2002
-
 ;;; Code:
+
+(defgroup grep-edit nil
+  "Customize grep-edit"
+  :group 'grep)
+
+(defcustom grep-edit-change-readonly-file nil
+  "*Non-nil means to change read only files."
+  :group 'grep-edit
+  :type 'boolean)
 
 (defface grep-edit-face
   '((((class color)
@@ -59,7 +76,8 @@
      (:background "ForestGreen" :bold t))
     (t
      ()))
-  "*Face used for the changed text on grep buffer.")
+  "*Face used for the changed text on grep buffer."
+  :group 'grep-edit)
 
 (defface grep-edit-file-face
   '((((class color)
@@ -70,7 +88,8 @@
      (:background "ForestGreen" :bold t))
     (t
      ()))
-  "*Face used for the changed text on file buffer.")
+  "*Face used for the changed text on file buffer."
+  :group 'grep-edit)
 
 (defface grep-edit-reject-face
   '((((class color)
@@ -81,7 +100,8 @@
      (:foreground "red" :bold t))
     (t
      ()))
-  "*Face used for the line on grep buffer that can not apply to file.")
+  "*Face used for the line on grep buffer that can not apply to file."
+  :group 'grep-edit)
 
 (defface grep-edit-done-face
   '((((class color)
@@ -92,7 +112,8 @@
      (:foreground "blue" :bold t))
     (t
      ()))
-  "*Face used for the line on grep buffer that can apply to file.")
+  "*Face used for the line on grep buffer that can apply to file."
+  :group 'grep-edit)
 
 (defvar grep-edit-overlays nil)
 (defvar grep-edit-file-overlays nil)
@@ -104,7 +125,6 @@
 (add-hook 'grep-setup-hook
           (lambda ()
             (define-key grep-mode-map "\M-r" 'grep-narrow-down)
-            (define-key grep-mode-map '[up] 'color-grep-prev)
             (define-key grep-mode-map " "
               'self-insert-command)
             (define-key grep-mode-map [backspace]
@@ -137,9 +157,9 @@
          (string= process-status "exit"))
         (progn
           (toggle-read-only)
+          (buffer-enable-undo (current-buffer))
           (grep-edit-set-readonly-area t)
-          (setq grep-edit-change-face-flg t)
-          ))))
+          (setq grep-edit-change-face-flg t)))))
 
 (defun grep-edit-set-readonly-area (state)
   (let ((inhibit-read-only t) beg end)
@@ -171,12 +191,14 @@
             (setq ov (cdr ov)))
           (if exist-ovelays
               ()
-            (setq ov (make-overlay (line-beginning-position) (+ 1 (line-end-position))))
+            (setq ov
+                  (make-overlay
+                   (line-beginning-position)
+                   (+ 1 (line-end-position))))
             (overlay-put ov 'grep-edit t)
             (overlay-put ov 'face 'grep-edit-face)
             (overlay-put ov 'priority 0)
-            (setq grep-edit-overlays (cons ov grep-edit-overlays))
-            )))))
+            (setq grep-edit-overlays (cons ov grep-edit-overlays)))))))
 
 (defvar grep-edit-filename "")
 (defvar grep-edit-line "")
@@ -217,8 +239,7 @@
       (if (get-file-buffer (expand-file-name grep-edit-filename))
           (get-file-buffer (expand-file-name grep-edit-filename))
         (find-file-noselect grep-edit-filename))
-    nil)
-  )
+    nil))
 
 (defun grep-edit-check-file ()
   "*check the file status. If it is impossible to change file, return t"
@@ -227,17 +248,16 @@
     nil)
    ((not (file-exists-p grep-edit-filename))
     nil)
-   (t t)
-   ))
+   (t t)))
 
 (defun grep-edit-change-file ()
   "*The changes on the grep buffer apply to the file"
-  (goto-line grep-edit-line)
-  (beginning-of-line)
-  (delete-region (line-beginning-position)
-                 (line-end-position))
-  (insert grep-edit-text)
-  )
+  (let ((inhibit-read-only grep-edit-change-readonly-file))
+    (goto-line grep-edit-line)
+    (beginning-of-line)
+    (delete-region (line-beginning-position)
+                   (line-end-position))
+    (insert grep-edit-text)))
 
 (defun grep-edit-put-color-file ()
   "*Highlight the changed line of the file"
@@ -323,7 +343,7 @@ commands.  This advice only has effect in grep-edit mode."
       ,(format "Make %s to work better with grep-edit,\n%s."  command
                "skipping read-only matches when invoked without argument")
       ad-do-it
-      (if (eq major-mode 'compilation-mode)
+      (if (eq major-mode 'grep-mode)
           (while (and ad-return-value
                       (text-property-any
                        (max 1 (1- (match-beginning 0))) (match-end 0)
@@ -339,11 +359,11 @@ commands.  This advice only has effect in grep-edit mode."
    `(defadvice ,command (around grep-edit-grok-read-only activate)
       ,(format "Make %s to work better with grep-edit,\n%s."  command
                "skipping read-only matches when invoked without argument")
-      (if (eq major-mode 'compilation-mode)
+      (if (eq major-mode 'grep-mode)
           (progn
             (grep-edit-add-skip-in-replace 'search-forward)
             (grep-edit-add-skip-in-replace 're-search-forward)
-            (unwind-protect 
+            (unwind-protect
                 ad-do-it
               (progn
                 (ad-remove-advice 'search-forward

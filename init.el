@@ -30,17 +30,12 @@
 
 (autoload 'ri "/home/zigler/.emacs.d/misc/ri-ruby.el" nil t)
 
-;; add git support(only in debian)
-;; (setq load-path (cons (expand-file-name "/usr/share/doc/git-core/contrib/emacs") load-path))
-
-
 
 ;;========调用公用模块
 (load-library "vc-svn")
 ;; (autoload 'senator-try-expand-semantic "senator")
 ;; (autoload 'two-mode-mode "two mode mode")
 (autoload 'cl "cl")
-;; (autoload 'magit-status "magit" nil t)
 ;; (require 'paredit)
 (require 'grep-edit)
 (require 'color-moccur)
