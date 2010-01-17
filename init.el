@@ -17,6 +17,8 @@
 ;;default for 23
 (add-to-list 'load-path "~/.emacs.d/misc/")
 (add-to-list 'load-path "~/.emacs.d/git-emacs/")
+(add-to-list 'load-path "~/.emacs.d/conf/")
+
 (add-to-list 'load-path "~/.emacs.d/sql/")
 (add-to-list 'load-path "~/.emacs.d/emacs-rails/")
 (add-to-list 'load-path "~/.emacs.d/python-mode/")
@@ -25,28 +27,27 @@
 (add-to-list 'load-path "~/.emacs.d/icicles/")
 ;; (add-to-list 'load-path "~/.emacs.d/pylookup/")
 (add-to-list 'load-path "~/.emacs.d/yaml-mode/")
-(defvar ri-ruby-script "/home/zigler/.emacs.d/misc/ri-emacs.rb"
-  "RI ruby script")
-
-(autoload 'ri "/home/zigler/.emacs.d/misc/ri-ruby.el" nil t)
 
 
 ;;========调用公用模块
 (load-library "vc-svn")
-;; (autoload 'senator-try-expand-semantic "senator")
-;; (autoload 'two-mode-mode "two mode mode")
 (autoload 'cl "cl")
-;; (require 'paredit)
+(autoload 'smart-compile "smart-compile" nil t)
+(require 'ido)
+(require 'unicad)
+(require 'tramp)
+(fmakunbound 'git-status)   ; Possibly remove Debian's autoloaded version
+(require 'git-emacs-autoloads)
+(autoload 'git-status "git-status"
+  "Launch git-emacs's status mode on the specified directory." t)
+
+(require 'ruby-mode)
 (require 'grep-edit)
 (require 'color-moccur)
-(require 'smart-compile)
 (require 'fvwm-mode)
 (require 'weblogger)
-(require 'unicad)
 (require 'muse)
 (require 'htmlize)
-(require 'ido)
-(require 'tramp)
 (require 'ange-ftp)
 (require 'speedbar)
 (require 'tabbar)
@@ -54,24 +55,21 @@
 (require 'doxymacs)
 (require 'regex-tool)
 (require 'xcscope)
-(require 'ruby-mode)
-;; (require 'ede)
 (require 'uniquify)
 (require 'sr-speedbar)
 (require 'install-elisp)
 (require 'template)
-(require 'git-emacs)
-(require 'git-status)
-
 (template-initialize)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
 (dolist (cmd '(ido-select-text ido-magic-forward-char
                                ido-exit-minibuffer))
   (add-to-list 'template-find-file-commands cmd))
 
-
+;; (autoload 'senator-try-expand-semantic "senator")
+;; (autoload 'two-mode-mode "two mode mode")
+;; (require 'paredit)
+;; (require 'ede)
 ;; (require 'ecb)
-;; (require 'setnu+)	
 ;; (require 'two-mode-mode)
 
 ;;私人信息,if you are not author please comment this line
@@ -825,18 +823,12 @@ that was stored with ska-point-to-register."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;=========Ruby 模式
-;;如果文件后缀名不为.rb，但是脚本第一行有#!ruby之类的说明
-;;也相应调用此ruby模式
-(autoload 'ruby-electric "ruby electric")
-(autoload 'rails "rails mode")
-;;调用inf-ruby
-(autoload 'run-ruby "inf-ruby"
-      "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-      "Set local key defs for inf-ruby in ruby-mode")
+
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode))
               auto-mode-alist))
+;;如果文件后缀名不为.rb，但是脚本第一行有#!ruby之类的说明
+;;也相应调用此ruby模式
 (setq interpreter-mode-alist
       (append '(("ruby" . ruby-mode))
               interpreter-mode-alist))
@@ -846,17 +838,9 @@ that was stored with ska-point-to-register."
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
 (add-hook 'ruby-mode-hook
           (lambda()
-            (load-file "~/.emacs.d/conf/ruby-conf.el")))
+	    (require 'ruby-conf)))
+            ;; (load-file "~/.emacs.d/conf/ruby-conf.el")))
 
-(when (locate-library "irbsh")
-  (autoload 'irbsh "irbsh" "irbsh - IRB.extend ShellUtilities" t)
-  (autoload 'irbsh-oneliner-with-completion "irbsh" "irbsh oneliner" t))
-(when (locate-library "irbsh-toggle")
-  (autoload 'irbsh-toggle "irbsh-toggle" 
-    "Toggles between the *irbsh*1 buffer and whatever buffer you are editing."
-    t)
-  (autoload 'irbsh-toggle-cd "irbsh-toggle" 
-    "Pops up a irbsh-buffer and insert a \"cd <file-dir>\" command." t))
 
 ;=========SQL模式
 (autoload 'mysql "mysql")
@@ -868,7 +852,6 @@ that was stored with ska-point-to-register."
 
 ;==========YAML 模式
 (require 'yaml-mode)  
-(add-hook 'yaml-mode-hook '(lambda () (define-key yaml-mode-map "\C-m" 'newline-and-indent))) 
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;==========ELisp 模式
