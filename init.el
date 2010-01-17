@@ -31,27 +31,23 @@
 
 ;;========调用公用模块
 (load-library "vc-svn")
-(autoload 'cl "cl")
+(autoload 'fvwm-mode "fvwm-mode" nil t)
+(autoload 'cl "cl" nil)
 (autoload 'smart-compile "smart-compile" nil t)
+(autoload 'git-status "git-status"
+  "Launch git-emacs's status mode on the specified directory." t)
 (require 'ido)
 (require 'unicad)
 (require 'tramp)
 (fmakunbound 'git-status)   ; Possibly remove Debian's autoloaded version
 (require 'git-emacs-autoloads)
-(autoload 'git-status "git-status"
-  "Launch git-emacs's status mode on the specified directory." t)
 
-(require 'ruby-mode)
-(require 'grep-edit)
-(require 'color-moccur)
-(require 'fvwm-mode)
 (require 'weblogger)
 (require 'muse)
 (require 'htmlize)
 (require 'ange-ftp)
 (require 'speedbar)
 (require 'tabbar)
-(require 'cc-mode)
 (require 'doxymacs)
 (require 'regex-tool)
 (require 'xcscope)
@@ -59,12 +55,18 @@
 (require 'sr-speedbar)
 (require 'install-elisp)
 (require 'template)
+(require 'color-moccur)
+(require 'cc-mode)
+(require 'ruby-mode)
+
 (template-initialize)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
 (dolist (cmd '(ido-select-text ido-magic-forward-char
                                ido-exit-minibuffer))
   (add-to-list 'template-find-file-commands cmd))
 
+;; (require 'color-moccur)
+;; (require 'grep-edit)
 ;; (autoload 'senator-try-expand-semantic "senator")
 ;; (autoload 'two-mode-mode "two mode mode")
 ;; (require 'paredit)
@@ -410,6 +412,7 @@ that was stored with ska-point-to-register."
 (global-set-key  (kbd "C-x C-b") 'ibuffer-other-window)
 ;; (define-key c++-mode-map (kbd "<tab>") 'c-indent-command)
 ;; tabbar键盘绑定
+(global-set-key (kbd "\C-c\C-r") 'eval-print-last-sexp)
 (global-set-key (kbd "\C-cbp") 'tabbar-backward-group)
 (global-set-key (kbd "\C-cbn") 'tabbar-forward-group)
 (global-set-key (kbd "\C-cbj") 'tabbar-backward)
@@ -485,6 +488,10 @@ that was stored with ska-point-to-register."
 (global-set-key [\C-S-f4] 'ecb-deactivate)     ;退出ECB
 
 ;;使用ecb: http://blog.csdn.net/xiaoliangbuaa/archive/2007/01/10/1479577.aspx
+;;===========grep配置
+(add-hook 'grep-mode-hook
+	  (lambda()
+	    (require 'grep-edit)))
 
 ;;=========c/c++模式
 (add-hook 'c-mode-common-hook
@@ -696,7 +703,7 @@ that was stored with ska-point-to-register."
 (setq js2-use-font-lock-faces t)
 
 ;=========python mode
-(require 'pymacs)
+;; (require 'pymacs)
 ;; (require 'pymacs-load)
 ;; (autoload 'py-complete-init "py-complete")
 ;; (add-hook 'python-mode-hook 'py-complete-init)
@@ -978,13 +985,12 @@ makes)."
 (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
-
 (add-hook 'ruby-mode-hook
           '(lambda ()
 	     ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
 	     (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
-		 (flymake-mode))
-	     ))
+		 (flymake-mode))))
+
 
 (defun flymake-pylint-init ()
   (let* ((temp-file (flymake-init-create-temp-buffer-copy
@@ -1019,11 +1025,11 @@ makes)."
  ;;           "Minor mode for incremental blame for Git." t)
 
 ;;=======color-moccur=============================
-(load "color-moccur")
 (setq *moccur-buffer-name-exclusion-list*
       '(".+TAGS.+" "*Completions*" "*Messages*"
-        "newsrc.eld" ".bbdb"))
-(setq moccur-split-word t)
+	"newsrc.eld" ".bbdb"))
+(setq moccur-split-word t)))
+
 ;; (setq dmoccur-use-list t)
 ;; (setq dmoccur-use-project t)
 ;; (setq dmoccur-list

@@ -1,14 +1,14 @@
+;;调用inf-ruby
+(require 'inf-ruby)
+(require 'rcodetools)
+(setenv "PATH" (concat "/var/lib/gems/1.8/bin:"
+		       (getenv "PATH") )  )
 (autoload 'ruby-electric "ruby electric")
 (autoload 'rails "rails mode")
-;;调用inf-ruby
-(autoload 'run-ruby "inf-ruby"
-  "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-  "Set local key defs for inf-ruby in ruby-mode")
 (defvar ri-ruby-script "/home/zigler/.emacs.d/misc/ri-emacs.rb"
   "RI ruby script")
 
-(autoload 'ri "/home/zigler/.emacs.d/misc/ri-ruby.el" nil t)
+(autoload 'ri "ri-ruby" nil t)
 
 (when (locate-library "irbsh")
   (autoload 'irbsh "irbsh" "irbsh - IRB.extend ShellUtilities" t)
@@ -24,8 +24,7 @@
 	  '(lambda()
 	     (save-excursion
 	       (untabify (point-min) (point-max))
-	       (delete-trailing-whitespace)
-	       )))
+	       (delete-trailing-whitespace))))
 (set (make-local-variable 'indent-tabs-mode) 'nil)
 (set (make-local-variable 'tab-width) 2)
 (imenu-add-to-menubar "IMENU")
@@ -33,6 +32,10 @@
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
 (inf-ruby-keys)
 (define-key ruby-mode-map "\r" 'ruby-reindent-then-newline-and-indent)
+;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
+(if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
+    (flymake-mode))
+
 
 (defun ruby-eval-buffer ()
   (interactive)
@@ -60,5 +63,17 @@
        (format "Error found in file \"%s\" on line %s. "  file line))
       (find-file (concat rails-root file))
       (goto-line (string-to-number line)))))
+
+;; Invoke ruby with '-c' to get syntax checking
+(defun flymake-ruby-init ()
+  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-intemp))
+	 (local-file  (file-relative-name
+                       temp-file
+                       (file-name-directory buffer-file-name))))
+    (list "ruby" (list "-c" local-file))))
+
+
+(push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
 
 (provide 'ruby-conf)
