@@ -41,7 +41,7 @@
 ;; 	    (define-key LaTeX-mode-map [(tab)]  'cdlatex-tab)
 	    (outline-minor-mode)))
 
-(setq fill-column 72) ;;与A4纸一行字数相同
+(setq (make-local-variable 'fill-column) 72) ;;与A4纸一行字数相同
 ;;reftex-mode
 ;;把beamer的frametitle也放入reftex目录缓冲中，但需要把\frametitle写在行首
 (setq reftex-section-levels
