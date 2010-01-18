@@ -43,7 +43,6 @@
 (autoload 'git-status "git-status"
   "Launch git-emacs's status mode on the specified directory." t)
 
-(require 'weblogger)
 (require 'muse)
 (require 'htmlize)
 (require 'ange-ftp)
@@ -451,7 +450,6 @@ that was stored with ska-point-to-register."
         try-complete-lisp-symbol
         try-expand-whole-kill))
 
-
 ;;=========ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
 
@@ -711,6 +709,8 @@ that was stored with ska-point-to-register."
 
 ;;==========weblogger
 ;; (setq weblogger-entry-mode-hook 'html-mode)
+(autoload 'weblogger-start-entry "weblogger" nil t)
+
 (global-set-key "\C-cbs" 'weblogger-start-entry)
 
 ;;;; anything.el
