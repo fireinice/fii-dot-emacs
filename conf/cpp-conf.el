@@ -1,3 +1,4 @@
+(provide 'cpp-conf)
 (require 'eassist)
 (require 'doxymacs)
 (add-hook 'font-lock-mode-hook

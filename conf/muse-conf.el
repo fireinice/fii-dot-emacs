@@ -1,4 +1,5 @@
 ;;; muse-conf.el --- Initialize muse-mode.
+(provide 'muse-conf)
 (load-file "~/.emacs.d/muse-config/muse-header-footer.el")
 (require 'muse)          ; load generic module
 (require 'muse-mode nil t)     ; load authoring mode

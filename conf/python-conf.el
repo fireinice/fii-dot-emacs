@@ -11,8 +11,6 @@
 ;; 
 ;;; Change log:
 ;; 
-
-;=========python mode
 (require 'pymacs)
 ;; (require 'pymacs-load)
 ;; (autoload 'py-complete-init "py-complete")
@@ -22,6 +20,7 @@
 (require 'python)
 (require 'auto-complete)
 (require 'ipython)
+(require 'smart-snippets-conf)
 (setq py-python-command-args '( "-colors" "Linux"))
 ;; Initialize Pymacs
 (autoload 'pymacs-apply "pymacs")
@@ -32,33 +31,44 @@
 
 (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
 (setq interpreter-mode-alist (cons '("python" . python-mode)
-				   interpreter-mode-alist))
+                                   interpreter-mode-alist))
 
-(add-hook 'python-mode-hook
-	  (lambda ()
-	    (auto-complete-mode 1)
-	    (setq tab-width 4 indent-tabs-mode nil)
+(auto-complete-mode 1)
+(setq tab-width 4 indent-tabs-mode nil)
 ;; 	    (which-function-mode t)
-	    (hs-minor-mode 1)
+(hs-minor-mode 1)
+(flymake-mode 1)
 ;; 	    (py-shell 1)
-	    (abbrev-mode t)
-	    (set (make-variable-buffer-local 'beginning-of-defun-function)
-		 'py-beginning-of-def-or-class)
-	    (setq outline-regexp "def\\|class ")
-	    (set (make-local-variable 'ac-sources)
-		 (append ac-sources '(ac-source-rope)
-			 '(ac-source-yasnippet)))
-			 ;; ))
-	    (set (make-local-variable 'ac-find-function) 'ac-python-find)
-	    (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
-	    (set (make-local-variable 'ac-auto-start) nil)
-))
- 
+(abbrev-mode t)
+(set (make-variable-buffer-local 'beginning-of-defun-function)
+     'py-beginning-of-def-or-class)
+(setq outline-regexp "def\\|class ")
+(set (make-local-variable 'ac-sources)
+     (append ac-sources
+             '(ac-source-yasnippet)
+             '(ac-source-rope)))
+(set (make-local-variable 'ac-find-function) 'ac-python-find)
+(set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
+(set (make-local-variable 'ac-auto-start) nil)
+;; (require 'pylookup)
+(setq pylookup-dir "/home/zigler/.emacs.d/pylookup")
+;; set executable file and db file
+(setq pylookup-program (concat pylookup-dir "/pylookup.py"))
+(setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
+(print 'pylookup-db-file)
+;; to speedup, just load it on demand
+(autoload 'pylookup-lookup "pylookup"
+  "Lookup SEARCH-TERM in the Python HTML indexes." t)
+
+(autoload 'pylookup-update "pylookup" 
+  "Run pylookup-update and create the database at `pylookup-db-file'." t)
+
+
 ;; http://www.enigmacurry.com/2009/01/21/autocompleteel-python-code-completion-in-emacs/
 ;; Initialize Rope                                                                         
 (pymacs-load "ropemacs" "rope-")
 (setq ropemacs-enable-autoimport t)
- 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
 ;;; Auto-completion                                                                                            
 ;;;  Integrates:                                                                                               
@@ -70,12 +80,13 @@
   (let (value)
     (nreverse
      (dolist (element list value)
-      (setq value (cons (format "%s%s" prefix element) value))))))
+       (setq value (cons (format "%s%s" prefix element) value))))))
 (defvar ac-source-rope
   '((candidates
      . (lambda ()
          (prefix-list-elements (rope-completions) ac-target))))
   "Source for Rope")
+
 (defun ac-python-find ()
   "Python `ac-find-function'."
   (require 'thingatpt)
@@ -106,22 +117,21 @@
             (setcdr (nthcdr (1- ac-limit) cand) nil))
         (setq candidates (append candidates cand))))
     (delete-dups candidates)))
- 
+
 ;;Ryan's python specific tab completion                                                                        
+;; Try the following:
+;; 1) Do a yasnippet expansion
+;; 2) Do a Rope code completion
 (defun ryan-python-tab ()
-  ; Try the following:                                                                                         
-  ; 1) Do a yasnippet expansion                                                                                
-  ; 2) Do a Rope code completion                                                                               
-  ; 3) Do an indent                                                                                            
   (interactive)
   (if (eql (ac-start) 0)
       (indent-for-tab-command)))
- 
+
 (defadvice ac-start (before advice-turn-on-auto-start activate)
   (set (make-local-variable 'ac-auto-start) t))
 (defadvice ac-cleanup (after advice-turn-off-auto-start activate)
   (set (make-local-variable 'ac-auto-start) nil))
- 
+
 (define-key python-mode-map [(tab)] 'ryan-python-tab)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
 ;;; End Auto Completion                                                                                        
@@ -164,4 +174,5 @@
 ;;     (view-buffer-other-window "*PYDOCS*" t 'kill-buffer-and-window))
 
 ;; (define-key py-mode-map  [(tab)] 'py-complete)
+
 (provide 'python-conf)

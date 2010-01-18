@@ -1,3 +1,4 @@
+(provide 'auctex-conf)
 (require 'tex-site)
 ;; (require 'preview-latex)
 (autoload 'LaTeX-preview-setup "preview")

@@ -34,13 +34,14 @@
 (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'cl "cl" nil)
 (autoload 'smart-compile "smart-compile" nil t)
-(autoload 'git-status "git-status"
-  "Launch git-emacs's status mode on the specified directory." t)
 (require 'ido)
 (require 'unicad)
 (require 'tramp)
 (fmakunbound 'git-status)   ; Possibly remove Debian's autoloaded version
 (require 'git-emacs-autoloads)
+(autoload 'python-mode "python-mode" "Python editing mode." t)
+(autoload 'git-status "git-status"
+  "Launch git-emacs's status mode on the specified directory." t)
 
 (require 'weblogger)
 (require 'muse)
@@ -48,7 +49,6 @@
 (require 'ange-ftp)
 (require 'speedbar)
 (require 'tabbar)
-(require 'doxymacs)
 (require 'regex-tool)
 (require 'xcscope)
 (require 'uniquify)
@@ -57,7 +57,6 @@
 (require 'template)
 (require 'color-moccur)
 (require 'cc-mode)
-(require 'ruby-mode)
 
 (template-initialize)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
@@ -65,7 +64,7 @@
                                ido-exit-minibuffer))
   (add-to-list 'template-find-file-commands cmd))
 
-;; (require 'color-moccur)
+;; (require 'doxymacs)
 ;; (require 'grep-edit)
 ;; (autoload 'senator-try-expand-semantic "senator")
 ;; (autoload 'two-mode-mode "two mode mode")
@@ -496,14 +495,14 @@ that was stored with ska-point-to-register."
 ;;=========c/c++模式
 (add-hook 'c-mode-common-hook
           (lambda()
-            (load-file "~/.emacs.d/conf/cpp-conf.el")))
+            (require 'cpp-conf)))
 
 ;;========Emacs Muse 模式
 (autoload 'muse-mode "muse-mode")
 (add-to-list 'auto-mode-alist '("\\.muse$" . muse-mode))
 (add-hook 'muse-mode-hook
           (lambda()
-            (load-file "~/.emacs.d/conf/muse-conf.el")))
+            (require 'muse-conf)))
 
 ;;========Gnus 模式
 (setq gnus-inhibit-startup-message t
@@ -516,7 +515,7 @@ that was stored with ska-point-to-register."
 (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil) 
 (add-hook 'TeX-mode-hook
 	  (lambda()
-	    (load-file "~/.emacs.d/conf/auctex-conf.el")))
+	    (require 'auctex-conf)))
 
 ;;=========ediff
 (add-hook 'ediff-mode-hook
@@ -529,68 +528,7 @@ that was stored with ska-point-to-register."
 ;;=========smart-compile
 ;; 智能编译:支持c/c++/elisp/html/muse 绑定到 F9
 (global-set-key (kbd "<f9>") 'smart-compile)
-
-(setq smart-compile-alist
-      '(("/network/asio/.*cpp$" .       "g++ -Wall %f -lm -lboost_thread -o %n")
-;;         ("\\.c\\'"      .   "gcc -Wall %f -lm -o %n")
-;;         ("\\.[Cc]+[Pp]*\\'" .   "g++ -Wall %f -lm -o %n")
-	(emacs-lisp-mode    . (emacs-lisp-byte-compile))
-	(html-mode          . (browse-url-of-buffer))
-	(nxhtml-mode        . (browse-url-of-buffer))
-	(html-helper-mode   . (browse-url-of-buffer))
-	(octave-mode        . (run-octave))
-	("\\.c\\'"          . "gcc -O2 %f -lm -o %n")
-	;;  ("\\.c\\'"          . "gcc -O2 %f -lm -o %n && ./%n")
-	("\\.[Cc]+[Pp]*\\'" . "g++ -O2 %f -lm -o %n")
-	("\\.m\\'"          . "gcc -O2 %f -lobjc -lpthread -o %n")
-	("\\.java\\'"       . "javac %f")
-;; 	("\\.php\\'"        . "php -l %f")
-;; 	("\\.f90\\'"        . "f90 %f -o %n")
-;; 	("\\.[Ff]\\'"       . "f77 %f -o %n")
-;; 	("\\.cron\\(tab\\)?\\'" . "crontab %f")
-;; 	("\\.tex\\'"        . (tex-file))
-	("\\.tex$"          . (TeX-command-master))
-	("\\.texi\\'"       . "makeinfo %f")
-;; 	("\\.mp\\'"         . "mptopdf %f")
-	("\\.pl\\'"         . "perl -cw %f")
-	("\\.rb\\'"         . "ruby -w %f")
-;; ;    ("\\.skb$"              .       "skribe %f -o %n.html")
-;; ;    (haskell-mode           .       "ghc -o %n %f")
-;; ;    (asy-mode               .       (call-interactively 'asy-compile-view))
-        (muse-mode      .   (call-interactively 'muse-project-publish))))
-
-
-(setq smart-run-alist
-      '(("\\.c$"          . "./%n")
-        ("\\.[Cc]+[Pp]*$" . "./%n")
-        ("\\.java$"       . "java %n")
-        ("\\.php$"        . "php %f")
-        ("\\.m$"          . "%f")
-        ("\\.scm"         . "%f")
-        ("\\.tex$"        . "dvisvga %n.dvi")
-        ("\\.py$"         . "python %f")
-        ("\\.pl$"         . "perl \"%f\"")
-        ("\\.pm$"         . "perl \"%f\"")
-        ("\\.bat$"        . "%f")
-        ("\\.mp$"         . "mpost %f")
-        ("\\.ahk$"        . "start d:\\Programs\\AutoHotkey\\AutoHotkey %f")
-        ("\\.sh$"         . "./%f")))
-
-(setq smart-executable-alist
-      '("%n.class"
-        "%n.exe"
-        "%n"
-        "%n.mp"
-        "%n.m"
-        "%n.php"
-        "%n.scm"
-        "%n.dvi"
-        "%n.py"
-        "%n.pl"
-        "%n.ahk"
-        "%n.pm"
-        "%n.bat"
-        "%n.sh"))
+(require 'smart-compile-conf)
 
 (add-hook 'after-save-hook
         #'(lambda ()
@@ -702,134 +640,12 @@ that was stored with ska-point-to-register."
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (setq js2-use-font-lock-faces t)
 
-;=========python mode
-;; (require 'pymacs)
-;; (require 'pymacs-load)
-;; (autoload 'py-complete-init "py-complete")
-;; (add-hook 'python-mode-hook 'py-complete-init)
-(require 'python-mode)
-;; (require 'pycomplete)
-(require 'python)
-(require 'auto-complete)
-;; Initialize Pymacs
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-
-(setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
-(setq interpreter-mode-alist (cons '("python" . python-mode)
-				   interpreter-mode-alist))
-;; (require 'python)
-
+;;=========Ruby 模式
 (add-hook 'python-mode-hook
 	  (lambda ()
-	    (auto-complete-mode 1)
-	    (setq tab-width 4 indent-tabs-mode nil)
-;; 	    (which-function-mode t)
-	    (hs-minor-mode 1)
-	    (flymake-mode 1)
-;; 	    (py-shell 1)
-	    (abbrev-mode t)
-	    (set (make-variable-buffer-local 'beginning-of-defun-function)
-		 'py-beginning-of-def-or-class)
-	    (setq outline-regexp "def\\|class ")
-	    (set (make-local-variable 'ac-sources)
-		 (append ac-sources '(ac-source-rope)
-			 '(ac-source-yasnippet)))
-			 ;; ))
-	    (set (make-local-variable 'ac-find-function) 'ac-python-find)
-	    (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
-	    (set (make-local-variable 'ac-auto-start) nil)))
-;; (require 'pylookup)
-(setq pylookup-dir "/home/zigler/.emacs.d/pylookup")
-;; set executable file and db file
-(setq pylookup-program (concat pylookup-dir "/pylookup.py"))
-(setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
-(print 'pylookup-db-file)
-;; to speedup, just load it on demand
-(autoload 'pylookup-lookup "pylookup"
-  "Lookup SEARCH-TERM in the Python HTML indexes." t)
-
-(autoload 'pylookup-update "pylookup" 
-  "Run pylookup-update and create the database at `pylookup-db-file'." t)
-
-  
-;; http://www.enigmacurry.com/2009/01/21/autocompleteel-python-code-completion-in-emacs/
-;; Initialize Rope                                                                         
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
- 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
-;;; Auto-completion                                                                                            
-;;;  Integrates:                                                                                               
-;;;   1) Rope                                                                                                  
-;;;   2) Yasnippet                                                                                             
-;;;   all with AutoComplete.el                                                                                 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
-(defun prefix-list-elements (list prefix)
-  (let (value)
-    (nreverse
-     (dolist (element list value)
-      (setq value (cons (format "%s%s" prefix element) value))))))
-(defvar ac-source-rope
-  '((candidates
-     . (lambda ()
-         (prefix-list-elements (rope-completions) ac-target))))
-  "Source for Rope")
-(defun ac-python-find ()
-  "Python `ac-find-function'."
-  (require 'thingatpt)
-  (let ((symbol (car-safe (bounds-of-thing-at-point 'symbol))))
-    (if (null symbol)
-        (if (string= "." (buffer-substring (- (point) 1) (point)))
-            (point)
-          nil)
-      symbol)))
-(defun ac-python-candidate ()
-  "Python `ac-candidates-function'"
-  (let (candidates)
-    (dolist (source ac-sources)
-      (if (symbolp source)
-          (setq source (symbol-value source)))
-      (let* ((ac-limit (or (cdr-safe (assq 'limit source)) ac-limit))
-             (requires (cdr-safe (assq 'requires source)))
-             cand)
-        (if (or (null requires)
-                (>= (length ac-target) requires))
-            (setq cand
-                  (delq nil
-                        (mapcar (lambda (candidate)
-                                  (propertize candidate 'source source))
-                                (funcall (cdr (assq 'candidates source)))))))
-        (if (and (> ac-limit 1)
-                 (> (length cand) ac-limit))
-            (setcdr (nthcdr (1- ac-limit) cand) nil))
-        (setq candidates (append candidates cand))))
-    (delete-dups candidates)))
- 
-;;Ryan's python specific tab completion                                                                        
-(defun ryan-python-tab ()
-  ; Try the following:                                                                                         
-  ; 1) Do a yasnippet expansion                                                                                
-  ; 2) Do a Rope code completion                                                                               
-  ; 3) Do an indent                                                                                            
-  (interactive)
-  (if (eql (ac-start) 0)
-      (indent-for-tab-command)))
- 
-(defadvice ac-start (before advice-turn-on-auto-start activate)
-  (set (make-local-variable 'ac-auto-start) t))
-(defadvice ac-cleanup (after advice-turn-off-auto-start activate)
-  (set (make-local-variable 'ac-auto-start) nil))
- 
-(define-key python-mode-map [(tab)] 'ryan-python-tab)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
-;;; End Auto Completion                                                                                        
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;=========Ruby 模式
+	    (require 'python-conf)))
+	    
+;;=========Ruby 模式
 
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode))
@@ -846,7 +662,6 @@ that was stored with ska-point-to-register."
 (add-hook 'ruby-mode-hook
           (lambda()
 	    (require 'ruby-conf)))
-            ;; (load-file "~/.emacs.d/conf/ruby-conf.el")))
 
 
 ;=========SQL模式
@@ -858,7 +673,7 @@ that was stored with ska-point-to-register."
   (sql-mysql-completion-init)))
 
 ;==========YAML 模式
-(require 'yaml-mode)  
+(autoload 'yaml-mode "yaml-mode.el" nil t)  
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;==========ELisp 模式
@@ -1017,18 +832,12 @@ makes)."
 	       '("\\.py\\'" flymake-pyflakes-init))) 
 
 (add-hook 'find-file-hook 'flymake-find-file-hook)
-;;========git=====================================
- ;; (require 'vc-git)
- ;; (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
- ;; (require 'git)
- ;; (autoload 'git-blame-mode "git-blame"
- ;;           "Minor mode for incremental blame for Git." t)
 
 ;;=======color-moccur=============================
 (setq *moccur-buffer-name-exclusion-list*
       '(".+TAGS.+" "*Completions*" "*Messages*"
 	"newsrc.eld" ".bbdb"))
-(setq moccur-split-word t)))
+(setq moccur-split-word t)
 
 ;; (setq dmoccur-use-list t)
 ;; (setq dmoccur-use-project t)
@@ -1046,7 +855,6 @@ makes)."
 ;; (global-set-key "\M-f" 'grep-buffers)
 ;; (global-set-key "\C-c\C-o" 'search-buffers)
 
-;;========init.el end here
 
 ;;========org mode==============================
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -1066,57 +874,6 @@ makes)."
       (setq yas/window-system-popup-function
 	    'yas/x-popup-menu-for-template)))
 
-(require 'smart-snippet)
-;; those non-word snippet can't be triggered by abbrev expand, we
-;; need to bind them explicitly to some key
-(smart-snippet-with-abbrev-tables
- (c++-mode-abbrev-table
-  c-mode-abbrev-table
-  java-mode-abbrev-table
-  ruby-mode-abbrev-table
-  ;;   js2-mode-abbrev-table
-  python-mode-abbrev-table)
- ("{" "{$.}" '(not (c-in-literal)))
- ("{" "{$>\n$>$.\n}$>" 'bol?)
- ;; if not in comment or other stuff(see `c-in-literal'), then
- ;; inser a pair of quote. if already in string, insert `\"'
- ("\"" "\"$.\"" '(not (c-in-literal)))	
- ("\"" "\\\"$." '(eq (c-in-literal) 'string))
- ;; insert a pair of parenthesis, useful everywhere
- ("(" "($.)" t)
- ;; insert a pair of angular bracket if we are writing templates
- ("<" "<$.>" '(and (not (c-in-literal))
-		   (looking-back "template[[:blank:]]*")))
- ;; a pair of square bracket, also useful everywhere
- ("[" "[$.]" t)
- ;; a pair of single quote, if not in literal
- ("'" "'$.'" '(not (c-in-literal)))
- ("," ", " '(not (c-in-literal)))
- )
-
-(smart-snippet-with-abbrev-tables
- (ruby-mode-abbrev-table)
- ("/" "/$./" '(not (c-in-literal)))
- ("|" "|$.|" '(not (c-in-literal)))
- )
-
-(smart-snippet-with-keymaps
- ((ruby-mode-map ruby-mode-abbrev-table))
- ("/" "/")
- ("|" "|"))
-
-(smart-snippet-with-keymaps
- ((c++-mode-map c++-mode-abbrev-table)
-  (c-mode-map c-mode-abbrev-table)
-  (java-mode-map java-mode-abbrev-table)
-  (ruby-mode-map ruby-mode-abbrev-table)
-  (python-mode-map python-mode-abbrev-table))
- ("{" "{")
- ("\"" "\"")
- ("(" "(")
- ("<" "<")
- ("[" "[")
- ("'" "'"))
 ;; (local-set-key "("
 ;;                '(lambda ()
 ;;                   (interactive)
@@ -1125,3 +882,4 @@ makes)."
 ;;                '(lambda ()
 ;;                   (interactive)
 ;;                   (yas/expand-snippet (point) (point) "\"$0\""))) 
+;;========init.el end here
