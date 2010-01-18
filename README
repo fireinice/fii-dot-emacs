@@ -1,3 +1,7 @@
+This configuration package also depend on
+nxhtml, cedet, muse
+but we do not include them in the package, please update them and add them into the load path
+
 packages:
 -
 name: grep-edit.el
