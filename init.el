@@ -11,22 +11,18 @@
 ;;; Change log:
 ;; 
 ;; ========加载路径 start
+;;(load-file "conf/my-function.el")
 (if (string-match "22" (emacs-version))
-    (add-to-list 'load-path "~/.emacs.d/nxhtml/")
-  (require 'linum))
+    (require 'linum))
 ;;default for 23
-(add-to-list 'load-path "~/.emacs.d/misc/")
-(add-to-list 'load-path "~/.emacs.d/git-emacs/")
-(add-to-list 'load-path "~/.emacs.d/conf/")
-
-(add-to-list 'load-path "~/.emacs.d/sql/")
-(add-to-list 'load-path "~/.emacs.d/emacs-rails/")
-(add-to-list 'load-path "~/.emacs.d/python-mode/")
-(add-to-list 'load-path "~/.emacs.d/html-helper/")
-(add-to-list 'load-path "~/.emacs.d/weblogger/")
-(add-to-list 'load-path "~/.emacs.d/icicles/")
-;; (add-to-list 'load-path "~/.emacs.d/pylookup/")
-(add-to-list 'load-path "~/.emacs.d/yaml-mode/")
+;;add all subdirectories into the load-path except start with dot
+(dolist (file-name (directory-files "~/.emacs.d" t))
+  (when (file-directory-p file-name)
+    (unless
+	(equal "."
+	       (substring
+		(file-name-nondirectory file-name) 0 1))
+      (add-to-list 'load-path file-name))))
 
 
 ;;========调用公用模块
@@ -34,24 +30,20 @@
 (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'cl "cl" nil)
 (autoload 'smart-compile "smart-compile" nil t)
+(autoload 'regex-tool "regex-tool" nil t)
 (require 'ido)
 (require 'unicad)
+(require 'ange-ftp) ;req by tramp for ftp protocol
 (require 'tramp)
 (fmakunbound 'git-status)   ; Possibly remove Debian's autoloaded version
 (require 'git-emacs-autoloads)
-(autoload 'python-mode "python-mode" "Python editing mode." t)
 (autoload 'git-status "git-status"
   "Launch git-emacs's status mode on the specified directory." t)
+(require 'my-function) ;load function customized
 
-(require 'muse)
-(require 'htmlize)
-(require 'ange-ftp)
-(require 'speedbar)
+
 (require 'tabbar)
-(require 'regex-tool)
-(require 'xcscope)
 (require 'uniquify)
-(require 'sr-speedbar)
 (require 'install-elisp)
 (require 'template)
 (require 'color-moccur)
@@ -64,14 +56,14 @@
   (add-to-list 'template-find-file-commands cmd))
 
 
+;; (require 'xcscope)
 ;; (require 'doxymacs)
-;; (require 'grep-edit)
 ;; (autoload 'senator-try-expand-semantic "senator")
 ;; (autoload 'two-mode-mode "two mode mode")
-;; (require 'paredit)
 ;; (require 'ede)
 ;; (require 'ecb)
 ;; (require 'two-mode-mode)
+
 
 ;;私人信息,if you are not author please comment this line
 (load-file "~/.emacs.d/conf/projects-conf.el") ;;porjects
@@ -140,13 +132,13 @@
 (setq semantic-idle-summary-function 'semantic-format-tag-uml-prototype) ;;让idle-summary的提醒包括参数名
 
 
+
 ;;========仅作用于X下
-(if window-system
-    (progn
-      (require 'icicles)
-      ;;      (require 'ecb-autoloads) ;;nox
-      (setq x-select-enable-clipboard t) ;;使用剪切板
-      (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)))
+(when window-system
+  (require 'icicles)
+  ;; (require 'ecb-autoloads) ;;nox
+  (setq x-select-enable-clipboard t) ;;使用剪切板
+  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
 ;;=======End
 
 
@@ -156,7 +148,6 @@
 (server-start)
 (setq major-mode 'text-mode)
 (setq-default abbrev-mode t
-	      ;; paredit-mode t
 	      kill-whole-line t        			; 在行首 C-k 时，同时删除该行。
 	      truncate-partial-width-windows nil) 	;;多窗时自动多行显示
 (setq ps-multibyte-buffer 'bdf-font-except-latin) 	; 打印
@@ -457,7 +448,10 @@ that was stored with ska-point-to-register."
 
 ;;=========speedbar
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t) 
-(autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t) 
+(autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
+(autoload 'sr-speedbar-toggle "sr-speedbar")
+;; w3 link listings
+(autoload 'w3-speedbar-buttons "sb-w3" "s3 specific speedbar button generator.")
 (global-set-key [(f4)] 'sr-speedbar-toggle) 
 (define-key-after (lookup-key global-map [menu-bar tools]) 
   [speedbar]
@@ -469,8 +463,7 @@ that was stored with ska-point-to-register."
 (add-hook 'speedbar-load-hook
 	  (lambda ()
 	    (require 'semantic-sb))) ;;semantic支持
-;; w3 link listings
-(autoload 'w3-speedbar-buttons "sb-w3" "s3 specific speedbar button generator.") 
+
 
 
 ;;===========ecb配置
@@ -682,7 +675,9 @@ that was stored with ska-point-to-register."
 ;==========ELisp 模式
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda()
-	    'turn-on-eldoc-mode
+	    (require 'paredit)
+	    (turn-on-eldoc-mode)
+	    (paredit-mode t)
 	    (make-hippie-expand-function
 	     '(try-complete-abbrev
 	       try-complete-lisp-symbol-partially

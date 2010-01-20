@@ -39,3 +39,36 @@ Install:
 Usage:
 You can disable unicad by M-x `unicad-disable' and enable it by M-x `unicad-enable' or `unicad'.
 
+-
+name: regex-tool
+location: misc
+version: 1.2.1
+brief: a tool for eval regular expression
+site: http://www.cims.nyu.edu/~stucchio/software/elisp/regex-tool.el.htmll 
+Install:
+(autoload 'regex-tool "regex-tool" nil t)
+Usage:
+After you type M-x regex-tool, you will see three buffers: *Regex*, *Text*
+and *Groups*, in a new frame. If you want to use the existing frame, set
+regex-tool-new-frame to nil. The *Regex* buffer contains your regular
+expression.  By default, this tool uses Emacs regular expressions.  If you
+customize the variable `regex-tool-backend', you can switch to using full
+Perl regular expressions.
+
+The *Text* buffer contains the sample text you want to match against.
+Change this however you like. The function regex-tool-insert-old-buffer-contents
+(bound by default to C-c C-i) will insert the contents of the buffer you
+were editing when regex-tool was first called.
+
+From within the *Regex* buffer, you can navigate the *Text* frame
+using C-v and M-v (scroll up/down). C-n and C-p will move point
+in the *Text* buffer to the next and previous matches.
+
+The *Groups* buffer will list out any regular expression groups that match.
+Your regular expression is searched for as many times as it appears in the
+buffer, and any groups that match will be repeated.
+
+The results are updated as you type in either the *Regex* or *Text* buffer.
+Use C-c C-c to force an update.  Use C-c C-k to quit all the regex-tool
+buffers and remove the frame.
+

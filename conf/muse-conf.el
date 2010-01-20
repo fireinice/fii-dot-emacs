@@ -2,6 +2,7 @@
 (provide 'muse-conf)
 (load-file "~/.emacs.d/muse-config/muse-header-footer.el")
 (require 'muse)          ; load generic module
+(require 'htmlize)
 (require 'muse-mode nil t)     ; load authoring mode
 (require 'muse-wiki)
 (require 'muse-html nil t)     ; load (X)HTML publishing style
