@@ -40,10 +40,10 @@
 (autoload 'git-status "git-status"
   "Launch git-emacs's status mode on the specified directory." t)
 (require 'my-function) ;load function customized
+(require 'uniquify) ;to identified same name buffer
 
 
 (require 'tabbar)
-(require 'uniquify)
 (require 'install-elisp)
 (require 'template)
 (require 'color-moccur)
@@ -229,8 +229,8 @@
         (indent-region (region-beginning) (region-end) nil))))
 
 ;;==============auto-fill
-;;把 fill-column 设为 80. 这样的文字更好读。
-(setq fill-column 80)
+;;把 fill-column 设为 72. 这样的文字更好读。
+(setq fill-column 72)
 ;;;; 解决中英文混排不能正确fill的问题
 ;;(put-charset-property ’chinese-cns11643-5 ’nospace-between-words t)
 ;;(put-charset-property ’chinese-cns11643-6 ’nospace-between-words t)
@@ -256,134 +256,6 @@
 
 
 
-
-;;=======基本函数
-(defun try-complete-abbrev (old)
-  (if (expand-abbrev) t nil))
-
-(defun my-indent-or-complete ()
-  (interactive)
-  (if (looking-at "\\>")
-      (hippie-expand nil)
-    (indent-for-tab-command)))
-;;注释一行或一个block 绑定到 C-;
-(defun my-comment-or-uncomment-region (&optional line)
-  "This function is to comment or uncomment a line or a region"
-  (interactive "P")
-  (unless (or line (and mark-active (not (equal (mark) (point)))))
-    (setq line 1))
-  (if line
-      (save-excursion
-        (comment-or-uncomment-region
-         (progn
-           (beginning-of-line)
-           (point))
-         (progn
-           (end-of-line)
-           (point))))
-    (call-interactively 'comment-or-uncomment-region)))
-;;字数统计
-(defun zjs-count-word ()
-  (interactive)
-  (let ((beg (point-min)) (end (point-max))
-        (eng 0) (non-eng 0))
-    (if mark-active
-        (setq beg (region-beginning)
-              end (region-end)))
-    (save-excursion
-      (goto-char beg)
-      (while (< (point) end)
-        (cond ((not (equal (car (syntax-after (point))) 2))
-               (forward-char))
-              ((< (char-after) 128)     
-               (progn
-                 (setq eng (1+ eng))
-                 (forward-word)))
-              (t
-               (setq non-eng (1+ non-eng))
-               (forward-char)))))
-    (message "English words: %d\nNon-English characters: %d"
-             eng non-eng))) 
-
-;;jump out from a pair(like quote, parenthesis, etc.)
-(defun kid-c-escape-pair ()
-  (interactive)
-  (let ((pair-regexp "[^])}\"'>]*[])}\"'>]"))
-    (if (looking-at pair-regexp)
-	(progn
-	  ;; be sure we can use C-u C-@ to jump back
-	  ;; if we goto the wrong place
-	  (push-mark) 
-	  (goto-char (match-end 0)))
-      (c-indent-command))))
-
-(defun ska-point-to-register()
-  "Store cursorposition _fast_ in a register. 
-Use ska-jump-to-register to jump back to the stored 
-position."
-  (interactive)
-  (setq zmacs-region-stays t)
-  (point-to-register 8))
-
-(defun ska-jump-to-register()
-  "Switches between current cursorposition and position
-that was stored with ska-point-to-register."
-  (interactive)
-  (setq zmacs-region-stays t)
-  (let ((tmp (point-marker)))
-        (jump-to-register 8)
-        (set-register 8 tmp)))
-(add-hook 'after-save-hook
-	  (lambda ()
-	    (mapcar
-	     (lambda (file)
-	       (setq file (expand-file-name file))
-	       (when (string= file (buffer-file-name))
-		 (save-excursion (byte-compile-file file))))
-	     '("~/.emacs.d/init.el" "~/.emacs.d/myinfo.el"
-  "~/.emacs.d/conf/cpp-conf.el"))))
-
-;;中英文之间自动加空格
-;; (defun add-blank-in-chinese-and-english (&optional start end)
-;;   “automaticall add a blank between English and Chinese words.”
-;;    (interactive)
-;;    (save-excursion
-;;      (progn
-;;        (if (not start)
-;; 	   (setq start (point-min)))
-;;        (if (not end)
-;; 	   (setq end (point-max)))
-;;        (goto-char start)
-;;        (while (and (re-search-forward ”\\(\\cc\\)\\([0-9-]*[a-z]\\)”  nil t)
-;; 		   (<= (match-end 0) end ))
-;; 	 (replace-match "\\1 \\2" nil nil))
-;;        (goto-char start)
-;;        (while (and (re-search-forward "\\([a-z][0-9-]*\\)\\(\\cc\\)"  nil t)
-;; 		   (<= (match-end 0) end ))
-;; 	 (replace-match "\\1 \\2" nil nil)))))
-
-;删除匹配括号间内容 
-(defun kill-match-paren (arg)
-  (interactive "p")
-  (cond ((looking-at "[([{]") (kill-sexp 1) (backward-char))
-	((looking-at "[])}]") (forward-char) (backward-kill-sexp 1))
-	(t (self-insert-command (or arg 1)))))
-
-
-;; substitute by paredit-mode
-(defun zzq-wrap-region-with-paren ( start end)
-  (interactive "r")
-  (goto-char start)
-  (insert "(")
-  (goto-char (+ 1 end))
-  (insert ")"))
-(global-set-key (kbd "C-(")	'zzq-wrap-region-with-paren)
-
-;;========END
-
-
-
-
 ;;========基本函数绑定
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
 ;; (add-hook 'magit-mode-hook
@@ -399,7 +271,8 @@ that was stored with ska-point-to-register."
 ;; the formal is C-i while the latter is the real "Tab" key in
 ;; your keyboard.
 (global-set-key [(control \')] 'kid-c-escape-pair)
-(global-set-key  (kbd "C-x C-b") 'ibuffer-other-window)
+;; (global-set-key  (kbd "\C-t") 'kid-c-escape-pair)
+(global-set-key  (kbd "\C-x \C-b") 'ibuffer-other-window)
 ;; (define-key c++-mode-map (kbd "<tab>") 'c-indent-command)
 ;; tabbar键盘绑定
 (global-set-key (kbd "\C-c\C-r") 'eval-print-last-sexp)
@@ -411,7 +284,7 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "\C-crj")  'ska-jump-to-register)
 (global-set-key (kbd "\C-ccu")  'revert-buffer)
 (global-set-key (kbd "\C-ccr")  'smart-run) 
-(global-set-key (kbd "C-x %") 'kill-match-paren)
+(global-set-key (kbd "\C-x %") 'kill-match-paren)
 (global-set-key (kbd "\C-cvg")	'magit-status)
 (global-set-key (kbd "\C-cvc")	'cvs-status)
 (global-set-key (kbd "\C-cpl")  'project-load)
@@ -522,6 +395,7 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "<f9>") 'smart-compile)
 (require 'smart-compile-conf)
 
+;; 自动设置script buffer 为可执行
 (add-hook 'after-save-hook
         #'(lambda ()
         (and (save-excursion
@@ -800,3 +674,4 @@ that was stored with ska-point-to-register."
 ;;                   (interactive)
 ;;                   (yas/expand-snippet (point) (point) "\"$0\""))) 
 ;;========init.el end here
+

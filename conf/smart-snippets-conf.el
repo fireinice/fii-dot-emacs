@@ -41,7 +41,6 @@
  (c++-mode-abbrev-table
   c-mode-abbrev-table
   java-mode-abbrev-table
-  ruby-mode-abbrev-table
   ;;   js2-mode-abbrev-table
   python-mode-abbrev-table)
  ("{" "{$.}" '(not (c-in-literal)))
@@ -67,7 +66,6 @@
  ((c++-mode-map c++-mode-abbrev-table)
   (c-mode-map c-mode-abbrev-table)
   (java-mode-map java-mode-abbrev-table)
-  (ruby-mode-map ruby-mode-abbrev-table)
   (python-mode-map python-mode-abbrev-table))
  ("{" "{")
  ("\"" "\"")
@@ -76,25 +74,3 @@
  ("[" "[")
  ("'" "'"))
 
-(smart-snippet-with-abbrev-tables
- (ruby-mode-abbrev-table)
- ("/" "/$./" '(not (c-in-literal)))
- ("|" "|$.|" '(not (c-in-literal)))
- )
-
-(smart-snippet-with-keymaps
- ((ruby-mode-map ruby-mode-abbrev-table))
- ("/" "/")
- ("|" "|"))
-
-
-
-;;;;##########################################################################
-;;;;  User Options, Variables
-;;;;##########################################################################
-
-
-
-
-
-;;; smart-snippets-conf.el ends here

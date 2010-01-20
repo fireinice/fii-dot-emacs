@@ -1,9 +1,9 @@
 ;;调用inf-ruby
 (require 'inf-ruby)
+(require 'ruby-electric)
 (require 'rcodetools)
-(require 'smart-snippets-conf)
 (require 'flymake-conf)
-(autoload 'ruby-electric-mode "ruby-electric")
+
 ;; could be replaced by smart-snippet and yasnippet
 (autoload 'rails "rails mode")
 (autoload 'ri "ri-ruby" nil t)
@@ -13,17 +13,18 @@
   (autoload 'irbsh "irbsh" "irbsh - IRB.extend ShellUtilities" t)
   (autoload 'irbsh-oneliner-with-completion "irbsh" "irbsh oneliner" t))
 (when (locate-library "irbsh-toggle")
-  (autoload 'irbsh-toggle "irbsh-toggle" 
+  (autoload 'irbsh-toggle "irbsh-toggle"
     "Toggles between the *irbsh*1 buffer and whatever buffer you are editing."
     t)
-  (autoload 'irbsh-toggle-cd "irbsh-toggle" 
+  (autoload 'irbsh-toggle-cd "irbsh-toggle"
     "Pops up a irbsh-buffer and insert a \"cd <file-dir>\" command." t))
 
 (defvar ri-ruby-script "/home/zigler/.emacs.d/misc/ri-emacs.rb"
   "RI ruby script")
+
 ;; add gem/bin into PATH to make rcodetools could be called
 (setenv "PATH" (concat "/var/lib/gems/1.8/bin:"
-		       (getenv "PATH") )  )
+           (getenv "PATH") )  )
 
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
 (define-key ruby-mode-map "\r" 'ruby-reindent-then-newline-and-indent)
@@ -32,16 +33,16 @@
 (set (make-local-variable 'tab-width) 2)
 (imenu-add-to-menubar "IMENU")
 (inf-ruby-keys)
-;; (ruby-electric-mode t)
+(ruby-electric-mode t)
 ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
 (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
-    (flymake-mode))
+    (flymake-mode t))
 
 (add-hook 'local-write-file-hooks
-	  '(lambda()
-	     (save-excursion
-	       (untabify (point-min) (point-max))
-	       (delete-trailing-whitespace))))
+    '(lambda()
+       (save-excursion
+         (untabify (point-min) (point-max))
+         (delete-trailing-whitespace))))
 
 
 (defun ruby-eval-buffer ()
@@ -64,8 +65,8 @@
     (search-forward "RAILS_ROOT}")
     (search-forward-regexp "\\([^:]*\\):\\([0-9]+\\)")
     (let  ((file (match-string 1))
-	   (line (match-string 2)))
-					;(kill-buffer (current-buffer))
+     (line (match-string 2)))
+          ;(kill-buffer (current-buffer))
       (message
        (format "Error found in file \"%s\" on line %s. "  file line))
       (find-file (concat rails-root file))
