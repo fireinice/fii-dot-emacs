@@ -472,7 +472,7 @@
                             (match-end 0)
                             'face (list :background
                                         (match-string-no-properties 0)))))))
- (defun hexcolour-add-to-font-lock ()
+(defun hexcolour-add-to-font-lock ()
    (font-lock-add-keywords nil hexcolour-keywords))
 (add-hook 'nxhtml-mumamo-mode 'hexcolour-add-to-font-lock)
 
@@ -532,7 +532,8 @@
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
 (add-hook 'ruby-mode-hook
           (lambda()
-	    (require 'ruby-conf)))
+	    (require 'ruby-conf)
+	    (setup-ruby-mode)))
 
 ;=========SQL模式
 (autoload 'mysql "mysql")

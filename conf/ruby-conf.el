@@ -3,6 +3,8 @@
 (require 'ruby-electric)
 (require 'rcodetools)
 (require 'flymake-conf)
+(require 'auto-complete-config)
+
 
 ;; could be replaced by smart-snippet and yasnippet
 (autoload 'rails "rails mode")
@@ -25,24 +27,27 @@
 ;; add gem/bin into PATH to make rcodetools could be called
 (setenv "PATH" (concat "/var/lib/gems/1.8/bin:"
            (getenv "PATH") )  )
-
+(inf-ruby-keys)
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
 (define-key ruby-mode-map "\r" 'ruby-reindent-then-newline-and-indent)
-
-(set (make-local-variable 'indent-tabs-mode) 'nil)
-(set (make-local-variable 'tab-width) 2)
-(imenu-add-to-menubar "IMENU")
-(inf-ruby-keys)
-(ruby-electric-mode t)
-;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
-(if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
-    (flymake-mode t))
-
-(add-hook 'local-write-file-hooks
-    '(lambda()
-       (save-excursion
-         (untabify (point-min) (point-max))
-         (delete-trailing-whitespace))))
+(defun setup-ruby-mode ()
+  (set (make-local-variable 'indent-tabs-mode) 'nil)
+  (set (make-local-variable 'tab-width) 2)
+  (imenu-add-to-menubar "IMENU")
+  (ruby-electric-mode t)
+  ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
+  (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
+      (flymake-mode t))
+  (auto-complete-mode t)
+  (set (make-local-variable 'ac-sources)
+       (append ac-sources
+	       '(ac-source-yasnippet)
+	       '(ac-source-rcodetools)))
+  (add-hook 'local-write-file-hooks
+	    '(lambda()
+	       (save-excursion
+		 (untabify (point-min) (point-max))
+		 (delete-trailing-whitespace)))))
 
 
 (defun ruby-eval-buffer ()

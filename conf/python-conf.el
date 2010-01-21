@@ -23,49 +23,49 @@
 (require 'smart-snippets-conf)
 ;; Initialize Pymacs
 (require 'pymacs)
-;; (autoload 'pymacs-apply "pymacs")
-;; (autoload 'pymacs-call "pymacs")
-;; (autoload 'pymacs-eval "pymacs" nil t)
-;; (autoload 'pymacs-exec "pymacs" nil t)
-;; (autoload 'pymacs-load "pymacs" nil t)
-
-(setq py-python-command-args '( "-colors" "Linux"))
-
-(auto-complete-mode 1)
-(setq tab-width 4 indent-tabs-mode nil)
-;; 	    (which-function-mode t)
-(hs-minor-mode 1)
-(flymake-mode 1)
-;; 	    (py-shell 1)
-(abbrev-mode t)
-(set (make-variable-buffer-local 'beginning-of-defun-function)
-     'py-beginning-of-def-or-class)
-(setq outline-regexp "def\\|class ")
-(set (make-local-variable 'ac-sources)
-     (append ac-sources
-             '(ac-source-yasnippet)
-             '(ac-source-rope)))
-(set (make-local-variable 'ac-find-function) 'ac-python-find)
-(set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
-(set (make-local-variable 'ac-auto-start) nil)
-;; (require 'pylookup)
-(setq pylookup-dir "/home/zigler/.emacs.d/pylookup")
-;; set executable file and db file
-(setq pylookup-program (concat pylookup-dir "/pylookup.py"))
-(setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
-(print 'pylookup-db-file)
 ;; to speedup, just load it on demand
 (autoload 'pylookup-lookup "pylookup"
   "Lookup SEARCH-TERM in the Python HTML indexes." t)
 
 (autoload 'pylookup-update "pylookup" 
   "Run pylookup-update and create the database at `pylookup-db-file'." t)
+;; (autoload 'pymacs-apply "pymacs")
+;; (autoload 'pymacs-call "pymacs")
+;; (autoload 'pymacs-eval "pymacs" nil t)
+;; (autoload 'pymacs-exec "pymacs" nil t)
+;; (autoload 'pymacs-load "pymacs" nil t)
 
+( defun setup-python-mode ()
+  (setq py-python-command-args '( "-colors" "Linux"))
+  (auto-complete-mode 1)
+  (set (make-local-variable 'indent-tabs-mode) 'nil)
+  (set (make-local-variable 'tab-width) 4)
+;; 	    (which-function-mode t)
+  (hs-minor-mode 1)
+  (flymake-mode 1)
+;; 	    (py-shell 1)
+  (abbrev-mode t)
+  (set (make-variable-buffer-local 'beginning-of-defun-function)
+       'py-beginning-of-def-or-class)
+  (setq outline-regexp "def\\|class ")
+  (set (make-local-variable 'ac-sources)
+       (append ac-sources
+	       '(ac-source-yasnippet)
+	       '(ac-source-rope)))
+  (set (make-local-variable 'ac-find-function) 'ac-python-find)
+  (set (make-local-variable 'ac-candidate-function) 'ac-python-candidate)
+  (set (make-local-variable 'ac-auto-start) nil)
+;; (require 'pylookup)
+  (setq pylookup-dir "/home/zigler/.emacs.d/pylookup")
+;; set executable file and db file
+  (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
+  (setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
+  (print 'pylookup-db-file)
 
 ;; http://www.enigmacurry.com/2009/01/21/autocompleteel-python-code-completion-in-emacs/
 ;; Initialize Rope                                                                         
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
+  (pymacs-load "ropemacs" "rope-")
+  (setq ropemacs-enable-autoimport t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;                                         
 ;;; Auto-completion                                                                                            
