@@ -11,9 +11,6 @@
 ;;; Change log:
 ;; 
 ;; ========加载路径 start
-;;(load-file "conf/my-function.el")
-(if (string-match "22" (emacs-version))
-    (require 'linum))
 ;;default for 23
 ;;add all subdirectories into the load-path except start with dot
 (dolist (file-name (directory-files "~/.emacs.d" t))
@@ -24,9 +21,11 @@
 		(file-name-nondirectory file-name) 0 1))
       (add-to-list 'load-path file-name))))
 
+(if (string-match "22" (emacs-version))
+    (require 'linum))
 
 ;;========调用公用模块
-(load-library "vc-svn")
+(autoload 'svn-status "vc-svn" nil t)
 (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'cl "cl" nil)
 (autoload 'smart-compile "smart-compile" nil t)
@@ -515,7 +514,8 @@
 	    interpreter-mode-alist))
 (add-hook 'python-mode-hook
 	  (lambda ()
-	    (require 'python-conf)))
+	    (require 'python-conf)
+	    (setup-python-mode)))
 	    
 ;;=========Ruby 模式
 (setq auto-mode-alist
