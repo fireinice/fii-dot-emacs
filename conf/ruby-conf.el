@@ -3,7 +3,7 @@
 (require 'ruby-electric)
 (require 'rcodetools)
 (require 'flymake-conf)
-(require 'auto-complete-config)
+(require 'ac-conf)
 
 
 ;; could be replaced by smart-snippet and yasnippet
@@ -43,6 +43,7 @@
        (append ac-sources
 	       '(ac-source-yasnippet)
 	       '(ac-source-rcodetools)))
+  (ac-mode-setup)
   (add-hook 'local-write-file-hooks
 	    '(lambda()
 	       (save-excursion

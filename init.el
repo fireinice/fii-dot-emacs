@@ -246,10 +246,6 @@
 ;; 		;; (add-blank-in-chinese-and-english (point-at-bol) (point-at-eol))
 ;; 		(do-auto-fill))) 
 
-;;emacs23
-;; (set-default-font "Consolas-16")
-;; (set-fontset-font (frame-parameter nil 'font)
-;; 		  'han '("SimSun". "unicode-bmp"))
 ;;=======End
 
 
