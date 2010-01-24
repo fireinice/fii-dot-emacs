@@ -28,8 +28,10 @@
 (require 'flymake)
 (load-library "flymake-cursor") 
 ;;echo error in minibuffer instead moving mouse on it
-(global-set-key "\C-c\C-e" 'flymake-goto-next-error)
-(setq flymake-gui-warnings-enabled nil)
+(add-hook 'flymake-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "C-c C-e") 'flymake-goto-next-error)
+	    (setq flymake-gui-warnings-enabled nil)))
 
 (defun flymake-create-temp-intemp (file-name prefix)
   "Return file name in temporary directory for checking FILE-NAME.
