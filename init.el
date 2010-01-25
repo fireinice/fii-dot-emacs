@@ -498,7 +498,11 @@
 (defvar js2-mode-abbrev-table nil
   "Abbrev table in use in `js2-mode' buffers.")
 (define-abbrev-table 'js2-mode-abbrev-table ())
-(setq js2-use-font-lock-faces t)
+(add-hook 'js2-mode-hook
+	  (lambda ()
+	    (setq js2-use-font-lock-faces t)
+	    (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
+	    (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
 
 
 ;;=========Python 模式
@@ -536,8 +540,8 @@
 (autoload 'sql-completion "sql completion")
 (setq sql-interactive-mode-hook
       (lambda ()
-  (define-key sql-interactive-mode-map "\t" 'comint-dynamic-complete)
-  (sql-mysql-completion-init)))
+	(define-key sql-interactive-mode-map "\t" 'comint-dynamic-complete)
+	(sql-mysql-completion-init)))
 
 ;==========YAML 模式
 (autoload 'yaml-mode "yaml-mode.el" nil t)  
