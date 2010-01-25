@@ -36,6 +36,7 @@
 ;; (add-hook 'auto-complete-mode-hook (lambda () (add-to-list 'ac-sources 'ac-source-filename)))
 ;; (global-auto-complete-mode t)
 (defun ac-mode-setup ()
+  (auto-complete-mode t)
   (set-face-background 'ac-candidate-face "lightgray")
   (set-face-underline 'ac-candidate-face "darkgray")
   (set-face-background 'ac-selection-face "steelblue")

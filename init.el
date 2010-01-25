@@ -40,21 +40,14 @@
   "Launch git-emacs's status mode on the specified directory." t)
 (require 'my-function) ;load function customized
 (require 'uniquify) ;to identified same name buffer
-
+(require 'template)
 
 (require 'tabbar)
 (require 'install-elisp)
-(require 'template)
 (require 'color-moccur)
-(require 'cc-mode)
-
-(template-initialize)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
-(dolist (cmd '(ido-select-text ido-magic-forward-char
-                               ido-exit-minibuffer))
-  (add-to-list 'template-find-file-commands cmd))
 
-
+;; (require 'cc-mode)
 ;; (require 'xcscope)
 ;; (require 'doxymacs)
 ;; (autoload 'senator-try-expand-semantic "senator")
@@ -309,6 +302,13 @@
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol
         try-expand-whole-kill))
+
+;;=========template 设置
+(template-initialize)
+;; compatible with ido
+(dolist (cmd '(ido-select-text ido-magic-forward-char
+                               ido-exit-minibuffer))
+  (add-to-list 'template-find-file-commands cmd))
 
 ;;=========ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
