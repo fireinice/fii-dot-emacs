@@ -27,10 +27,10 @@
 ;; add gem/bin into PATH to make rcodetools could be called
 (setenv "PATH" (concat "/var/lib/gems/1.8/bin:"
            (getenv "PATH") )  )
-(inf-ruby-keys)
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
 (define-key ruby-mode-map "\r" 'ruby-reindent-then-newline-and-indent)
 (defun setup-ruby-mode ()
+  (inf-ruby-keys)
   (set (make-local-variable 'indent-tabs-mode) 'nil)
   (set (make-local-variable 'tab-width) 2)
   (imenu-add-to-menubar "IMENU")

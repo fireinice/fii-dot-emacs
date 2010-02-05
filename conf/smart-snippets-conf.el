@@ -44,6 +44,7 @@
     ;; if not in comment or other stuff(see `c-in-literal'), then
     ;; inser a pair of quote. if already in string, insert `\"'
     ("\"" "\"$.\"" '(not (c-in-literal)))	
+    ;; ("\"" "\"$.\"" t)	
     ("\"" "\\\"$." '(eq (c-in-literal) 'string))
     ;; insert a pair of parenthesis, useful everywhere
     ("(" "($.)" t)

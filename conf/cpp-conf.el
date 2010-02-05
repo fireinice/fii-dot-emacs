@@ -6,7 +6,7 @@
 ;; this package would find the load-path of the system automatically through gcc
 (require 'semantic-gcc)
 (require 'smart-snippets-conf)
-
+(require 'ac-conf)
 (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
 (common-smart-snippets-setup c-mode-map c-mode-abbrev-table)
 
@@ -56,7 +56,13 @@
      try-expand-dabbrev-from-kill
      try-expand-list
      try-expand-list-all-buffers
-     try-expand-whole-kill)))
+     try-expand-whole-kill))
+  (ac-mode-setup)
+  (set (make-local-variable 'ac-sources)
+       (append ac-sources
+	       '(ac-source-yasnippet)
+	       '(ac-source-c++-keywords)
+	       '(ac-source-semantic))))
 
 ;;    (font-lock-add-keywords 'c-mode
 ;;     '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
