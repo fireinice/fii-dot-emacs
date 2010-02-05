@@ -49,9 +49,8 @@
 (require 'color-moccur)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
 
-(require 'cedet-conf)
 
-;; (require 'cc-mode)
+
 ;; (require 'xcscope)
 ;; (require 'doxymacs)
 ;; (autoload 'senator-try-expand-semantic "senator")
@@ -305,7 +304,9 @@
 ;;=========c/c++模式
 (add-hook 'c-mode-common-hook
           (lambda()
-            (require 'cpp-conf)))
+	    (require 'cedet-conf)
+            (require 'cpp-conf)
+	    (setup-c-base-mode)))
 
 ;;========Emacs Muse 模式
 (autoload 'muse-mode "muse-mode")
@@ -342,17 +343,17 @@
 
 ;; 自动设置script buffer 为可执行
 (add-hook 'after-save-hook
-        #'(lambda ()
-        (and (save-excursion
-               (save-restriction
-                 (widen)
-                 (goto-char (point-min))
-                 (save-match-data
-                   (looking-at "^#!"))))
-             (not (file-executable-p buffer-file-name))
-             (shell-command (concat "chmod u+x " buffer-file-name))
-             (message
-              (concat "Saved as script: " buffer-file-name)))))
+	  #'(lambda ()
+	      (and (save-excursion
+		     (save-restriction
+		       (widen)
+		       (goto-char (point-min))
+		       (save-match-data
+			 (looking-at "^#!"))))
+		   (not (file-executable-p buffer-file-name))
+		   (shell-command (concat "chmod u+x " buffer-file-name))
+		   (message
+		    (concat "Saved as script: " buffer-file-name)))))
 
 (define-auto-insert 'cperl-mode  "perl.tpl" )
 (define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
@@ -370,6 +371,7 @@
     _ "\n\n#endif"))
 
 (add-hook 'find-file-hooks 'auto-insert)
+
 
 ;;========ido 模式
 (ido-mode t)
@@ -471,8 +473,6 @@
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode))
               auto-mode-alist))
-;;如果文件后缀名不为.rb，但是脚本第一行有#!ruby之类的说明
-;;也相应调用此ruby模式
 (setq interpreter-mode-alist
       (append '(("ruby" . ruby-mode))
               interpreter-mode-alist))
@@ -500,6 +500,7 @@
 ;==========ELisp 模式
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda()
+	    (require 'cedet-conf)
 	    (require 'paredit)
 	    (turn-on-eldoc-mode)
 	    (paredit-mode t)
@@ -616,12 +617,4 @@
       (setq yas/window-system-popup-function
 	    'yas/x-popup-menu-for-template)))
 
-;; (local-set-key "("
-;;                '(lambda ()
-;;                   (interactive)
-;;                   (yas/expand-snippet (point) (point) "($0)"))) 
-;; (local-set-key "\""
-;;                '(lambda ()
-;;                   (interactive)
-;;                   (yas/expand-snippet (point) (point) "\"$0\""))) 
 ;;========init.el end here
