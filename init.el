@@ -24,6 +24,8 @@
 (if (string-match "22" (emacs-version))
     (require 'linum))
 
+
+
 ;;========调用公用模块
 (autoload 'svn-status "vc-svn" nil t)
 (autoload 'fvwm-mode "fvwm-mode" nil t)
@@ -47,6 +49,8 @@
 (require 'color-moccur)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
 
+(require 'cedet-conf)
+
 ;; (require 'cc-mode)
 ;; (require 'xcscope)
 ;; (require 'doxymacs)
@@ -67,68 +71,13 @@
 
 ;;========END
 
-;;========CEDET
-;; http://www.linuxforum.net/forum/showflat.php?Board=vim&Number=687565
-;; Load CEDET.
-;; See cedet/common/cedet.info for configuration details.
-(load-file "~/.emacs.d/cedet/common/cedet.el")
-
-;; Enable EDE (Project Management) features
-(global-ede-mode 1)
-;; (ede-minor-mode t)
-;; Enable EDE for a pre-existing C++ project
-;; (ede-cpp-root-project "NAME" :file "~/myproject/Makefile")
-
-;; Enabling Semantic (code-parsing, smart completion) features
-;; Select one of the following:
-
-;; * This enables the database and idle reparse engines
-(semantic-load-enable-minimum-features)
-
-;; * This enables some tools useful for coding, such as summary mode
-;;   imenu support, and the semantic navigator
-;; (semantic-load-enable-code-helpers)
-
-;; * This enables even more coding tools such as the nascent intellisense mode
-;;   decoration mode, and stickyfunc mode (plus regular code helpers)
-(semantic-load-enable-gaudy-code-helpers)
-
-;; * This enables the use of Exuberent ctags if you have it installed.
-;; (semantic-load-enable-all-exuberent-ctags-support)
-
-;; Enable SRecode (Template management) minor-mode.
-;; (global-srecode-minor-mode 1)
-
-(eval-after-load "semantic-c" 
-  '(dolist (d (list "/usr/include/c++/4.3"
-		    "/usr/include/c++/4.3/i486-linux-gnu"
-		    "/usr/include/c++/4.3/backward"
-		    "/usr/local/include"
-		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include"
-		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed"
-		    "/usr/include"))
-     (semantic-add-system-include d)))
-(eval-after-load "semantic-complete"
-  '(setq semantic-complete-inline-analyzer-displayor-class
-	 semantic-displayor-ghost)) 
-;; (setq semanticdb-project-roots
-;;         (list
-;;         (expand-file-name "/")))
-;; ;; (setq semantic-load-turn-everything-on t) 
-;; (add-hook 'semantic-init-hooks
-;; 	  (lambda ()
-;; 	    'semantic-idle-completions-mode
-;; 	    'semantic-mru-bookmark-mode))
-;; ;; 指定semantic临时文件的路径，避免到处都是临时文件
-(setq semanticdb-default-save-directory "~/.auto-save/semantic")
-(setq semantic-idle-summary-function 'semantic-format-tag-uml-prototype) ;;让idle-summary的提醒包括参数名
-
 
 
 ;;========仅作用于X下
+
 (when window-system
   (require 'icicles)
-  ;; (require 'ecb-autoloads) ;;nox
+  (autoload 'ecb-activate "ecb" nil t) ;;nox
   (setq x-select-enable-clipboard t) ;;使用剪切板
   (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
 ;;=======End
@@ -675,4 +624,3 @@
 ;;                   (interactive)
 ;;                   (yas/expand-snippet (point) (point) "\"$0\""))) 
 ;;========init.el end here
-

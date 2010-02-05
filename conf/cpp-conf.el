@@ -1,14 +1,25 @@
 (provide 'cpp-conf)
 (require 'eassist)
 (require 'doxymacs)
+(require 'xcscope)
+(require 'cedet-conf)
+;; this package would find the load-path of the system automatically through gcc
+(require 'semantic-gcc)
+;; (eval-after-load "semantic-c" 
+;;   '(dolist (d (list "/usr/include/c++/4.3"
+;; 		    "/usr/include/c++/4.3/i486-linux-gnu"
+;; 		    "/usr/include/c++/4.3/backward"
+;; 		    "/usr/local/include"
+;; 		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include"
+;; 		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed"
+;; 		    "/usr/include"))
+;;      (semantic-add-system-include d)))
+
 (add-hook 'font-lock-mode-hook
 	  (lambda()
 	    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
 		(doxymacs-font-lock))))
 (local-set-key (kbd "M-/") 'semantic-complete-analyze-inline)
-;; (local-set-key "." 'semantic-complete-self-insert)
-;; (local-set-key ">" 'semantic-complete-self-insert) 
-
 (doxymacs-mode 1)
 
 ;; (autoload 'senator-try-expand-semantic "senator")
@@ -27,6 +38,10 @@
 (define-key c-mode-base-map [(meta ?/)] 'semantic-ia-complete-symbol-menu)
 (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
 (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
+(define-key c-mode-base-map (kbd "\C-cp") 'semantic-analyze-proto-impl-toggle)
+(define-key c-mode-base-map (kbd ".") 'semantic-complete-self-insert)
+(define-key c-mode-base-map (kbd ">") 'semantic-complete-self-insert) 
+
 ;;预处理设置
 (setq c-macro-shrink-window-flag t)
 (setq c-macro-preprocessor "cpp")
@@ -34,9 +49,9 @@
 (setq c-macro-prompt-flag t)
 
 ;; (add-hook 'c++-mode-hook
-          (c-subword-mode 1)
-	  (c-set-offset 'inline-open 0)
-	  (c-set-offset 'friend '-)
+          ;; (c-subword-mode 1)
+(c-set-offset 'inline-open 0)
+(c-set-offset 'friend '-)
 ;; )
 ;; C/C++语言启动时自动加载semantic对/usr/include的索引数据库
 ;; (setq semanticdb-search-system-databases t)
