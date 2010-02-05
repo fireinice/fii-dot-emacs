@@ -5,15 +5,10 @@
 (require 'cedet-conf)
 ;; this package would find the load-path of the system automatically through gcc
 (require 'semantic-gcc)
-;; (eval-after-load "semantic-c" 
-;;   '(dolist (d (list "/usr/include/c++/4.3"
-;; 		    "/usr/include/c++/4.3/i486-linux-gnu"
-;; 		    "/usr/include/c++/4.3/backward"
-;; 		    "/usr/local/include"
-;; 		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include"
-;; 		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed"
-;; 		    "/usr/include"))
-;;      (semantic-add-system-include d)))
+(require 'smart-snippets-conf)
+
+(common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
+(common-smart-snippets-setup c-mode-map c-mode-abbrev-table)
 
 (add-hook 'font-lock-mode-hook
 	  (lambda()
@@ -83,3 +78,12 @@
 ;;     '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
 ;;       ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
 
+;; (eval-after-load "semantic-c" 
+;;   '(dolist (d (list "/usr/include/c++/4.3"
+;; 		    "/usr/include/c++/4.3/i486-linux-gnu"
+;; 		    "/usr/include/c++/4.3/backward"
+;; 		    "/usr/local/include"
+;; 		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include"
+;; 		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed"
+;; 		    "/usr/include"))
+;;      (semantic-add-system-include d)))

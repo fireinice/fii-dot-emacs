@@ -17,11 +17,23 @@
 (require 'smart-snippets-conf)
 (require 'auto-complete-config)
 (require 'ac-conf)
+(common-smart-snippets-setup python-mode-map python-mode-abbrev-table)
+
 (autoload 'pylookup-lookup "pylookup"
   "Lookup SEARCH-TERM in the Python HTML indexes." t)
 
 (autoload 'pylookup-update "pylookup" 
   "Run pylookup-update and create the database at `pylookup-db-file'." t)
+
+(require 'comint)
+(define-key comint-mode-map [(meta p)]
+  'comint-previous-matching-input-from-input)
+(define-key comint-mode-map [(meta n)]
+  'comint-next-matching-input-from-input)
+(define-key comint-mode-map [(control meta n)]
+  'comint-next-input)
+(define-key comint-mode-map [(control meta p)]
+  'comint-previous-input)
 
 (defun setup-python-mode ()
   (setq py-python-command-args '( "-colors" "Linux"))

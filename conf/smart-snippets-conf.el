@@ -34,99 +34,6 @@
 (eval-when-compile
   (require 'cl))
 (require 'smart-snippet)
-(require 'cc-mode)
-
-;; (defmacro smart-snippet-with-abbrev-tables-list
-;;   (abbrev-tables snippets)
-;;   (let ((tables (smart-snippet-quote-element abbrev-tables)))
-;;     `(progn
-;;        ,@(smart-snippet-flatten-1
-;;           (loop for table in tables
-;;                 collect (loop for snippet in snippets
-;;                               collect (append
-;;                                        (list
-;;                                         'smart-snippet-abbrev
-;;                                         table)
-;;                                        snippet)))))))
-
-;; (defmacro smart-snippet-with-keymaps-list
-;;    (keymap-and-abbrev-tables map-list)
-;;    (let ((kaymap-and-abbrev-tables
-;; 	  (smart-snippet-quote-element keymap-and-abbrev-tables)))
-;;      `(progn
-;; 	,@(smart-snippet-flatten-1
-;; 	   (loop for map-and-table in keymap-and-abbrev-tables
-;; 		 collect (loop for key-mapping in map-list
-;; 			       collect (list
-;; 					'smart-snippet-set-snippet-key
-;; 					(car map-and-table)
-;; 					(list 'quote
-;; 					      (cadr map-and-table))
-;; 					(car key-mapping)
-;; 					(car key-mapping))))))))
-
-
-;; (defun smart-snippet-flatten-1 (list)
-;;   (cond ((atom list) list)
-;;         ((listp (car list))
-;;          (append (car list)
-;;                  (smart-snippet-flatten-1 (cdr list))))
-;;         (t (append (list (car list))
-;;                    (smart-snippet-flatten-1 (cdr list))))))
-;; (defmacro double-loop (list1 list2)
-;;   `(progn
-;;      ,@(smart-snippet-flatten-2
-;; 	(loop for i in list1
-;; 	      collect (loop for j in list2
-;; 			    collect`((func ,i ,j) (func1 ,i ,j)))))))
-;; (macroexpand '(double-loop (1 2 3) (4 5)) )
-;; (defmacro smart-snippets-with-keymaps-abbrev-tables-list
-;;   (keymap-and-abbrev-tables snippets)
-;;   (let ((keymap-and-abbrev-tables
-;; 	 (smart-snippet-quote-element keymap-and-abbrev-tables)))
-;;     `(progn
-;;        ,@(smart-snippet-flatten-2
-;; 	  (loop for map-and-table in keymap-and-abbrev-tables
-;; 		collect (loop for snippet in snippets
-;; 			      collect `((append
-;; 					 (smart-snippet-abbrev
-;; 					  (nth 1 ,map-and-table))
-;; 					 ,snippet)
-;; 					(smart-snippet-set-snippet-key
-;; 					 ,(car map-and-table)
-;; 					 (quote
-;; 					  ,(cadr map-and-table))
-;; 					 ,(car snippet)
-;; 					 ,(car snippet)))))))))
-
-;; (defun smart-snippet-flatten-2 (list)
-;;   (progn
-;;     (smart-snippet-flatten-1
-;;      (smart-snippet-flatten-1 list))))
-
-;; (defmacro smart-snippets-with-keymaps-abbrev-tables-list
-;;   (arg-list)
-;;   (let ((keymap-and-abbrev-tables
-;; 	 (smart-snippet-quote-element (nth 0 arg-list)))
-;; 	(snippets (nth 1 arg-list)))
-;;     `(progn
-;;        ,@(smart-snippet-flatten-2
-;; 	  (loop for map-and-table in keymap-and-abbrev-tables
-;; 		collect (loop for snippet in snippets
-;; 			      collect `((append
-;; 					 (smart-snippet-abbrev
-;; 					  (nth 1 ,map-and-table))
-;; 					 ,snippet)
-;; 					(smart-snippet-set-snippet-key
-;; 					 ,(car map-and-table)
-;; 					 (quote
-;; 					  ,(cadr map-and-table))
-;; 					 ,(car snippet)
-;; 					 ,(car snippet)))))))))
-
-;; (macroexpand '(smart-snippets-with-keymaps-abbrev-tables-list
-;; ((c++-mode-map c++-mode-abbrev-table)
-;; common-snippets-list)))
 
 (defvar test-common-snippets-list
   '(("{" "{$.}" '(not (c-in-literal)))))
@@ -157,44 +64,22 @@
       (let ((mode-table (car keymap-and-abbrev-table))
 	    (abbrev-table (cadr keymap-and-abbrev-table))
 	    (short-key (car snippet)))
-	(print mode-table)
-	(print snippet)
-	(smart-snippet-with-abbrev-tables
-	 (list abbrev-table)
-	 snippet)
 	(smart-snippet-set-snippet-key
-	 (eval mode-table)
+	 mode-table
 	 abbrev-table
 	 short-key
-	 short-key))
-      )))
+	 short-key)
+	(smart-snippet-abbrev
+	 abbrev-table
+	 (nth 0 snippet)
+	 (nth 1 snippet)
+	 (nth 2 snippet))))))
 
-(smart-snippets-list-with-keymap-abbrev-table
- '(c++-mode-map c++-mode-abbrev-table)
- test-common-snippets-list)
+(defmacro common-smart-snippets-setup
+  (mode-map mode-abbrev-table)
+  `(smart-snippets-list-with-keymap-abbrev-table
+	  (list ,mode-map ',mode-abbrev-table)
+	  common-snippets-list))
 
+;; (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
 
-c++-mode-map
-
-("{" "{$.}" (quote (not (c-in-literal))))
-
-c++-mode-map
-
-("{" "{$.}" (quote (not (c-in-literal))))
-nil
-
-;; (smart-snippet-with-abbrev-tables c++-mode-map "{")
-;; (smart-snippet-set-snippet-key c++-mode-map 'c++-mode-abbrev-table "{" "{")
-(smart-snippet-with-keymaps
- ((c++-mode-map c++-mode-abbrev-table))
- ("{" "{")
- ("\"" "\"")
- ("(" "(")
- ("<" "<")
- ("[" "[")
- ("'" "'"))
-
-(smart-snippet-with-abbrev-tables
- (c++-mode-abbrev-table)
- ("{" "{$.}" '(not (c-in-literal)))
- )
