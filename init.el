@@ -388,10 +388,11 @@
 	    (add-to-list 'ido-ignore-buffers "\\`*svn-process*")))
 
 ;;=========w3m
-;; (require 'w3m)
-;; (add-hook 'w3m-mode-hook
-;;           (lambda()
-;;             (load-file "~/.emacs.d/conf/w3m-conf.el")))
+(autoload 'w3m "w3m" nil t)
+
+(add-hook 'w3m-mode-hook
+          (lambda()
+            (require 'w3m-conf)))
 
 ;=========HTML 模式
 
@@ -617,4 +618,5 @@
       (setq yas/window-system-popup-function
 	    'yas/x-popup-menu-for-template)))
 
+(autoload 'top "top-mode" nil t)
 ;;========init.el end here

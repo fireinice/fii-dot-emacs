@@ -3,6 +3,10 @@
 ;; download with wget
 ;; (require 'w3m-wget)
 ;;w3m default browser
+(setq browse-url-browser-function 'w3m-browse-url)
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+;; optional keyboard short-cut
+;; (global-set-key "\C-xm" 'browse-url-at-point)
 (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 
 ;; env settings for w3m
@@ -118,5 +122,5 @@
 ;;w3m antenna
 ;; (autoload 'w3m-antenna "w3m-antenna" "Report changes of WEB sites." t)
 
-
+(provide 'w3m-conf)
 ;;; .emacs-config-w3m.el ends here

@@ -10,6 +10,9 @@
 ;; 
 ;;; Change log:
 ;;
+;; load pylookup when compile time
+(eval-when-compile (require 'pylookup))
+
 (require 'python-mode)
 (require 'python)
 (require 'auto-complete)
@@ -17,6 +20,8 @@
 (require 'smart-snippets-conf)
 (require 'auto-complete-config)
 (require 'ac-conf)
+(require 'w3m-conf)
+
 (common-smart-snippets-setup python-mode-map python-mode-abbrev-table)
 
 (autoload 'pylookup-lookup "pylookup"
@@ -24,6 +29,11 @@
 
 (autoload 'pylookup-update "pylookup" 
   "Run pylookup-update and create the database at `pylookup-db-file'." t)
+(setq pylookup-dir "/home/zigler/.emacs.d/pylookup")
+;; set executable file and db file
+(setq pylookup-program (concat pylookup-dir "/pylookup.py"))
+(setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
+(define-key python-mode-map "\C-c\C-o" 'pylookup-lookup)
 
 (require 'comint)
 (define-key comint-mode-map [(meta p)]
@@ -53,12 +63,6 @@
        (append ac-sources
 	       '(ac-source-yasnippet)
 	       '(ac-source-ropemacs)))
-;; (require 'pylookup)
-  ;; (setq pylookup-dir "/home/zigler/.emacs.d/pylookup")
-;; set executable file and db file
-  ;; (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
-  ;; (setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
-  ;; (print 'pylookup-db-file)
   )
 
 
