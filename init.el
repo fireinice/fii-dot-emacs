@@ -49,8 +49,6 @@
 (require 'color-moccur)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
 
-
-
 ;; (require 'xcscope)
 ;; (require 'doxymacs)
 ;; (autoload 'senator-try-expand-semantic "senator")
@@ -204,6 +202,7 @@
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
 (global-set-key [(control \;)] 'my-comment-or-uncomment-region)
 (global-set-key "\r" 'newline-and-indent)
+
 ;; note TAB can be different to <tab> in X mode(not -nw mode).
 ;; the formal is C-i while the latter is the real "Tab" key in
 ;; your keyboard.
@@ -277,9 +276,9 @@
 ;; Texinfo fancy chapter tags 
 ;; (add-hook 'texinfo-mode-hook (lambda () (require 'sb-texinfo))) 
 ;; HTML fancy chapter tags 
-(add-hook 'speedbar-load-hook
-	  (lambda ()
-	    (require 'semantic-sb))) ;;semantic支持
+;; (add-hook 'speedbar-load-hook
+;; 	  (lambda ()
+;; 	    (require 'semantic-sb))) ;;semantic支持
 
 
 
@@ -306,6 +305,8 @@
           (lambda()
 	    (require 'cedet-conf)
             (require 'cpp-conf)
+	    (add-to-list 'magic-fallback-mode-alist
+			 '(buffer-standard-include-p . c++-mode))
 	    (setup-c-base-mode)))
 
 ;;========Emacs Muse 模式
@@ -355,21 +356,7 @@
 		   (message
 		    (concat "Saved as script: " buffer-file-name)))))
 
-(define-auto-insert 'cperl-mode  "perl.tpl" )
 (define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
-					; 也可以是,不过我没有试过
-					; (define-auto-insert "\\.pl"  "perl.tpl" )
-;; 自动为 C/C++ 的头文件添加 #define 保护。
-(define-auto-insert
-  '("\\.\\([Hh]\\|hh\\|hxx\\|hpp\\)\\'" . "C / C++ header")
-  '((upcase (concat "_"
-                    (replace-regexp-in-string
-                     "[^a-zA-Z0-9]" "_"
-                     (format "%s_" (file-name-nondirectory buffer-file-name)))))
-    "#ifndef " str \n
-    "#define " str "\n\n"
-    _ "\n\n#endif"))
-
 (add-hook 'find-file-hooks 'auto-insert)
 
 
@@ -619,4 +606,23 @@
 	    'yas/x-popup-menu-for-template)))
 
 (autoload 'top "top-mode" nil t)
+
+;;==========ac-mode
+(require 'auto-complete)
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
+(ac-config-default)
+(define-key ac-mode-map (kbd "C-`") 'auto-complete)
+;; (add-to-list 'ac-user-dictionary "foobar@example.com")
+(defun ac-mode-auto ()
+  (setup-complete-mode t)
+  (set-face-background 'ac-candidate-face "lightgray")
+  (set-face-underline 'ac-candidate-face "darkgray")
+  (set-face-background 'ac-selection-face "steelblue")
+  (define-key ac-completing-map "\M-n" 'ac-next)
+  (define-key ac-completing-map "\M-p" 'ac-previous)
+  (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+  (setq ac-dwim t)
+  (setq ac-auto-start 3))
+
 ;;========init.el end here

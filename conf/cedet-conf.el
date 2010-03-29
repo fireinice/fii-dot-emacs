@@ -40,12 +40,20 @@
 ;; http://github.com/alexott/emacs-configs/blob/master/rc/emacs-rc-cedet.el
 (load-file "~/.emacs.d/cedet/common/cedet.el")
 (require 'semantic-ia)
+(require 'ede)
+(global-ede-mode t)
 
-;; Enable EDE (Project Management) features
-(global-ede-mode 1)
 ;; (ede-minor-mode t)
 ;; Enable EDE for a pre-existing C++ project
-;; (ede-cpp-root-project "NAME" :file "~/myproject/Makefile")
+(ede-cpp-root-project
+ "TOM64"
+ :name "TOM64"
+ :file "~/work/TOM64/Offline-code/Middleware/Makefile"
+ :include-path '("/"
+		 "/blob"
+		 "/TFC")
+ 
+ )
 
 ;; Enabling Semantic (code-parsing, smart completion) features
 ;; Select one of the following:
@@ -82,7 +90,8 @@
 (setq semanticdb-default-save-directory "~/.auto-save/semantic")
 (setq semantic-idle-summary-function 'semantic-format-tag-uml-prototype) ;;让idle-summary的提醒包括参数名
 
-
+(setq semanticdb-project-roots
+      (list "/home/zigler/work/TOM64/Offline-code/Middleware/"))
 
 
 ;;;;##########################################################################

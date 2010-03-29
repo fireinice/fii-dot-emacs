@@ -1,19 +1,19 @@
 (provide 'cpp-conf)
 (require 'eassist)
-(require 'doxymacs)
+;; (require 'doxymacs)
 (require 'xcscope)
 (require 'cedet-conf)
 ;; this package would find the load-path of the system automatically through gcc
 (require 'semantic-gcc)
 (require 'smart-snippets-conf)
-(require 'ac-conf)
+(require 'cc-mode)
 (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
 (common-smart-snippets-setup c-mode-map c-mode-abbrev-table)
 
-(add-hook 'font-lock-mode-hook
-	  (lambda()
-	    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-		(doxymacs-font-lock))))
+;; (add-hook 'font-lock-mode-hook
+;; 	  (lambda()
+;; 	    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
+;; 		(doxymacs-font-lock))))
 (local-set-key (kbd "M-/") 'semantic-complete-analyze-inline)
 (define-key c-mode-base-map [(control \`)] 'hs-toggle-hiding)
 (define-key c-mode-base-map [(f7)] 'compile)
@@ -22,11 +22,39 @@
 (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
 (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
 (define-key c-mode-base-map (kbd "\C-cp") 'semantic-analyze-proto-impl-toggle)
-(define-key c-mode-base-map (kbd ".") 'semantic-complete-self-insert)
-(define-key c-mode-base-map (kbd ">") 'semantic-complete-self-insert) 
+;; (define-key c-mode-base-map (kbd ".") 'semantic-complete-self-insert)
+;; (define-key c-mode-base-map (kbd ">") 'semantic-complete-self-insert) 
+
+(setq eassist-header-switches '(("h" . ("cpp" "cc" "c"))
+				("hpp" . ("cpp" "cc"))
+				("cpp" . ("h" "hpp" "hh"))
+				("c" . ("h"))
+				("C" . ("H"))
+				("H" . ("C" "CPP" "CC"))
+				("cc" . ("h" "hpp" "hh"))
+				("hh" . ("cc" "cpp"))))
+
+(require 'cl)
+
+(defun file-in-directory-list-p (file dirlist)
+  "Returns true if the file specified is contained within one of
+the directories in the list. The directories must also exist."
+  (let ((dirs (mapcar 'expand-file-name dirlist))
+        (filedir (expand-file-name (file-name-directory file))))
+    (and
+     (file-directory-p filedir)
+     (member-if (lambda (x) ; Check directory prefix matches
+                  (string-match (substring x 0 (min(length filedir) (length x))) filedir))
+                dirs))))
+
+(defun buffer-standard-include-p ()
+  "Returns true if the current buffer is contained within one of
+the directories in the INCLUDE environment variable."
+  (and (getenv "INCLUDE")
+       (file-in-directory-list-p buffer-file-name (split-string (getenv "INCLUDE") path-separator))))
 
 (defun setup-c-base-mode ()
-  (doxymacs-mode 1)
+  ;; (doxymacs-mode 1)
   ;; (autoload 'senator-try-expand-semantic "senator")
   (c-set-style "stroustrup")
   (c-set-offset 'substatement-open 0)
@@ -44,6 +72,9 @@
   (setq c-macro-preprocessor "cpp")
   (setq c-macro-cppflags " ")
   (setq c-macro-prompt-flag t)
+  (set (make-local-variable 'ac-sources)
+       (append '(ac-source-semantic)
+	       ac-sources))
 
   (make-hippie-expand-function
    '(
@@ -57,12 +88,16 @@
      try-expand-list
      try-expand-list-all-buffers
      try-expand-whole-kill))
-  (ac-mode-setup)
-  (set (make-local-variable 'ac-sources)
-       (append ac-sources
-	       '(ac-source-yasnippet)
-	       '(ac-source-c++-keywords)
-	       '(ac-source-semantic))))
+  ;; (ac-mode-setup)
+  ;; (add-to-list 'ac-omni-completion-sources
+  ;; 	       (cons "\\." '(ac-source-semantic)))
+  ;; (add-to-list 'ac-omni-completion-sources
+  ;; 	       (cons "->" '(ac-source-semantic)))
+  )
+;; (set (make-local-variable 'ac-sources)
+;;      (append ac-sources
+;; 	     '(ac-source-yasnippet)
+;; 	     '(ac-source-semantic)))
 
 ;;    (font-lock-add-keywords 'c-mode
 ;;     '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)

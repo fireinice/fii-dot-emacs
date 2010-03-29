@@ -19,7 +19,6 @@
 (require 'ipython)
 (require 'smart-snippets-conf)
 (require 'auto-complete-config)
-(require 'ac-conf)
 (require 'w3m-conf)
 
 (common-smart-snippets-setup python-mode-map python-mode-abbrev-table)
@@ -44,7 +43,7 @@
   'comint-next-input)
 (define-key comint-mode-map [(control meta p)]
   'comint-previous-input)
-
+(ac-ropemacs-initialize)
 (defun setup-python-mode ()
   (setq py-python-command-args '( "-colors" "Linux"))
   (set (make-local-variable 'indent-tabs-mode) 'nil)
@@ -58,12 +57,10 @@
   (set (make-variable-buffer-local 'beginning-of-defun-function)
        'py-beginning-of-def-or-class)
   (setq outline-regexp "def\\|class ")
-  (ac-mode-setup)
   (set (make-local-variable 'ac-sources)
-       (append ac-sources
-	       '(ac-source-yasnippet)
-	       '(ac-source-ropemacs)))
-  )
+       (append '(ac-source-yasnippet)
+	       '(ac-source-ropemacs)
+	       ac-sources)))
 
 
 ;; Pychecker
