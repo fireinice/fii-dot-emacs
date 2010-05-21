@@ -25,7 +25,6 @@
     (require 'linum))
 
 
-
 ;;========调用公用模块
 (autoload 'svn-status "vc-svn" nil t)
 (autoload 'fvwm-mode "fvwm-mode" nil t)
@@ -198,7 +197,7 @@
 ;; 	    (define-key magit-mode-map [(tab)] 'magit-toggle-section)))
  ;;对M-x仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
-(global-set-key [(tab)] 'my-indent-or-complete)
+;; (global-set-key [(tab)] 'my-indent-or-complete)
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
 (global-set-key [(control \;)] 'my-comment-or-uncomment-region)
 (global-set-key "\r" 'newline-and-indent)
@@ -232,24 +231,24 @@
 
 
 ;;========Hippie-Expand
-(setq hippie-expand-try-functions-list
-;; (make-hippie-expand-function
- '(
-	yas/hippie-try-expand
-	try-complete-abbrev
-	try-expand-dabbrev-visible
-	try-expand-dabbrev
-	try-expand-dabbrev-all-buffers
-	try-expand-dabbrev-from-kill
-	try-expand-list
-	try-expand-list-all-buffers
-	try-expand-line
-        try-expand-line-all-buffers
-        try-complete-file-name-partially
-        try-complete-file-name
-        try-complete-lisp-symbol-partially
-        try-complete-lisp-symbol
-        try-expand-whole-kill))
+;; (setq hippie-expand-try-functions-list
+;; ;; (make-hippie-expand-function
+;;  '(
+;; 	yas/hippie-try-expand
+;; 	try-complete-abbrev
+;; 	try-expand-dabbrev-visible
+;; 	try-expand-dabbrev
+;; 	try-expand-dabbrev-all-buffers
+;; 	try-expand-dabbrev-from-kill
+;; 	try-expand-list
+;; 	try-expand-list-all-buffers
+;; 	try-expand-line
+;;         try-expand-line-all-buffers
+;;         try-complete-file-name-partially
+;;         try-complete-file-name
+;;         try-complete-lisp-symbol-partially
+;;         try-complete-lisp-symbol
+;;         try-expand-whole-kill))
 
 ;;=========template 设置
 (template-initialize)
@@ -382,13 +381,19 @@
             (require 'w3m-conf)))
 
 ;=========HTML 模式
-
+(load "/home/zigler/.emacs.d/nxhtml/autostart.el")
 (add-to-list 'auto-mode-alist
              '("\\.html$" . zzq-html-mode))
 ;; only special background in submode
 (setq mumamo-chunk-coloring 'submode-colored)
 (setq nxhtml-skip-welcome t)
- 
+(add-hook 'nxml-mode-hook 'm-nxml-mode-hook)
+
+(defun m-nxml-mode-hook ()
+  "key definitions for nxml mode"
+  (interactive)
+  (define-key nxml-mode-map [(tab)] 'nxml-complete))
+
 ;; do not turn on rng-validate-mode automatically, I don't like
 ;; the anoying red underlines
 ;; (setq rng-nxml-auto-validate-flag nil)
@@ -412,6 +417,8 @@
 (add-hook 'nxhtml-mumamo-mode 'hexcolour-add-to-font-lock)
 
 (defun zzq-html-mode ()
+  (define-key nxml-mode-map [(tab)] 'nxml-complete)
+
 ;;   (define-key nxml-mode-map [(alt \/)] 'nxml-complete)
   (nxhtml-mumamo-mode)
   ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
@@ -432,7 +439,7 @@
 ;;========JavaScript 模式
 ;; (autoload 'javascript-mode "javascritp mode")
 ;; (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
-;; (setq javascript-indent-level 2)
+(setq javascript-indent-level 2)
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (defvar js2-mode-abbrev-table nil
@@ -442,6 +449,7 @@
 	  (lambda ()
 	    (setq js2-use-font-lock-faces t)
 	    (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
+	    (define-key js2-mode-map "\r" 'newline-and-indent)
 	    (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
 
 
@@ -491,25 +499,26 @@
 	    (require 'cedet-conf)
 	    (require 'paredit)
 	    (turn-on-eldoc-mode)
-	    (paredit-mode t)
-	    (make-hippie-expand-function
-	     '(try-complete-abbrev
-	       try-complete-lisp-symbol-partially
-	       try-complete-lisp-symbol
-	       try-expand-dabbrev-visible
-	       try-expand-dabbrev
-	       try-expand-dabbrev-all-buffers
-	       try-expand-dabbrev-from-kill
-	       try-expand-list
-	       try-expand-list-all-buffers
-	       try-complete-file-name-partially
-	       try-complete-file-name
-	       try-expand-whole-kill))))
+	    (paredit-mode t)))
+	    ;; (make-hippie-expand-function
+	    ;;  '(try-complete-abbrev
+	    ;;    try-complete-lisp-symbol-partially
+	    ;;    try-complete-lisp-symbol
+	    ;;    try-expand-dabbrev-visible
+	    ;;    try-expand-dabbrev
+	    ;;    try-expand-dabbrev-all-buffers
+	    ;;    try-expand-dabbrev-from-kill
+	    ;;    try-expand-list
+	    ;;    try-expand-list-all-buffers
+	    ;;    try-complete-file-name-partially
+	    ;;    try-complete-file-name
+	    ;;    try-expand-whole-kill))))
 
 ;=========Shell 模式
 (require 'shell-completion)
 (require 'shell-history)
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on) ;; make the shell mode highlight
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+;; make the shell mode highlight
 (setq comint-prompt-read-only t) ;; to make the the shell prompt readonly
 
 
@@ -611,18 +620,52 @@
 (require 'auto-complete)
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
-(ac-config-default)
-(define-key ac-mode-map (kbd "C-`") 'auto-complete)
+;; (defun ac-common-setup ()
+;;   (setq ac-auto-start 4)
+;;   ;; (add-to-list 'ac-modes 'brandnew-mode)
+;;   )
 ;; (add-to-list 'ac-user-dictionary "foobar@example.com")
 (defun ac-mode-auto ()
-  (setup-complete-mode t)
+  (ac-config-default)
+  ;; (setup-complete-mode t)
   (set-face-background 'ac-candidate-face "lightgray")
   (set-face-underline 'ac-candidate-face "darkgray")
   (set-face-background 'ac-selection-face "steelblue")
   (define-key ac-completing-map "\M-n" 'ac-next)
   (define-key ac-completing-map "\M-p" 'ac-previous)
   (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+  (define-key ac-mode-map (kbd "C-`") 'auto-complete)
+  (ac-set-trigger-key "TAB")
   (setq ac-dwim t)
-  (setq ac-auto-start 3))
+  (setq ac-auto-start 3)
+  (append '(ac-source-yasnippet)
+	  ac-sources))
+(ac-mode-auto)
 
+
+;;========php mode
+(autoload 'php-mode "php-mode" "Major mode for editing php code." t)
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+
+(add-hook 'php-mode-hook 'my-php-mode-stuff)
+
+(defun my-php-mode-stuff ()
+  (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
+  (set (make-local-variable 'c-basic-offset) 2))
+
+
+(defun my-php-symbol-lookup ()
+  (interactive)
+  (let ((symbol (symbol-at-point)))
+    (if (not symbol)
+        (message "No symbol at point.")
+
+      (browse-url (concat "http://php.net/manual-lookup.php?pattern="
+                          (symbol-name symbol))))))
+
+;;========sh-mode
+(defun setupt-sh-mode ()
+  (define-key sh-mode-map "\r" 'newline-and-indent))
+(add-hook 'sh-mode-hook 'setup-sh-mode)
 ;;========init.el end here

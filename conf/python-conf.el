@@ -58,8 +58,7 @@
        'py-beginning-of-def-or-class)
   (setq outline-regexp "def\\|class ")
   (set (make-local-variable 'ac-sources)
-       (append '(ac-source-yasnippet)
-	       '(ac-source-ropemacs)
+       (append '(ac-source-ropemacs)
 	       ac-sources)))
 
 

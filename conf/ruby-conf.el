@@ -38,11 +38,9 @@
   ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
   (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
       (flymake-mode t))
-  ;; (ac-mode-setup)
   (set (make-local-variable 'ac-sources)
-       (append '(ac-source-yasnippet)
-	       '(ac-source-rcodetools)
-	       ac-sources))
+       (append '(ac-source-rcodetools)
+  	       ac-sources))
   (add-hook 'local-write-file-hooks
 	    '(lambda()
 	       (save-excursion
