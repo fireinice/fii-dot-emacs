@@ -44,6 +44,7 @@
 (define-key comint-mode-map [(control meta p)]
   'comint-previous-input)
 (ac-ropemacs-initialize)
+
 (defun setup-python-mode ()
   (setq py-python-command-args '( "-colors" "Linux"))
   (set (make-local-variable 'indent-tabs-mode) 'nil)

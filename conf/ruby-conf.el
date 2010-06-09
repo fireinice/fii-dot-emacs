@@ -6,7 +6,6 @@
 
 
 
-;; could be replaced by smart-snippet and yasnippet
 (autoload 'rails "rails mode")
 (autoload 'ri "ri-ruby" nil t)
 

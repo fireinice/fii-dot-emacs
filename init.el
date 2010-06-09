@@ -21,8 +21,8 @@
 		(file-name-nondirectory file-name) 0 1))
       (add-to-list 'load-path file-name))))
 
-(if (string-match "22" (emacs-version))
-    (require 'linum))
+;; (if (string-match "22" (emacs-version))
+    ;; (require 'linum))
 
 
 ;;========调用公用模块
@@ -54,7 +54,6 @@
 ;; (autoload 'two-mode-mode "two mode mode")
 ;; (require 'ede)
 ;; (require 'ecb)
-;; (require 'two-mode-mode)
 
 
 ;;私人信息,if you are not author please comment this line
@@ -165,7 +164,6 @@
                                 latex-mode plain-tex-mode))
       (let ((mark-even-if-inactive t))
         (indent-region (region-beginning) (region-end) nil))))
-
 ;;==============auto-fill
 ;;把 fill-column 设为 72. 这样的文字更好读。
 (setq fill-column 72)
@@ -380,66 +378,20 @@
           (lambda()
             (require 'w3m-conf)))
 
-;=========HTML 模式
-(load "/home/zigler/.emacs.d/nxhtml/autostart.el")
+;;=========nxhtml
+(autoload 'zzq-html-mode "xhtml-conf" nil t)
+(autoload 'kid-rhtml-mode "xhtml-conf" nil t)
 (add-to-list 'auto-mode-alist
              '("\\.html$" . zzq-html-mode))
-;; only special background in submode
-(setq mumamo-chunk-coloring 'submode-colored)
-(setq nxhtml-skip-welcome t)
-(add-hook 'nxml-mode-hook 'm-nxml-mode-hook)
+(add-to-list 'auto-mode-alist
+             '("\\.rhtml$" . kid-rhtml-mode))
+(add-to-list 'auto-mode-alist
+	     '("\\.php$" . zzq-html-mode))
 
-(defun m-nxml-mode-hook ()
-  "key definitions for nxml mode"
-  (interactive)
-  (define-key nxml-mode-map [(tab)] 'nxml-complete))
 
-;; do not turn on rng-validate-mode automatically, I don't like
-;; the anoying red underlines
-;; (setq rng-nxml-auto-validate-flag nil)
- 
-;; force to load another css-mode, the css-mode in nxml package
-;; seems failed to load under my Emacs 23
-;; (let ((load-path (cons "~/emacs/extension/"
-;;                        load-path)))
-;; (require 'css-mode)
 
-;;在html和css模式下将#XXXXXX按所代表的颜色着色
-
-(defvar hexcolour-keywords
-   '(("#[abcdef[:digit:]]\\{6\\}"
-      (0 (put-text-property (match-beginning 0)
-                            (match-end 0)
-                            'face (list :background
-                                        (match-string-no-properties 0)))))))
-(defun hexcolour-add-to-font-lock ()
-   (font-lock-add-keywords nil hexcolour-keywords))
-(add-hook 'nxhtml-mumamo-mode 'hexcolour-add-to-font-lock)
-
-(defun zzq-html-mode ()
-  (define-key nxml-mode-map [(tab)] 'nxml-complete)
-
-;;   (define-key nxml-mode-map [(alt \/)] 'nxml-complete)
-  (nxhtml-mumamo-mode)
-  ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
-  ;; define this dummy variable
-;;   (define-key nxhtml-mode-map  "\eh" 'nxml-complete)
-  (make-local-variable 'cua-inhibit-cua-keys)
-  (setq mumamo-current-chunk-family '("eRuby nXhtml Family" nxhtml-mode
-                                      (mumamo-chunk-eruby
-                                       mumamo-chunk-inlined-style
-                                       mumamo-chunk-inlined-script
-                                       mumamo-chunk-style=
-                                       mumamo-chunk-onjs=)))
-;;   (rails-minor-mode t)
-  (auto-fill-mode -1)
-  (setq tab-width 2)
-  (setq indent-tabs-mode nil))
 
 ;;========JavaScript 模式
-;; (autoload 'javascript-mode "javascritp mode")
-;; (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
-(setq javascript-indent-level 2)
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (defvar js2-mode-abbrev-table nil
@@ -625,27 +577,24 @@
 ;;   ;; (add-to-list 'ac-modes 'brandnew-mode)
 ;;   )
 ;; (add-to-list 'ac-user-dictionary "foobar@example.com")
-(defun ac-mode-auto ()
-  (ac-config-default)
-  ;; (setup-complete-mode t)
+(defun ac-mode-setup ()
+  (add-to-list 'ac-sources 'ac-source-yasnippet)
   (set-face-background 'ac-candidate-face "lightgray")
   (set-face-underline 'ac-candidate-face "darkgray")
   (set-face-background 'ac-selection-face "steelblue")
   (define-key ac-completing-map "\M-n" 'ac-next)
   (define-key ac-completing-map "\M-p" 'ac-previous)
-  (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
   (define-key ac-mode-map (kbd "C-`") 'auto-complete)
   (ac-set-trigger-key "TAB")
   (setq ac-dwim t)
-  (setq ac-auto-start 3)
-  (append '(ac-source-yasnippet)
-	  ac-sources))
-(ac-mode-auto)
+  (setq ac-auto-start 3))
+(ac-config-default)
+(add-hook 'auto-complete-mode-hook 'ac-mode-setup)
 
 
 ;;========php mode
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
-(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+;; (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
 
 (add-hook 'php-mode-hook 'my-php-mode-stuff)
@@ -665,7 +614,7 @@
                           (symbol-name symbol))))))
 
 ;;========sh-mode
-(defun setupt-sh-mode ()
+(defun setup-sh-mode ()
   (define-key sh-mode-map "\r" 'newline-and-indent))
 (add-hook 'sh-mode-hook 'setup-sh-mode)
 ;;========init.el end here
