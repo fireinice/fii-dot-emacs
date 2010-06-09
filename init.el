@@ -11,7 +11,6 @@
 ;;; Change log:
 ;; 
 ;; ========加载路径 start
-;;default for 23
 ;;add all subdirectories into the load-path except start with dot
 (dolist (file-name (directory-files "~/.emacs.d" t))
   (when (file-directory-p file-name)
@@ -193,7 +192,7 @@
 ;; (add-hook 'magit-mode-hook
 ;; 	  (lambda()
 ;; 	    (define-key magit-mode-map [(tab)] 'magit-toggle-section)))
- ;;对M-x仍使用原样式
+ ;;对info仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 ;; (global-set-key [(tab)] 'my-indent-or-complete)
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
@@ -389,6 +388,27 @@
 	     '("\\.php$" . zzq-html-mode))
 
 
+;;========php mode
+(autoload 'php-mode "php-mode" "Major mode for editing php code." t)
+;; (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+
+(add-hook 'php-mode-hook 'my-php-mode-stuff)
+
+(defun my-php-mode-stuff ()
+  (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
+  (set (make-local-variable 'c-basic-offset) 2))
+
+
+(defun my-php-symbol-lookup ()
+  (interactive)
+  (let (symbol (symbol-at-point))
+    (if (not symbol)
+        (message "No symbol at point.")
+      (browse-url
+       (concat "http://php.net/manual-lookup.php?pattern="
+	       (symbol-name symbol))))))
+
 
 
 ;;========JavaScript 模式
@@ -424,8 +444,6 @@
 (setq interpreter-mode-alist
       (append '(("ruby" . ruby-mode))
               interpreter-mode-alist))
-(setq auto-mode-alist
-      (cons '("\\.rhtml$" . two-mode-mode) auto-mode-alist))
 (modify-coding-system-alist 'file "\\.rb$" 'utf-8)
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
 (add-hook 'ruby-mode-hook
@@ -452,19 +470,6 @@
 	    (require 'paredit)
 	    (turn-on-eldoc-mode)
 	    (paredit-mode t)))
-	    ;; (make-hippie-expand-function
-	    ;;  '(try-complete-abbrev
-	    ;;    try-complete-lisp-symbol-partially
-	    ;;    try-complete-lisp-symbol
-	    ;;    try-expand-dabbrev-visible
-	    ;;    try-expand-dabbrev
-	    ;;    try-expand-dabbrev-all-buffers
-	    ;;    try-expand-dabbrev-from-kill
-	    ;;    try-expand-list
-	    ;;    try-expand-list-all-buffers
-	    ;;    try-complete-file-name-partially
-	    ;;    try-complete-file-name
-	    ;;    try-expand-whole-kill))))
 
 ;=========Shell 模式
 (require 'shell-completion)
@@ -486,43 +491,6 @@
 ;; (setq weblogger-entry-mode-hook 'html-mode)
 (autoload 'weblogger-start-entry "weblogger" nil t)
 (global-set-key "\C-cbs" 'weblogger-start-entry)
-
-;;;; anything.el
-
-;; my setup and configuration for anything.el
-;; the quicksilver of emacs
-
-;; (require 'anything) ; not required when loading anything-config.el
-(require 'anything-config)  ; loads anything.el too
-
-;; (setq anything-sources (list anything-source-buffers
-;; 			     anything-source-emacs-commands
-;; 			     anything-source-locate
-;; 			     anything-source-recentf
-;; 			     anything-source-complex-command-history
-;; 			     anything-source-emacs-functions
-;; 			     anything-source-bookmarks))
-
-;; (setq anything-type-actions (list anything-actions-buffer
-;; 				  anything-actions-file
-;; 				  anything-actions-command
-;; 				  anything-actions-function
-;; 				  anything-actions-sexp))
-
-;; (setq anything-action-transformers
-;;       '((buffer   . anything-transform-buffer-actions)
-;; 	(file     . anything-transform-file-actions)
-;; 	(command  . anything-transform-command-actions)
-;; 	(function . anything-transform-function-actions)
-;; 	(sexp     . anything-transform-sexp-actions)))
-
-;; (setq anything-candidate-transformers
-;;       '((buffer   . anything-transform-buffers)
-;; 	(file     . anything-transform-files)
-;; 	(command  . anything-transform-commands)
-;; 	(function . anything-transform-functions)
-;; 	(sexp     . anything-transform-sexps)))
-
 
 
 ;;=======color-moccur=============================
@@ -592,26 +560,6 @@
 (add-hook 'auto-complete-mode-hook 'ac-mode-setup)
 
 
-;;========php mode
-(autoload 'php-mode "php-mode" "Major mode for editing php code." t)
-;; (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
-
-(add-hook 'php-mode-hook 'my-php-mode-stuff)
-
-(defun my-php-mode-stuff ()
-  (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
-  (set (make-local-variable 'c-basic-offset) 2))
-
-
-(defun my-php-symbol-lookup ()
-  (interactive)
-  (let ((symbol (symbol-at-point)))
-    (if (not symbol)
-        (message "No symbol at point.")
-
-      (browse-url (concat "http://php.net/manual-lookup.php?pattern="
-                          (symbol-name symbol))))))
 
 ;;========sh-mode
 (defun setup-sh-mode ()
