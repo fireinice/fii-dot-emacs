@@ -378,14 +378,16 @@
             (require 'w3m-conf)))
 
 ;;=========nxhtml
+(load "/home/zigler/.emacs.d/nxhtml/autostart.el")
 (autoload 'zzq-html-mode "xhtml-conf" nil t)
+(autoload 'zzq-phtml-mode "xhtml-conf" nil t)
 (autoload 'kid-rhtml-mode "xhtml-conf" nil t)
 (add-to-list 'auto-mode-alist
              '("\\.html$" . zzq-html-mode))
 (add-to-list 'auto-mode-alist
              '("\\.rhtml$" . kid-rhtml-mode))
 (add-to-list 'auto-mode-alist
-	     '("\\.php$" . zzq-html-mode))
+	     '("\\.php$" . zzq-phtml-mode))
 
 
 ;;========php mode

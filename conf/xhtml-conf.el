@@ -101,47 +101,60 @@
          (let* ((prefix (ac-source-rng-nxml-get-prefix ac-target))
                 (kw (substring ac-target (length prefix))))
            (setq ac-source-rng-nxml-candidates kw)
-           (ac-source-rng-nxml-do-complete))))
-    ))
+           (ac-source-rng-nxml-do-complete))))))
 
-(load "/home/zigler/.emacs.d/nxhtml/autostart.el")
+;; (load "/home/zigler/.emacs.d/nxhtml/autostart.el")
+;; (require 'autostart)
 (require 'javascript-mode)
 ;=========HTML 模式
 ;; only special background in submode
 (setq mumamo-chunk-coloring 'submode-colored)
 (setq nxhtml-skip-welcome t)
+(add-hook 'nxhtml-mode-hook 'common-nxhtml-mode-setup)
 
-(defun kid-rhtml-mode ()
-  (nxhtml-mode)
+(defun common-nxhtml-mode-setup ()
   ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
   ;; define this dummy variable
+  (custom-set-faces
+   '(mumamo-background-chunk-major
+     ((((class color)
+	(min-colors 88)
+	(background dark))
+       (:background "grey25")))))
+  (setq tab-width 2)
   (make-local-variable 'cua-inhibit-cua-keys)
-  (setq mumamo-current-chunk-family
-	'("eRuby nXhtml Family" nxhtml-mode
-	  (mumamo-chunk-eruby
-	   mumamo-chunk-inlined-style
-	   mumamo-chunk-inlined-script
-	   mumamo-chunk-style=
-	   mumamo-chunk-onjs=)))
-  (nxhtml-mumamo-mode)
-  (rails-minor-mode t)
-  (auto-fill-mode -1)
-  (setq tab-width 2))
+  (set (make-local-variable 'ac-sources-prefix-function)
+       'ac-source-rng-nxml-prefix)
+  (set (make-local-variable 'ac-sources)
+       '(ac-source-yasnippet
+	 ac-source-rng-nxml
+	 ac-source-abbrev
+	 ac-source-dictionary))
+  (setq ac-auto-start 1))
 
 (defun zzq-html-mode ()
-  (nxhtml-mode)  
-  ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
-  ;; define this dummy variable
-  (make-local-variable 'cua-inhibit-cua-keys)
-  (setq mumamo-current-chunk-family
-	'("eRuby nXhtml Family" nxhtml-mode
-	  (mumamo-chunk-inlined-style
-	   mumamo-chunk-inlined-script
-	   mumamo-chunk-style=
-	   mumamo-chunk-onjs=)))
+  (nxhtml-mode)
   (nxhtml-mumamo-mode)
+  (setq mumamo-current-chunk-family
+  	'("common nXhtml Family" nxhtml-mode
+  	  (mumamo-chunk-inlined-style
+  	   mumamo-chunk-inlined-script
+  	   mumamo-chunk-style=
+  	   mumamo-chunk-onjs=)))
+  (setq indent-tabs-mode nil)
+  (auto-complete-mode 1)
   (auto-fill-mode -1)
-  (setq tab-width 2))
+  )
+
+
+(defun kid-rhtml-mode ()
+  (zzq-html-mode)
+  (eruby-nxhtml-mumamo-mode)
+  (rails-minor-mode t))
+
+(defun zzq-phtml-mode ()
+  (zzq-html-mode)
+  (nxhtml-mumamo-mode))
 
 (defun my-indent-or-complete-nxml ()
   (interactive)
@@ -149,36 +162,22 @@
       (nxml-complete)
     (indent-for-tab-command)))
 
-(defun setup-nxhtml-mode ()
-  "key definitions for nxml mode"
-  (define-key nxhtml-mode-map [(tab)] 'my-indent-or-complete-nxml)
-  (setq indent-tabs-mode nil)
-  (auto-complete-mode 1)
-  (make-local-variable 'ac-sources-prefix-function)
-  (setq ac-sources-prefix-function 'ac-source-rng-nxml-prefix)
-  (set 'ac-sources
-       (append '(ac-source-rng-nxml)
-	       ac-sources)))
-
-(add-hook 'nxhtml-mode 'setup-nxhtml-mode)
 ;; force to load another css-mode, the css-mode in nxml package
 ;; seems failed to load under my Emacs 23
 ;; (let ((load-path (cons "~/emacs/extension/"
 ;;                        load-path)))
 ;; (require 'css-mode)
 
-;; (defun setup-nxhtml-mode ()
-  ;; (require 'xhtml-conf)
-  ;; (setup-nxhtml-mode-common)
-  ;; (nxhtml-mode))
 
 ;;在html和css模式下将#XXXXXX按所代表的颜色着色
 (defvar hexcolour-keywords
-  '(("#[abcdef[:digit:]]\\{6\\}"
-     (0 (put-text-property (match-beginning 0)
-			   (match-end 0)
-			   'face (list :background
-				       (match-string-no-properties 0)))))))
+  '(
+    ("#[abcdef[:digit:]]\\{6\\}"
+     (0 (put-text-property
+	 (match-beginning 0)
+	 (match-end 0)
+	 'face (list :background
+		     (match-string-no-properties 0)))))))
 
 (defun hexcolour-add-to-font-lock ()
   (font-lock-add-keywords nil hexcolour-keywords))
