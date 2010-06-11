@@ -399,12 +399,19 @@
 
 (defun my-php-mode-stuff ()
   (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
-  (set (make-local-variable 'c-basic-offset) 2))
+  (set (make-local-variable 'c-basic-offset) 2)
+  (require 'autocompletion-php-functions)
+  (set 'ac-sources
+       (append '(ac-source-php)
+	       ac-sources))
+  (c-add-style
+   "php style"
+   '((c-block-comment-prefix . "//"))))
 
 
 (defun my-php-symbol-lookup ()
   (interactive)
-  (let (symbol (symbol-at-point))
+  (let (symbol (thing-at-point))
     (if (not symbol)
         (message "No symbol at point.")
       (browse-url

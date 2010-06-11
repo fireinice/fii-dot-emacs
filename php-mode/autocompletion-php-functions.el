@@ -1,4 +1,4 @@
-;;; autocomplete-php-function.el --- auto complete php functions.
+;;; autocompletion-php-functions.el --- auto complete php functions.
 
 ;; Copyright (C) 2009  Kazutaka Ashizawa
 
@@ -128,15 +128,15 @@
                                             php-reserved-keywords)))
      )) "Source for PHP 5.2.8 keywords.")
 
-(add-hook 'php-mode-hook
-          (lambda ()
-            (make-local-variable 'ac-sources)
-            (setq ac-sources '(ac-source-php
-                               ;;ac-source-yasnippet
-                               ac-source-abbrev
-                               ac-source-files-in-current-dir
-                               ac-source-words-in-buffer
-                               ac-source-filename))))
+;; (add-hook 'php-mode-hook
+;;           (lambda ()
+;;             (make-local-variable 'ac-sources)
+;;             (setq ac-sources '(ac-source-php
+;;                                ;;ac-source-yasnippet
+;;                                ac-source-abbrev
+;;                                ac-source-files-in-current-dir
+;;                                ac-source-words-in-buffer
+;;                                ac-source-filename))))
 
 (provide 'autocompletion-php-functions)
 ;;; autocompletion-php-functions.el ends here

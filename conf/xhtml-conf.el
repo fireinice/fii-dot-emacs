@@ -116,11 +116,11 @@
   ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
   ;; define this dummy variable
   (custom-set-faces
-   '(mumamo-background-chunk-major
-     ((((class color)
-	(min-colors 88)
-	(background dark))
-       (:background "grey25")))))
+   '(mumamo-background-chunk-major ((((class color) (min-colors 88) (background dark)) (:background "grey25"))))
+   '(mumamo-background-chunk-submode1 ((((class color) (min-colors 88) (background dark)) (:background "grey35"))))
+   '(mumamo-background-chunk-submode2 ((((class color) (min-colors 88) (background dark)) (:background "grey35"))))
+   '(mumamo-background-chunk-submode3 ((((class color) (min-colors 88) (background dark)) (:background "grey35"))))
+   '(mumamo-background-chunk-submode4 ((((class color) (min-colors 88) (background dark)) (:background "grey35")))))
   (setq tab-width 2)
   (make-local-variable 'cua-inhibit-cua-keys)
   (set (make-local-variable 'ac-sources-prefix-function)
