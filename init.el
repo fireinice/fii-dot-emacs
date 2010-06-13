@@ -404,9 +404,10 @@
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
 
-(add-hook 'php-mode-hook 'my-php-mode-stuff)
+(add-hook 'php-mode-hook 'setup-php-mode)
 
-(defun my-php-mode-stuff ()
+(defun setup-php-mode ()
+  (require 'w3m-conf)
   (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
   (setup-gtags-mode)
   (set (make-local-variable 'c-basic-offset) 2)

@@ -1,16 +1,21 @@
 (require 'w3m-load)
 (require 'mime-w3m)
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 ;; download with wget
 ;; (require 'w3m-wget)
-;;w3m default browser
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 ;; optional keyboard short-cut
 ;; (global-set-key "\C-xm" 'browse-url-at-point)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+
+;;w3m default browser
+(setq browse-url-browser-function 'w3m-browse-url-other-window)
+
+(defun w3m-browse-url-other-window (url &optional newwin)
+  (let ((w3m-pop-up-windows t))
+    (if (one-window-p) (split-window))
+    (other-window 1)
+    (w3m-browse-url url newwin)))
 
 ;; env settings for w3m
-
 (setq w3m-terminal-coding-system 'chinese-iso-8bit
       w3m-coding-system 'utf-8
       w3m-language 'utf-8
@@ -29,8 +34,7 @@
       w3m-use-cookies t
       w3m-display-inline-image t
       w3m-tab-width 8
-      browse-url-netscape-program '"firefox"
-      browse-url-browser-function 'w3m-browse-url)
+      browse-url-netscape-program '"firefox")
 
 
 ;;(global-set-key "\C-xp" 'browse-url-at-point)
@@ -121,6 +125,11 @@
 
 ;;w3m antenna
 ;; (autoload 'w3m-antenna "w3m-antenna" "Report changes of WEB sites." t)
+;; (apply-define-key
+;;  global-map
+;;  `(("M-M"     w3m-goto-url-new-session)
+;;    ("C-x M-B" view-w3m-bookmark)
+;;    ("C-x M-m" switch-to-w3m)))
 
 (provide 'w3m-conf)
 ;;; .emacs-config-w3m.el ends here
