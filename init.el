@@ -389,22 +389,36 @@
 (add-to-list 'auto-mode-alist
 	     '("\\.php$" . zzq-phtml-mode))
 
+;;========gtags mode
+(defun setup-gtags-mode ()
+  ;; (require 'xcscope)
+  (gtags-mode t)
+  (define-key gtags-mode-map "\C-css" 'gtags-find-tag)
+  (define-key gtags-mode-map "\C-cse" 'gtags-find-pattern)
+  (define-key gtags-mode-map "\C-csg" 'gtags-find-grep)
+  (define-key gtags-mode-map "\C-csu" 'gtags-pop-stack)
+  ;; (cscope-minor-mode nil)
+  )
 
 ;;========php mode
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
-;; (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
 
-(add-hook 'php-mode-hook 'my-php-mode-stuff)
+(add-hook 'php-mode-hook 'setup-php-mode)
 
-(defun my-php-mode-stuff ()
+(defun setup-php-mode ()
+  (require 'w3m-conf)
   (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
-  (set (make-local-variable 'c-basic-offset) 2))
-
+  (setup-gtags-mode)
+  (set (make-local-variable 'c-basic-offset) 2)
+  ;; (require 'auto-complete-etags)
+  (require 'autocompletion-php-functions)
+  (set (make-local-variable 'ac-sources)
+       '(ac-source-yasnippet ac-source-php ac-source-gtags ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers)))
 
 (defun my-php-symbol-lookup ()
   (interactive)
-  (let (symbol (symbol-at-point))
+  (let (symbol (thing-at-point))
     (if (not symbol)
         (message "No symbol at point.")
       (browse-url
