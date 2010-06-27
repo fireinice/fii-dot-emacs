@@ -45,15 +45,6 @@
 
 ;; (ede-minor-mode t)
 ;; Enable EDE for a pre-existing C++ project
-(ede-cpp-root-project
- "TOM64"
- :name "TOM64"
- :file "~/work/TOM64/Offline-code/Middleware/Makefile"
- :include-path '("/"
-		 "/blob"
-		 "/TFC")
- 
- )
 
 ;; Enabling Semantic (code-parsing, smart completion) features
 ;; Select one of the following:

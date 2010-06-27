@@ -42,7 +42,7 @@
 (require 'uniquify) ;to identified same name buffer
 (require 'template)
 
-(require 'tabbar)
+;;(require 'tabbar)
 (require 'install-elisp)
 (require 'color-moccur)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
@@ -124,7 +124,7 @@
 (menu-bar-mode -1)
 (setq use-file-dialog nil)
 
-(tabbar-mode t) ; 显示tab标签
+;;(tabbar-mode t) ; 显示tab标签
 (setq inhibit-startup-message t)        ;禁用启动信息
 ;; WoMan 不打开新的 frame
 (setq woman-use-own-frame nil)
@@ -208,10 +208,10 @@
 ;; (define-key c++-mode-map (kbd "<tab>") 'c-indent-command)
 ;; tabbar键盘绑定
 (global-set-key (kbd "\C-c\C-r") 'eval-print-last-sexp)
-(global-set-key (kbd "\C-cbp") 'tabbar-backward-group)
-(global-set-key (kbd "\C-cbn") 'tabbar-forward-group)
-(global-set-key (kbd "\C-cbj") 'tabbar-backward)
-(global-set-key (kbd "\C-cbk") 'tabbar-forward)
+;; (global-set-key (kbd "\C-cbp") 'tabbar-backward-group)
+;; (global-set-key (kbd "\C-cbn") 'tabbar-forward-group)
+;; (global-set-key (kbd "\C-cbj") 'tabbar-backward)
+;; (global-set-key (kbd "\C-cbk") 'tabbar-forward)
 (global-set-key (kbd "\C-crm")  'ska-point-to-register)
 (global-set-key (kbd "\C-crj")  'ska-jump-to-register)
 (global-set-key (kbd "\C-ccu")  'revert-buffer)
@@ -454,12 +454,20 @@
 	    (setup-ruby-mode)))
 
 ;=========SQL模式
-(autoload 'mysql "mysql")
-(autoload 'sql-completion "sql completion")
-(setq sql-interactive-mode-hook
-      (lambda ()
-	(define-key sql-interactive-mode-map "\t" 'comint-dynamic-complete)
-	(sql-mysql-completion-init)))
+(autoload 'sql-mode "sql-mode" "SQL Editing Mode" t)
+(setq auto-mode-alist
+      (append '(("\\.sql$" . sql-mode)
+		("\\.tbl$" . sql-mode)
+		("\\.sp$"  . sql-mode))
+	      auto-mode-alist))
+(defun setup-sql-modes ()
+  (require 'sql-completion)
+  (define-key sql-interactive-mode-map "\t" 'comint-dynamic-complete)
+  (sql-mysql-completion-init))
+(add-hook 'sql-interactive-mode-hook
+	  'setup-sql-modes)
+(add-hook 'sql-mode-hook
+	  'setup-sql-modes)
 
 ;==========YAML 模式
 (autoload 'yaml-mode "yaml-mode.el" nil t)  
