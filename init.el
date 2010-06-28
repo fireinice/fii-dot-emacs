@@ -163,6 +163,13 @@
                                 latex-mode plain-tex-mode))
       (let ((mark-even-if-inactive t))
         (indent-region (region-beginning) (region-end) nil))))
+
+(defadvice goto-line (after expand-after-goto-line
+			    activate compile)
+  "hideshow-expand affected block when using goto-line in a collapsed buffer"
+  (save-excursion
+    (hs-show-block)))
+
 ;;==============auto-fill
 ;;把 fill-column 设为 72. 这样的文字更好读。
 (setq fill-column 72)
@@ -195,7 +202,7 @@
  ;;对info仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 ;; (global-set-key [(tab)] 'my-indent-or-complete)
-(setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co 
+(setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co
 (global-set-key [(control \;)] 'my-comment-or-uncomment-region)
 (global-set-key "\r" 'newline-and-indent)
 
@@ -207,21 +214,20 @@
 (global-set-key  (kbd "\C-x \C-b") 'ibuffer-other-window)
 ;; (define-key c++-mode-map (kbd "<tab>") 'c-indent-command)
 ;; tabbar键盘绑定
-(global-set-key (kbd "\C-c\C-r") 'eval-print-last-sexp)
-(global-set-key (kbd "\C-cbp") 'tabbar-backward-group)
-(global-set-key (kbd "\C-cbn") 'tabbar-forward-group)
-(global-set-key (kbd "\C-cbj") 'tabbar-backward)
-(global-set-key (kbd "\C-cbk") 'tabbar-forward)
-(global-set-key (kbd "\C-crm")  'ska-point-to-register)
-(global-set-key (kbd "\C-crj")  'ska-jump-to-register)
-(global-set-key (kbd "\C-ccu")  'revert-buffer)
-(global-set-key (kbd "\C-ccr")  'smart-run) 
-(global-set-key (kbd "\C-x %") 'kill-match-paren)
-(global-set-key (kbd "\C-cvg")	'magit-status)
-(global-set-key (kbd "\C-cvc")	'cvs-status)
-(global-set-key (kbd "\C-cpl")  'project-load)
-(global-set-key (kbd "\C-cpc")  'project-compile)
-(global-set-key (kbd "\C-ccf")	'ffap)
+(global-set-key (kbd	"\C-c\C-r") 'eval-print-last-sexp)
+(global-set-key (kbd	"\C-cbp") 'tabbar-backward-group)
+(global-set-key (kbd	"\C-cbn") 'tabbar-forward-group)
+(global-set-key (kbd	"\C-cbj") 'tabbar-backward)
+(global-set-key (kbd	"\C-cbk") 'tabbar-forward)
+(global-set-key (kbd	"\C-crm")  'ska-point-to-register)
+(global-set-key (kbd	"\C-crj")  'ska-jump-to-register)
+(global-set-key (kbd	"\C-ccu")  'revert-buffer)
+(global-set-key (kbd	"\C-x %") 'kill-match-paren)
+(global-set-key (kbd	"\C-cvg")	'magit-status)
+(global-set-key (kbd	"\C-cvc")	'cvs-status)
+(global-set-key (kbd	"\C-cpl")  'project-load)
+(global-set-key (kbd	"\C-cpc")  'project-compile)
+(global-set-key (kbd	"\C-ccf")	'ffap)
 ;;========END
 
 
@@ -406,6 +412,7 @@
 
 (add-hook 'php-mode-hook 'setup-php-mode)
 
+(autoload 'geben "geben" "PHP Debugger on Emacs" t)
 (defun setup-php-mode ()
   (require 'w3m-conf)
   (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
@@ -455,7 +462,8 @@
 	    
 ;;=========Ruby 模式
 (setq auto-mode-alist
-      (append '(("\\.rb$" . ruby-mode))
+      (append '(("\\.rb$" . ruby-mode)
+		)
               auto-mode-alist))
 (setq interpreter-mode-alist
       (append '(("ruby" . ruby-mode))
@@ -578,7 +586,15 @@
 
 
 ;;========sh-mode
+;; Add color to a shell running in emacs 'M-x shell'
+(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+;; (autoload 'ansi-color-apply "ansi-color" nil t)
+;; (require 'ansi-color)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (defun setup-sh-mode ()
   (define-key sh-mode-map "\r" 'newline-and-indent))
 (add-hook 'sh-mode-hook 'setup-sh-mode)
+;; (add-hook 'compilation-filter-hook 'ansi-color-apply)
+;; (add-hook 'compilation-mode-hook 'ansi-color-for-comint-mode-on)
 ;;========init.el end here
+
