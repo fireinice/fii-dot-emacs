@@ -44,7 +44,8 @@
 	    '(lambda()
 	       (save-excursion
 		 (untabify (point-min) (point-max))
-		 (delete-trailing-whitespace)))))
+		 (delete-trailing-whitespace))))
+  (require 'ruby-test))
 
 
 (defun ruby-eval-buffer ()
