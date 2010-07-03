@@ -3,7 +3,7 @@
 (require 'ruby-electric)
 (require 'rcodetools)
 (require 'flymake-conf)
-
+(require 'rspec-mode)
 
 
 (autoload 'rails "rails mode")
