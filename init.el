@@ -9,9 +9,15 @@
 ;; 
 ;; 
 ;;; Change log:
-;; 
+;;
+(eval-when-compile
+  (require 'python-conf)
+  (require 'ruby-conf)
+  (load "js2.el"))
+
 ;; ========加载路径 start
 ;;add all subdirectories into the load-path except start with dot
+
 (dolist (file-name (directory-files "~/.emacs.d" t))
   (when (file-directory-p file-name)
     (unless
@@ -442,7 +448,6 @@
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (add-hook 'js2-mode-hook
 	  (lambda ()
-	    (setq js2-use-font-lock-faces t)
 	    (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
 	    (define-key js2-mode-map "\r" 'newline-and-indent)
 	    (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
@@ -580,7 +585,8 @@
 (defun ac-mode-setup ()
   (add-to-list 'ac-sources 'ac-source-yasnippet)
   (set-face-background 'ac-candidate-face "lightgray")
-  (set-face-underline 'ac-candidate-face "darkgray")
+  (set-face-attribute 'ac-candidate-face nil
+		      :underline "red")
   (set-face-background 'ac-selection-face "steelblue")
   (define-key ac-completing-map "\M-n" 'ac-next)
   (define-key ac-completing-map "\M-p" 'ac-previous)
