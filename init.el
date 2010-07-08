@@ -20,12 +20,12 @@
 		(file-name-nondirectory file-name) 0 1))
       (add-to-list 'load-path file-name))))
 
+
+
 ;; (if (string-match "22" (emacs-version))
     ;; (require 'linum))
 
-
 ;;========调用公用模块
-(autoload 'svn-status "vc-svn" nil t)
 (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'cl "cl" nil)
 (autoload 'smart-compile "smart-compile" nil t)
@@ -498,12 +498,29 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;==========ELisp 模式
+(defvar auto-compile-conf-list nil)
+(dolist (dirname '( "~/.emacs.d" "~/.emacs.d/conf"))
+  (dolist (file-name (directory-files dirname t))
+    (unless (file-directory-p file-name)
+      (when (string=
+	     (file-name-extension file-name)
+	     "el")
+	(add-to-list 'auto-compile-conf-list file-name)))))
 (add-hook 'emacs-lisp-mode-hook
 	  (lambda()
 	    (require 'cedet-conf)
 	    (require 'paredit)
 	    (turn-on-eldoc-mode)
-	    (paredit-mode t)))
+	    (paredit-mode t)
+	    (add-hook 'after-save-hook
+		      (lambda ()
+			(mapcar
+			 (lambda (file)
+			   (setq file (expand-file-name file))
+			   (message file)
+			   (when (string= file (buffer-file-name))
+			     (save-excursion (byte-compile-file file))))
+			 auto-compile-conf-list)))))
 
 ;=========Shell 模式
 (require 'shell-completion)
