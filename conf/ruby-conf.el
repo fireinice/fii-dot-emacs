@@ -6,8 +6,9 @@
 (require 'rspec-mode)
 
 
-(autoload 'rails "rails mode")
 (autoload 'ri "ri-ruby" nil t)
+(require 'rinari)
+;; (require 'rails)
 
 ;; irbsh and info-ruby is duplicated, we should choose one in future
 (when (locate-library "irbsh")

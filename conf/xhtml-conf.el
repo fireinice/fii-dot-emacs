@@ -23,7 +23,8 @@
 
 ;;; Commentary:
 
-;; 
+;;  BUGS:
+;;  * the ac-sources would return nil for prefix
 
 ;; Put this file into your load-path and the following into your ~/.emacs:
 ;;   (require 'xhtml-conf)
@@ -32,7 +33,8 @@
 
 (provide 'xhtml-conf)
 (eval-when-compile
-  (require 'cl))
+  (require 'cl)
+  (require 'auto-complete))
 
 ;;;
 ;;; ac-source-rng-nxml
@@ -49,10 +51,10 @@
 
 (defvar ac-source-rng-nxml-candidates nil)
 
-(defun ac-source-rng-nxml-prefix ()
-  (or (ac-sources-prefix-default)
-      (and (looking-back "[[:blank:]]")
-           (1- (point)))))
+;; (defun ac-source-rng-nxml-prefix ()
+;;   (or (ac-sources-prefix-default)
+;;       (and (looking-back "[[:blank:]]")
+;;            (1- (point)))))
 
 (defadvice rng-complete-before-point (around
                                       ac-source-rng-nxml-complete-advice
@@ -88,8 +90,8 @@
          (ac-source-rng-nxml-do-complete)))
     (candidates
      . (lambda ()
-         (let* ((prefix (ac-source-rng-nxml-get-prefix ac-target))
-                (kw (substring ac-target (length prefix)))
+         (let* ((prefix (ac-source-rng-nxml-get-prefix ac-prefix))
+                (kw (substring ac-prefix (length prefix)))
                 (kwlen (length kw)))
            (loop for c in ac-source-rng-nxml-candidates
                  if (eq (compare-strings kw 0 nil
@@ -98,33 +100,28 @@
                  collect (concat prefix c)))))
     (action
      . (lambda ()
-         (let* ((prefix (ac-source-rng-nxml-get-prefix ac-target))
-                (kw (substring ac-target (length prefix))))
+         (let* ((prefix (ac-source-rng-nxml-get-prefix ac-prefix))
+                (kw (substring ac-prefix (length prefix))))
            (setq ac-source-rng-nxml-candidates kw)
            (ac-source-rng-nxml-do-complete))))))
 
-;; (load "/home/zigler/.emacs.d/nxhtml/autostart.el")
-;; (require 'autostart)
 (require 'javascript-mode)
 ;=========HTML 模式
 ;; only special background in submode
-(setq mumamo-chunk-coloring 'submode-colored)
-(setq nxhtml-skip-welcome t)
 (add-hook 'nxhtml-mode-hook 'common-nxhtml-mode-setup)
 
 (defun common-nxhtml-mode-setup ()
   ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
   ;; define this dummy variable
-  (custom-set-faces
-   '(mumamo-background-chunk-major ((((class color) (min-colors 88) (background dark)) (:background "grey25"))))
-   '(mumamo-background-chunk-submode1 ((((class color) (min-colors 88) (background dark)) (:background "grey35"))))
-   '(mumamo-background-chunk-submode2 ((((class color) (min-colors 88) (background dark)) (:background "grey35"))))
-   '(mumamo-background-chunk-submode3 ((((class color) (min-colors 88) (background dark)) (:background "grey35"))))
-   '(mumamo-background-chunk-submode4 ((((class color) (min-colors 88) (background dark)) (:background "grey35")))))
+  (setq nxhtml-skip-welcome t)
+  (setq mumamo-chunk-coloring 'submode-colored)
+  (setq indent-region-mode t)
+  (setq indent-tabs-mode nil)
   (setq tab-width 2)
+  (setq nxml-slash-auto-complete-flag t)
   (make-local-variable 'cua-inhibit-cua-keys)
-  (set (make-local-variable 'ac-sources-prefix-function)
-       'ac-source-rng-nxml-prefix)
+  ;; (set (make-local-variable 'ac-sources-prefix-function)
+  ;;      'ac-source-rng-nxml-prefix)
   (set (make-local-variable 'ac-sources)
        '(ac-source-yasnippet
 	 ac-source-rng-nxml
@@ -141,16 +138,12 @@
   	   mumamo-chunk-inlined-script
   	   mumamo-chunk-style=
   	   mumamo-chunk-onjs=)))
-  (setq indent-tabs-mode nil)
-  (auto-complete-mode 1)
-  (auto-fill-mode -1)
-  )
-
+  (auto-fill-mode -1))
 
 (defun kid-rhtml-mode ()
+  (setq nxml-degraded t)
   (zzq-html-mode)
-  (eruby-nxhtml-mumamo-mode)
-  (rails-minor-mode t))
+  (eruby-nxhtml-mumamo-mode))
 
 (defun zzq-phtml-mode ()
   (zzq-html-mode)

@@ -10,10 +10,10 @@
 ;; 
 ;;; Change log:
 ;;
-(eval-when-compile
+( eval-when-compile
   (require 'python-conf)
-  (require 'ruby-conf)
-  (load "js2.el"))
+  (load "js2.el")
+  (require 'ruby-conf))
 
 ;; ========加载路径 start
 ;;add all subdirectories into the load-path except start with dot
@@ -399,6 +399,8 @@
 (add-to-list 'auto-mode-alist
              '("\\.rhtml$" . kid-rhtml-mode))
 (add-to-list 'auto-mode-alist
+	     '("\\.html\\.erb\\'" . eruby-nxhtml-mumamo))
+(add-to-list 'auto-mode-alist
 	     '("\\.php$" . zzq-phtml-mode))
 
 ;;========gtags mode
@@ -577,9 +579,11 @@
 (require 'auto-complete)
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
+(add-to-list 'ac-modes 'nxhtml-mode)
+(add-to-list 'ac-modes 'nxml-mode)
 ;; (defun ac-common-setup ()
 ;;   (setq ac-auto-start 4)
-;;   ;; (add-to-list 'ac-modes 'brandnew-mode)
+;;   ;; 
 ;;   )
 ;; (add-to-list 'ac-user-dictionary "foobar@example.com")
 (defun ac-mode-setup ()
@@ -612,3 +616,14 @@
 ;; (add-hook 'compilation-mode-hook 'ansi-color-for-comint-mode-on)
 ;;========init.el end here
 
+
+
+;;; This was installed by package-install.el.
+;;; This provides support for the package system and
+;;; interfacing with ELPA, the package archive.
+;;; Move this code earlier if you want to reference
+;;; packages in your .emacs.
+(when
+    (load
+     (expand-file-name "~/.emacs.d/elpa/package.el"))
+  (package-initialize))
