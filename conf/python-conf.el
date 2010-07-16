@@ -11,7 +11,9 @@
 ;;; Change log:
 ;;
 ;; load pylookup when compile time
-(eval-when-compile (require 'pylookup))
+(eval-when-compile
+  (load "../init.el")
+  (require 'pylookup))
 
 (require 'python-mode)
 (require 'python)
@@ -45,6 +47,8 @@
   'comint-previous-input)
 (ac-ropemacs-initialize)
 
+(make-variable-buffer-local 'beginning-of-defun-function)
+
 (defun setup-python-mode ()
   (setq py-python-command-args '( "-colors" "Linux"))
   (set (make-local-variable 'indent-tabs-mode) 'nil)
@@ -55,13 +59,14 @@
   ;; (flymake-mode 1)
   ;; (which-function-mode t)
   ;; (py-shell 1)
-  (set (make-variable-buffer-local 'beginning-of-defun-function)
+  (set beginning-of-defun-function
        'py-beginning-of-def-or-class)
   (setq outline-regexp "def\\|class ")
   (set (make-local-variable 'ac-sources)
        (append '(ac-source-ropemacs)
 	       ac-sources)))
 
+(setq pylint-options "--output-format=parseable --include-ids=yes")
 
 ;; Pychecker
 ;; (defun py-pychecker-run (command)

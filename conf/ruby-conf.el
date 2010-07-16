@@ -4,6 +4,7 @@
 (require 'rcodetools)
 (require 'flymake-conf)
 (require 'rspec-mode)
+;; (require 'rspec-mode-autoloads)
 
 
 (autoload 'ri "ri-ruby" nil t)
@@ -28,7 +29,7 @@
 (setenv "PATH" (concat "/var/lib/gems/1.8/bin:"
            (getenv "PATH") )  )
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
-(define-key ruby-mode-map "\r" 'ruby-reindent-then-newline-and-indent)
+(define-key ruby-mode-map "\r" 'reindent-then-newline-and-indent)
 (defun setup-ruby-mode ()
   (inf-ruby-keys)
   (set (make-local-variable 'indent-tabs-mode) 'nil)

@@ -31,7 +31,17 @@
 (add-hook 'flymake-mode-hook
 	  (lambda ()
 	    (local-set-key (kbd "C-c C-e") 'flymake-goto-next-error)
-	    (setq flymake-gui-warnings-enabled nil)))
+	    (setq flymake-gui-warnings-enabled nil)
+	    (setq flymake-compilation-prevents-syntax-check t)
+	    (setq flymake-log-level -1)
+	    (setq flymake-master-file-dirs (quote ("../src" "." "./src" "./UnitTest")))
+	    (set-face-attribute 'flymake-warnline nil
+				:background "LightBlue2"
+				:foreground "black")
+	    (set-face-attribute 'flymake-errline nil
+				:background "LightPink"
+				:foreground "black")
+	    ))
 
 (defun flymake-create-temp-intemp (file-name prefix)
   "Return file name in temporary directory for checking FILE-NAME.

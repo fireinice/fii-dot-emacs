@@ -10,10 +10,21 @@
 ;; 
 ;;; Change log:
 ;;
-( eval-when-compile
+
+(eval-when-compile
   (require 'python-conf)
-  (load "js2.el")
-  (require 'ruby-conf))
+  (require 'ruby-conf)
+  (require 'regex-tool))
+
+;;; This was installed by package-install.el.
+;;; This provides support for the package system and
+;;; interfacing with ELPA, the package archive.
+;;; Move this code earlier if you want to reference
+;;; packages in your .emacs.
+(when
+    (load
+     (expand-file-name "~/.emacs.d/elpa/package.el"))
+  (package-initialize))
 
 ;; ========加载路径 start
 ;;add all subdirectories into the load-path except start with dot
@@ -25,11 +36,6 @@
 	       (substring
 		(file-name-nondirectory file-name) 0 1))
       (add-to-list 'load-path file-name))))
-
-
-
-;; (if (string-match "22" (emacs-version))
-    ;; (require 'linum))
 
 ;;========调用公用模块
 (autoload 'fvwm-mode "fvwm-mode" nil t)
@@ -450,6 +456,7 @@
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (add-hook 'js2-mode-hook
 	  (lambda ()
+	    (setq js2-highlight-level 3)
 	    (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
 	    (define-key js2-mode-map "\r" 'newline-and-indent)
 	    (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
@@ -565,14 +572,7 @@
 ;;=======org mode end here======================
 
 ;;=========yasnipet mode
-(require 'yasnippet) ;; not yasnippet-bundle
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/snippets/")
-(if window-system
-    (progn
-      (setq yas/window-system-popup-function
-	    'yas/x-popup-menu-for-template)))
-
+(setq yas/global-mode t)
 (autoload 'top "top-mode" nil t)
 
 ;;==========ac-mode
@@ -581,10 +581,6 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
 (add-to-list 'ac-modes 'nxhtml-mode)
 (add-to-list 'ac-modes 'nxml-mode)
-;; (defun ac-common-setup ()
-;;   (setq ac-auto-start 4)
-;;   ;; 
-;;   )
 ;; (add-to-list 'ac-user-dictionary "foobar@example.com")
 (defun ac-mode-setup ()
   (add-to-list 'ac-sources 'ac-source-yasnippet)
@@ -601,7 +597,13 @@
 (ac-config-default)
 (add-hook 'auto-complete-mode-hook 'ac-mode-setup)
 
-
+;;========regex-tool
+(setq regex-tool-backend (quote perl))
+(setq regex-tool-new-frame t)
+;; (set-face-attribute 'regex-tool-matched-face t
+		    ;; :background "black"
+		    ;; :foreground "Orange"
+		    ;; :weight bold)
 
 ;;========sh-mode
 ;; Add color to a shell running in emacs 'M-x shell'
@@ -618,12 +620,8 @@
 
 
 
-;;; This was installed by package-install.el.
-;;; This provides support for the package system and
-;;; interfacing with ELPA, the package archive.
-;;; Move this code earlier if you want to reference
-;;; packages in your .emacs.
-(when
-    (load
-     (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (package-initialize))
+
+
+
+
+

@@ -51,11 +51,6 @@
 
 (defvar ac-source-rng-nxml-candidates nil)
 
-;; (defun ac-source-rng-nxml-prefix ()
-;;   (or (ac-sources-prefix-default)
-;;       (and (looking-back "[[:blank:]]")
-;;            (1- (point)))))
-
 (defadvice rng-complete-before-point (around
                                       ac-source-rng-nxml-complete-advice
                                       disable)
@@ -105,6 +100,7 @@
            (setq ac-source-rng-nxml-candidates kw)
            (ac-source-rng-nxml-do-complete))))))
 
+(require 'zencoding-mode)
 (require 'javascript-mode)
 ;=========HTML 模式
 ;; only special background in submode
@@ -114,14 +110,23 @@
   ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
   ;; define this dummy variable
   (setq nxhtml-skip-welcome t)
+  (set-face-attribute 'mumamo-background-chunk-major nil
+		      :background "Grey25")
+  (set-face-attribute 'mumamo-background-chunk-submode1 nil
+		      :background "Grey35")
+  (set-face-attribute 'mumamo-background-chunk-submode2 nil
+		      :background "Grey35")
+  (set-face-attribute 'mumamo-background-chunk-submode3 nil
+		      :background "Grey35")
+  (set-face-attribute 'mumamo-background-chunk-submode4 nil
+		      :background "Grey35")
+  (setq zencoding-mode t)
   (setq mumamo-chunk-coloring 'submode-colored)
   (setq indent-region-mode t)
   (setq indent-tabs-mode nil)
   (setq tab-width 2)
   (setq nxml-slash-auto-complete-flag t)
   (make-local-variable 'cua-inhibit-cua-keys)
-  ;; (set (make-local-variable 'ac-sources-prefix-function)
-  ;;      'ac-source-rng-nxml-prefix)
   (set (make-local-variable 'ac-sources)
        '(ac-source-yasnippet
 	 ac-source-rng-nxml
@@ -149,11 +154,11 @@
   (zzq-html-mode)
   (nxhtml-mumamo-mode))
 
-(defun my-indent-or-complete-nxml ()
-  (interactive)
-  (if (looking-at "\\>")
-      (nxml-complete)
-    (indent-for-tab-command)))
+;; (defun my-indent-or-complete-nxml ()
+;;   (interactive)
+;;   (if (looking-at "\\>")
+;;       (nxml-complete)
+;;     (indent-for-tab-command)))
 
 ;; force to load another css-mode, the css-mode in nxml package
 ;; seems failed to load under my Emacs 23
