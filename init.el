@@ -431,7 +431,9 @@
   (require 'w3m-conf)
   (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
   (setup-gtags-mode)
-  (set (make-local-variable 'c-basic-offset) 2)
+  ;; (set (make-local-variable 'c-basic-offset) 4)
+  (setq tab-width 4
+	indent-tabs-mode t)
   ;; (require 'auto-complete-etags)
   (require 'autocompletion-php-functions)
   (set (make-local-variable 'ac-sources)
@@ -614,8 +616,15 @@
 (defun setup-sh-mode ()
   (define-key sh-mode-map "\r" 'newline-and-indent))
 (add-hook 'sh-mode-hook 'setup-sh-mode)
-;; (add-hook 'compilation-filter-hook 'ansi-color-apply)
-;; (add-hook 'compilation-mode-hook 'ansi-color-for-comint-mode-on)
+
+;;========compilation mode support ansi-color
+;; (require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
 ;;========init.el end here
 
 

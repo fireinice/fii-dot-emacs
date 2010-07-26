@@ -4,8 +4,6 @@
 (require 'rcodetools)
 (require 'flymake-conf)
 (require 'rspec-mode)
-;; (require 'rspec-mode-autoloads)
-
 
 (autoload 'ri "ri-ruby" nil t)
 (require 'rinari)
@@ -30,8 +28,10 @@
            (getenv "PATH") )  )
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
 (define-key ruby-mode-map "\r" 'reindent-then-newline-and-indent)
+(define-key ruby-mode-map (kbd "\C-c\C-t") 'rspec-toggle-spec-and-target)
+
+;; (define-key ruby-mode-map "\r" 'reindent-then-newline-and-indent)
 (defun setup-ruby-mode ()
-  (inf-ruby-keys)
   (set (make-local-variable 'indent-tabs-mode) 'nil)
   (set (make-local-variable 'tab-width) 2)
   (imenu-add-to-menubar "IMENU")
@@ -76,4 +76,20 @@
       (find-file (concat rails-root file))
       (goto-line (string-to-number line)))))
 
+(define-key rspec-mode-keymap (kbd "C-c ,b") 'rspec-verify)
+(defun rspec-verify-backtrace ()
+  "Runs the specified example at the point of the current buffer."
+  (interactive)
+  (rspec-run-single-file (rspec-spec-file-for (buffer-file-name)) (rspec-core-options ()) (concat "--backtrace ")))
+
+(defun compilation-filter-hook-rspec ()
+  (interactive)
+  ;;Just want to search over the last set of stuff, so exchange point and mark?
+  (while (re-search-forward "^.*_spec\.rb:[[:digit:]]*: warning: useless use of == in void context$" nil t)
+    (let ((beg (progn (forward-line 0)
+		      (point))))
+      (forward-line 1)
+      (delete-region beg (point))))
+  )
+(add-hook 'compilation-filter-hook 'compilation-filter-hook-rspec)
 (provide 'ruby-conf)

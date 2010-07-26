@@ -269,7 +269,7 @@
       (concat "--options " (rspec-spec-opts-file))
     (if default-options
         default-options
-        (concat "--format specdoc " "--reverse"))))
+        (concat "--format specdoc " "--reverse " "--color"))))
 
 (defun rspec-spec-opts-file ()
   "Returns filename of spec opts file (usually spec/spec.opts)"
@@ -357,10 +357,10 @@
 
 ;; This hook makes any abbreviation that are defined in
 ;; rspec-mode-abbrev-table available in rSpec buffers
-(add-hook 'rspec-mode-hook
-          (lambda ()
-            (merge-abbrev-tables rspec-mode-abbrev-table
-                                 local-abbrev-table)))
+;; (add-hook 'rspec-mode-hook
+;;           (lambda ()
+;;             (merge-abbrev-tables rspec-mode-abbrev-table
+;;                                  local-abbrev-table)))
 
 ;; abbrev
 ;; from http://www.opensource.apple.com/darwinsource/Current/emacs-59/emacs/lisp/derived.el
