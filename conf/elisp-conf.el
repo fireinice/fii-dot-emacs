@@ -54,14 +54,11 @@
        (save-excursion (byte-compile-file file))))
    auto-compile-conf-list))
 
-(add-hook 'after-save-hook
-	  'el-after-save-hook)
-
 (defun setup-emacs-list-mode ()
   (turn-on-eldoc-mode)
-  (paredit-mode t))
-
-
+  (paredit-mode t)
+  (add-hook 'after-save-hook
+	    'el-after-save-hook nil t))
 ;;;;##########################################################################
 ;;;;  User Options, Variables
 ;;;;##########################################################################
