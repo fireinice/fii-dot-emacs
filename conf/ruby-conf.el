@@ -42,6 +42,7 @@
   (set (make-local-variable 'ac-sources)
        (append '(ac-source-rcodetools)
   	       ac-sources))
+  (add-hook 'compilation-filter-hook 'compilation-filter-hook-rspec)
   (add-hook 'local-write-file-hooks
 	    '(lambda()
 	       (save-excursion
@@ -85,11 +86,10 @@
 (defun compilation-filter-hook-rspec ()
   (interactive)
   ;;Just want to search over the last set of stuff, so exchange point and mark?
-  (while (re-search-forward "^.*_spec\.rb:[[:digit:]]*: warning: useless use of == in void context$" nil t)
+  (goto-char (point-min))
+  (while (re-search-forward "useless use of == in void context$" nil t)
     (let ((beg (progn (forward-line 0)
-		      (point))))
+    		      (point))))
       (forward-line 1)
-      (delete-region beg (point))))
-  )
-(add-hook 'compilation-filter-hook 'compilation-filter-hook-rspec)
+      (delete-region beg (point)))))
 (provide 'ruby-conf)

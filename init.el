@@ -11,10 +11,10 @@
 ;;; Change log:
 ;;
 
-(eval-when-compile
-  (require 'python-conf)
-  (require 'ruby-conf)
-  (require 'regex-tool))
+;; (eval-when-compile
+;;   (require 'python-conf)
+;;   (require 'ruby-conf)
+;;   (require 'regex-tool))
 
 ;;; This was installed by package-install.el.
 ;;; This provides support for the package system and
@@ -56,7 +56,7 @@
 
 ;;(require 'tabbar)
 (require 'install-elisp)
-(require 'color-moccur)
+;; (require 'color-moccur)
 (setq install-elisp-repository-directory "~/.emacs.d/misc/")
 
 ;; (require 'xcscope)
