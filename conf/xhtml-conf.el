@@ -99,12 +99,16 @@
                 (kw (substring ac-prefix (length prefix))))
            (setq ac-source-rng-nxml-candidates kw)
            (ac-source-rng-nxml-do-complete))))))
-
+(require 'mumamo)
 (require 'zencoding-mode)
 (require 'javascript-mode)
 ;=========HTML 模式
 ;; only special background in submode
 (add-hook 'nxhtml-mode-hook 'common-nxhtml-mode-setup)
+(add-hook 'mumamo-turn-on-hook
+	  (lambda ()
+	    (setq nxhtml-validation-header-mumamo-modes '(nxhtml-mode eruby-nxhtml-mumamo-mode))
+	    (nxhtml-add-validation-header-if-mumamo)))
 
 (defun common-nxhtml-mode-setup ()
   ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
@@ -126,6 +130,7 @@
   (setq indent-tabs-mode nil)
   (setq tab-width 2)
   (setq nxml-slash-auto-complete-flag t)
+  ;; (setq nxhtml-validation-header-mode t)
   (make-local-variable 'cua-inhibit-cua-keys)
   (set (make-local-variable 'ac-sources)
        '(ac-source-yasnippet
@@ -154,33 +159,30 @@
   (zzq-html-mode)
   (nxhtml-mumamo-mode))
 
-;; (defun my-indent-or-complete-nxml ()
-;;   (interactive)
-;;   (if (looking-at "\\>")
-;;       (nxml-complete)
-;;     (indent-for-tab-command)))
-
-;; force to load another css-mode, the css-mode in nxml package
-;; seems failed to load under my Emacs 23
-;; (let ((load-path (cons "~/emacs/extension/"
-;;                        load-path)))
-;; (require 'css-mode)
-
-
+;;=========css-mode
 ;;在html和css模式下将#XXXXXX按所代表的颜色着色
 (defvar hexcolour-keywords
-  '(
-    ("#[abcdef[:digit:]]\\{6\\}"
-     (0 (put-text-property
-	 (match-beginning 0)
-	 (match-end 0)
-	 'face (list :background
-		     (match-string-no-properties 0)))))))
+  '(("#[abcdef[:digit:]]\\{3,6\\}"
+     (0 (let ((colour (match-string-no-properties 0)))
+	  (if (or (= (length colour) 4)
+		  (= (length colour) 7))
+	      (put-text-property 
+	       (match-beginning 0)
+	       (match-end 0)
+	       'face (list :background (match-string-no-properties 0)
+			   :foreground (if (>= (apply '+ (x-color-values 
+							  (match-string-no-properties 0)))
+					       (* (apply '+ (x-color-values "white")) .6))
+					   "black" ;; light bg, dark text
+					 "white" ;; dark bg, light text
+					 )))))
+	append))))
 
+(autoload 'common-smart-snippets-setup "smart-snippets-conf" t nil)
 (defun hexcolour-add-to-font-lock ()
-  (font-lock-add-keywords nil hexcolour-keywords))
-(add-hook 'nxhtml-mumamo-mode 'hexcolour-add-to-font-lock)
-
+  (interactive)
+  (font-lock-add-keywords nil hexcolour-keywords t))
+(add-hook 'nxhtml-mode-hook 'hexcolour-add-to-font-lock)
 
 
 ;;;;##########################################################################

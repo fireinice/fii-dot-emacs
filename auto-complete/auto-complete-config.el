@@ -237,7 +237,7 @@
     ("border-top-color" border-color)
     ("border-top-style" border-style)
     ("border-top-width" border-width)
-    ("border-width" border-width)
+    ("border-width" "thin" "medium" "thick" length)
     ("bottom" length percentage "auto")
     ("caption-side" "top" "bottom")
     ("clear" "none" "left" "right" "both")
@@ -356,7 +356,8 @@
     (margin-width "auto") ;; length percentage
     (relative-size "larger" "smaller")
     (shape "rect")
-    (uri "url"))
+    (uri "url")
+    )
   "A list of CSS property value classes and their contents.")
 
 (defconst ac-css-pseudo-classes
@@ -465,7 +466,9 @@
   (add-to-list 'ac-ignores "end"))
 
 (defun ac-css-mode-setup ()
-  (setq ac-sources (append '(ac-source-css-property) ac-sources)))
+  (setq ac-sources (append '(ac-source-css-property) ac-sources))
+  (make-local-variable 'ac-ignores)
+  (add-to-list 'ac-ignores ";"))
 
 (defun ac-config-default ()
   (setq-default ac-sources '(ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers))

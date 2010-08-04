@@ -1,13 +1,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Filename: init.el
 ;; Author: zigler
-;; Description: 
+;; Description:
 ;; Created: 三  8月 27 09:37:28 2008 (CST)
 ;;           By: Zhiqiang.Zhang
 ;; Last-Updated: 二  8月  4 11:09:44 2009 (CST)
 ;;     Update #: 383
-;; 
-;; 
+;;
+;;
 ;;; Change log:
 ;;
 
@@ -32,9 +32,9 @@
 (dolist (file-name (directory-files "~/.emacs.d" t))
   (when (file-directory-p file-name)
     (unless
-	(equal "."
-	       (substring
-		(file-name-nondirectory file-name) 0 1))
+        (equal "."
+               (substring
+                (file-name-nondirectory file-name) 0 1))
       (add-to-list 'load-path file-name))))
 
 ;;========调用公用模块
@@ -95,9 +95,9 @@
 (server-start)
 (setq major-mode 'text-mode)
 (setq-default abbrev-mode t
-	      kill-whole-line t        			; 在行首 C-k 时，同时删除该行。
-	      truncate-partial-width-windows nil) 	;;多窗时自动多行显示
-(setq ps-multibyte-buffer 'bdf-font-except-latin) 	; 打印
+              kill-whole-line t                         ; 在行首 C-k 时，同时删除该行。
+              truncate-partial-width-windows nil)       ;;多窗时自动多行显示
+(setq ps-multibyte-buffer 'bdf-font-except-latin)       ; 打印
 (setq transient-mark-mode t)  ; 高亮当前选中区
 (setq suggest-key-bindings t) ; 当使用 M-x COMMAND 后，过 1 秒钟显示该 COMMAND 绑定的键。
 ;;下面的这个设置可以让光标指到某个括号的时候显示与它匹配的括号
@@ -112,20 +112,20 @@
 ;;(font-lock-comment-face ((t (:italic t))))
 ;; (icy-mode)
 
-;将备份文件放至~/tmp下
+;;将备份文件放至~/tmp下
 ;; Emacs 中，改变文件时，默认都会产生备份文件(以 ~ 结尾的文件)。可以完全去掉
 ;; (并不可取)，也可以制定备份的方式。这里采用的是，把所有的文件备份都放在一
 ;; 个固定的地方("~/var/tmp")。对于每个备份文件，保留最原始的两个版本和最新的
 ;; 五个版本。并且备份的时候，备份文件是复本，而不是原件。
-(setq backup-directory-alist '(("." . "~/.auto-save")) 
+(setq backup-directory-alist '(("." . "~/.auto-save"))
       version-control t
       kept-old-versions 2
       kept-new-versions 5
       delete-old-versions t
       backup-by-copying t)
 
-;语法高亮
-(setq global-font-lock-mode t               
+					;语法高亮
+(setq global-font-lock-mode t
       font-lock-maximum-decoration t
       font-lock-verbose t
       font-lock-maximum-size '((t . 1048576) (vm-mode . 5250000)))
@@ -164,10 +164,10 @@
               '(emacs-lisp-mode scheme-mode lisp-mode
                                 c-mode c++-mode objc-mode
                                 latex-mode plain-tex-mode
-				ruby-mode python-mode))
+                                ruby-mode python-mode))
       (let ((mark-even-if-inactive t))
         (indent-region (region-beginning) (region-end) nil))))
- 
+
 (defadvice yank-pop (after indent-region activate)
   (if (member major-mode
               '(emacs-lisp-mode scheme-mode lisp-mode
@@ -177,7 +177,7 @@
         (indent-region (region-beginning) (region-end) nil))))
 
 (defadvice goto-line (after expand-after-goto-line
-			    activate compile)
+                            activate compile)
   "hideshow-expand affected block when using goto-line in a collapsed buffer"
   (save-excursion
     (hs-show-block)))
@@ -197,9 +197,9 @@
 ;; ;设置输入自动补全
 ;; ;;(setq-default auto-fill-function 'do-auto-fill)
 ;; (setq-default auto-fill-function
-;; 	      (lambda ()
-;; 		;; (add-blank-in-chinese-and-english (point-at-bol) (point-at-eol))
-;; 		(do-auto-fill))) 
+;;            (lambda ()
+;;              ;; (add-blank-in-chinese-and-english (point-at-bol) (point-at-eol))
+;;              (do-auto-fill)))
 
 ;;=======End
 
@@ -209,9 +209,9 @@
 ;;========基本函数绑定
 (define-key minibuffer-local-must-match-map [(tab)] 'minibuffer-complete) ;;对M-x仍使用原样式
 ;; (add-hook 'magit-mode-hook
-;; 	  (lambda()
-;; 	    (define-key magit-mode-map [(tab)] 'magit-toggle-section)))
- ;;对info仍使用原样式
+;;        (lambda()
+;;          (define-key magit-mode-map [(tab)] 'magit-toggle-section)))
+;;对info仍使用原样式
 (define-key Info-mode-map [(tab)] 'Info-next-reference)
 ;; (global-set-key [(tab)] 'my-indent-or-complete)
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co
@@ -234,13 +234,13 @@
 (global-set-key (kbd "\C-crm")  'ska-point-to-register)
 (global-set-key (kbd "\C-crj")  'ska-jump-to-register)
 (global-set-key (kbd "\C-ccu")  'revert-buffer)
-(global-set-key (kbd "\C-ccr")  'smart-run) 
+(global-set-key (kbd "\C-ccr")  'smart-run)
 (global-set-key (kbd "\C-x %") 'kill-match-paren)
-(global-set-key (kbd "\C-cvg")	'magit-status)
-(global-set-key (kbd "\C-cvc")	'cvs-status)
+(global-set-key (kbd "\C-cvg")  'magit-status)
+(global-set-key (kbd "\C-cvc")  'cvs-status)
 (global-set-key (kbd "\C-cpl")  'project-load)
 (global-set-key (kbd "\C-cpc")  'project-compile)
-(global-set-key (kbd "\C-ccf")	'ffap)
+(global-set-key (kbd "\C-ccf")  'ffap)
 
 
 
@@ -249,15 +249,15 @@
 ;; (setq hippie-expand-try-functions-list
 ;; ;; (make-hippie-expand-function
 ;;  '(
-;; 	yas/hippie-try-expand
-;; 	try-complete-abbrev
-;; 	try-expand-dabbrev-visible
-;; 	try-expand-dabbrev
-;; 	try-expand-dabbrev-all-buffers
-;; 	try-expand-dabbrev-from-kill
-;; 	try-expand-list
-;; 	try-expand-list-all-buffers
-;; 	try-expand-line
+;;      yas/hippie-try-expand
+;;      try-complete-abbrev
+;;      try-expand-dabbrev-visible
+;;      try-expand-dabbrev
+;;      try-expand-dabbrev-all-buffers
+;;      try-expand-dabbrev-from-kill
+;;      try-expand-list
+;;      try-expand-list-all-buffers
+;;      try-expand-line
 ;;         try-expand-line-all-buffers
 ;;         try-complete-file-name-partially
 ;;         try-complete-file-name
@@ -277,22 +277,22 @@
 
 
 ;;=========speedbar
-(autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t) 
+(autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
 (autoload 'speedbar-get-focus "speedbar" "Jump to speedbar frame" t)
 (autoload 'sr-speedbar-toggle "sr-speedbar")
 ;; w3 link listings
 (autoload 'w3-speedbar-buttons "sb-w3" "s3 specific speedbar button generator.")
-(global-set-key [(f4)] 'sr-speedbar-toggle) 
-(define-key-after (lookup-key global-map [menu-bar tools]) 
+(global-set-key [(f4)] 'sr-speedbar-toggle)
+(define-key-after (lookup-key global-map [menu-bar tools])
   [speedbar]
   '("Speedbar" . speedbar-frame-mode)
-  [calendar]) 
-;; Texinfo fancy chapter tags 
-;; (add-hook 'texinfo-mode-hook (lambda () (require 'sb-texinfo))) 
-;; HTML fancy chapter tags 
+  [calendar])
+;; Texinfo fancy chapter tags
+;; (add-hook 'texinfo-mode-hook (lambda () (require 'sb-texinfo)))
+;; HTML fancy chapter tags
 ;; (add-hook 'speedbar-load-hook
-;; 	  (lambda ()
-;; 	    (require 'semantic-sb))) ;;semantic支持
+;;        (lambda ()
+;;          (require 'semantic-sb))) ;;semantic支持
 
 
 
@@ -300,8 +300,8 @@
 (setq ecb-tree-indent 4
       ecb-windows-height 0.5
       ecb-windows-width 0.20
-;;       ecb-auto-compatibility-check nil
-;;       ecb-version-check nil
+      ;;       ecb-auto-compatibility-check nil
+      ;;       ecb-version-check nil
       inhibit-startup-message t
       ecb-tip-of-the-day nil
       ecb-tree-navigation-by-arrow t);;使用箭头键展开或折叠
@@ -311,17 +311,17 @@
 ;;使用ecb: http://blog.csdn.net/xiaoliangbuaa/archive/2007/01/10/1479577.aspx
 ;;===========grep配置
 (add-hook 'grep-mode-hook
-	  (lambda()
-	    (require 'grep-edit)))
+          (lambda()
+            (require 'grep-edit)))
 
 ;;=========c/c++模式
 (add-hook 'c-mode-common-hook
           (lambda()
-	    (require 'cedet-conf)
+            (require 'cedet-conf)
             (require 'cpp-conf)
-	    (add-to-list 'magic-fallback-mode-alist
-			 '(buffer-standard-include-p . c++-mode))
-	    (setup-c-base-mode)))
+            (add-to-list 'magic-fallback-mode-alist
+                         '(buffer-standard-include-p . c++-mode))
+            (setup-c-base-mode)))
 
 ;;========Emacs Muse 模式
 (autoload 'muse-mode "muse-mode")
@@ -334,22 +334,22 @@
 (setq gnus-inhibit-startup-message t
       gnus-init-file "~/.emacs.d/conf/gnus-conf.el")
 
-;=========Auctex
+					;=========Auctex
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
-(autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil) 
+(autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
 (add-hook 'TeX-mode-hook
-	  (lambda()
-	    (require 'auctex-conf)))
+          (lambda()
+            (require 'auctex-conf)))
 
 ;;=========ediff
 (add-hook 'ediff-mode-hook
           (lambda()
-	    ;;将ediff的默认buffer排列改为左右而非上下
-	    (setq ediff-split-window-function 'split-window-horizontally
-	    ;;ediff不单独打开一个窗口输入命令
-		  ediff-window-setup-function 'ediff-setup-windows-plain)))
+            ;;将ediff的默认buffer排列改为左右而非上下
+            (setq ediff-split-window-function 'split-window-horizontally
+		  ;;ediff不单独打开一个窗口输入命令
+                  ediff-window-setup-function 'ediff-setup-windows-plain)))
 
 ;;=========smart-compile
 ;; 智能编译:支持c/c++/elisp/html/muse 绑定到 F9
@@ -358,17 +358,17 @@
 
 ;; 自动设置script buffer 为可执行
 (add-hook 'after-save-hook
-	  #'(lambda ()
-	      (and (save-excursion
-		     (save-restriction
-		       (widen)
-		       (goto-char (point-min))
-		       (save-match-data
-			 (looking-at "^#!"))))
-		   (not (file-executable-p buffer-file-name))
-		   (shell-command (concat "chmod u+x " buffer-file-name))
-		   (message
-		    (concat "Saved as script: " buffer-file-name)))))
+          #'(lambda ()
+              (and (save-excursion
+                     (save-restriction
+                       (widen)
+                       (goto-char (point-min))
+                       (save-match-data
+                         (looking-at "^#!"))))
+                   (not (file-executable-p buffer-file-name))
+                   (shell-command (concat "chmod u+x " buffer-file-name))
+                   (message
+                    (concat "Saved as script: " buffer-file-name)))))
 
 (define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
 (add-hook 'find-file-hooks 'auto-insert)
@@ -379,14 +379,14 @@
 (setq ido-enable-flex-matching t)
 (ido-everywhere t)
 (add-hook 'ido-setup-hook
-	  (lambda()
-	    (define-key ido-completion-map [(tab)] 'ido-complete)
-	    (add-to-list 'ido-ignore-files "\\`\\.svn/")
-	    (add-to-list 'ido-ignore-files "\\`TAGS")
-	    (add-to-list 'ido-ignore-buffers "\\`\\.bbdb")
-	    (add-to-list 'ido-ignore-buffers "\\`\\.newsrc.dribble")
-	    (add-to-list 'ido-ignore-buffers "\\`*Completions*")
-	    (add-to-list 'ido-ignore-buffers "\\`*svn-process*")))
+          (lambda()
+            (define-key ido-completion-map [(tab)] 'ido-complete)
+            (add-to-list 'ido-ignore-files "\\`\\.svn/")
+            (add-to-list 'ido-ignore-files "\\`TAGS")
+            (add-to-list 'ido-ignore-buffers "\\`\\.bbdb")
+            (add-to-list 'ido-ignore-buffers "\\`\\.newsrc.dribble")
+            (add-to-list 'ido-ignore-buffers "\\`*Completions*")
+            (add-to-list 'ido-ignore-buffers "\\`*svn-process*")))
 
 ;;=========w3m
 (autoload 'w3m "w3m" nil t)
@@ -405,9 +405,15 @@
 (add-to-list 'auto-mode-alist
              '("\\.rhtml$" . kid-rhtml-mode))
 (add-to-list 'auto-mode-alist
-	     '("\\.html\\.erb\\'" . eruby-nxhtml-mumamo))
+             '("\\.html\\.erb$" . kid-rhtml-mode))
 (add-to-list 'auto-mode-alist
-	     '("\\.php$" . zzq-phtml-mode))
+             '("\\.php$" . zzq-phtml-mode))
+
+(add-hook 'css-mode-hook
+          (lambda()
+            (require 'xhtml-conf)
+	    (hexcolour-add-to-font-lock)
+	    (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)))
 
 ;;========gtags mode
 (defun setup-gtags-mode ()
@@ -433,7 +439,7 @@
   (setup-gtags-mode)
   ;; (set (make-local-variable 'c-basic-offset) 4)
   (setq tab-width 4
-	indent-tabs-mode t)
+        indent-tabs-mode t)
   ;; (require 'auto-complete-etags)
   (require 'autocompletion-php-functions)
   (set (make-local-variable 'ac-sources)
@@ -446,7 +452,7 @@
         (message "No symbol at point.")
       (browse-url
        (concat "http://php.net/manual-lookup.php?pattern="
-	       (symbol-name symbol))))))
+               (symbol-name symbol))))))
 
 
 
@@ -457,30 +463,30 @@
   "Abbrev table in use in `js2-mode' buffers.")
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (add-hook 'js2-mode-hook
-	  (lambda ()
-	    (setq js2-highlight-level 3)
-	    (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
-	    (define-key js2-mode-map "\r" 'newline-and-indent)
-	    (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
+          (lambda ()
+            (setq js2-highlight-level 3)
+            (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
+            (define-key js2-mode-map "\r" 'newline-and-indent)
+            (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
 
 
 ;;=========Python 模式
 (setq auto-mode-alist
       (cons '("\\.py$" . python-mode)
-	    auto-mode-alist))
+            auto-mode-alist))
 (setq interpreter-mode-alist
       (cons '("python" . python-mode)
-	    interpreter-mode-alist))
+            interpreter-mode-alist))
 (add-hook 'python-mode-hook
-	  (lambda ()
-	    (require 'python-conf)
-	    (setup-python-mode)))
-	    
+          (lambda ()
+            (require 'python-conf)
+            (setup-python-mode)))
+
 ;;=========Ruby 模式
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)
-		("Rakefile$" . ruby-mode)
-		)
+                ("Rakefile$" . ruby-mode)
+                )
               auto-mode-alist))
 (setq interpreter-mode-alist
       (append '(("ruby" . ruby-mode))
@@ -489,37 +495,37 @@
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
 (add-hook 'ruby-mode-hook
           (lambda()
-	    (require 'ruby-conf)
-	    (setup-ruby-mode)))
+            (require 'ruby-conf)
+            (setup-ruby-mode)))
 
 
-;=========SQL模式
+					;=========SQL模式
 (autoload 'sql-mode "sql-mode" "SQL Editing Mode" t)
 (setq auto-mode-alist
       (append '(("\\.sql$" . sql-mode)
-		("\\.tbl$" . sql-mode)
-		("\\.sp$"  . sql-mode))
-	      auto-mode-alist))
+                ("\\.tbl$" . sql-mode)
+                ("\\.sp$"  . sql-mode))
+              auto-mode-alist))
 (defun setup-sql-modes ()
   (require 'sql-completion)
   (define-key sql-interactive-mode-map "\t" 'comint-dynamic-complete)
   (sql-mysql-completion-init))
 (add-hook 'sql-interactive-mode-hook
-	  'setup-sql-modes)
+          'setup-sql-modes)
 (add-hook 'sql-mode-hook
-	  'setup-sql-modes)
+          'setup-sql-modes)
 
-;==========YAML 模式
-(autoload 'yaml-mode "yaml-mode.el" nil t)  
+;;==========YAML 模式
+(autoload 'yaml-mode "yaml-mode.el" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
-;==========ELisp 模式
+;;==========ELisp 模式
 (add-hook 'emacs-lisp-mode-hook
-	  (lambda()
-	    (require 'elisp-conf)
-	    (setup-emacs-list-mode)))
+          (lambda()
+            (require 'elisp-conf)
+            (setup-emacs-list-mode)))
 
-;=========Shell 模式
+;;=========Shell 模式
 (require 'shell-completion)
 (require 'shell-history)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -544,7 +550,7 @@
 ;;=======color-moccur=============================
 (setq *moccur-buffer-name-exclusion-list*
       '(".+TAGS.+" "*Completions*" "*Messages*"
-	"newsrc.eld" ".bbdb"))
+        "newsrc.eld" ".bbdb"))
 (setq moccur-split-word t)
 
 ;; (setq dmoccur-use-list t)
@@ -588,7 +594,7 @@
   (add-to-list 'ac-sources 'ac-source-yasnippet)
   (set-face-background 'ac-candidate-face "lightgray")
   (set-face-attribute 'ac-candidate-face nil
-		      :underline "red")
+                      :underline "red")
   (set-face-background 'ac-selection-face "steelblue")
   (define-key ac-completing-map "\M-n" 'ac-next)
   (define-key ac-completing-map "\M-p" 'ac-previous)
@@ -603,9 +609,9 @@
 (setq regex-tool-backend (quote perl))
 (setq regex-tool-new-frame t)
 ;; (set-face-attribute 'regex-tool-matched-face t
-		    ;; :background "black"
-		    ;; :foreground "Orange"
-		    ;; :weight bold)
+;; :background "black"
+;; :foreground "Orange"
+;; :weight bold)
 
 ;;========sh-mode
 ;; Add color to a shell running in emacs 'M-x shell'
@@ -624,6 +630,7 @@
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
 
 ;;========init.el end here
 

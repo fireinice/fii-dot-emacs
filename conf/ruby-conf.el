@@ -77,7 +77,7 @@
       (find-file (concat rails-root file))
       (goto-line (string-to-number line)))))
 
-(define-key rspec-mode-keymap (kbd "C-c ,b") 'rspec-verify)
+(define-key rspec-mode-keymap (kbd "C-c ,b") 'rspec-verify-backtrace)
 (defun rspec-verify-backtrace ()
   "Runs the specified example at the point of the current buffer."
   (interactive)
