@@ -1,10 +1,10 @@
-;;; xhtml-conf.el --- 
+;;; xhtml-conf.el ---
 
 ;; Copyright 2010 Zhiqiang Zhang
 ;;
 ;; Author: zhiqiang.zhang@ask.com
 ;; Version: $Id: xhtml-conf.el,v 0.0 2010/06/04 06:33:03 zigler Exp $
-;; Keywords: 
+;; Keywords:
 ;; X-URL: not distributed yet
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -102,28 +102,28 @@
 (require 'mumamo)
 (require 'zencoding-mode)
 (require 'javascript-mode)
-;=========HTML 模式
+;;=========HTML 模式
 ;; only special background in submode
 (add-hook 'nxhtml-mode-hook 'common-nxhtml-mode-setup)
 (add-hook 'mumamo-turn-on-hook
-	  (lambda ()
-	    (setq nxhtml-validation-header-mumamo-modes '(nxhtml-mode eruby-nxhtml-mumamo-mode))
-	    (nxhtml-add-validation-header-if-mumamo)))
+          (lambda ()
+            (setq nxhtml-validation-header-mumamo-modes '(nxhtml-mode eruby-nxhtml-mumamo-mode))
+            (nxhtml-add-validation-header-if-mumamo)))
 
 (defun common-nxhtml-mode-setup ()
   ;; I don't use cua-mode, but nxhtml always complains. So, OK, let's
   ;; define this dummy variable
   (setq nxhtml-skip-welcome t)
   (set-face-attribute 'mumamo-background-chunk-major nil
-		      :background "Grey25")
+                      :background "Grey25")
   (set-face-attribute 'mumamo-background-chunk-submode1 nil
-		      :background "Grey35")
+                      :background "Grey35")
   (set-face-attribute 'mumamo-background-chunk-submode2 nil
-		      :background "Grey35")
+                      :background "Grey35")
   (set-face-attribute 'mumamo-background-chunk-submode3 nil
-		      :background "Grey35")
+                      :background "Grey35")
   (set-face-attribute 'mumamo-background-chunk-submode4 nil
-		      :background "Grey35")
+                      :background "Grey35")
   (setq zencoding-mode t)
   (setq mumamo-chunk-coloring 'submode-colored)
   (setq indent-region-mode t)
@@ -134,26 +134,21 @@
   (make-local-variable 'cua-inhibit-cua-keys)
   (set (make-local-variable 'ac-sources)
        '(ac-source-yasnippet
-	 ac-source-rng-nxml
-	 ac-source-abbrev
-	 ac-source-dictionary))
+         ac-source-rng-nxml
+         ac-source-abbrev
+         ac-source-dictionary))
   (setq ac-auto-start 1))
 
 (defun zzq-html-mode ()
   (nxhtml-mode)
   (nxhtml-mumamo-mode)
   (setq mumamo-current-chunk-family
-  	'("common nXhtml Family" nxhtml-mode
-  	  (mumamo-chunk-inlined-style
-  	   mumamo-chunk-inlined-script
-  	   mumamo-chunk-style=
-  	   mumamo-chunk-onjs=)))
+        '("common nXhtml Family" nxhtml-mode
+          (mumamo-chunk-inlined-style
+           mumamo-chunk-inlined-script
+           mumamo-chunk-style=
+           mumamo-chunk-onjs=)))
   (auto-fill-mode -1))
-
-(defun kid-rhtml-mode ()
-  (setq nxml-degraded t)
-  (zzq-html-mode)
-  (eruby-nxhtml-mumamo-mode))
 
 (defun zzq-phtml-mode ()
   (zzq-html-mode)
@@ -164,19 +159,19 @@
 (defvar hexcolour-keywords
   '(("#[abcdef[:digit:]]\\{3,6\\}"
      (0 (let ((colour (match-string-no-properties 0)))
-	  (if (or (= (length colour) 4)
-		  (= (length colour) 7))
-	      (put-text-property 
-	       (match-beginning 0)
-	       (match-end 0)
-	       'face (list :background (match-string-no-properties 0)
-			   :foreground (if (>= (apply '+ (x-color-values 
-							  (match-string-no-properties 0)))
-					       (* (apply '+ (x-color-values "white")) .6))
-					   "black" ;; light bg, dark text
-					 "white" ;; dark bg, light text
-					 )))))
-	append))))
+          (if (or (= (length colour) 4)
+                  (= (length colour) 7))
+              (put-text-property
+               (match-beginning 0)
+               (match-end 0)
+               'face (list :background (match-string-no-properties 0)
+                           :foreground (if (>= (apply '+ (x-color-values
+                                                          (match-string-no-properties 0)))
+                                               (* (apply '+ (x-color-values "white")) .6))
+                                           "black" ;; light bg, dark text
+                                         "white" ;; dark bg, light text
+                                         )))))
+        append))))
 
 (autoload 'common-smart-snippets-setup "smart-snippets-conf" t nil)
 (defun hexcolour-add-to-font-lock ()

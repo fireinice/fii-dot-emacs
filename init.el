@@ -124,7 +124,7 @@
       delete-old-versions t
       backup-by-copying t)
 
-					;语法高亮
+                                        ;语法高亮
 (setq global-font-lock-mode t
       font-lock-maximum-decoration t
       font-lock-verbose t
@@ -334,7 +334,7 @@
 (setq gnus-inhibit-startup-message t
       gnus-init-file "~/.emacs.d/conf/gnus-conf.el")
 
-					;=========Auctex
+                                        ;=========Auctex
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
@@ -348,7 +348,7 @@
           (lambda()
             ;;将ediff的默认buffer排列改为左右而非上下
             (setq ediff-split-window-function 'split-window-horizontally
-		  ;;ediff不单独打开一个窗口输入命令
+                  ;;ediff不单独打开一个窗口输入命令
                   ediff-window-setup-function 'ediff-setup-windows-plain)))
 
 ;;=========smart-compile
@@ -399,21 +399,18 @@
 (load "/home/zigler/.emacs.d/nxhtml/autostart.el")
 (autoload 'zzq-html-mode "xhtml-conf" nil t)
 (autoload 'zzq-phtml-mode "xhtml-conf" nil t)
-(autoload 'kid-rhtml-mode "xhtml-conf" nil t)
+(autoload 'common-smart-snippets-setup "smart-snippets-conf" nil t)
 (add-to-list 'auto-mode-alist
              '("\\.html$" . zzq-html-mode))
-(add-to-list 'auto-mode-alist
-             '("\\.rhtml$" . kid-rhtml-mode))
-(add-to-list 'auto-mode-alist
-             '("\\.html\\.erb$" . kid-rhtml-mode))
 (add-to-list 'auto-mode-alist
              '("\\.php$" . zzq-phtml-mode))
 
 (add-hook 'css-mode-hook
           (lambda()
             (require 'xhtml-conf)
-	    (hexcolour-add-to-font-lock)
-	    (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)))
+            (require 'smart-snippets-conf)
+            (hexcolour-add-to-font-lock)
+            (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)))
 
 ;;========gtags mode
 (defun setup-gtags-mode ()
@@ -483,10 +480,12 @@
             (setup-python-mode)))
 
 ;;=========Ruby 模式
+(autoload 'rhtml-mode "ruby-conf")
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)
                 ("Rakefile$" . ruby-mode)
-                )
+                ("\\.rhtml$" . rhtml-mode)
+                ("\\.html\\.erb$" . rhtml-mode))
               auto-mode-alist))
 (setq interpreter-mode-alist
       (append '(("ruby" . ruby-mode))
@@ -495,11 +494,11 @@
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
 (add-hook 'ruby-mode-hook
           (lambda()
+            (require 'rails)
             (require 'ruby-conf)
             (setup-ruby-mode)))
 
-
-					;=========SQL模式
+;;=========SQL模式
 (autoload 'sql-mode "sql-mode" "SQL Editing Mode" t)
 (setq auto-mode-alist
       (append '(("\\.sql$" . sql-mode)
@@ -633,11 +632,3 @@
 
 
 ;;========init.el end here
-
-
-
-
-
-
-
-
