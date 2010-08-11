@@ -1,29 +1,29 @@
 ;; $Id: fvwm-mode.el 210 2007-08-18 16:37:19Z theblackdragon $
-;; 
+;;
 ;; Release 1.6.1
-;; 
+;;
 ;; Copyright (C) 2005-2006  Bert Geens <bert@lair.be>
-;; 
+;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
 ;; as published by the Free Software Foundation; either version 2
 ;; of the License, or (at your option) any later version.
-;; 
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
-;; 
-;; Thanks to Scott Andrew Borton for his excellent major mode tutorial, 
-;;  to Thomas Adam for providing his vim syntax file for FVWM which was a great help in creating this mode 
+;;
+;; Thanks to Scott Andrew Borton for his excellent major mode tutorial,
+;;  to Thomas Adam for providing his vim syntax file for FVWM which was a great help in creating this mode
 ;;  and many others in the Emacs and FVWM communities.
-;; 
+;;
 ;; Thanks also to Hun for testing, bugreporting and providing patches with added keywords.
-;; 
+;;
 ;; ChangeLog:
 ;; 1.6.1
 ;;  - added fvwm-execute-buffer (C-c e b)
@@ -82,12 +82,12 @@
 ;; 1.0.0:
 ;;  - initial release
 ;;  - only does syntax hilighting
-;; 
+;;
 ;; TODO:
 ;; * move some keywords around and add 'new' ones
 ;; * fix the colouring to be usable with color-theme
 ;; * hilight user defined functions
-;; 
+;;
 (defvar fvwm-mode-hook nil
   "Hook run when entering FVWM mode.")
 
@@ -121,7 +121,7 @@
     (define-key fvwm-mode-map "\C-ceb" 'fvwm-execute-buffer)
     (define-key fvwm-mode-map "\C-cef" 'fvwm-execute-file)
     (define-key fvwm-mode-map "\C-cer" 'fvwm-execute-region)
-    (if (featurep 'pcomplete) 
+    (if (featurep 'pcomplete)
         (define-key fvwm-mode-map "\M-\t" 'pcomplete)
         (define-key fvwm-mode-map "\M-\t"  'fvwm-complete-keyword))
     fvwm-mode-map)
@@ -204,82 +204,82 @@
 (require 'font-lock)
 ;;
 ;; Fvwm functions
-;; 
+;;
 (defvar fvwm-functions '(
-	"AddButtonStyle" "AddTitleStyle" "AddToDecor" "AddToFunc" "AddToMenu"
-	"AnimatedMove" "Any" "AppsBackingStore" "Autoraise" 
+        "AddButtonStyle" "AddTitleStyle" "AddToDecor" "AddToFunc" "AddToMenu"
+        "AnimatedMove" "Any" "AppsBackingStore" "Autoraise"
 
-	"BackingStore" "Beep" "BorderStyle" "BoundaryWidth" "BugOpts" "BusyCursor"
-	"ButtonState" "ButtonStyle" "DestroyModuleConfig"
+        "BackingStore" "Beep" "BorderStyle" "BoundaryWidth" "BugOpts" "BusyCursor"
+        "ButtonState" "ButtonStyle" "DestroyModuleConfig"
 
-	"ChangeDecor" "ChangeMenuStyle" "CenterOnCirculate" "CirculateDown"
-	"CirculateHit" "CirculateSkip" "CirculateSkipIcons" "CirculateUp" "ClickTime"
-	"ClickToFocus" "Close" "ColorLimit" "ColormapFocus" "CopyMenuStyle" "Current"
-	"Cursor" "CursorMove" "CursorStyle" 
+        "ChangeDecor" "ChangeMenuStyle" "CenterOnCirculate" "CirculateDown"
+        "CirculateHit" "CirculateSkip" "CirculateSkipIcons" "CirculateUp" "ClickTime"
+        "ClickToFocus" "Close" "ColorLimit" "ColormapFocus" "CopyMenuStyle" "Current"
+        "Cursor" "CursorMove" "CursorStyle"
 
-	"DecorateTransients" "DefaultColors" "DefaultColorset" "DefaultFont"
-	"DefaultIcon" "DefaultLayers" "Delete" "Desk" "DesktopName" "DesktopSize"
-	"Destroy" "DestroyModule" "Deschedule" "DestroyDecor" "DestroyFunc" "DestroyMenu"
-	"DestroyMenuStyle" "Direction" "DontMoveOff"
+        "DecorateTransients" "DefaultColors" "DefaultColorset" "DefaultFont"
+        "DefaultIcon" "DefaultLayers" "Delete" "Desk" "DesktopName" "DesktopSize"
+        "Destroy" "DestroyModule" "Deschedule" "DestroyDecor" "DestroyFunc" "DestroyMenu"
+        "DestroyMenuStyle" "Direction" "DontMoveOff"
 
-	"Echo" "EdgeCommand" "EdgeResistance" "EdgeScroll" "EdgeThickness" "Emulate"
-	"EndFunction" "EndMenu" "EndPopup" "EscapeFunc" "EWMHBaseStruts" "Exec"
-	"ExecUseShell" "ExitFunction"  "EWMHActivateWindowFunc"
+        "Echo" "EdgeCommand" "EdgeResistance" "EdgeScroll" "EdgeThickness" "Emulate"
+        "EndFunction" "EndMenu" "EndPopup" "EscapeFunc" "EWMHBaseStruts" "Exec"
+        "ExecUseShell" "ExitFunction"  "EWMHActivateWindowFunc"
 
-	"FakeClick" "FlipFocus" "Focus" "Function"
+        "FakeClick" "FlipFocus" "Focus" "Function"
 
-	"GlobalOpts" "GnomeButton" "GotoDesk" "GotoDenkAndPage" "GotoPage"
+        "GlobalOpts" "GnomeButton" "GotoDesk" "GotoDenkAndPage" "GotoPage"
 
-	"HiBackColor" "HideGeometryWindow" "HiForeColor" "HilightColor"
+        "HiBackColor" "HideGeometryWindow" "HiForeColor" "HilightColor"
 
-	"Icon" "IconBox" "IconFont" "Iconify" "IconPath" "IgnoreModifiers" "ImagePath"
+        "Icon" "IconBox" "IconFont" "Iconify" "IconPath" "IgnoreModifiers" "ImagePath"
 
-	"Key"
+        "Key"
 
-	"Layer" "Lenience" "Lower"
+        "Layer" "Lenience" "Lower"
 
-	"Maximize" "Menu" "MenuBackColor" "MenuForeColor" "MenuStippleColor" "MenuStyle"
-	"Module" "ModuleListenOnly" "ModulePath" "Mouse" "Move" "MoveThreshold" "MoveToDesk" "MoveToPage"
-	"MoveToScreen" "MWMBorders" "MWMButtons" "MWMDecorHints" "MWMFunctionHints"
-	"MWMHintOverride" "MWMMenus"
+        "Maximize" "Menu" "MenuBackColor" "MenuForeColor" "MenuStippleColor" "MenuStyle"
+        "Module" "ModuleListenOnly" "ModulePath" "Mouse" "Move" "MoveThreshold" "MoveToDesk" "MoveToPage"
+        "MoveToScreen" "MWMBorders" "MWMButtons" "MWMDecorHints" "MWMFunctionHints"
+        "MWMHintOverride" "MWMMenus"
 
-	"Next" "NoBorder" "NoBoundaryWidth" "None" "Nop" "NoPPosition" "NoTitle"
+        "Next" "NoBorder" "NoBoundaryWidth" "None" "Nop" "NoPPosition" "NoTitle"
 
-	"OpaqueMove" "OpaqueMoveSize" "OpaqueResize"
+        "OpaqueMove" "OpaqueMoveSize" "OpaqueResize"
 
-	"Pager" "PagerBackColor" "PagerFont" "PagerForeColor" "PagingDefault" "Pick"
-	"PipeRead" "PixmapPath" "PlaceAgain" "PointerKey" "Popup" "Prev"
+        "Pager" "PagerBackColor" "PagerFont" "PagerForeColor" "PagingDefault" "Pick"
+        "PipeRead" "PixmapPath" "PlaceAgain" "PointerKey" "Popup" "Prev"
 
-	"Quit" "QuitScreen" "QuitSession"
+        "Quit" "QuitScreen" "QuitSession"
 
-	"Raise" "RaiseLower" "RandomPlacement" "Read" "Recapture" "RecaptureWindow"
-	"Refresh" "Resize" "ResizeMove" "Restart" 
+        "Raise" "RaiseLower" "RandomPlacement" "Read" "Recapture" "RecaptureWindow"
+        "Refresh" "Resize" "ResizeMove" "Restart"
 
-	"SaveUnders" "SaveQuitSession" "SaveSession" "Scroll" "SetAnimation" "SetEnv" 
-	"SetMenuDelay" "SetMenuStyle" "SendToModule" "Silent" "SmartPlacement" "SnapAttraction" 
-	"SnapGrid" "StartsOnDesk" "StaysOnTop" "StdBackColor" "StdForeColor" "Stick" "Sticky" 
-	"StickyBackColor" "StickyForeColor" "StickyIcons" "Stroke" "StrokeFunc" 
-	"StubbornIconPlacement" "StubbornIcons" "StubbornPlacement" "Style" "StyleFocus" 
-	"SuppressIcons" "Swallow"  "Schedule"
+        "SaveUnders" "SaveQuitSession" "SaveSession" "Scroll" "SetAnimation" "SetEnv"
+        "SetMenuDelay" "SetMenuStyle" "SendToModule" "Silent" "SmartPlacement" "SnapAttraction"
+        "SnapGrid" "StartsOnDesk" "StaysOnTop" "StdBackColor" "StdForeColor" "Stick" "Sticky"
+        "StickyBackColor" "StickyForeColor" "StickyIcons" "Stroke" "StrokeFunc"
+        "StubbornIconPlacement" "StubbornIcons" "StubbornPlacement" "Style" "StyleFocus"
+        "SuppressIcons" "Swallow"  "Schedule"
 
-	"Test" "TitleStyle" "TogglePage" 
+        "Test" "TitleStyle" "TogglePage"
         "ThisWindow" "TestRc"
 
-	"UnsetEnv" "UpdateDecor" "UpdateStyles"
+        "UnsetEnv" "UpdateDecor" "UpdateStyles"
 
-	"Wait" "Warp" "WarpToWindow" "WindowFont" "WindowId" "WindowList" "WindowListSkip" 
-	"WindowShade" "WindowShadeAnimate" "WindowsDesk" "Xinerama" "XineramaPrimaryScreen" 
-	"XineramaSls" "XineramaSlsSize" "XorPixmap" "XorValue"))
-;; 
+        "Wait" "Warp" "WarpToWindow" "WindowFont" "WindowId" "WindowList" "WindowListSkip"
+        "WindowShade" "WindowShadeAnimate" "WindowsDesk" "Xinerama" "XineramaPrimaryScreen"
+        "XineramaSls" "XineramaSlsSize" "XorPixmap" "XorValue"))
+;;
 ;; Fvwm keywords
-;; 
+;;
 (defvar fvwm-keywords-1 '(
        "Action" "Active" "ActiveColorset" "ActiveDown" "ActiveFore" "ActiveForeOff"
        "ActivePlacement" "ActivePlacementHonorsStartsOnPage" "ActivePlacementIgnoresStartsOnPage"
-       "ActiveUp" "All" "AllDesks" "AllowRestack" "AllPages" "Alphabetic" "Anim" "Animated" "Animation" "AnimationOff" 
-       "AutomaticHotkeys" "AutomaticHotkeysOff" "AdjustedPixmap" 
-        
-       "BGradient" "Back" "BackColor" "Background" "BackingStore" "BackingStoreOff" "BalloonColorset" "bg" 
+       "ActiveUp" "All" "AllDesks" "AllowRestack" "AllPages" "Alphabetic" "Anim" "Animated" "Animation" "AnimationOff"
+       "AutomaticHotkeys" "AutomaticHotkeysOff" "AdjustedPixmap"
+
+       "BGradient" "Back" "BackColor" "Background" "BackingStore" "BackingStoreOff" "BalloonColorset" "bg"
        "Balloons" "BalloonFont" "BalloonYOffset" "BalloonBorderWidth"
        "BorderColorset" "BorderWidth" "Bottom" "BoundaryWidth" "Buffer" "Button"
        "Button0" "Button1" "Button2" "Button3" "Button4" "Button5" "Button6" "Button7" "Button8"
@@ -295,7 +295,7 @@
        "DrawMotion" "DGradient" "DecorateTransient" "Default" "Delay" "DepressableBorder" "Desk" "DontLowerTransient"
        "DontRaiseTransient" "DontShowName" "DontStackTransient" "DontStackTransientParent" "DoubleClick"
        "DoubleClickTime" "Down" "DrawIcons" "DumbPlacement" "DynamicMenu" "DynamicPopDownAction"
-       "DynamicPopupAction" 
+       "DynamicPopupAction"
 
        "East" "Expect" "Effect"
 
@@ -311,12 +311,12 @@
        "Hilight3DThickness" "Hilight3dThin" "HilightBack" "HilightBackOff" "HilightBorderColorset"
        "HilightColorset" "HilightFore" "HintOverride" "HoldSubmenus"
        "HilightIconTitleColorset" "hi"
-       
+
        "Icon" "IconAlpha" "IconBox" "IconFill" "IconFont" "IconGrid" "IconOverride" "IconTitle"
        "Iconic" "IconifyWindowGroups" "IconifyWindowGroupsOff" "Icons" "IgnoreRestack" "Inactive"
        "InActive" "IndexedWindowName" "Interior" "Item" "ItemFormat" "Iterations"
        "IconTitleColorset" "IconTitleRelief" "IndexedIconName" "IconBackgroundPadding" "IconTint"
-       
+
        "KeepWindowGroupsOnDesk"
 
        "Last" "Layer" "Left" "LeftJustified" "LeftJustify" "Lenience" "LowerTransient" "LeftOfText"
@@ -353,7 +353,7 @@
        "Right" "RightJustified" "Root" "RootTransparent" "Rows" "RightTitleRotatedCCW"
 
        "SGradient" "SameType" "SaveUnder" "SaveUnderDiff" "ScatterWindowGroups" "Screen" "SelectButton"
-       "SelectInPlace" "SelectOnReleasE" "SelectWarp" "SeparatorsLong" "SeparatorsShort" 
+       "SelectInPlace" "SelectOnReleasE" "SelectWarp" "SeparatorsLong" "SeparatorsShort"
        "ShowCurrentDesk" "ShowMapping"
        "SideColor" "SidePic" "Simple" "SkipMapping" "Slippery" "SlipperyIcon" "SmallFont" "SloppyFocus"
        "SmartPlacement" "SmartPlacementIsNormal" "SmartPlacementIsReallySmart" "Solid" "SolidSeparators"
@@ -364,12 +364,12 @@
        "SubmenusLeft" "SubmenusRight" "Sunk" "StrokeWidth" "sh"
 
        "This" "TileCascadePlacement" "TileManualPlacement" "TiledPixmap" "Timeout" "Tint" "Title"
-       "TitleAtBottom" "TitleColorset" "TitleFont" "TitleAtLeft" "TitleAtRight" "TitleAtTop" 
+       "TitleAtBottom" "TitleColorset" "TitleFont" "TitleAtLeft" "TitleAtRight" "TitleAtTop"
        "TitleUnderlines0" "TitleUnderlines1"
        "TitleUnderlines2" "TitleWarp" "TitleWarpOff" "Top" "Transient" "Translucent" "TrianglesRelief"
-       "TrianglesSolid" "Toggle" "Twist" 
+       "TrianglesSolid" "Toggle" "Twist"
 
-       "UnderMousePlacement" "Up" "UseBorderStyle" "UseDecor" "UseIconName" "UseIconPosition" 
+       "UnderMousePlacement" "Up" "UseBorderStyle" "UseDecor" "UseIconName" "UseIconPosition"
        "UseListSkip" "UsePPosition"
        "UseSkipList" "UseStack" "UseStyle" "UseTitleStyle" "UseTransientPPosition" "UseTransientUSPosition"
        "UseUSPosition" "UseWinList" "UnderText"
@@ -387,13 +387,13 @@
 ;; We need to work around a size limitation for the arguments to regexp-opt in emacses before GNU Emacs 22
 (if (string< (substring emacs-version 0 2) "22")
     (let ()
-	(defvar fvwm-keywords-1-opt (regexp-opt fvwm-keywords-1))
+        (defvar fvwm-keywords-1-opt (regexp-opt fvwm-keywords-1))
       (defvar fvwm-keywords-2-opt (regexp-opt fvwm-keywords-2))
       (defvar fvwm-keywords (concat "\\<\\(" fvwm-keywords-1-opt "\\|" fvwm-keywords-2-opt "\\)\\>")))
   (defvar fvwm-keywords (concat "\\<" (regexp-opt (append fvwm-keywords-1 fvwm-keywords-2) t) "\\>")))
-;; 
+;;
 ;; Fvwm focusstyles for the Style command (the FP Styles)
-;; 
+;;
 (defvar fvwm-fp-focusstyles (concat "\\<" (regexp-opt '(
        "FPFocusClickButtons" "FPFocusClickModifiers"
        "!FPSortWindowlistByFocus" "FPSortWindowlistByFocus"
@@ -419,9 +419,9 @@
        "!FPReleaseFocus" "!FPReleaseFocusTransient"
        "FPReleaseFocusTransient" "FPOverrideReleaseFocus"
        "!FPOverrideReleaseFocus") t) "\\>"))
-;; 
+;;
 ;; Fvwm focusstyles for the StyleFocus command
-;; 
+;;
 (defvar fvwm-stylefocus-focusstyles (concat "\\<" (regexp-opt '(
        "FocusClickButtons" "FocusClickModifiers"
        "!SortWindowlistByFocus" "SortWindowlistByFocus"
@@ -445,9 +445,9 @@
        "AllowRaiseClickFunction" "GrabFocus" "OverrideGrabFocus"
        "!OverrideGrabFocus" "ReleaseFocus"
        "!ReleaseFocus" "!ReleaseFocusTransient") t) "\\>"))
-;; 
+;;
 ;; EWMH keywords
-;; 
+;;
 (defvar ewmh-keywords (concat "\\<" (regexp-opt '(
        "EWMHDonateIcon" "EWMHDontDonateIcon"
        "EWMHDonateMiniIcon" "EWMHDontDonateMiniIcon"
@@ -460,29 +460,29 @@
        "EWMHPlacementUseDynamicWorkingArea") t) "\\>"))
 ;;
 ;; Conditionnames
-;; 
+;;
 (defvar fvwm-conditionnames (concat "\\<" (regexp-opt '(
        "AcceptsFocus" "CurrentDesk" "CurrentGlobalPage"
        "CurrentGlobalPageAnyDesk" "CurrentPage"
        "CurrentPageAnyDesk" "CurrentScreen" "Iconic" "Layer"
        "Maximized" "PlacedByButton3" "PlacedByFvwm" "Raised"
        "Shaded" "Sticky" "Transient" "Visible") t) "\\>"))
-;; 
+;;
 ;; Contextnames
-;; 
+;;
 (defvar fvwm-contextnames (concat "\\<" (regexp-opt '(
        "BOTTOM" "BOTTOM_EDGE" "BOTTOM_LEFT" "BOTTOM_RIGHT"
        "DEFAULT" "DESTROY" "LEFT" "LEFT_EDGE" "MENU" "MOVE"
        "RESIZE" "RIGHT" "RIGHT_EDGE" "ROOT" "SELECT" "STROKE" "SYS"
        "TITLE" "TOP" "TOP_EDGE" "TOP_LEFT" "TOP_RIGHT" "WAIT"
        "POSITION") t) "\\>"))
-;; 
+;;
 ;; Fvwm module and special function names
-;; 
+;;
 (defvar fvwm-special (concat "\\<" (regexp-opt '(
        "FvwmAnimate" "FvwmAudio" "FvwmAuto" "FvwmBacker" "FvwmBanner"
        "FvwmButtons" "FvwmCascade" "FvwmCommandS" "FvwmConsole"
-       "FvwmConsoleC" "FvwmCpp" "FvwmDebug" "FvwmDragWell" "FvwmEvent" 
+       "FvwmConsoleC" "FvwmCpp" "FvwmDebug" "FvwmDragWell" "FvwmEvent"
        "FvwmForm" "FvwmGtk" "FvwmIconBox" "FvwmIconMan" "FvwmIdent"
        "FvwmM4" "FvwmPager" "FvwmRearrange" "FvwmSave" "FvwmSaveDesk"
        "FvwmScript" "FvwmScroll" "FvwmTalk" "FvwmTaskBar" "FvwmTheme"
@@ -491,18 +491,18 @@
        "StartFunction" "InitFunction" "RestartFunction" "ExitFunction"
        "SessionInitFunction" "SessionRestartFunction" "SessionExitFunction"
        "MissingSubmenuFunction") t) "\\>"))
-;; 
+;;
 ;; Some others:
 ;; (regexp-opt '("bottom bottomright" "button" "default" "down" "indicator" "none" "pointer" "position" "prev" "quiet" "top" "unlimited") t)
 ;; (regexp-opt '("True" "False" "Toggle") t)
-;; 
+;;
 (defconst fvwm-font-lock-keywords-1
   (list
    '("^[ ]*\\(#.*\\)" 1 font-lock-comment-face) ;hilight comments
    '("\\(#[0-9a-fA-F]\\{12\\}\\)[ ,\n]" . fvwm-rgb-value-face) ;hilight RGB values, never seen this before, but it was in fvwm.vim...
-   '("\\(#[0-9a-fA-F]\\{9\\}\\)[ ,\n]" . fvwm-rgb-value-face)	;hilight RGB values, never seen this before, but it was in fvwm.vim...
-   '("\\(#[0-9a-fA-F]\\{6\\}\\)[ ,\n]" . fvwm-rgb-value-face)	;hilight RGB values
-   '("\\(#[0-9a-fA-F]\\{3\\}\\)[ ,\n]" . fvwm-rgb-value-face)	;hilight RGB values
+   '("\\(#[0-9a-fA-F]\\{9\\}\\)[ ,\n]" . fvwm-rgb-value-face)   ;hilight RGB values, never seen this before, but it was in fvwm.vim...
+   '("\\(#[0-9a-fA-F]\\{6\\}\\)[ ,\n]" . fvwm-rgb-value-face)   ;hilight RGB values
+   '("\\(#[0-9a-fA-F]\\{3\\}\\)[ ,\n]" . fvwm-rgb-value-face)   ;hilight RGB values
 
    ; hilight Colorset keyword followed by a colour name from rgb.txt, see man FvwmTheme for details
    '(".*[Cc]olorset.*[ ]fg[ ]\\([a-z\"0-9]*\\).*" 1 fvwm-rgb-value-face)
@@ -537,12 +537,12 @@
    (cons fvwm-contextnames font-lock-constant-face) ;FVWM context keywords
    (cons fvwm-special fvwm-special-face)) ;FVWM builtin modules and special functions
   "Fvwm keywords to hilight")
-;; 
+;;
 ;; FvwmScript keywords
-;; 
+;;
 (defvar fvwmscript-instructions (concat "\\<" (regexp-opt '(
        "HideWidget" "ShowWidget" "ChangeValue" "ChangeMaxValue" "ChangeMinValue"
-       "ChangeTitle" "ChongeLocaleTitle" "ChangeIcon" "ChangeForeColor" 
+       "ChangeTitle" "ChongeLocaleTitle" "ChangeIcon" "ChangeForeColor"
        "ChangeBackColor" "ChangeColorset" "ChongePosition" "ChangeSize" "ChangeFont"
        "WarpPointer" "WriteToFile" "Do" "Set" "Quit" "SendSignal" "SendToScript"
        "Key") t) "\\>")) ;instructions
@@ -557,7 +557,7 @@
        "Type" "Size" "Position" "Title" "Value" "MaxValue" "MinValue" "Font"
        "ForeColor" "BackColor" "HilightColor" "ShadowColor" "Colorset" "Flags") t) "\\>"));properties
 (defvar fvwmscript-flagsopt (concat "\\<" (regexp-opt '(
-       "Hidden" "NoReliefString" "NoFocus" "Left" "Center" "Right") t) "\\>"))	;flagsOpt
+       "Hidden" "NoReliefString" "NoFocus" "Left" "Center" "Right") t) "\\>"))  ;flagsOpt
 (defvar fvwmscript-keywords (concat "\\<" (regexp-opt '(
        "BackColor" "Colorset" "DefaultFont" "DefaultBack" "DefaultColorset"
        "DefaultFore" "DefaultHilight" "DefaultShadow" "Font" "ForeColor" "HilightColor"
@@ -567,20 +567,20 @@
        "CheckBox" "HDipstick" "HScrollBar" "ItemDraw" "List" "Menu" "MiniScroll"
        "PopupMenu" "PushButton" "Rectangle" "SwallowExec" "TextField" "VDipstick"
        "VScrollBar") t) "\\>")) ;widgets
-;; 
+;;
 (defconst fvwm-font-lock-keywords-2
   (append fvwm-font-lock-keywords-1
-	  (list
-	   '("\\(rgb:..\/..\/..\\)" 1 fvwm-rgb-value-face)
-	   '("\\($[-_a-zA-Z0-9]*\\)" 1 font-lock-variable-name-face)
-	   (cons fvwmscript-instructions font-lock-function-name-face) ;instructions
-	   (cons fvwmscript-functions font-lock-function-name-face) ;functions
-	   '("\\<\\(Begin\\|Case\\|Do\\|E\\(?:lse\\|nd\\)\\|I\\(?:f\\|nit\\)\\|Main\\|P\\(?:eriodicTasks\\|roperty\\)\\|QuitFunc\\|Set\\|Then\\|Widget\\)\\>" . font-lock-keyword-face)
-	   (cons fvwmscript-properties font-lock-keyword-face) ;properties
-	   (cons fvwmscript-flagsopt font-lock-function-name-face) ;flagsOpt
-	   (cons fvwmscript-keywords font-lock-keyword-face)	  ;keywords
-	   (cons fvwmscript-widgets font-lock-keyword-face)))	  ;widgets
-	  "FvwmScript keywords to hilight")
+          (list
+           '("\\(rgb:..\/..\/..\\)" 1 fvwm-rgb-value-face)
+           '("\\($[-_a-zA-Z0-9]*\\)" 1 font-lock-variable-name-face)
+           (cons fvwmscript-instructions font-lock-function-name-face) ;instructions
+           (cons fvwmscript-functions font-lock-function-name-face) ;functions
+           '("\\<\\(Begin\\|Case\\|Do\\|E\\(?:lse\\|nd\\)\\|I\\(?:f\\|nit\\)\\|Main\\|P\\(?:eriodicTasks\\|roperty\\)\\|QuitFunc\\|Set\\|Then\\|Widget\\)\\>" . font-lock-keyword-face)
+           (cons fvwmscript-properties font-lock-keyword-face) ;properties
+           (cons fvwmscript-flagsopt font-lock-function-name-face) ;flagsOpt
+           (cons fvwmscript-keywords font-lock-keyword-face)      ;keywords
+           (cons fvwmscript-widgets font-lock-keyword-face)))     ;widgets
+          "FvwmScript keywords to hilight")
 
 (defvar fvwm-font-lock-keywords fvwm-font-lock-keywords-2 "Default hilighting for FVWM mode")
 
@@ -592,7 +592,7 @@
   (interactive "sFunction name? ")
   (skeleton-insert
    '(nil "AddToFunc " name "\n"
-	 " + " _ )))
+         " + " _ )))
 ;;   (define-skeleton fvwm-function
 ;;     "Defines the skeleton for an FVWM Function."
 ;;     "Function name: "
@@ -604,8 +604,8 @@
   (interactive "sMenu name? ")
   (skeleton-insert
    '(nil "DestroyMenu name\n"
-	 "AddToMenu name\n"
-	 " + " _)))
+         "AddToMenu name\n"
+         " + " _)))
 
 (defun fvwm-insert-buttons (name rows columns geometry)
   "Inserts the skeleton for an FvwmButtons and adds it to your StartFunction (if possible)
@@ -613,10 +613,10 @@ Pressing enter at any prompt skips that option and doesn't include it in the ske
   (interactive "sFvwmButtons alias? \nsAmount of rows? \nsAmount of columns? \nsGeometry? ")
   (skeleton-insert
    '(nil "DestroyModuleConfig " name ": *\n"
-	 (if (not (string-equal rows "" )) (insert (concat "*" name ": Rows " rows "\n")))
-	 (if (not (string-equal columns "" )) (insert (concat "*" name ": Columns " columns "\n")))
-	 (if (not (string-equal geometry "" )) (insert (concat "*" name ": Geometry " geometry "\n")))
-	 "\n")))
+         (if (not (string-equal rows "" )) (insert (concat "*" name ": Rows " rows "\n")))
+         (if (not (string-equal columns "" )) (insert (concat "*" name ": Columns " columns "\n")))
+         (if (not (string-equal geometry "" )) (insert (concat "*" name ": Geometry " geometry "\n")))
+         "\n")))
 
 (defun fvwm-script-insert-skeleton (title width height font)
   "Inserts the skeleton for an FvwmScript into the current buffer"
@@ -624,47 +624,47 @@ Pressing enter at any prompt skips that option and doesn't include it in the ske
   (goto-char (point-min))
   (skeleton-insert
    '(nil "#-*-fvwm-*-\n"
-	 "WindowTitle {" title "}\n"
-	 (if (and (not (string-equal width "")) (not (string-equal height ""))) (insert (concat "WindowSize " width " " height)))
-	 (if (not (string-equal font "")) (insert (concat "Font " font)))
-	 "Init\n"
-	 "Begin\n"
-	 " " _ "\n"
-	 "End\n\n"
-	 "PeriodicTasks\n"
-	 "Begin\n"
-	 " \n"
-	 "End\n")))
+         "WindowTitle {" title "}\n"
+         (if (and (not (string-equal width "")) (not (string-equal height ""))) (insert (concat "WindowSize " width " " height)))
+         (if (not (string-equal font "")) (insert (concat "Font " font)))
+         "Init\n"
+         "Begin\n"
+         " " _ "\n"
+         "End\n\n"
+         "PeriodicTasks\n"
+         "Begin\n"
+         " \n"
+         "End\n")))
 
 (defun fvwm-script-insert-widget (type title number x-pos y-pos width height)
   "Inserts the skeleton for a new FvwmScript widget,the type is the type of widget to insert (see man FvwmButtons for details), the title is the title for the widget, or nothing if left empty, the numder is the number the widget will get it defaults to number one higher than the current highest widget number"
   (interactive "sWidget type (default: ItemDraw): \nsWidget title (default: empty): \nsWidget number (default: next highest number): \nsx-position (default: 0): \nsy-position (default: 0): \nsWidth (default: 100): \nsHeight (default: 50): ")
   (if (string= number "")
       (let ((widget-number "0") temp-widget-number (working-point-position (point))) ; use save-excursion instead of saving the point position
-	"Find the highest numbered widget" 
-	(goto-char (point-max))
-	(while (re-search-backward "^Widget \\(.*\\)" nil t)
-	  (setq temp-widget-number (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
-	  (if (string< widget-number temp-widget-number)
-	      (progn
-		(setq widget-number temp-widget-number)
-		(forward-word 1))))
-	(setq number (+ (string-to-int widget-number) 1))
-	(goto-char working-point-position)))
+        "Find the highest numbered widget"
+        (goto-char (point-max))
+        (while (re-search-backward "^Widget \\(.*\\)" nil t)
+          (setq temp-widget-number (buffer-substring-no-properties (match-beginning 1) (match-end 1)))
+          (if (string< widget-number temp-widget-number)
+              (progn
+                (setq widget-number temp-widget-number)
+                (forward-word 1))))
+        (setq number (+ (string-to-int widget-number) 1))
+        (goto-char working-point-position)))
   (skeleton-insert
    '(nil "Widget " (number-to-string number) "\n"
-	 "Property\n"
-	 " Position " x-pos | "0" " " y-pos | "0" "\n"
-	 " Size " width | "100" " " height | "50" "\n"
-	 " Type " type | "ItemDraw" "\n"
-	 " Title {" title "}\n"
-	 "Main\n"
-	 " Case message of\n"
-	 "  SingleClic:\n"
-	 "  Begin\n"
-	 "   " _ "\n"
-	 "  End\n"
-	 "End\n")))
+         "Property\n"
+         " Position " x-pos | "0" " " y-pos | "0" "\n"
+         " Size " width | "100" " " height | "50" "\n"
+         " Type " type | "ItemDraw" "\n"
+         " Title {" title "}\n"
+         "Main\n"
+         " Case message of\n"
+         "  SingleClic:\n"
+         "  Begin\n"
+         "   " _ "\n"
+         "  End\n"
+         "End\n")))
 
 ;; -------------------------
 ;; |      Completion       |
@@ -684,8 +684,8 @@ Pressing enter at any prompt skips that option and doesn't include it in the ske
 (defun pcomplete-parse-fvwm-arguments ()
   (save-excursion
     (let* ((thispt (point))
-	   (pt (search-backward-regexp "[ \t\n]" nil t))
-	   (ptt (if pt (+ pt 1) thispt)))
+           (pt (search-backward-regexp "[ \t\n]" nil t))
+           (ptt (if pt (+ pt 1) thispt)))
       (list
        (list "dummy" (buffer-substring-no-properties ptt thispt))
        (point-min) ptt))))
@@ -717,10 +717,10 @@ Pressing enter at any prompt skips that option and doesn't include it in the ske
         "Completes the FVWM keywords before point by comparing it against the known FVWM keywords"
         ;; This function is largely based on lisp-complete-symbol from GNU Emacs' lisp.el
         (interactive)
-        
+
         (if (not fvwm-keywords-map)
             (fvwm-generate-hashmap))
-        
+
         (let ((window (get-buffer-window "*Completions*")))
           (if (and (eq last-command this-command)
                    window (window-live-p window) (window-buffer window)
@@ -783,10 +783,10 @@ Pressing enter at any prompt skips that option and doesn't include it in the ske
   "Indents the current line."
   (interactive)
   (let ((savep (> (current-column) (current-indentation)))
-	(indent (condition-case nil (max (fvwm-calculate-indentation) 0)
-		  (error 0))))
+        (indent (condition-case nil (max (fvwm-calculate-indentation) 0)
+                  (error 0))))
     (if savep
-	(save-excursion (indent-line-to indent))
+        (save-excursion (indent-line-to indent))
       (indent-line-to indent))))
 
 (list "AddToFunc")
@@ -805,19 +805,19 @@ Pressing enter at any prompt skips that option and doesn't include it in the ske
        ((= current-line-indent prev-line-indent)
         (setq current-indent (+ prev-line-indent standard-indent)))
        ((> prev-line-indent current-line-indent)
-	(setq current-indent (+ prev-line-indent (- (mod prev-line-indent standard-indent)))))
+        (setq current-indent (+ prev-line-indent (- (mod prev-line-indent standard-indent)))))
        (t (setq current-indent (+ current-line-indent (- (mod current-line-indent standard-indent)) standard-indent)))))))
 
 ;; -------------------------
 ;; |    Timestamp file     |
 ;; -------------------------
 (add-hook 'before-save-hook
-	  '(lambda ()
-	     (save-excursion
-	       (goto-char (point-min))
-	       (if (buffer-modified-p)
-		   (if (re-search-forward (concat "^" fvwm-last-updated-prefix ".*") nil t)
-		       (replace-match (concat fvwm-last-updated-prefix (format-time-string fvwm-time-format-string) fvwm-last-updated-suffix)))))))
+          '(lambda ()
+             (save-excursion
+               (goto-char (point-min))
+               (if (buffer-modified-p)
+                   (if (re-search-forward (concat "^" fvwm-last-updated-prefix ".*") nil t)
+                       (replace-match (concat fvwm-last-updated-prefix (format-time-string fvwm-time-format-string) fvwm-last-updated-suffix)))))))
 
 ;; -------------------------
 ;; |   Run Fvwm commands   |
@@ -836,11 +836,11 @@ Pressing enter at any prompt skips that option and doesn't include it in the ske
     (goto-char beg)
     (while (< beg end)
       (progn
-	(beginning-of-line)
-	(setq beg (point))
-	(end-of-line)
-	(fvwm-execute-command (buffer-substring beg (point)))
-	(line-move 1)))
+        (beginning-of-line)
+        (setq beg (point))
+        (end-of-line)
+        (fvwm-execute-command (buffer-substring beg (point)))
+        (line-move 1)))
     (line-move -1)))
 
 (defun fvwm-execute-buffer ()
@@ -876,9 +876,9 @@ Entry to this mode calls the value of `fvwm-mode-hook'"
 
   (setq indent-tabs-mode nil) ;This messes with font-lock in combination with indentation
   (fvwm-disable-indentation)
-  
+
   (setq major-mode 'fvwm-mode
-	mode-name "FVWM")
+        mode-name "FVWM")
 
   ;; XEmacs needs this, otherwise the menu isn't displayed.
   (if (featurep 'xemacs)

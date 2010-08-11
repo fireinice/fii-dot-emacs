@@ -16,6 +16,7 @@
 ;;   (require 'ruby-conf)
 ;;   (require 'regex-tool))
 
+
 ;;; This was installed by package-install.el.
 ;;; This provides support for the package system and
 ;;; interfacing with ELPA, the package archive.
@@ -28,6 +29,13 @@
 
 ;; ========加载路径 start
 ;;add all subdirectories into the load-path except start with dot
+(dolist (file-name (directory-files "~/.emacs.d/el-get" t))
+  (when (file-directory-p file-name)
+    (unless
+        (equal "."
+               (substring
+                (file-name-nondirectory file-name) 0 1))
+      (add-to-list 'load-path file-name))))
 
 (dolist (file-name (directory-files "~/.emacs.d" t))
   (when (file-directory-p file-name)
@@ -36,6 +44,9 @@
                (substring
                 (file-name-nondirectory file-name) 0 1))
       (add-to-list 'load-path file-name))))
+
+;; el-get to manage the packages
+(autoload 'el-get-install "el-get-conf" nil t)
 
 ;;========调用公用模块
 (autoload 'fvwm-mode "fvwm-mode" nil t)
@@ -55,10 +66,7 @@
 (require 'template)
 
 ;;(require 'tabbar)
-(require 'install-elisp)
 ;; (require 'color-moccur)
-(setq install-elisp-repository-directory "~/.emacs.d/misc/")
-
 ;; (require 'xcscope)
 ;; (require 'doxymacs)
 ;; (autoload 'senator-try-expand-semantic "senator")
@@ -629,6 +637,5 @@
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
 
 ;;========init.el end here
