@@ -38,7 +38,9 @@
 ;; See cedet/common/cedet.info for configuration details.
 ;; http://alexott.net/en/writings/emacs-devenv/EmacsCedet.html
 ;; http://github.com/alexott/emacs-configs/blob/master/rc/emacs-rc-cedet.el
-(load-file "~/.emacs.d/cedet/common/cedet.el")
+;; (add-to-list 'load-path "/home/zigler/.emacs.d/el-get/cedet/common")
+;; (add-to-list 'load-path "/home/zigler/.emacs.d/el-get/cedet/semantic/")
+(load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
 (require 'semantic-ia)
 (require 'ede)
 (global-ede-mode t)

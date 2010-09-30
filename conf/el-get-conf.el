@@ -36,20 +36,74 @@
 (require 'el-get)
 
 (setq el-get-sources
-      '((:name el-get
-               :type http
-               :url "http://www.emacswiki.org/emacs/download/el-get.el"
-               :build emacs)
+      '((:name cedet
+               :type cvs
+	       :module "cedet"
+	       :url ":pserver:anonymous@cedet.cvs.sourceforge.net:/cvsroot/cedet"
+	       :options "login"
+               :build ("make clean-all" "make"))
+	(:name ecb
+	       :type cvs
+	       :module "ecb"
+	       :url ":pserver:anonymous@ecb.cvs.sourceforge.net:/cvsroot/ecb"
+	       :options "login"
+	       :info "info-help"
+               :build ("make"))
 	(:name fvwm-mode
                :type http
-               :url "http://www.lair.be/files/fvwm/fvwm-mode/fvwm-mode.el"
-               :build emacs)
+               :url "http://www.lair.be/files/fvwm/fvwm-mode/fvwm-mode.el")
+	(:name paredit
+               :type http
+               :url "http://mumble.net/~campbell/emacs/paredit.el")
 	(:name auto-complete
 	       :type git
                :url "http://cx4a.org/repo/auto-complete.git"
-               :build ("make"))
-	)
-      )
+	       :build ("make"))
+	(:name volume
+	       :type git
+	       :url "http://github.com/dbrock/volume-el.git")
+	;; rails
+	(:name rspec-mode
+	       ;; require el-expectations
+	       :type git
+	       :url "http://github.com/pezra/rspec-mode.git")
+	(:name rails-mode
+	       ;; require behave(outside) require clojure
+	       :type git
+	       :url "http://github.com/remvee/emacs-rails.git")
+	(:name slime
+	       :type apt-get)
+	(:name el-expectations
+               :type http
+               :url "http://www.emacswiki.org/emacs/download/el-expectations.el")
+	;; html
+	(:name zencoding
+	       ;; require noweb
+	       :type git
+	       :url "http://github.com/chrisdone/zencoding.git"
+	       :build ("make"))
+	(:name noweb
+	       :type apt-get)
+	;; python
+	(:name pylookup
+	       :type git
+	       :url "http://github.com/tsgates/pylookup.git")
+	(:name el-get
+	       :type git
+	       :url "http://github.com/dimitri/el-get.git")
+	;; java
+	(:name jdee
+	       ;; require elib bsh
+	       :type git-svn
+	       :url "http://jdee.svn.sourceforge.net/svnroot/jdee/trunk/jdee")
+	(:name bsh
+	       :type apt-get)
+	(:name elib
+	       :type apt-get)
+	(:name android-mode
+	       :type git
+	       :url "git://github.com/remvee/android-mode.git")))
+
 (el-get)
 ;; (setq el-get-sources
 ;;       '((:name bbdb

@@ -16,7 +16,7 @@
 ;;   (require 'ruby-conf)
 ;;   (require 'regex-tool))
 
-
+(setq warning-suppress-types nil)
 ;;; This was installed by package-install.el.
 ;;; This provides support for the package system and
 ;;; interfacing with ELPA, the package archive.
@@ -47,6 +47,7 @@
 
 ;; el-get to manage the packages
 (autoload 'el-get-install "el-get-conf" nil t)
+(autoload 'el-get-remove "el-get-conf" nil t)
 
 ;;========调用公用模块
 (autoload 'fvwm-mode "fvwm-mode" nil t)
@@ -64,7 +65,7 @@
 (require 'my-function) ;load function customized
 (require 'uniquify) ;to identified same name buffer
 (require 'template)
-
+(require 'volume)
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
 ;; (require 'xcscope)
@@ -418,18 +419,18 @@
             (require 'xhtml-conf)
             (require 'smart-snippets-conf)
             (hexcolour-add-to-font-lock)
-            (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)))
-
+	    ))
+            ;; (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)
 ;;========gtags mode
-(defun setup-gtags-mode ()
-  ;; (require 'xcscope)
-  (gtags-mode t)
-  (define-key gtags-mode-map "\C-css" 'gtags-find-tag)
-  (define-key gtags-mode-map "\C-cse" 'gtags-find-pattern)
-  (define-key gtags-mode-map "\C-csg" 'gtags-find-grep)
-  (define-key gtags-mode-map "\C-csu" 'gtags-pop-stack)
-  ;; (cscope-minor-mode nil)
-  )
+;; (defun setup-gtags-mode ()
+;;   ;; (require 'xcscope)
+;;     (gtags-mode t)
+;;   (define-key gtags-mode-map "\C-css" 'gtags-find-tag)
+;;   (define-key gtags-mode-map "\C-cse" 'gtags-find-pattern)
+;;   (define-key gtags-mode-map "\C-csg" 'gtags-find-grep)
+;;   (define-key gtags-mode-map "\C-csu" 'gtags-pop-stack)
+;;   ;; (cscope-minor-mode nil)
+;;   )
 
 ;;========php mode
 (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
@@ -441,7 +442,8 @@
 (defun setup-php-mode ()
   (require 'w3m-conf)
   (local-set-key (kbd "<f1>") 'my-php-symbol-lookup)
-  (setup-gtags-mode)
+  (gtags-mode t)
+  ;; (setup-gtags-mode)
   ;; (set (make-local-variable 'c-basic-offset) 4)
   (setq tab-width 4
         indent-tabs-mode t)
@@ -469,11 +471,18 @@
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (add-hook 'js2-mode-hook
           (lambda ()
-            (setq js2-highlight-level 3)
+	    (setq js2-highlight-level 3)
             (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
             (define-key js2-mode-map "\r" 'newline-and-indent)
             (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
-
+;;========JavaScript 模式
+(add-to-list 'load-path "/home/zigler/.emacs.d/jdee/lisp")
+(autoload 'jde-mode "jde" nil t)
+(add-to-list 'auto-mode-alist '("\\.java$" . jde-mode))
+(add-hook 'python-mode-hook
+          (lambda ()
+            (require 'java-conf)
+            (setup-java-mode)))
 
 ;;=========Python 模式
 (setq auto-mode-alist
