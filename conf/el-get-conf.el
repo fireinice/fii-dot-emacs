@@ -77,6 +77,7 @@
                :type http
                :url "http://www.emacswiki.org/emacs/download/el-expectations.el")
 	;; html
+	(:name nxhtml)
 	(:name zencoding
 	       ;; require noweb
 	       :type git
@@ -92,6 +93,9 @@
 	       :type git
 	       :url "http://github.com/dimitri/el-get.git")
 	;; java
+	(:name auto-complete-java
+	       :type git
+               :url "git://github.com/jixiuf/ajc-java-complete.git")
 	(:name jdee
 	       ;; require elib bsh
 	       :type git-svn
