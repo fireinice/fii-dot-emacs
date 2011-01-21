@@ -36,7 +36,8 @@
 (require 'el-get)
 
 (setq el-get-sources
-      '((:name cedet
+      '(
+	(:name cedet
                :type cvs
 	       :module "cedet"
 	       :url ":pserver:anonymous@cedet.cvs.sourceforge.net:/cvsroot/cedet"
@@ -63,6 +64,12 @@
 	       :type git
 	       :url "http://github.com/dbrock/volume-el.git")
 	;; rails
+	slime
+	clojure-mode
+	(:name behave
+	       ;; require el-expectations
+	       :type git
+	       :url "https://github.com/technomancy/dotfiles.git")
 	(:name rspec-mode
 	       ;; require el-expectations
 	       :type git
@@ -71,8 +78,6 @@
 	       ;; require behave(outside) require clojure
 	       :type git
 	       :url "http://github.com/remvee/emacs-rails.git")
-	(:name slime
-	       :type apt-get)
 	(:name el-expectations
                :type http
                :url "http://www.emacswiki.org/emacs/download/el-expectations.el")

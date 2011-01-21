@@ -10,11 +10,14 @@ usage()
 }
 
 rm -rf *.elc conf/*.elc
-
-for directory in ~/.emacs.d/*; do
-    if [ -d $directory ]; then
-	LOAD_PATH="$LOAD_PATH -L $directory"
-    fi
-done
-echo $LOAD_PATH
-emacs -batch -no-init-file $LOAD_PATH -f batch-byte-compile *.el conf/*.el misc/*.el
+touch myinfo.el
+wget --no-check-certificate https://github.com/dimitri/el-get/raw/master/el-get-install.el
+emacs --script el-get-install.el
+rm el-get-install.el
+# for directory in ~/.emacs.d/*; do
+#     if [ -d $directory ]; then
+# 	LOAD_PATH="$LOAD_PATH -L $directory"
+#     fi
+# done
+# echo $LOAD_PATH
+# emacs -batch -no-init-file $LOAD_PATH -f batch-byte-compile *.el conf/*.el misc/*.el
