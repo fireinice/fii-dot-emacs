@@ -11,11 +11,17 @@ usage()
 
 rm -rf *.elc conf/*.elc
 touch myinfo.el
+echo "installing el-get package...."
 wget --no-check-certificate https://github.com/dimitri/el-get/raw/master/el-get-install.el
 emacs --script el-get-install.el
 rm el-get-install.el
-emacs -batch -l /home/zigler/.emacs.d/el-get/el-get/el-get.el -l setup/el-get-misc.el
-emacs -batch -l /home/zigler/.emacs.d/el-get/el-get/el-get.el -l setup/el-get-ruby.el
+echo "installing el-get package....done"
+echo "installing other packages...."
+for setup_file in setup/*.el
+do
+    emacs -batch -l el-get/el-get/el-get.el -l elpa/package.el -l $setup_file 
+done
+echo "installing other packages....done"
 # for directory in ~/.emacs.d/*; do
 #     if [ -d $directory ]; then
 # 	LOAD_PATH="$LOAD_PATH -L $directory"
