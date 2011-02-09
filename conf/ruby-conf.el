@@ -6,10 +6,11 @@
 (require 'rsense)
 (setq rsense-home "/opt/rsense")
 (setq rsense-rurema-home (concat rsense-home "/ruby-refm"))
-(autoload 'ri "ri-ruby" nil t)
+(autoload 'yari "yari" nil t)
 (require 'rinari)
 (require 'xhtml-conf)
 ;; (require 'rails)
+(require 'rvm)
 
 ;; irbsh and info-ruby is duplicated, we should choose one in future
 (when (locate-library "irbsh")
@@ -22,12 +23,7 @@
   (autoload 'irbsh-toggle-cd "irbsh-toggle"
     "Pops up a irbsh-buffer and insert a \"cd <file-dir>\" command." t))
 
-(defvar ri-ruby-script "/home/zigler/.emacs.d/misc/ri-emacs.rb"
-  "RI ruby script")
-
 ;; add gem/bin into PATH to make rcodetools could be called
-(setenv "PATH" (concat "/var/lib/gems/1.8/bin:"
-           (getenv "PATH") )  )
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
 (define-key ruby-mode-map (kbd "\C-c\C-t") 'rspec-toggle-spec-and-target)
 
@@ -38,6 +34,7 @@
   (ruby-electric-mode nil))
 
 (defun setup-ruby-mode ()
+  (rvm-use-default)
   (set (make-local-variable 'indent-tabs-mode) 'nil)
   (set (make-local-variable 'tab-width) 2)
   (imenu-add-to-menubar "IMENU")

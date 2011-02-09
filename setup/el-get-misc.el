@@ -14,7 +14,23 @@
 	(:name volume
 	       :type git
 	       :url "http://github.com/dbrock/volume-el.git")
+	(:name unicad
+	       :type svn
+	       :url "http://unicad.googlecode.com/svn/trunk/lisp"
+	       :features "unicad")
 	auctex
+	(:name grep-edit
+	       :type emacswiki)
 	;; **FIXME** require autoconf, we need a check here
 	))
 (el-get 'wait)
+
+
+
+
+
+
+
+
+
+

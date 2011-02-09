@@ -1,1 +1,8 @@
+tramp
 ./el-get/
+ac-comphist.dat
+auto-save-list/
+el-get/
+*.elc
+myinfo.el
+semantic.cache

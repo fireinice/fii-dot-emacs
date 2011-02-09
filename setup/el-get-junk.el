@@ -6,6 +6,7 @@
 (setq el-get-sources
       '(
 	php-mode
+	weblogger-el
 	))
 (el-get 'wait)
 

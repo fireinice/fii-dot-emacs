@@ -1,2 +1,0 @@
-((:proxy nil :port 9000 :language :php :fileuri "file:///home/zigler/work/jobeet/web/test.php" :source
-	 ("file:///home/zigler/work/jobeet/web/test.php" "file:///home/zigler/work/jobeet/web/test.php" "file:///home/zigler/work/jobeet/web/test.php" "file:///home/zigler/work/jobeet/web/test.php" "file:///home/zigler/work/jobeet/web/test.php" "file:///home/zigler/work/jobeet/web/test.php" "file:///home/zigler/work/jobeet/web/test.php" "file:///home/zigler/work/jobeet/web/test.php")))

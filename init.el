@@ -50,12 +50,11 @@
 (autoload 'el-get-remove "el-get-conf" nil t)
 
 ;;========调用公用模块
-(autoload 'fvwm-mode "fvwm-mode" nil t)
+;; (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'cl "cl" nil)
-(autoload 'smart-compile "smart-compile" nil t)
+;; (autoload 'smart-compile "smart-compile" nil t)
 (autoload 'regex-tool "regex-tool" nil t)
 (require 'ido)
-(require 'unicad)
 (require 'ange-ftp) ;req by tramp for ftp protocol
 (require 'tramp)
 (fmakunbound 'git-status)   ; Possibly remove Debian's autoloaded version
@@ -66,6 +65,7 @@
 (require 'uniquify) ;to identified same name buffer
 (require 'template)
 (require 'volume)
+(require 'unicad)
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
 ;; (require 'xcscope)
@@ -81,7 +81,7 @@
 ;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
 ;; 这个文件中
 (setq custom-file "~/.emacs.d/myinfo.el")
-(load custom-file)
+
 ;; end of 私人信息
 
 ;;========END
@@ -405,7 +405,7 @@
             (require 'w3m-conf)))
 
 ;;=========nxhtml
-(load "/home/zigler/.emacs.d/nxhtml/autostart.el")
+(load "~/.emacs.d/el-get/nxhtml/autostart.el")
 (autoload 'zzq-html-mode "xhtml-conf" nil t)
 (autoload 'zzq-phtml-mode "xhtml-conf" nil t)
 (autoload 'common-smart-snippets-setup "smart-snippets-conf" nil t)
@@ -419,7 +419,7 @@
             (require 'xhtml-conf)
             (require 'smart-snippets-conf)
             (hexcolour-add-to-font-lock)
-	    ))
+            ))
             ;; (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)
 ;;========gtags mode
 ;; (defun setup-gtags-mode ()
@@ -471,7 +471,7 @@
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (add-hook 'js2-mode-hook
           (lambda ()
-	    (setq js2-highlight-level 3)
+            (setq js2-highlight-level 3)
             (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
             (define-key js2-mode-map "\r" 'newline-and-indent)
             (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
@@ -511,7 +511,7 @@
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
 (add-hook 'ruby-mode-hook
           (lambda()
-            (require 'rails)
+            ;; (require 'rails)
             (require 'ruby-conf)
             (setup-ruby-mode)))
 
@@ -602,7 +602,7 @@
 ;;==========ac-mode
 (require 'auto-complete)
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/el-get/auto-complete/dict")
 (add-to-list 'ac-modes 'nxhtml-mode)
 (add-to-list 'ac-modes 'nxml-mode)
 ;; (add-to-list 'ac-user-dictionary "foobar@example.com")
@@ -646,5 +646,5 @@
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
+(load custom-file)
 ;;========init.el end here

@@ -20,28 +20,28 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
 ;;========Flymake=====================================
 (require 'flymake)
-(load-library "flymake-cursor") 
+(load-library "flymake-cursor")
 ;;echo error in minibuffer instead moving mouse on it
 (add-hook 'flymake-mode-hook
-	  (lambda ()
-	    (local-set-key (kbd "C-c C-e") 'flymake-goto-next-error)
-	    (setq flymake-gui-warnings-enabled nil)
-	    (setq flymake-compilation-prevents-syntax-check t)
-	    (setq flymake-log-level -1)
-	    (setq flymake-master-file-dirs (quote ("../src" "." "./src" "./UnitTest")))
-	    (set-face-attribute 'flymake-warnline nil
-				:background "LightBlue2"
-				:foreground "black")
-	    (set-face-attribute 'flymake-errline nil
-				:background "LightPink"
-				:foreground "black")
-	    ))
+          (lambda ()
+            (local-set-key (kbd "C-c C-e") 'flymake-goto-next-error)
+            (setq flymake-gui-warnings-enabled nil)
+            (setq flymake-compilation-prevents-syntax-check t)
+            (setq flymake-log-level -1)
+            (setq flymake-master-file-dirs (quote ("../src" "." "./src" "./UnitTest")))
+            (set-face-attribute 'flymake-warnline nil
+                                :background "LightBlue2"
+                                :foreground "black")
+            (set-face-attribute 'flymake-errline nil
+                                :background "LightPink"
+                                :foreground "black")
+            ))
 
 (defun flymake-create-temp-intemp (file-name prefix)
   "Return file name in temporary directory for checking FILE-NAME.
@@ -70,14 +70,15 @@ makes)."
     (flymake-log 3 "create-temp-intemp: file=%s temp=%s" file-name temp-name)
     temp-name))
 
-(require 'flymake-shell)
+(autoload 'flymake-shell-load "flymake-shell" nil t)
+;; (require 'flymake-shell)
 (add-hook 'sh-mode-hook 'flymake-shell-load)
 
 ;; Invoke ruby with '-c' to get syntax checking
 (defun flymake-ruby-init ()
   (let* ((temp-file   (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-intemp))
-	 (local-file  (file-relative-name
+         (local-file  (file-relative-name
                        temp-file
                        (file-name-directory buffer-file-name))))
     (list "ruby" (list "-c" local-file))))
@@ -86,36 +87,30 @@ makes)."
 (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
-(add-hook 'ruby-mode-hook
-          '(lambda ()
-	     ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
-	     (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
-		 (flymake-mode t))))
-
 
 (defun flymake-pylint-init ()
   (let* ((temp-file (flymake-init-create-temp-buffer-copy
-		     'flymake-create-temp-intemp))
-	 (local-file (file-relative-name
-		      temp-file
-		      (file-name-directory buffer-file-name))))
+                     'flymake-create-temp-intemp))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
     (list "epylint" (list local-file))))
 
 
 ;; (add-to-list 'flymake-allowed-file-name-masks
-;; 	     '("\\.py\\'" flymake-pylint-init))
+;;           '("\\.py\\'" flymake-pylint-init))
 
-(when (load "flymake" t) 
-  (defun flymake-pyflakes-init () 
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy 
-		       'flymake-create-temp-intemp)) 
-	   (local-file (file-relative-name 
-			temp-file 
-			(file-name-directory buffer-file-name)))) 
-      (list "pyflakes" (list local-file)))) 
+(when (load "flymake" t)
+  (defun flymake-pyflakes-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-intemp))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "pyflakes" (list local-file))))
 
-  (add-to-list 'flymake-allowed-file-name-masks 
-	       '("\\.py\\'" flymake-pyflakes-init))) 
+  (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.py\\'" flymake-pyflakes-init)))
 
 (add-hook 'find-file-hook 'flymake-find-file-hook)
 
