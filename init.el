@@ -343,14 +343,17 @@
 (setq gnus-inhibit-startup-message t
       gnus-init-file "~/.emacs.d/conf/gnus-conf.el")
 
-                                        ;=========Auctex
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
-(autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
-(autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
-(add-hook 'TeX-mode-hook
-          (lambda()
-            (require 'auctex-conf)))
+;=========Auctex
+(when (and (locate-library "auctex")
+	   (locate-library "tex-site")
+	   (locate-library "preview-latex"))
+  (load "auctex.el" nil t t)
+  (load "preview-latex.el" nil t t)
+  (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
+  (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
+  (add-hook 'TeX-mode-hook
+            (lambda()
+              (require 'auctex-conf))))
 
 ;;=========ediff
 (add-hook 'ediff-mode-hook
@@ -551,11 +554,12 @@
 
 ;;========lftp
 ;; If you want use with lftp, put this to .emacs
-(defvar my-lftp-sites (shell-completion-get-file-column "~/.lftp/bookmarks" 0 "[ \t]+"))
-(add-to-list 'shell-completion-options-alist
-             '("lftp" my-lftp-sites))
-(add-to-list 'shell-completion-prog-cmdopt-alist
-             '("lftp" ("help" "open" "get" "mirror") ("open" my-lftp-sites)))
+(when (file-readable-p "~/.lftp/bookmarks")
+  (defvar my-lftp-sites (shell-completion-get-file-column "~/.lftp/bookmarks" 0 "[ \t]+"))
+  (add-to-list 'shell-completion-options-alist
+	       '("lftp" my-lftp-sites))
+  (add-to-list 'shell-completion-prog-cmdopt-alist
+	       '("lftp" ("help" "open" "get" "mirror") ("open" my-lftp-sites))))
 
 ;;==========weblogger
 ;; (setq weblogger-entry-mode-hook 'html-mode)
@@ -646,5 +650,7 @@
   (ansi-color-apply-on-region (point-min) (point-max))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-(load custom-file)
+
+(when (file-readable-p custom-file)
+  (load custom-file))
 ;;========init.el end here

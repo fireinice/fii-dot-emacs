@@ -18,12 +18,17 @@
 	       :type svn
 	       :url "http://unicad.googlecode.com/svn/trunk/lisp"
 	       :features "unicad")
-	auctex
+	;; auctex
 	(:name grep-edit
 	       :type emacswiki)
-	;; **FIXME** require autoconf, we need a check here
-	))
-(el-get 'wait)
+	apel ;;required by flim
+	flim ;;required by w3m
+	(:name w3m
+	       :type cvs
+	       :url ":pserver:anonymous@cvs.namazu.org:/storage/cvsroot"
+	       :module "emacs-w3m"
+	       :build ("autoconf" "./configure" "make"))))
+(el-get 'sync)
 
 
 
