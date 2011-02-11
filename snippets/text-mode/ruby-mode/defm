@@ -1,5 +1,0 @@
-#name : def....end
-# --
-def ${1:MethodName}(${2:args})
-  $0
-end

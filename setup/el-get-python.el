@@ -29,16 +29,16 @@
 (require 'el-get)
 (setq el-get-sources
       '(pylookup
-	pymacs
-	;;check python rope package here
-	(:name ropemode
-	       :type hg
-	       :url "http://bitbucket.org/agr/ropemode")
-	(:name ropemacs
-	       :type hg
-	       :url "http://bitbucket.org/agr/ropemacs")
+	;; pymacs
+	;; check python rope/pymacs package here
+	;; (:name ropemode
+	;;        :type hg
+	;;        :url "http://bitbucket.org/agr/ropemode")
+	;; (:name ropemacs
+	;;        :type hg
+	;;        :url "http://bitbucket.org/agr/ropemacs")
 	))
 (el-get 'sync)
 
-(provide 'el-get-java)
+(provide 'el-get-python)
 ;;; el-get-java.el ends here

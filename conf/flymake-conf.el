@@ -26,7 +26,8 @@
 
 ;;========Flymake=====================================
 (require 'flymake)
-(load-library "flymake-cursor")
+(when (locate-library "flymake-cursor")
+  (load-library "flymake-cursor"))
 ;;echo error in minibuffer instead moving mouse on it
 (add-hook 'flymake-mode-hook
           (lambda ()

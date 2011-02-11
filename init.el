@@ -44,7 +44,7 @@
                (substring
                 (file-name-nondirectory file-name) 0 1))
       (add-to-list 'load-path file-name))))
-
+(add-to-list 'load-path "~/.emacs.d/el-get/jdee/lisp")
 ;; el-get to manage the packages
 (autoload 'el-get-install "el-get-conf" nil t)
 (autoload 'el-get-remove "el-get-conf" nil t)
@@ -600,7 +600,17 @@
 ;;=======org mode end here======================
 
 ;;=========yasnipet mode
-(setq yas/global-mode t)
+(when (locate-library "yasnippet")
+  (require 'yasnippet)
+  (yas/initialize)
+  (setq yas/global-mode t)
+  (setq yasnippet-dir
+	(file-name-directory (locate-library "yasnippet")))
+  (setq yasnippet-snippets-dir (concat yasnippet-dir "snippets"))
+  (add-to-list 'yas/snippet-dirs "~/.emacs.d/snippets")
+  (add-to-list 'yas/snippet-dirs yasnippet-snippets-dir)
+  (yas/reload-all))
+		
 (autoload 'top "top-mode" nil t)
 
 ;;==========ac-mode

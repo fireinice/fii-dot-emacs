@@ -1,5 +1,0 @@
-#name : case $var in $cond) ...;; esac
-# --
-case ${1:var} in
-    ${2:condition} )  ${3:command};; $0
-esac

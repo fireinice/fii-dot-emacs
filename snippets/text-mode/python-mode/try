@@ -1,6 +1,0 @@
-#name : try ... except Exception: ...
-# --
-try:
-    $0
-except ${Exception}:
-    $1

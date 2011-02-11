@@ -1,3 +1,4 @@
+abbrev_defs
 tramp
 ./el-get/
 ac-comphist.dat
@@ -6,3 +7,6 @@ el-get/
 *.elc
 myinfo.el
 semantic.cache
+*#
+*~
+.#*

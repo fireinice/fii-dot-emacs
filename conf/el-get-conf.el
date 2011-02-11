@@ -113,7 +113,7 @@
 	       :type git
 	       :url "git://github.com/remvee/android-mode.git")))
 
-(el-get)
+;; (el-get)
 ;; (setq el-get-sources
 ;;       '((:name bbdb
 ;;             :type git

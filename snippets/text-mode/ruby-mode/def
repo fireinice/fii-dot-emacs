@@ -1,5 +1,0 @@
-#name : def....end
-# --
-def ${1:AttrName}
-  $0
-end
