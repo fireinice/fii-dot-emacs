@@ -1,30 +1,43 @@
-(provide 'cpp-conf)
-(require 'eassist)
-;; (require 'doxymacs)
+;;; cpp-conf.el --- Baidu's C/C++ style for cc-mode
+
+;; Keywords: c, tools
+
+;; baidu-c-style.el is Copyright (C) 2008 Baidu Inc. All Rights Reserved.
+;;
+;; It is free software; you can redistribute it and/or modify it under the
+;; terms of either:
+;;
+;; a) the GNU General Public License as published by the Free Software
+;; Foundation; either version 1, or (at your option) any later version, or
+;;
+;; b) the "Artistic License".
+
+;;; Commentary:
+
+;; Provides the baidu C/C++ coding style. You may wish to add
+;; `baidu-set-c-style' to your `c-mode-common-hook' after requiring this
+;; file. For example:
+;;
+;;    (add-hook 'c-mode-common-hook 'baidu-set-c-style)
+;;
+
+;;; Code:
+
+;; For some reason 1) c-backward-syntactic-ws is a macro and 2)  under Emacs 22
+;; bytecode cannot call (unexpanded) macros at run time:
+(eval-when-compile
+  (require 'cl)
+  (require 'cc-defs))
+
 (require 'xcscope)
 (require 'cedet-conf)
 ;; this package would find the load-path of the system automatically through gcc
-(require 'semantic-gcc)
 (require 'smart-snippets-conf)
-(require 'cc-mode)
+(require 'semantic-gcc)
+(require 'flymake-conf)
+
 (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
 (common-smart-snippets-setup c-mode-map c-mode-abbrev-table)
-
-;; (add-hook 'font-lock-mode-hook
-;; 	  (lambda()
-;; 	    (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-;; 		(doxymacs-font-lock))))
-(local-set-key (kbd "M-/") 'semantic-complete-analyze-inline)
-(define-key c-mode-base-map [(control \`)] 'hs-toggle-hiding)
-(define-key c-mode-base-map [(f7)] 'compile)
-(define-key c-mode-base-map [(meta \`)] 'c-indent-command)
-(define-key c-mode-base-map [(meta ?/)] 'semantic-ia-complete-symbol-menu)
-(define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
-(define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
-(define-key c-mode-base-map (kbd "\C-cp") 'semantic-analyze-proto-impl-toggle)
-;; (define-key c-mode-base-map (kbd ".") 'semantic-complete-self-insert)
-;; (define-key c-mode-base-map (kbd ">") 'semantic-complete-self-insert) 
-
 (setq eassist-header-switches '(("h" . ("cpp" "cc" "c"))
 				("hpp" . ("cpp" "cc"))
 				("cpp" . ("h" "hpp" "hh"))
@@ -33,76 +46,52 @@
 				("H" . ("C" "CPP" "CC"))
 				("cc" . ("h" "hpp" "hh"))
 				("hh" . ("cc" "cpp"))))
+(define-key c-mode-base-map [(f7)] 'compile)
+(define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
+(define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
 
-(require 'cl)
-
-(defun file-in-directory-list-p (file dirlist)
-  "Returns true if the file specified is contained within one of
-the directories in the list. The directories must also exist."
-  (let ((dirs (mapcar 'expand-file-name dirlist))
-        (filedir (expand-file-name (file-name-directory file))))
-    (and
-     (file-directory-p filedir)
-     (member-if (lambda (x) ; Check directory prefix matches
-                  (string-match (substring x 0 (min(length filedir) (length x))) filedir))
-                dirs))))
-
-(defun buffer-standard-include-p ()
-  "Returns true if the current buffer is contained within one of
-the directories in the INCLUDE environment variable."
-  (and (getenv "INCLUDE")
-       (file-in-directory-list-p buffer-file-name (split-string (getenv "INCLUDE") path-separator))))
+(defconst baidu-c-style
+  `("k&r"
+    (c-enable-xemacs-performance-kludge-p . t) ; speed up indentation in XEmacs
+    (c-basic-offset . 4)
+    (tab-width . 4)
+    (indent-tabs-mode . nil)
+    ;; (c-offsets-alist . ((arglist-cont-nonempty . +)))
+    (c-hanging-colons-alist . ((member-init-intro before)))
+    (c-hanging-braces-alist . ((substatement-open after)
+			       (namespace-open after)
+			       (class-open after)
+			       (class-close before)))
+    )
+  "Baidu C/C++ Programming Style")
 
 (defun setup-c-base-mode ()
-  ;; (doxymacs-mode 1)
-  ;; (autoload 'senator-try-expand-semantic "senator")
-  (c-set-style "stroustrup")
-  (c-set-offset 'substatement-open 0)
-  (c-set-offset 'inline-open 0)
-  (c-set-offset 'friend '-)
-  (setq tab-width 4 indent-tabs-mode t)
+  (c-toggle-auto-newline t)
+  (c-toggle-auto-hungry-state t)
+  (c-add-style "baidu" baidu-c-style t)
   (setq gdb-many-windows t)
-  ;; hungry-delete and auto-newline
-  (c-toggle-auto-hungry-state 1)
   (which-function-mode t)
-  (hs-minor-mode 1)
+  (hs-minor-mode t)
   (abbrev-mode t)
-  ;;预处理设置
-  (setq c-macro-shrink-window-flag t)
-  (setq c-macro-preprocessor "cpp")
-  (setq c-macro-cppflags " ")
-  (setq c-macro-prompt-flag t)
+  ;; ac-omni-completion-sources is made buffer local so
+  ;; you need to add it to a mode hook to activate on 
+  ;; whatever buffer you want to use it with.  This
+  ;; example uses C mode (as you probably surmised).
+
+  ;; auto-complete.el expects ac-omni-completion-sources to be
+  ;; a list of cons cells where each cell's car is a regex
+  ;; that describes the syntactical bits you want AutoComplete
+  ;; to be aware of. The cdr of each cell is the source that will
+  ;; supply the completion data.  The following tells autocomplete
+  ;; to begin completion when you type in a . or a ->
+  (add-to-list 'ac-omni-completion-sources
+	       (cons "\\." '(ac-source-semantic)))
+  (add-to-list 'ac-omni-completion-sources
+	       (cons "->" '(ac-source-semantic)))
   (set (make-local-variable 'ac-sources)
        (append '(ac-source-semantic)
 	       ac-sources))
-
-  (make-hippie-expand-function
-   '(
-     yas/hippie-try-expand
-     ;; 	senator-try-expand-semantic
-     try-complete-abbrev
-     try-expand-dabbrev-visible
-     try-expand-dabbrev
-     try-expand-dabbrev-all-buffers
-     try-expand-dabbrev-from-kill
-     try-expand-list
-     try-expand-list-all-buffers
-     try-expand-whole-kill))
-  ;; (ac-mode-setup)
-  ;; (add-to-list 'ac-omni-completion-sources
-  ;; 	       (cons "\\." '(ac-source-semantic)))
-  ;; (add-to-list 'ac-omni-completion-sources
-  ;; 	       (cons "->" '(ac-source-semantic)))
   )
-;; (set (make-local-variable 'ac-sources)
-;;      (append ac-sources
-;; 	     '(ac-source-yasnippet)
-;; 	     '(ac-source-semantic)))
-
-;;    (font-lock-add-keywords 'c-mode
-;;     '(("\\<\\(FIXME\\):" 1 font-lock-warning-face prepend)
-;;       ("\\<\\(and\\|or\\|not\\)\\>" . font-lock-keyword-face)))
-
 
 ;; (eval-after-load "semantic-c" 
 ;;   '(dolist (d (list "/usr/include/c++/4.3"
@@ -126,3 +115,5 @@ the directories in the INCLUDE environment variable."
 ;; (setq semanticdb-project-roots
 ;;           (list
 ;;         (expand-file-name "/")))
+
+(provide 'cpp-conf)

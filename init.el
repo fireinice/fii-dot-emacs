@@ -50,9 +50,9 @@
 (autoload 'el-get-remove "el-get-conf" nil t)
 
 ;;========调用公用模块
-;; (autoload 'fvwm-mode "fvwm-mode" nil t)
+(autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'cl "cl" nil)
-;; (autoload 'smart-compile "smart-compile" nil t)
+(autoload 'smart-compile "smart-compile" nil t)
 (autoload 'regex-tool "regex-tool" nil t)
 (require 'ido)
 (require 'ange-ftp) ;req by tramp for ftp protocol
@@ -631,7 +631,8 @@
   (define-key ac-mode-map (kbd "C-`") 'auto-complete)
   (ac-set-trigger-key "TAB")
   (setq ac-dwim t)
-  (setq ac-auto-start 3))
+  (setq ac-auto-start 3)
+  (ac-flyspell-workaround))
 (ac-config-default)
 (add-hook 'auto-complete-mode-hook 'ac-mode-setup)
 
