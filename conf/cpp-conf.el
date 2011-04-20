@@ -1,41 +1,18 @@
-;;; cpp-conf.el --- Baidu's C/C++ style for cc-mode
-
-;; Keywords: c, tools
-
-;; baidu-c-style.el is Copyright (C) 2008 Baidu Inc. All Rights Reserved.
-;;
-;; It is free software; you can redistribute it and/or modify it under the
-;; terms of either:
-;;
-;; a) the GNU General Public License as published by the Free Software
-;; Foundation; either version 1, or (at your option) any later version, or
-;;
-;; b) the "Artistic License".
-
-;;; Commentary:
-
-;; Provides the baidu C/C++ coding style. You may wish to add
-;; `baidu-set-c-style' to your `c-mode-common-hook' after requiring this
-;; file. For example:
-;;
-;;    (add-hook 'c-mode-common-hook 'baidu-set-c-style)
-;;
-
-;;; Code:
-
-;; For some reason 1) c-backward-syntactic-ws is a macro and 2)  under Emacs 22
-;; bytecode cannot call (unexpanded) macros at run time:
+;;; cpp-conf.el 
 (eval-when-compile
   (require 'cl)
   (require 'cc-defs))
 
 (require 'xcscope)
+(require 'doxymacs)
 (require 'cedet-conf)
+(require 'cpp-projects)
+(require 'semantic-gcc)
+(require 'semantic-ia)
+
 ;; this package would find the load-path of the system automatically through gcc
 (require 'smart-snippets-conf)
-(require 'semantic-gcc)
 (require 'flymake-conf)
-
 (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
 (common-smart-snippets-setup c-mode-map c-mode-abbrev-table)
 (setq eassist-header-switches '(("h" . ("cpp" "cc" "c"))
@@ -47,14 +24,12 @@
 				("cc" . ("h" "hpp" "hh"))
 				("hh" . ("cc" "cpp"))))
 (define-key c-mode-base-map [(f7)] 'compile)
-(define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
-(define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
-
 (defconst baidu-c-style
   `("k&r"
     (c-enable-xemacs-performance-kludge-p . t) ; speed up indentation in XEmacs
     (c-basic-offset . 4)
     (tab-width . 4)
+    (fill-column . 100)
     (indent-tabs-mode . nil)
     ;; (c-offsets-alist . ((arglist-cont-nonempty . +)))
     (c-hanging-colons-alist . ((member-init-intro before)))
@@ -64,8 +39,8 @@
 			       (class-close before)))
     )
   "Baidu C/C++ Programming Style")
-
 (defun setup-c-base-mode ()
+  (semantic-key-bindings)
   (c-toggle-auto-newline t)
   (c-toggle-auto-hungry-state t)
   (c-add-style "baidu" baidu-c-style t)
@@ -73,6 +48,8 @@
   (which-function-mode t)
   (hs-minor-mode t)
   (abbrev-mode t)
+  (doxymacs-mode)
+  (doxymacs-font-lock)
   ;; ac-omni-completion-sources is made buffer local so
   ;; you need to add it to a mode hook to activate on 
   ;; whatever buffer you want to use it with.  This
@@ -91,7 +68,9 @@
   (set (make-local-variable 'ac-sources)
        (append '(ac-source-semantic)
 	       ac-sources))
-  )
+  (make-local-variable 'ac-ignores)
+  ;; do not ac by comment
+  (add-to-list 'ac-ignores "//"))
 
 ;; (eval-after-load "semantic-c" 
 ;;   '(dolist (d (list "/usr/include/c++/4.3"

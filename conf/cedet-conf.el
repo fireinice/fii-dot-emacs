@@ -38,12 +38,11 @@
 ;; See cedet/common/cedet.info for configuration details.
 ;; http://alexott.net/en/writings/emacs-devenv/EmacsCedet.html
 ;; http://github.com/alexott/emacs-configs/blob/master/rc/emacs-rc-cedet.el
-;; (add-to-list 'load-path "/home/zigler/.emacs.d/el-get/cedet/common")
-;; (add-to-list 'load-path "/home/zigler/.emacs.d/el-get/cedet/semantic/")
 (load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
 (require 'semantic-ia)
 (require 'ede)
 (global-ede-mode t)
+
 
 ;; (ede-minor-mode t)
 ;; Enable EDE for a pre-existing C++ project
@@ -83,9 +82,27 @@
 (setq semanticdb-default-save-directory "~/.auto-save/semantic")
 (setq semantic-idle-summary-function 'semantic-format-tag-uml-prototype) ;;让idle-summary的提醒包括参数名
 
-(setq semanticdb-project-roots
-      (list "/home/zigler/work/TOM64/Offline-code/Middleware/"))
+;; (setq semanticdb-project-roots
+      ;; (list "/home/zigler/work/TOM64/Offline-code/Middleware/"))
+(dolist (d load-path)
+  (semantic-add-system-include d 'emacs-lisp-mode))
 
+(defun semantic-key-bindings ()
+  (local-set-key "\C-cxu" 'semantic-mrub-switch-tags)
+  (local-set-key "\C-cxr" 'semantic-symref)
+  (local-set-key "\C-cxs" 'semantic-symref-symbol)
+  (local-set-key "\C-cxj" 'semantic-ia-fast-jump)
+  (local-set-key "\C-cxc" 'semantic-ia-describe-class)
+  (local-set-key "\C-cxm" 'semantic-ia-show-summary)
+  (local-set-key "\C-cxd" 'semantic-ia-show-doc)
+  (local-set-key "\C-cxi" 'semantic-decoration-include-visit)
+  (local-set-key "\C-cxp" 'senator-previous-tag)
+  (local-set-key "\C-cxn" 'senator-next-tag)
+  (local-set-key "\C-cxa" 'senator-go-to-up-reference)
+  (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
+  (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
+  (define-key c-mode-base-map (kbd "\C-cxo") 'semantic-analyze-proto-impl-toggle)
+  )
 
 ;;;;##########################################################################
 ;;;;  User Options, Variables

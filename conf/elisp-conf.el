@@ -57,6 +57,7 @@
 (defun setup-emacs-list-mode ()
   (turn-on-eldoc-mode)
   (paredit-mode t)
+  (semantic-key-bindings)
   (add-hook 'after-save-hook
 	    'el-after-save-hook nil t))
 ;;;;##########################################################################

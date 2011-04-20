@@ -3,6 +3,7 @@
 (require 'el-get)
 (setq el-get-sources
       '(
+	doxymacs
 	;; check bzr
 	cedet
 	(:name ecb
@@ -10,5 +11,5 @@
 	       :options ("xzf")
 	       :url "http://ecb.sourceforge.net/cvs_snapshots/ecb.tar.gz"
 	       :load-path ("ecb-snap")
-	       ))
+	       )))
 (el-get 'wait)

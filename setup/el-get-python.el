@@ -29,6 +29,10 @@
 (require 'el-get)
 (setq el-get-sources
       '(pylookup
+	(:name pylint
+	       :type git
+	       :url "git://gist.github.com/302848.git")
+
 	;; pymacs
 	;; check python rope/pymacs package here
 	;; (:name ropemode
