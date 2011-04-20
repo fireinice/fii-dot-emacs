@@ -1,0 +1,11 @@
+#name : class ... { ... }
+# --
+switch (${1:var})
+{
+case $2:
+    $3
+    break;
+default:
+    $4
+    break;
+}
