@@ -1,7 +1,8 @@
 ;;; cpp-conf.el 
 (eval-when-compile
   (require 'cl)
-  (require 'cc-defs))
+  (require 'cc-defs)
+  (require 'cc-mode))
 
 (require 'xcscope)
 (require 'doxymacs)
@@ -13,8 +14,8 @@
 ;; this package would find the load-path of the system automatically through gcc
 (require 'smart-snippets-conf)
 (require 'flymake-conf)
-(common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
-(common-smart-snippets-setup c-mode-map c-mode-abbrev-table)
+;; (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
+(common-smart-snippets-setup c-mode-base-map c-mode-abbrev-table)
 (setq eassist-header-switches '(("h" . ("cpp" "cc" "c"))
 				("hpp" . ("cpp" "cc"))
 				("cpp" . ("h" "hpp" "hh"))
@@ -31,6 +32,7 @@
     (tab-width . 4)
     (fill-column . 100)
     (indent-tabs-mode . nil)
+    (buffer-file-coding-system . gb18030)
     ;; (c-offsets-alist . ((arglist-cont-nonempty . +)))
     (c-hanging-colons-alist . ((member-init-intro before)))
     (c-hanging-braces-alist . ((substatement-open after)
