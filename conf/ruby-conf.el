@@ -1,4 +1,4 @@
-(require 'inf-ruby)
+;; (require 'inf-ruby)
 (require 'ruby-electric)
 (require 'rcodetools)
 (require 'flymake-conf)
@@ -11,6 +11,7 @@
 (require 'xhtml-conf)
 ;; (require 'rails)
 (require 'rvm)
+(require 'autotest)
 
 ;; irbsh and info-ruby is duplicated, we should choose one in future
 (when (locate-library "irbsh")
@@ -26,21 +27,24 @@
 ;; add gem/bin into PATH to make rcodetools could be called
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
 (define-key ruby-mode-map (kbd "\C-c\C-t") 'rspec-toggle-spec-and-target)
-
 (defun rhtml-mode ()
   (setq nxml-degraded t)
   (zzq-html-mode)
   (eruby-nxhtml-mumamo-mode)
   (ruby-electric-mode nil))
+(require 'rvm)
+(setq rvm--gemset-default "global")
 
 (defun setup-ruby-mode ()
-  (rvm-use-default)
-  (set (make-local-variable 'indent-tabs-mode) 'nil)
-  (set (make-local-variable 'tab-width) 2)
-  (imenu-add-to-menubar "IMENU")
   (ruby-electric-mode t)
-  (local-unset-key (kbd "<return>"))
-  (local-set-key (kbd "RET")  'newline-and-indent)
+  (imenu-add-to-menubar "IMENU")
+  (set (make-local-variable 'tab-width) 2)
+  (set (make-local-variable 'indent-tabs-mode) 'nil)
+  ;; (setq rspec-use-rvm t)
+  ;; (setq rvm--gemset-default "rails3tutorial")
+  ;; (local-unset-key (kbd "<return>"))
+  (local-unset-key (kbd "RET"))
+  (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
   ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
   (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
       (lambda ()
@@ -54,7 +58,10 @@
             '(lambda()
                (save-excursion
                  (untabify (point-min) (point-max))
-                 (delete-trailing-whitespace)))) nil t)
+                 (delete-trailing-whitespace))))
+  (rvm-use "ruby-1.9.2-p0" "rails3tutorial")
+  (setenv "GEM_HOME" (cdr (assoc "GEM_HOME" (rvm/info "ruby-1.9.2-p0@rails3tutorial"))))
+  (ac-mode-setup))
 
 
 (defun ruby-eval-buffer ()
@@ -77,8 +84,8 @@
     (search-forward "RAILS_ROOT}")
     (search-forward-regexp "\\([^:]*\\):\\([0-9]+\\)")
     (let  ((file (match-string 1))
-     (line (match-string 2)))
-          ;(kill-buffer (current-buffer))
+           (line (match-string 2)))
+                                        ;(kill-buffer (current-buffer))
       (message
        (format "Error found in file \"%s\" on line %s. "  file line))
       (find-file (concat rails-root file))
@@ -99,4 +106,11 @@
                       (point))))
       (forward-line 1)
       (delete-region beg (point)))))
+
+(defun ruby-insert-end ()
+  "Insert \"end\" at point and reindent current line."
+  (interactive)
+  (insert "end")
+  (ruby-indent-line t)
+  (end-of-line))
 (provide 'ruby-conf)
