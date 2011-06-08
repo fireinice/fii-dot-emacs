@@ -22,6 +22,7 @@
 (require 'smart-snippets-conf)
 (require 'auto-complete-config)
 (require 'w3m-conf)
+(require 'python-pylint)
 ;; (require 'pymacs)
 
 ;; pylookup setup
@@ -73,6 +74,5 @@
        (append '(ac-source-yasnippet ac-source-ropemacs)
 	       ac-sources)))
 
-(setq pylint-options "--output-format=parseable --include-ids=yes")
-
+(setq python-pylint-options "--output-format=parseable --include-ids=yes")
 (provide 'python-conf)

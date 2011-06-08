@@ -15,7 +15,7 @@
 ;;   (require 'python-conf)
 ;;   (require 'ruby-conf)
 ;;   (require 'regex-tool))
-
+(global-set-key (kbd "C-SPC") 'nil)
 (setq warning-suppress-types nil)
 ;;; This was installed by package-install.el.
 ;;; This provides support for the package system and
@@ -280,6 +280,7 @@
 (dolist (cmd '(ido-select-text ido-magic-forward-char
                                ido-exit-minibuffer))
   (add-to-list 'template-find-file-commands cmd))
+(add-to-list 'template-default-directories "~/.emacs.d/tpl")
 
 ;;=========ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
@@ -324,6 +325,9 @@
             (require 'grep-edit)))
 
 ;;=========c/c++模式
+(setq auto-mode-alist
+      (append '(("\\.h$" . c++-mode))
+              auto-mode-alist))
 (add-hook 'c-mode-common-hook
           (lambda()
             (require 'cedet-conf)
