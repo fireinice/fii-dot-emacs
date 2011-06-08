@@ -1,4 +1,4 @@
-;;; snippet.el -- insert snippets of text into a buffer
+;;; smart-snippet.el -- insert snippets of text into a buffer
 
 ;; Copyright (C) 2005 Pete Kazmier
 
@@ -1666,6 +1666,7 @@ variables are available:
   (let* ((table (smart-snippet-abbrev-table (symbol-name abbrev-table)))
          (snippet-list (gethash abbrev-name table))
          (snippet (assoc template snippet-list)))
+    ;; (message condition)
     (puthash abbrev-name
              (cond ((null snippet)
                     (cons (list template condition)
