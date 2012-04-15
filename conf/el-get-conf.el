@@ -111,7 +111,10 @@
 	       :type apt-get)
 	(:name android-mode
 	       :type git
-	       :url "git://github.com/remvee/android-mode.git")))
+	       :url "git://github.com/remvee/android-mode.git")
+	(:name emdroid
+               :type http
+               :url "http://www.emacswiki.org/emacs/download/emdroid.el")))
 
 ;; (el-get)
 ;; (setq el-get-sources

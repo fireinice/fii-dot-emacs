@@ -131,6 +131,7 @@
   (setq tab-width 2)
   (setq nxml-slash-auto-complete-flag t)
   ;; (setq nxhtml-validation-header-mode t)
+  (define-key zencoding-preview-keymap "\r" 'zencoding-expand-yas)
   (make-local-variable 'cua-inhibit-cua-keys)
   (set (make-local-variable 'ac-sources)
        '(ac-source-yasnippet
@@ -140,6 +141,7 @@
   (setq ac-auto-start 1))
 
 (defun zzq-html-mode ()
+  (common-nxhtml-mode-setup)
   (nxhtml-mode)
   (nxhtml-mumamo-mode)
   (setq mumamo-current-chunk-family
