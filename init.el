@@ -54,6 +54,7 @@
 (autoload 'cl "cl" nil)
 (autoload 'smart-compile "smart-compile" nil t)
 (autoload 'regex-tool "regex-tool" nil t)
+(require 'cc-mode)
 (require 'ido)
 (require 'ange-ftp) ;req by tramp for ftp protocol
 (require 'tramp)
@@ -69,7 +70,7 @@
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
 ;; (require 'xcscope)
-;; (require 'doxymacs)
+(require 'doxymacs)
 ;; (autoload 'senator-try-expand-semantic "senator")
 ;; (autoload 'two-mode-mode "two mode mode")
 ;; (require 'ede)
@@ -552,6 +553,8 @@
 (require 'shell-completion)
 (require 'shell-history)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(modify-coding-system-alist 'file "\\.sh$" 'gb18030)
+
 ;; make the shell mode highlight
 (setq comint-prompt-read-only t) ;; to make the the shell prompt readonly
 
@@ -660,12 +663,19 @@
 
 ;;========compilation mode support ansi-color
 ;; (require 'ansi-color)
-(defun colorize-compilation-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region (point-min) (point-max))
-  (toggle-read-only))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+;; (defun colorize-compilation-buffer ()
+;;   (toggle-read-only)
+;;   (ansi-color-apply-on-region (point-min) (point-max))
+;;   (toggle-read-only))
+;; (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
 (when (file-readable-p custom-file)
   (load custom-file))
+
+;; ========ess
+(add-hook 'ess-mode-hook
+	  (lambda () "DOCSTRING"
+	    (interactive)
+	    (require 'r-conf)
+	    (setup-r-mode)))
 ;;========init.el end here

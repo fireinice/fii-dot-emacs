@@ -10,20 +10,12 @@
 		      )
 (ede-cpp-root-project "resta2"
 		      :name "new Resta of Dan"
-		      :file "~/work/resta2/Makefile"
+		      :file "~/work/resta_svn/Makefile"
 		      :include-path '("/src/include")
 		      ;; :system-include-path '("~/exp/include")
 		      ;; :spp-table '(("isUnix" . "")
 		      ;; ("BOOST_TEST_DYN_LINK" . ""))
 		      )
 
-(ede-cpp-root-project "resta.new"
-		      :name "new Resta of Dan"
-		      :file "~/dev/resta/Makefile"
-		      :include-path '("/src/include")
-		      ;; :system-include-path '("~/exp/include")
-		      ;; :spp-table '(("isUnix" . "")
-		      ;; ("BOOST_TEST_DYN_LINK" . ""))
-		      )
 
 (provide 'cpp-projects)

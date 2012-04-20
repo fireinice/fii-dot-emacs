@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*- #
 #// -*- mode:Python; tab-width:4; py-basic-offset:4; indent-tabs-mode:nil -*-
 #/*************************************************************************
-# *  Copyright (c) 2006 Ask Jeeves Technologies. ALL RIGHTS RESERVED.     *
+# * Copyright (c) (>>>YEAR<<<) Baidu.com, Inc. All Rights Reserved
+# * $Id: (>>>FILE<<<),v 0.0 (>>>VC_DATE<<<) zhangzhiqiang Exp $ 
 # *************************************************************************/
 #/**
 # * \file		(>>>FILE<<<)
@@ -10,7 +11,7 @@
 # *
 # * 
 # *
-# * \author		Zhiqiang Zhang(Zhiqiang.Zhang@ask.com) IAC Search & Media (Hangzhou)
+# * \author		ZhangZhiqiang(zhangzhiqiang@baidu.com)
 # * \bug		No known bugs.
 # *
 # * $Date: (>>>VC_DATE<<<) $
