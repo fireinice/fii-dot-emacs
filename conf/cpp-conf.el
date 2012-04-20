@@ -15,7 +15,7 @@
 (require 'smart-snippets-conf)
 (require 'flymake-conf)
 ;; (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
-(common-smart-snippets-setup c-mode-base-map c-mode-abbrev-table)
+;; (common-smart-snippets-setup c-mode-base-map c-mode-abbrev-table)
 (setq eassist-header-switches '(("h" . ("cpp" "cc" "c"))
 				("hpp" . ("cpp" "cc"))
 				("cpp" . ("h" "hpp" "hh"))
@@ -24,7 +24,7 @@
 				("H" . ("C" "CPP" "CC"))
 				("cc" . ("h" "hpp" "hh"))
 				("hh" . ("cc" "cpp"))))
-(define-key c-mode-base-map [(f7)] 'compile)
+;; (define-key c-mode-base-map [(f7)] 'compile)
 (defconst baidu-c-style
   `("k&r"
     (c-enable-xemacs-performance-kludge-p . t) ; speed up indentation in XEmacs

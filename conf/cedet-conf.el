@@ -32,7 +32,8 @@
 
 (provide 'cedet-conf)
 (eval-when-compile
-  (require 'cl))
+  (require 'cl)
+  (require 'cc-mode))
 ;; http://www.linuxforum.net/forum/showflat.php?Board=vim&Number=687565
 ;; Load CEDET.
 ;; See cedet/common/cedet.info for configuration details.

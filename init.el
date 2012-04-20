@@ -67,6 +67,7 @@
 (require 'template)
 (require 'volume)
 (require 'unicad)
+
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
 ;; (require 'xcscope)
