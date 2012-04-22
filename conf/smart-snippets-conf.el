@@ -57,36 +57,36 @@
     ("'" "'$.'" '(not (c-in-literal)))
     ("," ", " '(not (c-in-literal)))))
 
-;; (smart-snippet-with-abbrev-tables
-;;  (c++-mode-abbrev-table
-;;   java-mode-abbrev-table)
-;;  ("{" "{$.}" '(not (c-in-literal)))
-;;  ("{" "{$>\n$>$.\n}$>" 'bol?)
-;;  ;; if not in comment or other stuff(see `c-in-literal'), then
-;;  ;; inser a pair of quote. if already in string, insert `\"'
-;;  ("\"" "\"$.\"" '(not (c-in-literal))) 
-;;  ("\"" "\\\"$." '(eq (c-in-literal) 'string))
-;;  ;; insert a pair of parenthesis, useful everywhere
-;;  ("(" "($.)" t)
-;;  ;; insert a pair of angular bracket if we are writing templates
-;;  ("<" "<$.>" '(and (not (c-in-literal))
-;; 		   (looking-back "template[[:blank:]]*")))
-;;  ;; a pair of square bracket, also useful everywhere
-;;  ("[" "[$.]" t)
-;;  ;; a pair of single quote, if not in literal
-;;  ("'" "'$.'" '(not (c-in-literal)))
-;;  )
+(smart-snippet-with-abbrev-tables
+ (c++-mode-abbrev-table
+  jde-mode-abbrev-table)
+ ("{" "{$.}" '(not (c-in-literal)))
+ ("{" "{$>\n$>$.\n}$>" 'bol?)
+ ;; if not in comment or other stuff(see `c-in-literal'), then
+ ;; inser a pair of quote. if already in string, insert `\"'
+ ("\"" "\"$.\"" '(not (c-in-literal))) 
+ ("\"" "\\\"$." '(eq (c-in-literal) 'string))
+ ;; insert a pair of parenthesis, useful everywhere
+ ("(" "($.)" t)
+ ;; insert a pair of angular bracket if we are writing templates
+ ("<" "<$.>" '(and (not (c-in-literal))
+		   (looking-back "template[[:blank:]]*")))
+ ;; a pair of square bracket, also useful everywhere
+ ("[" "[$.]" t)
+ ;; a pair of single quote, if not in literal
+ ("'" "'$.'" '(not (c-in-literal)))
+ )
 
-;; (smart-snippet-with-keymaps
-;;  ((c++-mode-map c++-mode-abbrev-table)
-;;   (java-mode-map java-mode-abbrev-table))
-;;  ("{" "{")
-;;  ("\"" "\"")
-;;  ("(" "(")
-;;  ("<" "<")
-;;  ("[" "[")
-;;  ("'" "'")
-;;  )
+(smart-snippet-with-keymaps
+ ((c++-mode-map c++-mode-abbrev-table)
+  (jde-mode-map java-mode-abbrev-table))
+ ("{" "{")
+ ("\"" "\"")
+ ("(" "(")
+ ("<" "<")
+ ("[" "[")
+ ("'" "'")
+ )
 
 
 (defun smart-snippets-list-with-keymap-abbrev-table
@@ -110,8 +110,8 @@
 (defmacro common-smart-snippets-setup
   (mode-map mode-abbrev-table)
   `(smart-snippets-list-with-keymap-abbrev-table
-	  (list ,mode-map ',mode-abbrev-table)
-	  common-snippets-list))
+    (list ,mode-map ',mode-abbrev-table)
+    common-snippets-list))
 
 ;; (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
 

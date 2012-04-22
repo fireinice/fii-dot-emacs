@@ -51,9 +51,9 @@
 ;; your keyboard.
 (global-set-key [(control \')] 'kid-c-escape-pair)
 ;; (global-set-key  (kbd "\C-t") 'kid-c-escape-pair)
-(global-set-key  (kbd "\C-x \C-b") 'ibuffer-other-window)
 ;; (define-key c++-mode-map (kbd "<tab>") 'c-indent-command)
 ;; tabbar键盘绑定
+;; (global-set-key (kbd "C-x k") 'kill-this-buffer)
 (global-set-key (kbd "\C-c\C-r") 'eval-print-last-sexp)
 ;; (global-set-key (kbd "\C-cbp") 'tabbar-backward-group)
 ;; (global-set-key (kbd "\C-cbn") 'tabbar-forward-group)

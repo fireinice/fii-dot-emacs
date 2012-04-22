@@ -35,15 +35,16 @@
   (require 'cl))
 
 ;;=========template 设置
+(require 'template)
+
 (template-initialize)
+
 ;; compatible with ido
 (dolist (cmd '(ido-select-text ido-magic-forward-char
                                ido-exit-minibuffer))
   (add-to-list 'template-find-file-commands cmd))
-(add-to-list 'template-default-directories "~/.emacs.d/tpl")
 
-;;=========ibuffer
-(setq ibuffer-default-sorting-mode 'major-mode)
+(add-to-list 'template-default-directories "~/.emacs.d/tpl")
 
 
 

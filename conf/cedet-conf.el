@@ -34,6 +34,7 @@
 (eval-when-compile
   (require 'cl)
   (require 'cc-mode))
+
 ;; http://www.linuxforum.net/forum/showflat.php?Board=vim&Number=687565
 ;; Load CEDET.
 ;; See cedet/common/cedet.info for configuration details.
@@ -100,10 +101,12 @@
   (local-set-key "\C-cxp" 'senator-previous-tag)
   (local-set-key "\C-cxn" 'senator-next-tag)
   (local-set-key "\C-cxa" 'senator-go-to-up-reference)
-  (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
-  (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
-  (define-key c-mode-base-map (kbd "\C-cxo") 'semantic-analyze-proto-impl-toggle)
-  )
+  (eval-after-load 'cc-mode (
+			     lambda ()
+				    (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
+				    (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
+				    (define-key c-mode-base-map (kbd "\C-cxo") 'semantic-analyze-proto-impl-toggle))))
+
 
 ;;;;##########################################################################
 ;;;;  User Options, Variables

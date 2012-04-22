@@ -34,6 +34,7 @@
 (eval-when-compile
   (require 'cl))
 
+(autoload 'smart-compile "smart-compile" nil t)
 (setq smart-compile-alist
       '(("/network/asio/.*cpp$" .       "g++ -Wall %f -lm -lboost_thread -o %n")
 	;;         ("\\.c\\'"      .   "gcc -Wall %f -lm -o %n")
