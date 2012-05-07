@@ -78,9 +78,7 @@
 	       ;; require behave(outside) require clojure
 	       :type git
 	       :url "http://github.com/remvee/emacs-rails.git")
-	(:name el-expectations
-               :type http
-               :url "http://www.emacswiki.org/emacs/download/el-expectations.el")
+	el-expectations
 	;; html
 	(:name nxhtml)
 	(:name zencoding
@@ -104,7 +102,7 @@
 	(:name jdee
 	       ;; require elib bsh
 	       :type git-svn
-	       :url "http://jdee.svn.sourceforge.net/svnroot/jdee/trunk/jdee")
+	       :url "https://jdee.svn.sourceforge.net/svnroot/jdee")
 	(:name bsh
 	       :type apt-get)
 	(:name elib
@@ -112,9 +110,21 @@
 	(:name android-mode
 	       :type git
 	       :url "git://github.com/remvee/android-mode.git")
-	(:name emdroid
-               :type http
-               :url "http://www.emacswiki.org/emacs/download/emdroid.el")))
+	(:name pylint
+	       :type git
+	       :url "git://gist.github.com/302848.git")
+	emdroid
+	(:name unicad
+	       ;; 
+	       :type git-svn
+	       :url "http://unicad.googlecode.com/svn/trunk/")
+	(:name smart-compile
+	       ;; should replace by modecompile?
+	       :type http
+	       :url "http://sourceforge.jp/projects/macwiki/svn/view/zenitani/elisp/smart-compile.el?view=co&revision=735&root=macwiki")
+	(:name flymake-shell
+	       :type git
+	       :url "https://github.com/purcell/flymake-shell.git")))
 
 ;; (el-get)
 ;; (setq el-get-sources

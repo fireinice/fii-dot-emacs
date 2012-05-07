@@ -1,3 +1,33 @@
+;;========Hippie-Expand
+;; (setq hippie-expand-try-functions-list
+;; ;; (make-hippie-expand-function
+;;  '(
+;;      yas/hippie-try-expand
+;;      try-complete-abbrev
+;;      try-expand-dabbrev-visible
+;;      try-expand-dabbrev
+;;      try-expand-dabbrev-all-buffers
+;;      try-expand-dabbrev-from-kill
+;;      try-expand-list
+;;      try-expand-list-all-buffers
+;;      try-expand-line
+;;         try-expand-line-all-buffers
+;;         try-complete-file-name-partially
+;;         try-complete-file-name
+;;         try-complete-lisp-symbol-partially
+;;         try-complete-lisp-symbol
+;;         try-expand-whole-kill))
+(nconc load-path
+       (zzq-subdirectories "~/.emacs.d/"))
+
+(dolist (file-name (directory-files "~/.emacs.d" t))
+  (when (file-directory-p file-name)
+    (unless
+        (equal "."
+               (substring
+                (file-name-nondirectory file-name) 0 1))
+      (add-to-list 'load-path file-name))))
+
 ;; ;;========php mode
 ;; (autoload 'php-mode "php-mode" "Major mode for editing php code." t)
 ;; (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))

@@ -32,30 +32,12 @@
 
 (provide 'custom-settings)
 (eval-when-compile
-  (require 'cl))
+  (require 'cl)
+  (require 'cc-mode))
 
 
 
 
-;;========Hippie-Expand
-;; (setq hippie-expand-try-functions-list
-;; ;; (make-hippie-expand-function
-;;  '(
-;;      yas/hippie-try-expand
-;;      try-complete-abbrev
-;;      try-expand-dabbrev-visible
-;;      try-expand-dabbrev
-;;      try-expand-dabbrev-all-buffers
-;;      try-expand-dabbrev-from-kill
-;;      try-expand-list
-;;      try-expand-list-all-buffers
-;;      try-expand-line
-;;         try-expand-line-all-buffers
-;;         try-complete-file-name-partially
-;;         try-complete-file-name
-;;         try-complete-lisp-symbol-partially
-;;         try-complete-lisp-symbol
-;;         try-expand-whole-kill))
 
 ;;=======基本设置 start
 (server-start)
@@ -159,8 +141,6 @@
 ;;;;##########################################################################
 ;;;;  User Options, Variables
 ;;;;##########################################################################
-
-
 
 
 

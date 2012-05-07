@@ -33,17 +33,20 @@
 (provide 'elisp-conf)
 (eval-when-compile
   (require 'cl))
-
+;; (require 'cc-mode)
 (require 'cedet-conf)
 (require 'paredit)
+(require 'custom-variables)
+
 (defvar auto-compile-conf-list nil)
-(dolist (dirname '( "~/.emacs.d" "~/.emacs.d/conf"))
+(dolist (dirname '("~/.emacs.d/" "~/.emacs.d/conf/" "~/.emacs.d/settings" ))
   (dolist (file-name (directory-files dirname t))
     (unless (file-directory-p file-name)
       (when (string=
 	     (file-name-extension file-name)
 	     "el")
 	(add-to-list 'auto-compile-conf-list file-name)))))
+
 
 (defun el-after-save-hook ()
   (mapcar
@@ -57,9 +60,15 @@
 (defun setup-emacs-list-mode ()
   (turn-on-eldoc-mode)
   (paredit-mode t)
+  (message "elips mode setup")
   (semantic-key-bindings)
   (add-hook 'after-save-hook
 	    'el-after-save-hook nil t))
+
+;; C-h f emacs-list-mode would tell the file load
+(eval-after-load "lisp-mode"
+  `(setup-emacs-list-mode))
+
 ;;;;##########################################################################
 ;;;;  User Options, Variables
 ;;;;##########################################################################
