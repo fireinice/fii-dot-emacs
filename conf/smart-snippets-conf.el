@@ -35,9 +35,6 @@
   (require 'cl))
 (require 'smart-snippet)
 
-(defvar test-common-snippets-list
-  '(("{" "{$.}" '(not (c-in-literal)))))
-
 (defvar common-snippets-list
   '(("{" "{$.}" '(not (c-in-literal)))
     ("{" "{$>\n$>$.\n}$>" 'bol?)
@@ -57,55 +54,52 @@
     ("'" "'$.'" '(not (c-in-literal)))
     ("," ", " '(not (c-in-literal)))))
 
-(smart-snippet-with-abbrev-tables
- (c++-mode-abbrev-table
-  jde-mode-abbrev-table)
- ("{" "{$.}" '(not (c-in-literal)))
- ("{" "{$>\n$>$.\n}$>" 'bol?)
- ;; if not in comment or other stuff(see `c-in-literal'), then
- ;; inser a pair of quote. if already in string, insert `\"'
- ("\"" "\"$.\"" '(not (c-in-literal))) 
- ("\"" "\\\"$." '(eq (c-in-literal) 'string))
- ;; insert a pair of parenthesis, useful everywhere
- ("(" "($.)" t)
- ;; insert a pair of angular bracket if we are writing templates
- ("<" "<$.>" '(and (not (c-in-literal))
-		   (looking-back "template[[:blank:]]*")))
- ;; a pair of square bracket, also useful everywhere
- ("[" "[$.]" t)
- ;; a pair of single quote, if not in literal
- ("'" "'$.'" '(not (c-in-literal)))
- )
+;; (smart-snippet-with-abbrev-tables
+;;  (c++-mode-abbrev-table
+;;   jde-mode-abbrev-table)
+;;  ("{" "{$.}" '(not (c-in-literal)))
+;;  ("{" "{$>\n$>$.\n}$>" 'bol?)
+;;  ;; if not in comment or other stuff(see `c-in-literal'), then
+;;  ;; inser a pair of quote. if already in string, insert `\"'
+;;  ("\"" "\"$.\"" '(not (c-in-literal))) 
+;;  ("\"" "\\\"$." '(eq (c-in-literal) 'string))
+;;  ;; insert a pair of parenthesis, useful everywhere
+;;  ("(" "($.)" t)
+;;  ;; insert a pair of angular bracket if we are writing templates
+;;  ("<" "<$.>" '(and (not (c-in-literal))
+;; 		   (looking-back "template[[:blank:]]*")))
+;;  ;; a pair of square bracket, also useful everywhere
+;;  ("[" "[$.]" t)
+;;  ;; a pair of single quote, if not in literal
+;;  ("'" "'$.'" '(not (c-in-literal)))
+;;  )
 
-(smart-snippet-with-keymaps
- ((c++-mode-map c++-mode-abbrev-table)
-  (jde-mode-map java-mode-abbrev-table))
- ("{" "{")
- ("\"" "\"")
- ("(" "(")
- ("<" "<")
- ("[" "[")
- ("'" "'")
- )
-
+;; (smart-snippet-with-keymaps
+;;  ((c++-mode-map c++-mode-abbrev-table))
+;;  ("{" "{")
+;;  ("\"" "\"")
+;;  ("(" "(")
+;;  ("<" "<")
+;;  ("[" "[")
+;;  ("'" "'")
+;;  )
 
 (defun smart-snippets-list-with-keymap-abbrev-table
   (keymap-and-abbrev-table snippets)
-  (progn
-    (dolist (snippet snippets)
-      (let ((mode-table (car keymap-and-abbrev-table))
-	    (abbrev-table (cadr keymap-and-abbrev-table))
-	    (short-key (car snippet)))
-	(smart-snippet-set-snippet-key
-	 mode-table
-	 abbrev-table
-	 short-key
-	 short-key)
-	(smart-snippet-abbrev
-	 abbrev-table 
-	 (nth 0 snippet)
-	 (nth 1 snippet)
-	 (nth 2 snippet))))))
+  (dolist (snippet snippets)
+    (let ((mode-table (car keymap-and-abbrev-table))
+	  (abbrev-table (cadr keymap-and-abbrev-table))
+	  (short-key (car snippet)))
+      (smart-snippet-set-snippet-key
+       mode-table
+       abbrev-table
+       short-key
+       short-key)
+      (smart-snippet-abbrev
+       abbrev-table 
+       (nth 0 snippet)
+       (nth 1 snippet)
+       (nth 2 snippet)))))
 
 (defmacro common-smart-snippets-setup
   (mode-map mode-abbrev-table)
@@ -113,5 +107,8 @@
     (list ,mode-map ',mode-abbrev-table)
     common-snippets-list))
 
+
+;; (macroexpand '(common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table))
+;; (smart-snippets-list-with-keymap-abbrev-table (list c++-mode-map 'c++-mode-abbrev-table) common-snippets-list)
 ;; (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
 

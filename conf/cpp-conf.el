@@ -72,7 +72,8 @@
 	       ac-sources))
   (make-local-variable 'ac-ignores)
   ;; do not ac by comment
-  (add-to-list 'ac-ignores "//"))
+  (add-to-list 'ac-ignores "//")
+  (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table))
 
 ;; (eval-after-load "semantic-c" 
 ;;   '(dolist (d (list "/usr/include/c++/4.3"

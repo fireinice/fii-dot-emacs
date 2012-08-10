@@ -60,7 +60,6 @@
 ;; 这个文件中
 (setq custom-file (concat my-emacs-path "myinfo.el"))
 ;; end of 私人信息
-
 (require 'custom-variables)
 (require 'misc-funcs)
 (require 'custom-settings)
@@ -248,7 +247,7 @@
 (load "~/.emacs.d/el-get/nxhtml/autostart.el")
 (autoload 'zzq-html-mode "xhtml-conf" nil t)
 (autoload 'zzq-phtml-mode "xhtml-conf" nil t)
-(autoload 'common-smart-snippets-setup "smart-snippets-conf" nil t)
+;; (autoload 'common-smart-snippets-setup "smart-snippets-conf" nil t)
 (add-to-list 'auto-mode-alist
              '("\\.html$" . zzq-html-mode))
 (add-to-list 'auto-mode-alist
@@ -257,7 +256,7 @@
 (add-hook 'css-mode-hook
           (lambda()
             (require 'xhtml-conf)
-            (require 'smart-snippets-conf)
+            ;; (require 'smart-snippets-conf)
             (hexcolour-add-to-font-lock)
             ))
             ;; (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)
@@ -276,17 +275,15 @@
             (define-key js2-mode-map "\r" 'newline-and-indent)
             (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
 ;;========Java 模式
-(autoload 'emdroid-create-activity "emdroid" nil t)
-(autoload 'jde-mode "jde" nil t)
-;; (add-to-list 'auto-mode-alist '("\\.java$" . jde-mode))
-;; (add-to-list 'auto-mode-alist '("\\.java$" . jde-mode))
-(add-hook 'java-mode-hook
-          (lambda ()
-	    ;; (require 'semantic-edit)
-	    ;; (load "jde-autoload")
-	    (require 'java-conf)
-	    ;; (require 'jde)
-            (setup-java-mode)))
+;; (add-hook 'java-mode-hook
+;;           (lambda ()
+;; 	    ;; (require 'semantic-edit)
+;; 	    (require 'java-conf)))
+
+;; (eval-after-load "java-conf"
+;;   '(progn
+;;      (setup-java-mode)))
+(load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode)
 
 ;;=========Python 模式
 (setq auto-mode-alist
@@ -295,10 +292,7 @@
 (setq interpreter-mode-alist
       (cons '("python" . python-mode)
             interpreter-mode-alist))
-(add-hook 'python-mode-hook
-          (lambda ()
-            (require 'python-conf)
-            (setup-python-mode)))
+(load-conf-file-and-setup 'python-mode-hook 'python-conf setup-python-mode)
 
 ;;=========Ruby 模式
 (autoload 'rhtml-mode "ruby-conf")
@@ -313,11 +307,12 @@
               interpreter-mode-alist))
 (modify-coding-system-alist 'file "\\.rb$" 'utf-8)
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
-(add-hook 'ruby-mode-hook
-          (lambda()
-            ;; (require 'rails)
-            (require 'ruby-conf)
-            (setup-ruby-mode)))
+;; (add-hook 'ruby-mode-hook
+;;           (lambda()
+;;             ;; (require 'rails)
+;;             (require 'ruby-conf)
+;;             (setup-ruby-mode)))
+(load-conf-file-and-setup 'ruby-mode-hook 'ruby-conf setup-ruby-mode)
 
 ;;=========SQL模式
 (autoload 'sql-mode "sql-mode" "SQL Editing Mode" t)
@@ -340,10 +335,17 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;;==========ELisp 模式
-(add-hook 'emacs-lisp-mode-hook
-          (lambda()
-            (require 'elisp-conf)))
+;; (add-hook 'emacs-lisp-mode-hook
+          ;; (lambda()
+            ;; (require 'elisp-conf)))
 
+;; (eval-after-load "elisp-conf"
+  ;; '(progn
+     ;; (setup-emacs-list-mode)))
+
+
+(load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-lisp-mode setup-emacs-lisp-buffer)
+;; (macroexpand '(load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-list-mode))
 ;;=========Shell 模式
 (require 'shell-completion)
 (require 'shell-history)

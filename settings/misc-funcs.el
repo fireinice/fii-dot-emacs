@@ -182,6 +182,43 @@ that was stored with ska-point-to-register."
 
 
 
+(defmacro load-conf-file-and-setup
+  (mode-hook conf-file mode-setup-function &optional buffer-setup-fun)
+  `(progn
+     (add-hook ,mode-hook
+	       (lambda()
+		 (require ,conf-file)
+		 (,buffer-setup-fun))
+	       (eval-after-load (prin1-to-string ,conf-file)
+		 '(progn
+		    (,mode-setup-function))))))
+
+
+;; (defmacro load-conf-file-and-setup-c
+;;   (mode-hook conf-name)
+;;   (let ((conf-file (make-symbol "conf-file"))
+;; 	(mode-setup-fun (make-symbol "mode-setup-fun"))
+;; 	(buffer-setup-fun (make-symbol "buffer-setup-fun")))
+;;     `(let ((,conf-file (intern (concat ,conf-name "-conf")))
+;; 	   (,mode-setup-fun (read (concat "setup-" ,conf-name "-mode")))
+;; 	   (,buffer-setup-fun (read (concat "setup-" ,conf-name "-buffer"))))
+;;        (progn
+;; 	 (prin1 ,conf-file)
+;; 	 (princ ,mode-hook)
+;; 	 (princ ,mode-setup-fun)
+;; 	 (add-hook ,mode-hook
+;; 	 	   (lambda()
+;; 	 	     (require ,conf-file)
+;; 	 	     (,buffer-setup-fun)))
+;; 	 (eval-after-load (prin1-to-string ,conf-file)
+;; 	   '(progn
+;; 	      (,mode-setup-fun)))
+;; 	 (eq 'java-mode-hook ,mode-hook)
+;; 	 ))))
+
+;; (load-conf-file-and-setup-c 'java-mode-hook "java")
+
+
 ;;========END
 
 

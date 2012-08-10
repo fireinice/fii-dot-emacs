@@ -33,13 +33,19 @@
 (provide 'java-conf)
 (eval-when-compile
   (require 'cl))
+(message "java mode file loaded")
 (setenv "JAVA_HOME" "/usr/lib/jvm/java-6-sun/")
 (setenv "CLASSPATH" ".")
-
+(autoload 'emdroid-create-activity "emdroid" nil t)
+(autoload 'jde-mode "jde" nil t)
 (require 'cedet-conf)
-;; (require 'smart-snippets-conf)
+(require 'jde)
+(require 'smart-snippets-conf)
 (defun setup-java-mode ()
+  (message "java-mode load start")
   (autoload 'android-mode "android-mode" nil t)
+  ;; (setq 'android-mode-avd "test")
+  ;; (setq 'android-mode-sdk-dir "/home/zigler/tools/android-sdk-linux/")
   (setq c-basic-offset 2)
   (jde-mode)
   (setq jde-web-browser "firefox")
@@ -48,8 +54,8 @@
   (setq jde-enable-abbrev-mode t)
   (local-set-key [(control return)] 'jde-complete)
   (local-set-key [(shift return)] 'jde-complete-minibuf)
-  (local-set-key [(meta return)] 'jde-complete-in-line))
-
+  (local-set-key [(meta return)] 'jde-complete-in-line)
+  (common-smart-snippets-setup java-mode-map java-mode-abbrev-table))
 ;;;;##########################################################################
 ;;;;  User Options, Variables
 ;;;;##########################################################################

@@ -29,7 +29,6 @@
 ;;   (require 'elisp-conf)
 
 ;;; Code:
-
 (provide 'elisp-conf)
 (eval-when-compile
   (require 'cl))
@@ -57,20 +56,21 @@
        (save-excursion (byte-compile-file file))))
    auto-compile-conf-list))
 
-(defun setup-emacs-list-mode ()
+(defun setup-emacs-lisp-buffer ()
   (turn-on-eldoc-mode)
   (paredit-mode t)
-  (message "elips mode setup")
-  (semantic-key-bindings)
+  (semantic-key-bindings))
+
+
+(defun setup-emacs-lisp-mode ()
   (add-hook 'after-save-hook
 	    'el-after-save-hook nil t))
 
 ;; C-h f emacs-list-mode would tell the file load
-(eval-after-load "lisp-mode"
-  `(setup-emacs-list-mode))
 
 ;;;;##########################################################################
 ;;;;  User Options, Variables
 ;;;;##########################################################################
 
 ;;; elisp-conf.el ends here
+
