@@ -188,12 +188,14 @@ that was stored with ska-point-to-register."
      (add-hook ,mode-hook
 	       (lambda()
 		 (require ,conf-file)
-		 (,buffer-setup-fun))
-	       (eval-after-load (prin1-to-string ,conf-file)
-		 '(progn
-		    (,mode-setup-function))))))
+		 (,buffer-setup-fun)
+		 ))
+     (eval-after-load (prin1-to-string ,conf-file)
+       '(progn
+	  (,mode-setup-function)))
+     ))
 
-
+(macroexpand '(load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode))
 ;; (defmacro load-conf-file-and-setup-c
 ;;   (mode-hook conf-name)
 ;;   (let ((conf-file (make-symbol "conf-file"))
