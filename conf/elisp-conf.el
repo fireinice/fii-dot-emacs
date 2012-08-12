@@ -30,22 +30,14 @@
 
 ;;; Code:
 (provide 'elisp-conf)
+(message "elisp-mode file load")
+
 (eval-when-compile
   (require 'cl))
-;; (require 'cc-mode)
 (require 'cedet-conf)
 (require 'paredit)
 (require 'custom-variables)
-
 (defvar auto-compile-conf-list nil)
-(dolist (dirname '("~/.emacs.d/" "~/.emacs.d/conf/" "~/.emacs.d/settings" ))
-  (dolist (file-name (directory-files dirname t))
-    (unless (file-directory-p file-name)
-      (when (string=
-	     (file-name-extension file-name)
-	     "el")
-	(add-to-list 'auto-compile-conf-list file-name)))))
-
 
 (defun el-after-save-hook ()
   (mapcar
@@ -56,15 +48,26 @@
        (save-excursion (byte-compile-file file))))
    auto-compile-conf-list))
 
+
 (defun setup-emacs-lisp-buffer ()
+  (message "elisp-mode buffer setup")
   (turn-on-eldoc-mode)
   (paredit-mode t)
   (semantic-key-bindings))
 
 
 (defun setup-emacs-lisp-mode ()
+  (message "elisp-mode mode setup")
+  (dolist (dirname '("~/.emacs.d/" "~/.emacs.d/conf/" "~/.emacs.d/settings" ))
+    (dolist (file-name (directory-files dirname t))
+      (unless (file-directory-p file-name)
+	(when (string=
+	       (file-name-extension file-name)
+	       "el")
+	  (add-to-list 'auto-compile-conf-list file-name)))))
   (add-hook 'after-save-hook
-	    'el-after-save-hook nil t))
+	    'el-after-save-hook))
+
 
 ;; C-h f emacs-list-mode would tell the file load
 

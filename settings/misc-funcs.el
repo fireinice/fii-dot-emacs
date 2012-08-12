@@ -134,15 +134,6 @@ that was stored with ska-point-to-register."
   (let ((tmp (point-marker)))
     (jump-to-register 8)
     (set-register 8 tmp)))
-(add-hook 'after-save-hook
-	  (lambda ()
-	    (mapcar
-	     (lambda (file)
-	       (setq file (expand-file-name file))
-	       (when (string= file (buffer-file-name))
-		 (save-excursion (byte-compile-file file))))
-	     '("~/.emacs.d/init.el" "~/.emacs.d/myinfo.el"
-	       "~/.emacs.d/conf/cpp-conf.el"))))
 
 ;;中英文之间自动加空格
 ;; (defun add-blank-in-chinese-and-english (&optional start end)
@@ -181,21 +172,17 @@ that was stored with ska-point-to-register."
 (global-set-key (kbd "C-(")	'zzq-wrap-region-with-paren)
 
 
-
 (defmacro load-conf-file-and-setup
   (mode-hook conf-file mode-setup-function &optional buffer-setup-fun)
   `(progn
      (add-hook ,mode-hook
 	       (lambda()
 		 (require ,conf-file)
-		 (,buffer-setup-fun)
-		 ))
+		 (,buffer-setup-fun)))
      (eval-after-load (prin1-to-string ,conf-file)
        '(progn
-	  (,mode-setup-function)))
-     ))
+	  (,mode-setup-function)))))
 
-(macroexpand '(load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode))
 ;; (defmacro load-conf-file-and-setup-c
 ;;   (mode-hook conf-name)
 ;;   (let ((conf-file (make-symbol "conf-file"))

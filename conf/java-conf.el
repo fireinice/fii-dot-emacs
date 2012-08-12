@@ -29,25 +29,23 @@
 ;;   (require 'java-conf)
 
 ;;; Code:
-
 (provide 'java-conf)
 (eval-when-compile
   (require 'cl))
-(message "java mode file loaded")
+(message "java-mode file loaded")
 (setenv "JAVA_HOME" "/usr/lib/jvm/java-6-sun/")
 (setenv "CLASSPATH" ".")
 (autoload 'emdroid-create-activity "emdroid" nil t)
-(autoload 'jde-mode "jde" nil t)
 (require 'cedet-conf)
 (require 'jde)
 (require 'smart-snippets-conf)
+
 (defun setup-java-mode ()
   (message "java-mode load start")
   (autoload 'android-mode "android-mode" nil t)
-  ;; (setq 'android-mode-avd "test")
-  ;; (setq 'android-mode-sdk-dir "/home/zigler/tools/android-sdk-linux/")
+  ;; (setq android-mode-avd "test")
+  ;; (setq android-mode-sdk-dir "/home/zigler/tools/android-sdk-linux/")
   (setq c-basic-offset 2)
-  (jde-mode)
   (setq jde-web-browser "firefox")
   (setq jde-doc-dir "/usr/lib/jvm/java-6-sun/docs")
   (setq jde-compiler (quote ("javac" "")))
@@ -56,6 +54,8 @@
   (local-set-key [(shift return)] 'jde-complete-minibuf)
   (local-set-key [(meta return)] 'jde-complete-in-line)
   (common-smart-snippets-setup java-mode-map java-mode-abbrev-table))
+(message "java-mode file load end")
+
 ;;;;##########################################################################
 ;;;;  User Options, Variables
 ;;;;##########################################################################

@@ -1,3 +1,4 @@
+
 ;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Filename: init.el
 ;; Author: zigler
@@ -41,16 +42,10 @@
 
 ;; ========加载路径 start
 ;;add all subdirectories into the load-path except start with dot
-;; (dolist (file-name (directory-files "~/.emacs.d/el-get" t))
-;;   (when (file-directory-p file-name)
-;;     (unless
-;;         (equal "."
-;;                (substring
-;;                 (file-name-nondirectory file-name) 0 1))
-;;       (add-to-list 'load-path file-name))))
-(nconc load-path
-       (zzq-subdirectories (concat my-emacs-path "el-get/"))
-       (zzq-subdirectories (concat my-emacs-path "/")))
+(setq load-path
+      (append (zzq-subdirectories (concat my-emacs-path "/"))
+	      (zzq-subdirectories (concat my-emacs-path "el-get/"))
+	      load-path))
 (add-to-list 'load-path (concat my-emacs-path "el-get/jdee/lisp"))
 (add-to-list 'load-path (concat my-emacs-path "settings/"))
 
@@ -274,16 +269,13 @@
             (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
             (define-key js2-mode-map "\r" 'newline-and-indent)
             (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
-;;========Java 模式
-;; (add-hook 'java-mode-hook
-;;           (lambda ()
-;; 	    ;; (require 'semantic-edit)
-;; 	    (require 'java-conf)))
 
-;; (eval-after-load "java-conf"
-;;   '(progn
-;;      (setup-java-mode)))
-(load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode)
+;;========Java 模式
+(autoload 'jde-mode "jde" nil t)
+(setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
+;; (assq-delete-all "\\.java\\'" auto-mode-alist)
+(add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
+(load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
 
 ;;=========Python 模式
 (setq auto-mode-alist

@@ -1,3 +1,13 @@
+
+;; (add-hook 'java-mode-hook
+;;           (lambda ()
+;; 	    ;; (require 'semantic-edit)
+;; 	    (require 'java-conf)))
+
+;; (eval-after-load "java-conf"
+;;   '(progn
+;;      (setup-java-mode)))
+
 ;;========Hippie-Expand
 ;; (setq hippie-expand-try-functions-list
 ;; ;; (make-hippie-expand-function
@@ -56,3 +66,13 @@
 ;;       (browse-url
 ;;        (concat "http://php.net/manual-lookup.php?pattern="
 ;;                (symbol-name symbol))))))
+
+;; (add-hook 'after-save-hook
+;; 	  (lambda ()
+;; 	    (mapcar
+;; 	     (lambda (file)
+;; 	       (setq file (expand-file-name file))
+;; 	       (when (string= file (buffer-file-name))
+;; 		 (save-excursion (byte-compile-file file))))
+;; 	     '("~/.emacs.d/init.el" "~/.emacs.d/myinfo.el"
+;; 	       "~/.emacs.d/conf/cpp-conf.el"))))
