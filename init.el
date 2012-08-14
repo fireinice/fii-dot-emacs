@@ -49,12 +49,13 @@
 (add-to-list 'load-path (concat my-emacs-path "el-get/jdee/lisp"))
 (add-to-list 'load-path (concat my-emacs-path "settings/"))
 
-;;私人信息,if you are not author please comment this line
+;;=====私人信息,if you are not author please comment this line
 (load-file (concat my-emacs-path "conf/projects-conf.el")) ;;porjects
 ;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
 ;; 这个文件中
 (setq custom-file (concat my-emacs-path "myinfo.el"))
-;; end of 私人信息
+;;=====end of 私人信息
+
 (require 'custom-variables)
 (require 'misc-funcs)
 (require 'custom-settings)
@@ -75,40 +76,27 @@
 (require 'uniquify) ;to identified same name buffer
 (require 'volume)
 (require 'unicad)
-
+(require 'doxymacs)
 
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
 ;; (require 'xcscope)
-(require 'doxymacs)
 ;; (autoload 'senator-try-expand-semantic "senator")
 ;; (autoload 'two-mode-mode "two mode mode")
 ;; (require 'ede)
 ;; (require 'ecb)
-
-
-;;私人信息,if you are not author please comment this line
-(load-file "~/.emacs.d/conf/projects-conf.el") ;;porjects
-;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
-;; 这个文件中
-(setq custom-file "~/.emacs.d/myinfo.el")
-
-;; end of 私人信息
-
 ;;========END
 
-
+;; ======== el-get 
 ;; el-get to manage the packages
 (autoload 'el-get-install "el-get-conf" nil t)
 (autoload 'el-get-update "el-get-conf" nil t)
 (autoload 'el-get-remove "el-get-conf" nil t)
-
+;; ======= END
 
 ;;=========ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
-;; 按下C-x k立即关闭掉当前的buffer
 (global-set-key (kbd "\C-x \C-b") 'ibuffer-other-window)
-
 
 ;;=========speedbar
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
@@ -144,23 +132,11 @@
 
 (require 'template-conf)
 
-
 ;;===========grep配置
 (add-hook 'grep-mode-hook
           (lambda()
             (require 'grep-edit)))
 
-;;=========c/c++模式
-(setq auto-mode-alist
-      (append '(("\\.h$" . c++-mode))
-              auto-mode-alist))
-(add-hook 'c-mode-common-hook
-          (lambda()
-            (require 'cedet-conf)
-            (require 'cpp-conf)
-            (add-to-list 'magic-fallback-mode-alist
-                         '(buffer-standard-include-p . c++-mode))
-            (setup-c-base-mode)))
 
 ;;========Emacs Muse 模式
 (autoload 'muse-mode "muse-mode")
@@ -198,23 +174,6 @@
 (global-set-key (kbd "<f9>") 'smart-compile)
 (require 'smart-compile-conf)
 
-;; 自动设置script buffer 为可执行
-(add-hook 'after-save-hook
-          #'(lambda ()
-              (and (save-excursion
-                     (save-restriction
-                       (widen)
-                       (goto-char (point-min))
-                       (save-match-data
-                         (looking-at "^#!"))))
-                   (not (file-executable-p buffer-file-name))
-                   (shell-command (concat "chmod u+x " buffer-file-name))
-                   (message
-                    (concat "Saved as script: " buffer-file-name)))))
-
-(define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
-(add-hook 'find-file-hooks 'auto-insert)
-
 
 ;;========ido 模式
 (require 'ido)
@@ -238,53 +197,33 @@
           (lambda()
             (require 'w3m-conf)))
 
-;;=========nxhtml
-(load "~/.emacs.d/el-get/nxhtml/autostart.el")
-(autoload 'zzq-html-mode "xhtml-conf" nil t)
-(autoload 'zzq-phtml-mode "xhtml-conf" nil t)
-;; (autoload 'common-smart-snippets-setup "smart-snippets-conf" nil t)
-(add-to-list 'auto-mode-alist
-             '("\\.html$" . zzq-html-mode))
-(add-to-list 'auto-mode-alist
-             '("\\.php$" . zzq-phtml-mode))
 
-(add-hook 'css-mode-hook
-          (lambda()
-            (require 'xhtml-conf)
-            ;; (require 'smart-snippets-conf)
-            (hexcolour-add-to-font-lock)
-            ))
-            ;; (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)
+;;**************** 编辑模式****************
+;;=========c/c++模式
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-to-list 'magic-fallback-mode-alist
+	     '(buffer-standard-include-p . c++-mode))
+;; (add-hook 'c-mode-common-hook
+;;           (lambda()
+;; 	    (require 'cpp-conf)
+;; 	    (setup-c-base-mode)))
+(load-conf-file-and-setup 'c-mode-common-hook 'cpp-conf setup-c-base-mode)
+;;==========END
 
-
-;;========JavaScript 模式
-(autoload 'js2-mode "js2" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(defvar js2-mode-abbrev-table nil
-  "Abbrev table in use in `js2-mode' buffers.")
-(define-abbrev-table 'js2-mode-abbrev-table ())
-(add-hook 'js2-mode-hook
-          (lambda ()
-            (setq js2-highlight-level 3)
-            (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
-            (define-key js2-mode-map "\r" 'newline-and-indent)
-            (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
-
-;;========Java 模式
+;;==========Java 模式
 (autoload 'jde-mode "jde" nil t)
 (setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
-;; (assq-delete-all "\\.java\\'" auto-mode-alist)
 (add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
 (load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
+;;==========END
 
-;;=========Python 模式
-(setq auto-mode-alist
-      (cons '("\\.py$" . python-mode)
-            auto-mode-alist))
+;;==========Python 模式
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (setq interpreter-mode-alist
       (cons '("python" . python-mode)
             interpreter-mode-alist))
 (load-conf-file-and-setup 'python-mode-hook 'python-conf setup-python-mode)
+;;==========END
 
 ;;=========Ruby 模式
 (autoload 'rhtml-mode "ruby-conf")
@@ -299,12 +238,47 @@
               interpreter-mode-alist))
 (modify-coding-system-alist 'file "\\.rb$" 'utf-8)
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
-;; (add-hook 'ruby-mode-hook
-;;           (lambda()
-;;             ;; (require 'rails)
-;;             (require 'ruby-conf)
-;;             (setup-ruby-mode)))
 (load-conf-file-and-setup 'ruby-mode-hook 'ruby-conf setup-ruby-mode)
+;;==========END
+
+;;==========ELisp 模式
+(load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-lisp-mode setup-emacs-lisp-buffer)
+;; (macroexpand '(load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-list-mode))
+;;==========END
+
+;;=========nxhtml
+(load "~/.emacs.d/el-get/nxhtml/autostart.el")
+(autoload 'zzq-html-mode "xhtml-conf" nil t)
+(autoload 'zzq-phtml-mode "xhtml-conf" nil t)
+(autoload 'common-smart-snippets-setup "smart-snippets-conf" nil t)
+(add-to-list 'auto-mode-alist
+             '("\\.html$" . zzq-html-mode))
+(add-to-list 'auto-mode-alist
+             '("\\.php$" . zzq-phtml-mode))
+
+(add-hook 'css-mode-hook
+          (lambda()
+            (require 'xhtml-conf)
+            ;; (require 'smart-snippets-conf)
+            (hexcolour-add-to-font-lock)
+	    (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)))
+
+
+
+;;========JavaScript 模式
+(autoload 'js2-mode "js2" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(defvar js2-mode-abbrev-table nil
+  "Abbrev table in use in `js2-mode' buffers.")
+(define-abbrev-table 'js2-mode-abbrev-table ())
+(add-hook 'js2-mode-hook
+          (lambda ()
+            (setq js2-highlight-level 3)
+            (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
+            (define-key js2-mode-map "\r" 'newline-and-indent)
+
+            (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
+
 
 ;;=========SQL模式
 (autoload 'sql-mode "sql-mode" "SQL Editing Mode" t)
@@ -326,23 +300,29 @@
 (autoload 'yaml-mode "yaml-mode.el" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
-;;==========ELisp 模式
-;; (add-hook 'emacs-lisp-mode-hook
-          ;; (lambda()
-            ;; (require 'elisp-conf)))
 
-;; (eval-after-load "elisp-conf"
-  ;; '(progn
-     ;; (setup-emacs-list-mode)))
-
-
-(load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-lisp-mode setup-emacs-lisp-buffer)
-;; (macroexpand '(load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-list-mode))
 ;;=========Shell 模式
 (require 'shell-completion)
 (require 'shell-history)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (modify-coding-system-alist 'file "\\.sh$" 'gb18030)
+;; 自动设置script buffer 为可执行
+(add-hook 'after-save-hook
+          #'(lambda ()
+              (and (save-excursion
+                     (save-restriction
+                       (widen)
+                       (goto-char (point-min))
+                       (save-match-data
+                         (looking-at "^#!"))))
+                   (not (file-executable-p buffer-file-name))
+                   (shell-command (concat "chmod u+x " buffer-file-name))
+                   (message
+                    (concat "Saved as script: " buffer-file-name)))))
+
+(define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
+(add-hook 'find-file-hooks 'auto-insert)
+
 
 ;; make the shell mode highlight
 (setq comint-prompt-read-only t) ;; to make the the shell prompt readonly
@@ -393,6 +373,7 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-hide-leading-stars t)
 (setq org-log-done t)
+
 ;; (require 'jira)
 ;;=======org mode end here======================
 
@@ -459,13 +440,12 @@
 ;;   (toggle-read-only))
 ;; (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
-(when (file-readable-p custom-file)
-  (load custom-file))
 
 ;; ========ess
-(add-hook 'ess-mode-hook
-	  (lambda () "DOCSTRING"
-	    (interactive)
-	    (require 'r-conf)
-	    (setup-r-mode)))
+(load-conf-file-and-setup 'ess-mode-hook 'r-conf setup-r-mode)
+
+;; ==========
+
+(when (file-readable-p custom-file)
+  (load custom-file))
 ;;========init.el end here

@@ -43,7 +43,6 @@
   (mapcar
    (lambda (file)
      (setq file (expand-file-name file))
-     (message file)
      (when (string= file (buffer-file-name))
        (save-excursion (byte-compile-file file))))
    auto-compile-conf-list))
