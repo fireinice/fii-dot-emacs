@@ -32,16 +32,18 @@
 (provide 'java-conf)
 (eval-when-compile
   (require 'cl))
+
+(require 'cedet-conf)
+(require 'jde)
+(require 'smart-snippets-conf)
 (message "java-mode file loaded")
 (setenv "JAVA_HOME" "/usr/lib/jvm/java-6-sun/")
 (setenv "CLASSPATH" ".")
 (autoload 'emdroid-create-activity "emdroid" nil t)
-(require 'cedet-conf)
-(require 'jde)
-(require 'smart-snippets-conf)
 
 (defun setup-java-mode ()
   (message "java-mode load start")
+  (jde-mode)
   (autoload 'android-mode "android-mode" nil t)
   (custom-set-variables '(android-mode-avd "test")
 			'(android-mode-sdk-dir "/home/zigler/tools/android-sdk-linux/"))

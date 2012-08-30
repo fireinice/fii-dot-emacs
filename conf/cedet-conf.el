@@ -40,7 +40,8 @@
 ;; See cedet/common/cedet.info for configuration details.
 ;; http://alexott.net/en/writings/emacs-devenv/EmacsCedet.html
 ;; http://github.com/alexott/emacs-configs/blob/master/rc/emacs-rc-cedet.el
-(load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
+(if (not (featurep 'cedet))
+    (load-file "~/.emacs.d/el-get/cedet/common/cedet.el"))
 (require 'semantic-ia)
 (require 'ede)
 (global-ede-mode t)

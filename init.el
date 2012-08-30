@@ -34,11 +34,14 @@
 ;;; This provides support for the package system and
 ;;; interfacing with ELPA, the package archive.
 ;;; Move this code earlier if you want to reference
-;;; packages in your .emacs.
-(when
-    (load
-     (expand-file-name (concat my-emacs-path "/elpa/package.el")))
-  (package-initialize))
+;;; packages in your .emacs.t
+ (when
+     (load
+      (expand-file-name (concat my-emacs-path "/elpa/package.el")))
+   (package-initialize))
+(require 'package)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 
 ;; ========加载路径 start
 ;;add all subdirectories into the load-path except start with dot
@@ -211,10 +214,13 @@
 ;;==========END
 
 ;;==========Java 模式
-(autoload 'jde-mode "jde" nil t)
-(setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
-(add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
-(load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
+;; jde-mode need cedet defined
+;; (load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
+;; (autoload 'jde-mode "jde" nil t)
+;; (setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
+;; (add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
+;; (load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
+(load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode)
 ;;==========END
 
 ;;==========Python 模式

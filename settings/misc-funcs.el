@@ -178,7 +178,8 @@ that was stored with ska-point-to-register."
      (add-hook ,mode-hook
 	       (lambda()
 		 (require ,conf-file)
-		 (,buffer-setup-fun)))
+		 (if (fboundp ',buffer-setup-fun)
+		     (,buffer-setup-fun))))
      (eval-after-load (prin1-to-string ,conf-file)
        '(progn
 	  (,mode-setup-function)))))
