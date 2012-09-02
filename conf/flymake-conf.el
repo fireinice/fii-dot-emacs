@@ -34,7 +34,7 @@
             (local-set-key (kbd "C-c C-e") 'flymake-goto-next-error)
             (setq flymake-gui-warnings-enabled nil)
             (setq flymake-compilation-prevents-syntax-check t)
-            (setq flymake-log-level 2)
+            (setq flymake-log-level 1)
             (setq flymake-master-file-dirs (quote ("../src" "." "./src" "./UnitTest")))
             (set-face-attribute 'flymake-warnline nil
                                 :background "LightBlue2"
@@ -114,7 +114,6 @@ makes)."
                '("\\.py\\'" flymake-pyflakes-init)))
 
 (add-hook 'find-file-hook 'flymake-find-file-hook)
-
 
 (provide 'flymake-conf)
 ;;; flymake-conf.el ends here

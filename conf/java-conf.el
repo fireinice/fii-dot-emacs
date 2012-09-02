@@ -36,26 +36,41 @@
 (require 'cedet-conf)
 (require 'jde)
 (require 'smart-snippets-conf)
+(require 'flymake-conf)
+(require 'jde-ecj-flymake)
 (message "java-mode file loaded")
 (setenv "JAVA_HOME" "/usr/lib/jvm/java-6-sun/")
 (setenv "CLASSPATH" ".")
 (autoload 'emdroid-create-activity "emdroid" nil t)
 
+(push '("\\.java\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup)
+      flymake-allowed-file-name-masks)
+
+
 (defun setup-java-mode ()
   (message "java-mode load start")
+  (custom-set-variables
+   '(android-mode-avd "test")
+   '(android-mode-sdk-dir "/home/zigler/tools/android-sdk-linux/"))
+  (setq jde-global-classpath
+	'("/home/zigler/tools/android-sdk-linux/platforms/android-10/android.jar"
+	  "/home/zigler/tools/android-sdk-linux/platforms/android-15/android.jar"
+	  "/home/zigler/tools/android-sdk-linux/platforms/android-16/android.jar"))
+  (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))
   (jde-mode)
+  (flymake-mode)
+  ;; (jde-bsh-run)
+  (message "continue")
   (autoload 'android-mode "android-mode" nil t)
-  (custom-set-variables '(android-mode-avd "test")
-			'(android-mode-sdk-dir "/home/zigler/tools/android-sdk-linux/"))
   (setq c-basic-offset 2)
   (setq jde-web-browser "firefox")
   (setq jde-doc-dir "/usr/lib/jvm/java-6-sun/docs")
-  (setq jde-compiler (quote ("javac" "")))
   (setq jde-enable-abbrev-mode t)
   (local-set-key [(control return)] 'jde-complete)
   (local-set-key [(shift return)] 'jde-complete-minibuf)
   (local-set-key [(meta return)] 'jde-complete-in-line)
-  (common-smart-snippets-setup java-mode-map java-mode-abbrev-table))
+  (common-smart-snippets-setup java-mode-map java-mode-abbrev-table)
+  )
 (message "java-mode file load end")
 
 ;;;;##########################################################################
