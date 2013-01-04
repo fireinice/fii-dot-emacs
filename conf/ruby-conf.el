@@ -8,10 +8,8 @@
 (setq rsense-rurema-home (concat rsense-home "/ruby-refm"))
 (autoload 'yari "yari" nil t)
 (require 'rinari)
-(require 'xhtml-conf)
 ;; (require 'rails)
 (require 'rvm)
-(require 'autotest)
 
 ;; irbsh and info-ruby is duplicated, we should choose one in future
 (when (locate-library "irbsh")
@@ -27,21 +25,21 @@
 ;; add gem/bin into PATH to make rcodetools could be called
 (define-key ruby-mode-map "\C-c\C-a" 'ruby-eval-buffer)
 (define-key ruby-mode-map (kbd "\C-c\C-t") 'rspec-toggle-spec-and-target)
+
 (defun rhtml-mode ()
+  (require 'xhtml-conf)
   (setq nxml-degraded t)
   (zzq-html-mode)
   (eruby-nxhtml-mumamo-mode)
   (ruby-electric-mode nil))
-(require 'rvm)
-(setq rvm--gemset-default "global")
 
 (defun setup-ruby-mode ()
   (ruby-electric-mode t)
   (imenu-add-to-menubar "IMENU")
   (set (make-local-variable 'tab-width) 2)
   (set (make-local-variable 'indent-tabs-mode) 'nil)
-  ;; (setq rspec-use-rvm t)
-  ;; (setq rvm--gemset-default "rails3tutorial")
+  (setq rspec-use-rvm t)
+  (setq rvm--gemset-default "rails3tutorial")
   ;; (local-unset-key (kbd "<return>"))
   (local-unset-key (kbd "RET"))
   (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)

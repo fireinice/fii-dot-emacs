@@ -49,6 +49,8 @@
 ;;;               ac-sources-prefix-function 'ac-source-rng-nxml-prefix
 ;;;               ac-sources '(ac-source-rng-nxml))))
 
+(load "~/.emacs.d/el-get/nxhtml/autostart.el")
+(require 'smart-snippets-conf)
 (defvar ac-source-rng-nxml-candidates nil)
 
 (defadvice rng-complete-before-point (around

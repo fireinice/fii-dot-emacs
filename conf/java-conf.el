@@ -52,33 +52,33 @@
   (custom-set-variables
    '(android-mode-avd "test")
    '(android-mode-sdk-dir "/home/zigler/tools/android-sdk-linux/"))
+  (autoload 'android-mode "android-mode" nil t)
   (setq jde-global-classpath
 	'("/home/zigler/tools/android-sdk-linux/platforms/android-10/android.jar"
 	  "/home/zigler/tools/android-sdk-linux/platforms/android-15/android.jar"
 	  "/home/zigler/tools/android-sdk-linux/platforms/android-16/android.jar"))
   (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))
-  (jde-mode)
-  (flymake-mode)
-  ;; (jde-bsh-run)
-  (message "continue")
-  (autoload 'android-mode "android-mode" nil t)
-  (setq c-basic-offset 2)
   (setq jde-web-browser "firefox")
   (setq jde-doc-dir "/usr/lib/jvm/java-6-sun/docs")
   (setq jde-enable-abbrev-mode t)
+  (setq jde-complete-insert-method-signature nil)
+  (setq jde-launch-beanshell-on-demand-p nil)
+  (setq c-basic-offset 2)
+  (jde-mode)
   (local-set-key [(control return)] 'jde-complete)
   (local-set-key [(shift return)] 'jde-complete-minibuf)
   (local-set-key [(meta return)] 'jde-complete-in-line)
+  (flymake-mode)
   (common-smart-snippets-setup java-mode-map java-mode-abbrev-table)
-  )
+  (set (make-local-variable 'ac-sources)
+       (append '(ac-source-yasnippet ac-source-semantic ac-source-words-in-same-mode-buffers)
+	       ac-sources)))
+
+(defun setup-java-buffer ()
+  (setq c-basic-offset 2))
 (message "java-mode file load end")
 
 ;;;;##########################################################################
 ;;;;  User Options, Variables
 ;;;;##########################################################################
-
-
-
-
-
 ;;; java-conf.el ends here

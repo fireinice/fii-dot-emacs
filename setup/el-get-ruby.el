@@ -24,10 +24,11 @@
                :url "http://shylock.uw.hu/Emacs/ruby-electric.el")
         el-expectations ;; require by rspec
         mode-compile ;;require by rspec
-        rspec-mode
-        (:name autotest
-               :type git
-               :url "git://github.com/krick/autotest.el.git")
+        ;; rspec-mode
+        ;; (:name autotest
+        ;;        :type git
+        ;;        :url "git://github.com/krick/autotest.el.git")
+        ;; (:name unit-test :type emacswiki)
         ;; depend on ruby-mode
         (:name rails-mode
                :type git

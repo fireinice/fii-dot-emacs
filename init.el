@@ -22,13 +22,16 @@
   (let (subdirectories-list)
     (dolist (file-name (directory-files directory t))
       (when (file-directory-p file-name)
-	
-	(unless
-	    (equal "."
-		   (substring
-		    (file-name-nondirectory file-name) 0 1))
-	  (add-to-list 'subdirectories-list file-name))))
+
+        (unless
+            (equal "."
+                   (substring
+                    (file-name-nondirectory file-name) 0 1))
+          (add-to-list 'subdirectories-list file-name))))
     subdirectories-list))
+
+
+
 
 ;;; This was installed by package-install.el.
 ;;; This provides support for the package system and
@@ -40,15 +43,17 @@
       (expand-file-name (concat my-emacs-path "/elpa/package.el")))
    (package-initialize))
 (require 'package)
+(add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+
 
 ;; ========加载路径 start
 ;;add all subdirectories into the load-path except start with dot
 (setq load-path
       (append (zzq-subdirectories (concat my-emacs-path "/"))
-	      (zzq-subdirectories (concat my-emacs-path "el-get/"))
-	      load-path))
+              (zzq-subdirectories (concat my-emacs-path "el-get/"))
+              load-path))
 (add-to-list 'load-path (concat my-emacs-path "el-get/jdee/lisp"))
 (add-to-list 'load-path (concat my-emacs-path "settings/"))
 
@@ -90,7 +95,7 @@
 ;; (require 'ecb)
 ;;========END
 
-;; ======== el-get 
+;; ======== el-get
 ;; el-get to manage the packages
 (autoload 'el-get-install "el-get-conf" nil t)
 (autoload 'el-get-update "el-get-conf" nil t)
@@ -154,8 +159,8 @@
 
 ;=========Auctex
 (when (and (locate-library "auctex")
-	   (locate-library "tex-site")
-	   (locate-library "preview-latex"))
+           (locate-library "tex-site")
+           (locate-library "preview-latex"))
   (load "auctex.el" nil t t)
   (load "preview-latex.el" nil t t)
   (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
@@ -204,12 +209,11 @@
 ;;**************** 编辑模式****************
 ;;=========c/c++模式
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(add-to-list 'magic-fallback-mode-alist
-	     '(buffer-standard-include-p . c++-mode))
+
 ;; (add-hook 'c-mode-common-hook
 ;;           (lambda()
-;; 	    (require 'cpp-conf)
-;; 	    (setup-c-base-mode)))
+;;          (require 'cpp-conf)
+;;          (setup-c-base-mode)))
 (load-conf-file-and-setup 'c-mode-common-hook 'cpp-conf setup-c-base-mode)
 ;;==========END
 
@@ -220,7 +224,7 @@
 ;; (setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
 ;; (add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
 ;; (load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
-(load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode)
+(load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode setup-java-buffer)
 ;;==========END
 
 ;;==========Python 模式
@@ -232,6 +236,7 @@
 ;;==========END
 
 ;;=========Ruby 模式
+(require 'rspec-mode)
 (autoload 'rhtml-mode "ruby-conf")
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)
@@ -253,7 +258,6 @@
 ;;==========END
 
 ;;=========nxhtml
-(load "~/.emacs.d/el-get/nxhtml/autostart.el")
 (autoload 'zzq-html-mode "xhtml-conf" nil t)
 (autoload 'zzq-phtml-mode "xhtml-conf" nil t)
 (autoload 'common-smart-snippets-setup "smart-snippets-conf" nil t)
@@ -267,23 +271,27 @@
             (require 'xhtml-conf)
             ;; (require 'smart-snippets-conf)
             (hexcolour-add-to-font-lock)
-	    (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)))
+            (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)))
 
 
 
 ;;========JavaScript 模式
-(autoload 'js2-mode "js2" nil t)
+(autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.jsm\\'" . js2-mode))
 (defvar js2-mode-abbrev-table nil
   "Abbrev table in use in `js2-mode' buffers.")
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (add-hook 'js2-mode-hook
           (lambda ()
-            (setq js2-highlight-level 3)
+	    (require 'smart-snippets-conf)
+	    (setq js2-highlight-level 3)
             (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
             (define-key js2-mode-map "\r" 'newline-and-indent)
-
-            (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
+	    
+            (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)
+	    (common-smart-snippets-setup js2-mode-map js2-mode-abbrev-table)
+	    ))
 
 
 ;;=========SQL模式
@@ -339,9 +347,9 @@
 (when (file-readable-p "~/.lftp/bookmarks")
   (defvar my-lftp-sites (shell-completion-get-file-column "~/.lftp/bookmarks" 0 "[ \t]+"))
   (add-to-list 'shell-completion-options-alist
-	       '("lftp" my-lftp-sites))
+               '("lftp" my-lftp-sites))
   (add-to-list 'shell-completion-prog-cmdopt-alist
-	       '("lftp" ("help" "open" "get" "mirror") ("open" my-lftp-sites))))
+               '("lftp" ("help" "open" "get" "mirror") ("open" my-lftp-sites))))
 
 ;;==========weblogger
 ;; (setq weblogger-entry-mode-hook 'html-mode)
@@ -389,12 +397,12 @@
   (yas/initialize)
   (setq yas/global-mode t)
   (setq yasnippet-dir
-	(file-name-directory (locate-library "yasnippet")))
+        (file-name-directory (locate-library "yasnippet")))
   (setq yasnippet-snippets-dir (concat yasnippet-dir "snippets"))
   (add-to-list 'yas/snippet-dirs "~/.emacs.d/snippets")
   (add-to-list 'yas/snippet-dirs yasnippet-snippets-dir)
   (yas/reload-all))
-		
+
 (autoload 'top "top-mode" nil t)
 
 ;;==========ac-mode
@@ -403,6 +411,7 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/el-get/auto-complete/dict")
 (add-to-list 'ac-modes 'nxhtml-mode)
 (add-to-list 'ac-modes 'nxml-mode)
+(add-to-list 'ac-modes 'jde-mode)
 ;; (add-to-list 'ac-user-dictionary "foobar@example.com")
 (defun ac-mode-setup ()
   (add-to-list 'ac-sources 'ac-source-yasnippet)

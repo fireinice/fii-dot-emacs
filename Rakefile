@@ -1,5 +1,8 @@
 LOAD_PATH = Dir["*"].delete_if{ |d| File.file?(d)}.collect { |d| d = "-L #{d}" }.join(' ')
 
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec
 
 require 'rake/clean'
 CLEAN.include('conf/*.elc', '*~', '#*', '.#*', '*.elc', '*_flymake.*' )
