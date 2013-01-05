@@ -39,8 +39,6 @@
 ;; (add-hook 'magit-mode-hook
 ;;        (lambda()
 ;;          (define-key magit-mode-map [(tab)] 'magit-toggle-section)))
-;;对info仍使用原样式
-(define-key Info-mode-map [(tab)] 'Info-next-reference)
 ;; (global-set-key [(tab)] 'my-indent-or-complete)
 (setq outline-minor-mode-prefix [(control o)]) ;outline前缀设为Co
 (global-set-key [(control \;)] 'my-comment-or-uncomment-region)
@@ -70,6 +68,9 @@
 (global-set-key (kbd "\C-cpc")  'project-compile)
 (global-set-key (kbd "\C-ccf")  'ffap)
 
+(when window-system
+  ;;对info仍使用原样式
+  (define-key Info-mode-map [(tab)] 'Info-next-reference))
 
 ;;;;##########################################################################
 ;;;;  User Options, Variables

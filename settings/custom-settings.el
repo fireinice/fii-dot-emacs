@@ -79,7 +79,6 @@
       font-lock-maximum-size '((t . 1048576) (vm-mode . 5250000)))
 
 ;; 不要 tool-bar / scroll-bar / menu-bar
-(scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (setq use-file-dialog nil)
@@ -134,7 +133,8 @@
   (require 'icicles)
   (autoload 'ecb-activate "ecb" nil t) ;;nox
   (setq x-select-enable-clipboard t) ;;使用剪切板
-  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
+  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+  (scroll-bar-mode -1))
 ;;=======End
 
 

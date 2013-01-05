@@ -84,7 +84,7 @@
 (require 'uniquify) ;to identified same name buffer
 (require 'volume)
 (require 'unicad)
-(require 'doxymacs)
+(try-require 'doxymacs)
 
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
