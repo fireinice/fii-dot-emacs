@@ -46,7 +46,6 @@
 (push '("\\.java\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup)
       flymake-allowed-file-name-masks)
 
-
 (defun setup-java-mode ()
   (message "java-mode load start")
   (custom-set-variables
@@ -64,6 +63,7 @@
   (setq jde-complete-insert-method-signature nil)
   (setq jde-launch-beanshell-on-demand-p nil)
   (setq c-basic-offset 2)
+  (hs-minor-mode t)
   (jde-mode)
   (local-set-key [(control return)] 'jde-complete)
   (local-set-key [(shift return)] 'jde-complete-minibuf)
