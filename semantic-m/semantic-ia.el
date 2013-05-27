@@ -1,10 +1,10 @@
-;;; TEMPLATE.el.tpl --- (>>>POINT<<<)
+;;; semantic-ia.el --- 
 
-;; Copyright (>>>YEAR<<<) (>>>USER_NAME<<<)
+;; Copyright 2013 zigler zhang
 ;;
-;; Author: (>>>AUTHOR<<<)
-;; Version: $Id: (>>>FILE<<<),v 0.0 (>>>VC_DATE<<<) (>>>LOGIN_NAME<<<) Exp $
-;; Keywords: (>>>1<<<)
+;; Author: zhangzhiqiang@zzqgj
+;; Version: $Id: semantic.el,v 0.0 2013/05/18 13:55:04 zhangzhiqiang Exp $
+;; Keywords: 
 ;; X-URL: not distributed yet
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -23,16 +23,15 @@
 
 ;;; Commentary:
 
-;; (>>>2<<<)
+;; 
 
 ;; Put this file into your load-path and the following into your ~/.emacs:
-;;   (require '(>>>FILE_SANS<<<))
+;;   (require 'semantic-ia)
 
 ;;; Code:
 
-(provide '(>>>FILE_SANS<<<))
-(eval-when-compile
-  (require 'cl))
+(provide 'semantic-ia)
+(require 'semantic/analyze)
 
 
 
@@ -41,7 +40,7 @@
 ;;;;##########################################################################
 
 
-(>>>3<<<)
 
 
-;;; (>>>FILE_SANS<<<) ends here
+
+;;; semantic-ia.el ends here

@@ -7,7 +7,7 @@
 (require 'xcscope)
 (require 'doxymacs)
 (require 'cedet-conf)
-(require 'cpp-projects)
+(try-require 'cpp-projects)
 (require 'semantic-gcc)
 (require 'semantic-ia)
 

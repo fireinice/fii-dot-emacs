@@ -114,10 +114,6 @@
 	       :type git
 	       :url "git://gist.github.com/302848.git")
 	emdroid
-	(:name unicad
-	       ;; 
-	       :type git-svn
-	       :url "http://unicad.googlecode.com/svn/trunk/")
 	(:name smart-compile
 	       ;; should replace by modecompile?
 	       :type http

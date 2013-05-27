@@ -45,7 +45,7 @@
 (require 'package)
 (add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 
 
 ;; ========加载路径 start
@@ -82,8 +82,8 @@
 (autoload 'git-status "git-status"
   "Launch git-emacs's status mode on the specified directory." t)
 (require 'uniquify) ;to identified same name buffer
-(require 'volume)
-(require 'unicad)
+(try-require 'volume)
+(try-require 'unicad)
 (try-require 'doxymacs)
 
 ;;(require 'tabbar)
@@ -237,7 +237,7 @@
 ;;==========END
 
 ;;=========Ruby 模式
-(require 'rspec-mode)
+(try-require 'rspec-mode)
 (autoload 'rhtml-mode "ruby-conf")
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)
@@ -253,6 +253,7 @@
 (load-conf-file-and-setup 'ruby-mode-hook 'ruby-conf setup-ruby-mode)
 ;;==========END
 
+
 ;;==========ELisp 模式
 (load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-lisp-mode setup-emacs-lisp-buffer)
 ;; (macroexpand '(load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-list-mode))
@@ -266,6 +267,17 @@
              '("\\.html$" . zzq-html-mode))
 (add-to-list 'auto-mode-alist
              '("\\.php$" . zzq-phtml-mode))
+;; (add-hook 'php-mode-hook ')
+(add-hook 'php-mode-hook
+	  (lambda ()
+	    (c-set-offset 'arglist-cont 0)
+	    (c-set-offset 'arglist-intro '+)
+	    (c-set-offset 'case-label 2)
+	    (c-set-offset 'arglist-close 0)
+	    (setq c-basic-offset 4)
+	    (setq indent-tabs-mode nil)
+	    (flymake-php-load)
+	    (php-eldoc-enable)))
 
 (add-hook 'css-mode-hook
           (lambda()

@@ -35,34 +35,20 @@
   (require 'cl)
   (require 'cc-mode))
 
-;; http://www.linuxforum.net/forum/showflat.php?Board=vim&Number=687565
-;; Load CEDET.
-;; See cedet/common/cedet.info for configuration details.
-;; http://alexott.net/en/writings/emacs-devenv/EmacsCedet.html
-;; http://github.com/alexott/emacs-configs/blob/master/rc/emacs-rc-cedet.el
-(if (not (featurep 'cedet))
-    (load-file "~/.emacs.d/el-get/cedet/common/cedet.el"))
-(require 'semantic-ia)
-(require 'ede)
-(global-ede-mode t)
+(require 'semantic/analyze/refs)
 
+;; http://www.cnblogs.com/zfreay/archive/2012/01/08/2316441.html
 
-;; (ede-minor-mode t)
-;; Enable EDE for a pre-existing C++ project
-
-;; Enabling Semantic (code-parsing, smart completion) features
-;; Select one of the following:
-
-;; * This enables the database and idle reparse engines
-;; (semantic-load-enable-minimum-features)
-
-;; * This enables some tools useful for coding, such as summary mode
-;;   imenu support, and the semantic navigator
-;; (semantic-load-enable-code-helpers)
-
-;; * This enables even more coding tools such as the nascent intellisense mode
-;;   decoration mode, and stickyfunc mode (plus regular code helpers)
-(semantic-load-enable-gaudy-code-helpers)
+;; Add further minor-modes to be enabled by semantic-mode.
+;; See doc-string of `semantic-default-submodes' for other things
+;; you can use here.
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
+;; (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
+;; Enable Semantic
+(semantic-mode 1)
+;; Enable EDE (Project Management) features
+(global-ede-mode 1)
 
 ;; * This enables the use of Exuberent ctags if you have it installed.
 ;; (semantic-load-enable-all-exuberent-ctags-support)
@@ -86,7 +72,7 @@
 (setq semantic-idle-summary-function 'semantic-format-tag-uml-prototype) ;;让idle-summary的提醒包括参数名
 
 ;; (setq semanticdb-project-roots
-      ;; (list "/home/zigler/work/TOM64/Offline-code/Middleware/"))
+;; (list "/home/zigler/work/TOM64/Offline-code/Middleware/"))
 (dolist (d load-path)
   (semantic-add-system-include d 'emacs-lisp-mode))
 
@@ -102,11 +88,12 @@
   (local-set-key "\C-cxp" 'senator-previous-tag)
   (local-set-key "\C-cxn" 'senator-next-tag)
   (local-set-key "\C-cxa" 'senator-go-to-up-reference)
-  (eval-after-load 'cc-mode (
-			     lambda ()
-				    (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
-				    (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
-				    (define-key c-mode-base-map (kbd "\C-cxo") 'semantic-analyze-proto-impl-toggle))))
+  (eval-after-load
+      'cc-mode (
+		lambda ()
+		       (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
+		       (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
+		       (define-key c-mode-base-map (kbd "\C-cxo") 'semantic-analyze-proto-impl-toggle))))
 
 
 ;;;;##########################################################################

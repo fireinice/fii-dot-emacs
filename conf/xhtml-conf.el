@@ -51,6 +51,7 @@
 
 (load "~/.emacs.d/el-get/nxhtml/autostart.el")
 (require 'smart-snippets-conf)
+(require 'flymake-conf)
 (defvar ac-source-rng-nxml-candidates nil)
 
 (defadvice rng-complete-before-point (around
@@ -156,7 +157,10 @@
 
 (defun zzq-phtml-mode ()
   (zzq-html-mode)
-  (nxhtml-mumamo-mode))
+  (nxhtml-mumamo-mode)
+  (common-smart-snippets-setup php-mode-map php-mode-abbrev-table))
+  
+
 
 ;;=========css-mode
 ;;在html和css模式下将#XXXXXX按所代表的颜色着色
