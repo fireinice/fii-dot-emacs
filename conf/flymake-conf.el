@@ -31,7 +31,8 @@
 ;;echo error in minibuffer instead moving mouse on it
 (add-hook 'flymake-mode-hook
           (lambda ()
-            (local-set-key (kbd "C-c C-e") 'flymake-goto-next-error)
+	    (local-set-key (kbd "C-c C-e") 'flymake-goto-next-error)
+	    (local-set-key (kbd "C-c C-d") 'flymake-display-err-menu-for-current-line)
             (setq flymake-gui-warnings-enabled nil)
             (setq flymake-compilation-prevents-syntax-check t)
             (setq flymake-log-level -1)
@@ -89,31 +90,31 @@ makes)."
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
 
-(defun flymake-pylint-init ()
-  (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                     'flymake-create-temp-intemp))
-         (local-file (file-relative-name
-                      temp-file
-                      (file-name-directory buffer-file-name))))
-    (list "epylint" (list local-file))))
+;; (defun flymake-pylint-init ()
+;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                      'flymake-create-temp-intemp))
+;;          (local-file (file-relative-name
+;;                       temp-file
+;;                       (file-name-directory buffer-file-name))))
+;;     (list "epylint" (list local-file))))
 
 
-;; (add-to-list 'flymake-allowed-file-name-masks
-;;           '("\\.py\\'" flymake-pylint-init))
+;; ;; (add-to-list 'flymake-allowed-file-name-masks
+;; ;;           '("\\.py\\'" flymake-pylint-init))
 
-(when (load "flymake" t)
-  (defun flymake-pyflakes-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-intemp))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "pyflakes" (list local-file))))
+;; (when (load "flymake" t)
+;;   (defun flymake-pyflakes-init ()
+;;     (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                        'flymake-create-temp-intemp))
+;;            (local-file (file-relative-name
+;;                         temp-file
+;;                         (file-name-directory buffer-file-name))))
+;;       (list "pyflakes" (list local-file))))
 
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pyflakes-init)))
+;;   (add-to-list 'flymake-allowed-file-name-masks
+;;                '("\\.py\\'" flymake-pyflakes-init)))
 
-(add-hook 'find-file-hook 'flymake-find-file-hook)
+;; (add-hook 'find-file-hook 'flymake-find-file-hook)
 
 (provide 'flymake-conf)
 ;;; flymake-conf.el ends here

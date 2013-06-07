@@ -138,7 +138,8 @@
   (make-local-variable 'cua-inhibit-cua-keys)
   (set (make-local-variable 'ac-sources)
        '(ac-source-yasnippet
-         ac-source-rng-nxml
+         ac-source-semantic
+	 ac-source-rng-nxml
          ac-source-abbrev
          ac-source-dictionary))
   (setq ac-auto-start 1))

@@ -110,9 +110,6 @@
 	(:name android-mode
 	       :type git
 	       :url "git://github.com/remvee/android-mode.git")
-	(:name pylint
-	       :type git
-	       :url "git://gist.github.com/302848.git")
 	emdroid
 	(:name smart-compile
 	       ;; should replace by modecompile?

@@ -31,6 +31,7 @@
 ;;; Code:
 
 (provide 'cedet-conf)
+
 (eval-when-compile
   (require 'cl)
   (require 'cc-mode))
@@ -49,6 +50,8 @@
 (semantic-mode 1)
 ;; Enable EDE (Project Management) features
 (global-ede-mode 1)
+
+;; (semanticdb-enable-cscope-databases)
 
 ;; * This enables the use of Exuberent ctags if you have it installed.
 ;; (semantic-load-enable-all-exuberent-ctags-support)

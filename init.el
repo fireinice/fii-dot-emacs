@@ -199,8 +199,16 @@
             (add-to-list 'ido-ignore-buffers "\\`*svn-process*")))
 
 ;;=========w3m
+
 (autoload 'w3m "w3m" nil t)
 
+(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
+
+;;w3m default browser
+;; (setq browse-url-browser-function 'w3m-browse-url-other-window)
+
+;; optional keyboard short-cut
+(global-set-key "\C-xm" 'browse-url-at-point)
 (add-hook 'w3m-mode-hook
           (lambda()
             (require 'w3m-conf)))
@@ -277,7 +285,8 @@
 	    (setq c-basic-offset 4)
 	    (setq indent-tabs-mode nil)
 	    (flymake-php-load)
-	    (php-eldoc-enable)))
+	    (php-eldoc-enable)
+	    (set (make-local-variable 'browse-url-browser-function) 'w3m-browse-url)))
 
 (add-hook 'css-mode-hook
           (lambda()
@@ -407,14 +416,13 @@
 ;;=========yasnipet mode
 (when (locate-library "yasnippet")
   (require 'yasnippet)
-  (yas/initialize)
-  (setq yas/global-mode t)
   (setq yasnippet-dir
         (file-name-directory (locate-library "yasnippet")))
   (setq yasnippet-snippets-dir (concat yasnippet-dir "snippets"))
   (add-to-list 'yas/snippet-dirs "~/.emacs.d/snippets")
   (add-to-list 'yas/snippet-dirs yasnippet-snippets-dir)
-  (yas/reload-all))
+  (yas-reload-all)
+  (yas-global-mode t))
 
 (autoload 'top "top-mode" nil t)
 

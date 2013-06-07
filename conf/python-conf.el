@@ -23,6 +23,8 @@
 (require 'auto-complete-config)
 (require 'w3m-conf)
 (require 'python-pylint)
+(require 'flymake-conf)
+(require 'python-mode)
 ;; (require 'pymacs)
 
 ;; pylookup setup
@@ -39,37 +41,29 @@
 (set (make-local-variable 'browse-url-browser-function) 'w3m-browse-url)
 ;; pylookup ends here
 
-(common-smart-snippets-setup python-mode-map python-mode-abbrev-table)
+(require 'flymake-python-pyflakes)
+(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
+(setq flymake-python-pyflakes-executable "flake8")
 
-
-
-;; (require 'comint)
-;; (define-key comint-mode-map [(meta p)]
-;;   'comint-previous-matching-input-from-input)
-;; (define-key comint-mode-map [(meta n)]
-;;   'comint-next-matching-input-from-input)
-;; (define-key comint-mode-map [(control meta n)]
-;;   'comint-next-input)
-;; (define-key comint-mode-map [(control meta p)]
-;;   'comint-previous-input)
-;; (make-variable-buffer-local 'beginning-of-defun-function)
 (ac-ropemacs-initialize)
 
 (defun setup-python-mode ()
+  (message "setup python mode")
   (setq py-python-command-args '( "-colors" "Linux"))
   (set (make-local-variable 'indent-tabs-mode) 'nil)
   (set (make-local-variable 'tab-width) 4)
+  (setq python-indent 4)
   (auto-complete-mode 1)
   (hs-minor-mode 1)
   (abbrev-mode t)
   (flymake-mode 1)
+  (flymake-python-pyflakes-load)
   ;; (which-function-mode t)
   ;; (py-shell 1)
-  
-
   (set beginning-of-defun-function
        'py-beginning-of-def-or-class)
   (setq outline-regexp "def\\|class ")
+  (electric-pair-mode t)
   (set (make-local-variable 'ac-sources)
        (append '(ac-source-yasnippet ac-source-ropemacs)
 	       ac-sources)))

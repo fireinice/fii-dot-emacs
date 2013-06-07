@@ -1,13 +1,10 @@
-(require 'w3m-load)
-(require 'mime-w3m)
+(require 'w3m)
+;; (require 'mime-w3m)
 (autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
 ;; download with wget
 ;; (require 'w3m-wget)
 ;; optional keyboard short-cut
 ;; (global-set-key "\C-xm" 'browse-url-at-point)
-
-;;w3m default browser
-(setq browse-url-browser-function 'w3m-browse-url-other-window)
 
 (defun w3m-browse-url-other-window (url &optional newwin)
   (let ((w3m-pop-up-windows t))
