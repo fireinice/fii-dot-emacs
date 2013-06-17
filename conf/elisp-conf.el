@@ -52,7 +52,9 @@
   (message "elisp-mode buffer setup")
   (turn-on-eldoc-mode)
   (paredit-mode t)
-  (semantic-key-bindings))
+  ;; fixme
+  ;; (semantic-key-bindings)
+  )
 
 
 (defun setup-emacs-lisp-mode ()

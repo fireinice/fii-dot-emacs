@@ -15,6 +15,7 @@
   (require 'cl)
   (require 'cc-mode))
 
+
 (defconst my-emacs-path "~/.emacs.d/" "emacs conf base path")
 
 (defun zzq-subdirectories (directory)
@@ -72,6 +73,7 @@
 ;;========调用公用模块
 (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'regex-tool "regex-tool" nil t)
+(require 'protobuf-mode)
 (require 'cc-mode)
 (require 'ido)
 (require 'ange-ftp) ;req by tramp for ftp protocol
@@ -85,6 +87,9 @@
 (try-require 'volume)
 (try-require 'unicad)
 (try-require 'doxymacs)
+(require 'autopair)
+(autopair-global-mode) ;; to enable in all buffers
+(setq autopair-autowrap t)
 
 ;;(require 'tabbar)
 ;; (require 'color-moccur)

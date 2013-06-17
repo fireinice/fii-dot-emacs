@@ -4,13 +4,12 @@
   (require 'cc-defs)
   (require 'cc-mode))
 
+(try-require 'google-c-style)
 (require 'xcscope)
 (require 'doxymacs)
 (require 'cedet-conf)
 (try-require 'cpp-projects)
-(require 'semantic-gcc)
-(require 'semantic-ia)
-
+(require 'auto-complete-clang-async)
 ;; this package would find the load-path of the system automatically through gcc
 (require 'smart-snippets-conf)
 (require 'flymake-conf)
@@ -39,11 +38,17 @@
 			       (class-close before)))
     )
   "Baidu C/C++ Programming Style")
+
 (defun setup-c-base-mode ()
+  (message "set up c base mode")
+  (require 'cedet-conf)
+  ;; fixme
   (semantic-key-bindings)
   (c-toggle-auto-newline t)
   (c-toggle-auto-hungry-state t)
-  (c-add-style "baidu" baidu-c-style t)
+  ;; (c-add-style "baidu" baidu-c-style t)
+  (google-set-c-style)
+  (google-make-newline-indent)
   (setq gdb-many-windows t)
   (which-function-mode t)
   (hs-minor-mode t)
@@ -61,17 +66,23 @@
   ;; to be aware of. The cdr of each cell is the source that will
   ;; supply the completion data.  The following tells autocomplete
   ;; to begin completion when you type in a . or a ->
+
+  ;; (local-set-key "." 'semantic-complete-self-insert)
+  ;; (local-set-key ">" 'semantic-complete-self-insert)
   (add-to-list 'ac-omni-completion-sources
 	       (cons "\\." '(ac-source-semantic)))
   (add-to-list 'ac-omni-completion-sources
 	       (cons "->" '(ac-source-semantic)))
   (set (make-local-variable 'ac-sources)
-       (append '(ac-source-semantic)
+       (append '(ac-source-semantic ac-source-semantic-raw)
 	       ac-sources))
   (make-local-variable 'ac-ignores)
   ;; do not ac by comment
   (add-to-list 'ac-ignores "//")
-  (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table))
+  ;; (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
+  (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
+  (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
+  (define-key c-mode-base-map (kbd "\C-cxo") 'semantic-analyze-proto-impl-toggle))
 
 ;; (eval-after-load "semantic-c" 
 ;;   '(dolist (d (list "/usr/include/c++/4.3"

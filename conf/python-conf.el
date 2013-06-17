@@ -44,11 +44,14 @@
 (require 'flymake-python-pyflakes)
 (add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 (setq flymake-python-pyflakes-executable "flake8")
+;; (setq flymake-python-pyflakes-extra-arguments '("--ignore=W806"))
 
 (ac-ropemacs-initialize)
 
 (defun setup-python-mode ()
   (message "setup python mode")
+  (setq autopair-dont-activate t)
+  (setq py-load-pymacs-p 'nil)
   (setq py-python-command-args '( "-colors" "Linux"))
   (set (make-local-variable 'indent-tabs-mode) 'nil)
   (set (make-local-variable 'tab-width) 4)
