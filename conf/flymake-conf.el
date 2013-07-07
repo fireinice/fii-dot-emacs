@@ -28,7 +28,6 @@
 (require 'flymake)
 (when (locate-library "flymake-cursor")
   (load-library "flymake-cursor"))
-;;echo error in minibuffer instead moving mouse on it
 (add-hook 'flymake-mode-hook
           (lambda ()
 	    (local-set-key (kbd "C-c C-e") 'flymake-goto-next-error)
@@ -36,14 +35,16 @@
             (setq flymake-gui-warnings-enabled nil)
             (setq flymake-compilation-prevents-syntax-check t)
             (setq flymake-log-level -1)
-            (setq flymake-master-file-dirs (quote ("../src" "." "./src" "./UnitTest")))
+	    (setq flymake-run-in-place nil)
+	    (setq flymake-master-file-dirs (quote ("../src" "." "./src" "./UnitTest")))
             (set-face-attribute 'flymake-warnline nil
                                 :background "LightBlue2"
                                 :foreground "black")
             (set-face-attribute 'flymake-errline nil
                                 :background "LightPink"
                                 :foreground "black")
-            ))
+	    ))
+
 
 (defun flymake-create-temp-intemp (file-name prefix)
   "Return file name in temporary directory for checking FILE-NAME.
@@ -89,6 +90,15 @@ makes)."
 (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
+
+
+
+
+
+
+
+
+
 
 ;; (defun flymake-pylint-init ()
 ;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy

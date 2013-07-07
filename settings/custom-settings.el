@@ -92,11 +92,6 @@
 ;;设置标题栏
 ;; (setq frame-title-format "emacs@%b")
 
-;; 设置前景，,背景色 list-colors-display看颜色
-(add-to-list 'default-frame-alist '(background-color . "grey25"))
-(add-to-list 'default-frame-alist '(foreground-color . "grey85"))
-(add-to-list 'default-frame-alist '(cursor-color . "red"))
-(add-to-list 'default-frame-alist '(mouse-color . "slateblue"))
 ;; 修改默认的tramp方法为空，否则会出现ssh:sudo: unkown service错误，即把sudo作为参数传给ssh
 ;; (add-to-list 'tramp-default-method-alist
 ;;              '("\\`localhost\\'" "" "su"))
@@ -131,17 +126,18 @@
 
 (when window-system
   (require 'icicles)
+  ;; 设置前景，,背景色 list-colors-display看颜色
+  (add-to-list 'default-frame-alist '(background-color . "grey25"))
+  (add-to-list 'default-frame-alist '(foreground-color . "grey85"))
+  (add-to-list 'default-frame-alist '(cursor-color . "red"))
   (autoload 'ecb-activate "ecb" nil t) ;;nox
   (setq x-select-enable-clipboard t) ;;使用剪切板
   (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
   (scroll-bar-mode -1))
-;;=======End
 
-
-;;;;##########################################################################
-;;;;  User Options, Variables
-;;;;##########################################################################
-
-
-
-;;; custom-settings.el ends here
+(when (not window-system)
+  (set-face-attribute 'font-lock-string-face nil :foreground "LightSalmon")
+  (set-face-attribute 'font-lock-keyword-face nil :foreground "Cyan1")
+  (set-face-attribute 'font-lock-constant-face nil :foreground "Aquamarine")
+  (set-face-attribute 'font-lock-type-face nil :foreground "PaleGreen")
+  (set-face-attribute 'font-lock-function-name-face nil :foreground "LightSkyBlue"))  

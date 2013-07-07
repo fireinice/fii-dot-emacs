@@ -1,23 +1,26 @@
 /***************************************************************************
  * 
- * Copyright (c) (>>>YEAR<<<) Baidu.com, Inc. All Rights Reserved
+ * Copyright (c) (>>>YEAR<<<) (>>>HOST_ADDR<<<), Inc. All Rights Reserved
  * $Id: (>>>FILE<<<),v 0.0 (>>>VC_DATE<<<) zhangzhiqiang Exp $ 
  * 
  **************************************************************************/
-  
+
 /**
  * @file (>>>FILE<<<)
- * @author zhangzhiqiang(zhangzhiqiang@baidu.com)
- * @date (>>>DATE<<<)
+ * @author (>>>AUTHOR<<<)
+ * @date (>>>VC_DATE<<<)
  * @version $Revision: 0.0 $ 
- * @brief (>>>POINT<<<)
+ * @brief (>>>BRIEF<<<)
  *  
  **/
 
-#ifndef _(>>>FILE_UPCASE<<<)_H_
-#define _(>>>FILE_UPCASE<<<)_H_
+#ifndef (>>>FILE_UPCASE<<<)_H_
+#define (>>>FILE_UPCASE<<<)_H_ 1
 
 (>>>POINT<<<)
 
-#endif /* _(>>>FILE_UPCASE<<<)_H_ */
+#endif /* (>>>FILE_UPCASE<<<)_H_ */
+
+>>>TEMPLATE-DEFINITION-SECTION<<<
+  ("BRIEF" "BRIEF: ")
 

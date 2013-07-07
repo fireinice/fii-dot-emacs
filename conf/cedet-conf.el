@@ -57,7 +57,6 @@
 (add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode t)
 (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode t)
 
-(add-to-list 'semantic-default-submodes 'global-semantic-show-unmatched-syntax-mode t)
 (add-to-list 'semantic-default-submodes 'global-semantic-show-parser-state-mode t)
 
 ;; (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
@@ -116,11 +115,7 @@
   (local-set-key "\C-cxi" 'semantic-decoration-include-visit)
   (local-set-key "\C-cxp" 'senator-previous-tag)
   (local-set-key "\C-cxn" 'senator-next-tag)
-  (local-set-key "\C-cxa" 'senator-go-to-up-reference)
-  (eval-after-load
-      'cc-mode (
-		lambda ()
-		       )))
+  (local-set-key "\C-cxa" 'senator-go-to-up-reference))
 
 
 ;;;;##########################################################################

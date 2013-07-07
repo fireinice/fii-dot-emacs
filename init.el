@@ -90,6 +90,9 @@
 (require 'autopair)
 (autopair-global-mode) ;; to enable in all buffers
 (setq autopair-autowrap t)
+(require 'highlight-chars)
+(add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
+(add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)
 
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
@@ -144,6 +147,10 @@
 ;;使用ecb: http://blog.csdn.net/xiaoliangbuaa/archive/2007/01/10/1479577.aspx
 
 (require 'template-conf)
+
+;; full screen
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . maximized)))))
 
 ;;===========grep配置
 (add-hook 'grep-mode-hook
@@ -222,12 +229,7 @@
 ;;**************** 编辑模式****************
 ;;=========c/c++模式
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-
-;; (add-hook 'c-mode-common-hook
-;;           (lambda()
-;;          (require 'cpp-conf)
-;;          (setup-c-base-mode)))
-(load-conf-file-and-setup 'c-mode-common-hook 'cpp-conf setup-c-base-mode)
+(load-conf-file-and-setup 'c-mode-common-hook 'cpp-conf setup-c-base-mode setup-c-base-buffer)
 ;;==========END
 
 ;;==========Java 模式
@@ -246,7 +248,7 @@
 (setq interpreter-mode-alist
       (cons '("python" . python-mode)
             interpreter-mode-alist))
-(load-conf-file-and-setup 'python-mode-hook 'python-conf setup-python-mode)
+(load-conf-file-and-setup 'python-mode-hook 'python-conf setup-python-mode setup-python-buffer)
 ;;==========END
 
 ;;=========Ruby 模式
@@ -416,7 +418,7 @@
 (setq org-log-done t)
 
 ;; (require 'jira)
-;;=======org mode end here======================
+;; =======org mode end here======================
 
 ;;=========yasnipet mode
 (when (locate-library "yasnippet")

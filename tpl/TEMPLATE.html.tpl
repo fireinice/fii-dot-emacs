@@ -1,9 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
   <head>
     <title>(>>>title<<<)</title>
-    <meta name="author" content="(>>>USER_NAME<<<)"/>
+    <meta name="author" content="(>>>USER_NAME<<<)">
   </head>
 
   <body>
@@ -11,7 +10,7 @@
 
     (>>>POINT<<<)
     
-    <hr/>
+    <hr>
     <address>
       <a href="mailto:(>>>LOGIN_NAME<<<)@(>>>HOST_ADDR<<<)">(>>>USER_NAME<<<)</a>,
       (>>>DATE<<<)

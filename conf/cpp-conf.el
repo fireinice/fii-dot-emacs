@@ -9,10 +9,12 @@
 (require 'doxymacs)
 (require 'cedet-conf)
 (try-require 'cpp-projects)
-(require 'auto-complete-clang-async)
+;; (require 'auto-complete-clang-async)
 ;; this package would find the load-path of the system automatically through gcc
-(require 'smart-snippets-conf)
-(require 'flymake-conf)
+;; (require 'smart-snippets-conf)
+;; (require 'flymake-conf)
+(load-file "~/.emacs.d/ede-projects.el")
+
 (setq eassist-header-switches '(("h" . ("cpp" "cc" "c"))
 				("hpp" . ("cpp" "cc"))
 				("cpp" . ("h" "hpp" "hh"))
@@ -43,17 +45,21 @@
   (message "set up c base mode")
   (require 'cedet-conf)
   ;; fixme
+  (setq gdb-many-windows t)
+  (which-function-mode t)
+  (abbrev-mode t))
+
+(defun setup-c-base-buffer ()
+  (message "set up c base buffer")
+  (google-set-c-style)
   (semantic-key-bindings)
   (c-toggle-auto-newline t)
   (c-toggle-auto-hungry-state t)
-  ;; (c-add-style "baidu" baidu-c-style t)
-  (google-set-c-style)
+  ;; (google-set-c-style)
   (google-make-newline-indent)
-  (setq gdb-many-windows t)
-  (which-function-mode t)
   (hs-minor-mode t)
-  (abbrev-mode t)
   (doxymacs-mode)
+  (flymake-mode t)
   (doxymacs-font-lock)
   ;; ac-omni-completion-sources is made buffer local so
   ;; you need to add it to a mode hook to activate on 
@@ -80,19 +86,10 @@
   ;; do not ac by comment
   (add-to-list 'ac-ignores "//")
   ;; (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
-  (define-key c-mode-base-map (kbd "M-o") 'eassist-switch-h-cpp)
-  (define-key c-mode-base-map (kbd "M-m") 'eassist-list-methods)
-  (define-key c-mode-base-map (kbd "\C-cxo") 'semantic-analyze-proto-impl-toggle))
-
-;; (eval-after-load "semantic-c" 
-;;   '(dolist (d (list "/usr/include/c++/4.3"
-;; 		    "/usr/include/c++/4.3/i486-linux-gnu"
-;; 		    "/usr/include/c++/4.3/backward"
-;; 		    "/usr/local/include"
-;; 		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include"
-;; 		    "/usr/lib/gcc/i486-linux-gnu/4.3.2/include-fixed"
-;; 		    "/usr/include"))
-;;      (semantic-add-system-include d)))
+  (google-set-c-style)
+  (define-key c-mode-base-map (kbd "M-o" ) 'eassist-switch-h-cpp)
+  (define-key c-mode-base-map (kbd "M-m" ) 'eassist-list-methods)
+  )
 
 ;; C/C++语言启动时自动加载semantic对/usr/include的索引数据库
 ;; (setq semanticdb-search-system-databases t)
@@ -106,5 +103,25 @@
 ;; (setq semanticdb-project-roots
 ;;           (list
 ;;         (expand-file-name "/")))
+
+(ede-cpp-root-project
+ "Gatling"
+ :name "Gatling Project"
+ :file "~/gat/cscope.files"
+ :include-path '("include"
+		 "../include"
+		 "/third_party/poco-1.4.6p1/Net/include"
+		 "/third_party/poco-1.4.6p1/Foundation/include"
+		 "/third_party/poco-1.4.6p1/Util/include"
+		 "/third_party/poco-1.4.6p1/XML/include"
+		 "/third_party/third_party/sparsehash-2.0.2/src/")
+ ;;                 "/Common"
+ ;;                 "/Interfaces"
+ ;;                 "/Libs"
+ ;;                )
+ ;; :system-include-path '("~/exp/include")
+ :spp-table '(("POCO_HAVE_FD_EPOLL" . "1")
+	      ;;              ("BOOST_TEST_DYN_LINK" . "")
+	      ))
 
 (provide 'cpp-conf)
