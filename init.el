@@ -148,6 +148,8 @@
 
 (require 'template-conf)
 
+(autoload 'git-blame-mode "git-blame"
+  "Minor mode for incremental blame for Git." t)
 ;; full screen
 (custom-set-variables
  '(initial-frame-alist (quote ((fullscreen . maximized)))))
