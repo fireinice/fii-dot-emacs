@@ -41,7 +41,6 @@
 ;; include system wide library with gcc
 (require 'semantic/bovine/gcc)
 (require 'semantic/ia)
-(require 'eassist)
 (require 'semantic/db-global)
 ;; http://www.cnblogs.com/zfreay/archive/2012/01/08/2316441.html
 
@@ -115,7 +114,8 @@
   (local-set-key "\C-cxi" 'semantic-decoration-include-visit)
   (local-set-key "\C-cxp" 'senator-previous-tag)
   (local-set-key "\C-cxn" 'senator-next-tag)
-  (local-set-key "\C-cxa" 'senator-go-to-up-reference))
+  (local-set-key "\C-cxa" 'senator-go-to-up-reference)
+  (local-set-key "\C-cxo" 'semantic-analyze-proto-impl-toggle))
 
 
 ;;;;##########################################################################

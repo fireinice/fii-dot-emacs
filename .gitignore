@@ -1,6 +1,5 @@
 abbrev_defs
 tramp
-./el-get/
 ac-comphist.dat
 auto-save-list/
 el-get/
@@ -12,3 +11,4 @@ semanticdb/
 *#
 *~
 .#*
+*.bak

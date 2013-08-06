@@ -15,14 +15,7 @@
 ;; (require 'flymake-conf)
 (load-file "~/.emacs.d/ede-projects.el")
 
-(setq eassist-header-switches '(("h" . ("cpp" "cc" "c"))
-				("hpp" . ("cpp" "cc"))
-				("cpp" . ("h" "hpp" "hh"))
-				("c" . ("h"))
-				("C" . ("H"))
-				("H" . ("C" "CPP" "CC"))
-				("cc" . ("h" "hpp" "hh"))
-				("hh" . ("cc" "cpp"))))
+
 ;; (define-key c-mode-base-map [(f7)] 'compile)
 (defconst baidu-c-style
   `("k&r"
@@ -47,7 +40,8 @@
   ;; fixme
   (setq gdb-many-windows t)
   (which-function-mode t)
-  (abbrev-mode t))
+  (abbrev-mode t)
+  )
 
 (defun setup-c-base-buffer ()
   (message "set up c base buffer")
@@ -87,8 +81,8 @@
   (add-to-list 'ac-ignores "//")
   ;; (common-smart-snippets-setup c++-mode-map c++-mode-abbrev-table)
   (google-set-c-style)
-  (define-key c-mode-base-map (kbd "M-o" ) 'eassist-switch-h-cpp)
-  (define-key c-mode-base-map (kbd "M-m" ) 'eassist-list-methods)
+  (define-key c-mode-base-map (kbd "M-o" ) 'ff-find-other-file)
+  (setq cc-search-directories '("." "../include" "../src" "/usr/include" "/usr/local/include/*"))
   )
 
 ;; C/C++语言启动时自动加载semantic对/usr/include的索引数据库

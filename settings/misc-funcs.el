@@ -67,7 +67,7 @@ of an error, just add the package to a list of missing packages."
               '(emacs-lisp-mode scheme-mode lisp-mode
                                 c-mode c++-mode objc-mode
                                 latex-mode plain-tex-mode
-                                ruby-mode python-mode))
+                                ruby-mode))
       (let ((mark-even-if-inactive t))
         (indent-region (region-beginning) (region-end) nil))))
 
