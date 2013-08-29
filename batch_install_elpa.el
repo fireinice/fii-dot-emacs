@@ -18,16 +18,13 @@
     ;;   (unless pkg-desc
     ;; 	(error "Package `%s' is not available for installation"
     ;; 	       (symbol-name name))))
-    (if (package-install name)
-	(message (ansi-green "done"))
-      (message (ansi-red "failed")))))
+    (package-install name)))
 
 (try-package-install 'auto-complete)
 (try-package-install 'magit)
 (try-package-install 'w3m)
 (try-package-install 'autopair)
 (try-package-install 'paredit)
-(try-package-install 'bash-completion)
 (try-package-install 'regex-tool)
 
 (try-package-install 'python-mode)
@@ -42,3 +39,9 @@
 (try-package-install 'flymake-shell)
 
 (try-package-install 'yasnippet)
+
+(try-package-install 'magit)
+(try-package-install 'magit-push-remote)
+
+(try-package-install 'bash-completion)
+(try-package-install 'shell-history)

@@ -366,8 +366,6 @@
 
 ;;===========shell Buffer 模式
 ;; make the shell mode highlight
-(require 'shell-completion)
-(require 'shell-history)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (setq comint-prompt-read-only t) ;; to make the the shell prompt readonly
 
