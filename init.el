@@ -32,22 +32,20 @@
     subdirectories-list))
 
 
-
-
 ;;; This was installed by package-install.el.
 ;;; This provides support for the package system and
 ;;; interfacing with ELPA, the package archive.
 ;;; Move this code earlier if you want to reference
 ;;; packages in your .emacs.t
- (when
-     (load
-      (expand-file-name (concat my-emacs-path "/elpa/package.el")))
-   (package-initialize))
+;; (when
+;;     (load
+;;      (expand-file-name (concat my-emacs-path "/elpa/package.el")))
+;;   (package-initialize))
 (require 'package)
 (add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-
+(package-initialize)
 
 ;; ========加载路径 start
 ;;add all subdirectories into the load-path except start with dot
@@ -73,12 +71,11 @@
 ;;========调用公用模块
 (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'regex-tool "regex-tool" nil t)
-(require 'protobuf-mode)
+(try-require 'protobuf-mode)
 (require 'cc-mode)
 (require 'ido)
 (require 'ange-ftp) ;req by tramp for ftp protocol
 (require 'tramp)
-(require 'ange-ftp) ;req by tramp for ftp protocol
 (fmakunbound 'git-status)   ; Possibly remove Debian's autoloaded version
 (require 'git-emacs-autoloads)
 (autoload 'git-status "git-status"
@@ -109,6 +106,8 @@
 (autoload 'el-get-update "el-get-conf" nil t)
 (autoload 'el-get-remove "el-get-conf" nil t)
 ;; ======= END
+
+(setq default-buffer-file-coding-system 'utf-8)
 
 ;;=========ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
@@ -346,11 +345,8 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 
-;;=========Shell 模式
-(require 'shell-completion)
-(require 'shell-history)
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-(modify-coding-system-alist 'file "\\.sh$" 'gb18030)
+;;=========Shell Script 模式
+(add-hook 'sh-mode-hook 'flymake-shell-load)
 ;; 自动设置script buffer 为可执行
 (add-hook 'after-save-hook
           #'(lambda ()
@@ -368,10 +364,12 @@
 (define-auto-insert 'sh-mode '(nil "#!/usr/bin/env bash\n\n"))
 (add-hook 'find-file-hooks 'auto-insert)
 
-
+;;===========shell Buffer 模式
 ;; make the shell mode highlight
+(require 'shell-completion)
+(require 'shell-history)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (setq comint-prompt-read-only t) ;; to make the the shell prompt readonly
-
 
 ;;========lftp
 ;; If you want use with lftp, put this to .emacs

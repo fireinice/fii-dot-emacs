@@ -22,7 +22,7 @@
 (require 'smart-snippets-conf)
 (require 'auto-complete-config)
 (require 'w3m-conf)
-(require 'python-pylint)
+(try-require 'python-pylint)
 (require 'flymake-conf)
 (require 'python-mode)
 ;; (require 'pymacs)
@@ -42,7 +42,6 @@
 ;; pylookup ends here
 
 (require 'flymake-python-pyflakes)
-(add-hook 'python-mode-hook 'flymake-python-pyflakes-load)
 (setq flymake-python-pyflakes-executable "flake8")
 ;; (setq flymake-python-pyflakes-extra-arguments '("--ignore=W806"))
 
@@ -61,7 +60,7 @@
   (message "setup python mode")
   ;; (setq autopair-dont-activate t)
   (setq py-python-command-args '( "-colors" "Linux"))
-  (setq python-indent 4)
+  (setq python-indent-offset 4)
   (auto-complete-mode 1)
   (hs-minor-mode 1)
   (abbrev-mode t)
