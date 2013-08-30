@@ -26,6 +26,8 @@
 (try-package-install 'autopair)
 (try-package-install 'paredit)
 (try-package-install 'regex-tool)
+(try-package-install 'htmlize)
+
 
 (try-package-install 'python-mode)
 (try-package-install 'python-pylint)
@@ -45,3 +47,12 @@
 
 (try-package-install 'bash-completion)
 (try-package-install 'shell-history)
+
+(try-package-install 'php-mode)
+(try-package-install 'php-eldoc)
+
+(try-package-install 'apt-utils)
+
+(try-package-install 'mediawiki)
+
+
