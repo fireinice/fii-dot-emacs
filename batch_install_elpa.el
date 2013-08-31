@@ -41,4 +41,7 @@
 (try-package-install 'flymake-python-pyflakes)
 (try-package-install 'flymake-shell)
 
+(try-package-install 'emacs-droid)
+(try-package-install 'android-mode)
+
 (try-package-install 'yasnippet)

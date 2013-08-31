@@ -76,10 +76,6 @@
 (require 'ido)
 (require 'ange-ftp) ;req by tramp for ftp protocol
 (require 'tramp)
-(fmakunbound 'git-status)   ; Possibly remove Debian's autoloaded version
-(require 'git-emacs-autoloads)
-(autoload 'git-status "git-status"
-  "Launch git-emacs's status mode on the specified directory." t)
 (require 'uniquify) ;to identified same name buffer
 (try-require 'volume)
 (try-require 'unicad)
@@ -87,9 +83,10 @@
 (require 'autopair)
 (autopair-global-mode) ;; to enable in all buffers
 (setq autopair-autowrap t)
-(require 'highlight-chars)
-(add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
-(add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)
+(if (try-require 'highlight-chars)
+    ((add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
+     (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
+
 
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
