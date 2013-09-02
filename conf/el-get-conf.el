@@ -37,12 +37,6 @@
 
 (setq el-get-sources
       '(
-	(:name cedet
-               :type cvs
-	       :module "cedet"
-	       :url ":pserver:anonymous@cedet.cvs.sourceforge.net:/cvsroot/cedet"
-	       :options "login"
-               :build ("make clean-all" "make"))
 	(:name ecb
 	       :type cvs
 	       :module "ecb"
@@ -53,13 +47,6 @@
 	(:name fvwm-mode
                :type http
                :url "http://www.lair.be/files/fvwm/fvwm-mode/fvwm-mode.el")
-	(:name paredit
-               :type http
-               :url "http://mumble.net/~campbell/emacs/paredit.el")
-	(:name auto-complete
-	       :type git
-               :url "http://cx4a.org/repo/auto-complete.git"
-	       :build ("make"))
 	(:name volume
 	       :type git
 	       :url "http://github.com/dbrock/volume-el.git")
@@ -107,10 +94,6 @@
 	       :type apt-get)
 	(:name elib
 	       :type apt-get)
-	(:name android-mode
-	       :type git
-	       :url "git://github.com/remvee/android-mode.git")
-	emdroid
 	(:name smart-compile
 	       ;; should replace by modecompile?
 	       :type http

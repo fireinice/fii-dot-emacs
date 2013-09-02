@@ -73,6 +73,7 @@
 (require 'cc-mode)
 (require 'ange-ftp) ;req by tramp for ftp protocol
 (require 'tramp)
+(require 'xcscope)
 
 (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'regex-tool "regex-tool" nil t)
@@ -81,6 +82,7 @@
 (try-require 'volume)
 (try-require 'unicad)
 (try-require 'doxymacs)
+(try-require 'moccur-edit) ;; ***FIXME*** need a fix here not install yet
 (if (try-require 'autopair)
     (lambda ()
       (autopair-global-mode) 
@@ -90,11 +92,8 @@
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
 
-;;(require 'tabbar)
-;; (require 'color-moccur)
-;; (require 'xcscope)
+
 ;; (autoload 'senator-try-expand-semantic "senator")
-;; (autoload 'two-mode-mode "two mode mode")
 ;; (require 'ede)
 ;; (require 'ecb)
 ;;========END

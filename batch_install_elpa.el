@@ -28,6 +28,7 @@
 (try-package-install 'w3m)
 (try-package-install 'yasnippet)
 (try-package-install 'ascope)
+(try-package-install 'color-moccur)
 
 (try-package-install 'python-mode)
 (try-package-install 'python-pylint)
