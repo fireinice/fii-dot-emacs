@@ -85,8 +85,9 @@
 (autopair-global-mode) ;; to enable in all buffers
 (setq autopair-autowrap t)
 (if (try-require 'highlight-chars)
-    ((add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
-     (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
+    (lambda()
+      (add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
+      (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
 
 
 
@@ -98,11 +99,7 @@
 ;; (require 'ede)
 ;; (require 'ecb)
 ;;========END
-(autopair-global-mode) ;; to enable in all buffers
-(setq autopair-autowrap t)
 
-(add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
-(add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)
 
 ;; ======== el-get
 ;; el-get to manage the packages
