@@ -56,4 +56,6 @@
 
 (try-package-install 'mediawiki)
 
+(try-package-install 'emacs-droid)
+(try-package-install 'android-mode)
 

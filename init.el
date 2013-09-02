@@ -81,7 +81,13 @@
 (try-require 'volume)
 (try-require 'unicad)
 (try-require 'doxymacs)
-(require 'highlight-chars)
+(require 'autopair)
+(autopair-global-mode) ;; to enable in all buffers
+(setq autopair-autowrap t)
+(if (try-require 'highlight-chars)
+    ((add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
+     (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
+
 
 
 ;;(require 'tabbar)
