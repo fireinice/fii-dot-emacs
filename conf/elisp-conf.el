@@ -52,7 +52,7 @@
   (message "elisp-mode buffer setup")
   (turn-on-eldoc-mode)
   (paredit-mode t)
-  (setq autopair-dont-activate t)
+  (set (make-local-variable 'autopair-dont-activate) t)
   (autopair-mode -1)
   ;; fixme
   ;; (semantic-key-bindings)

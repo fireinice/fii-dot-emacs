@@ -49,11 +49,11 @@
   (setq py-load-pymacs-p 'nil)
   (set (make-local-variable 'indent-tabs-mode) 'nil)
   (set (make-local-variable 'tab-width) 4)
+  (jedi:setup)
+  (setq jedi:complete-on-dot t)
   (set (make-local-variable 'ac-sources)
        (append '(ac-source-yasnippet)
 	       ac-sources))
-  (jedi:setup)
-  (setq jedi:complete-on-dot t)
   )
 
 (defun setup-python-mode ()

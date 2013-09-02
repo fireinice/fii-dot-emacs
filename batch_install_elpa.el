@@ -21,13 +21,12 @@
     (package-install name)))
 
 (try-package-install 'auto-complete)
-(try-package-install 'magit)
-(try-package-install 'w3m)
 (try-package-install 'autopair)
 (try-package-install 'paredit)
 (try-package-install 'regex-tool)
 (try-package-install 'htmlize)
-
+(try-package-install 'w3m)
+(try-package-install 'yasnippet)
 
 (try-package-install 'python-mode)
 (try-package-install 'python-pylint)
@@ -40,8 +39,7 @@
 (try-package-install 'flymake-python-pyflakes)
 (try-package-install 'flymake-shell)
 
-(try-package-install 'yasnippet)
-
+(try-package-install 'psvn)
 (try-package-install 'magit)
 (try-package-install 'magit-push-remote)
 
@@ -50,6 +48,9 @@
 
 (try-package-install 'php-mode)
 (try-package-install 'php-eldoc)
+
+(try-package-install 'js2-mode)
+(try-package-install 'ac-js2)
 
 (try-package-install 'apt-utils)
 

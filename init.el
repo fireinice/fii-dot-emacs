@@ -76,20 +76,13 @@
 (require 'ido)
 (require 'ange-ftp) ;req by tramp for ftp protocol
 (require 'tramp)
-(fmakunbound 'git-status)   ; Possibly remove Debian's autoloaded version
-(require 'git-emacs-autoloads)
-(autoload 'git-status "git-status"
-  "Launch git-emacs's status mode on the specified directory." t)
 (require 'uniquify) ;to identified same name buffer
+(require 'autopair)
 (try-require 'volume)
 (try-require 'unicad)
 (try-require 'doxymacs)
-(require 'autopair)
-(autopair-global-mode) ;; to enable in all buffers
-(setq autopair-autowrap t)
 (require 'highlight-chars)
-(add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
-(add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)
+
 
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
@@ -99,6 +92,11 @@
 ;; (require 'ede)
 ;; (require 'ecb)
 ;;========END
+(autopair-global-mode) ;; to enable in all buffers
+(setq autopair-autowrap t)
+
+(add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
+(add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)
 
 ;; ======== el-get
 ;; el-get to manage the packages
@@ -130,6 +128,43 @@
 ;; (add-hook 'speedbar-load-hook
 ;;        (lambda ()
 ;;          (require 'semantic-sb))) ;;semantic支持
+
+;;=========yasnipet mode
+(when (locate-library "yasnippet")
+  (require 'yasnippet)
+  (setq yasnippet-dir
+        (file-name-directory (locate-library "yasnippet")))
+  (setq yasnippet-snippets-dir (concat yasnippet-dir "snippets"))
+  (add-to-list 'yas/snippet-dirs "~/.emacs.d/snippets")
+  (add-to-list 'yas/snippet-dirs yasnippet-snippets-dir)
+  (yas-reload-all)
+  (yas-global-mode t))
+
+(autoload 'top "top-mode" nil t)
+
+;;==========ac-mode
+(require 'auto-complete)
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/el-get/auto-complete/dict")
+(add-to-list 'ac-modes 'nxhtml-mode)
+(add-to-list 'ac-modes 'nxml-mode)
+(add-to-list 'ac-modes 'jde-mode)
+;; (add-to-list 'ac-user-dictionary "foobar@example.com")
+(defun ac-mode-setup ()
+  (add-to-list 'ac-sources 'ac-source-yasnippet)
+  (set-face-background 'ac-candidate-face "lightgray")
+  (set-face-attribute 'ac-candidate-face nil
+                      :underline "red")
+  (set-face-background 'ac-selection-face "steelblue")
+  (define-key ac-completing-map "\M-n" 'ac-next)
+  (define-key ac-completing-map "\M-p" 'ac-previous)
+  (define-key ac-mode-map (kbd "C-`") 'auto-complete)
+  (ac-set-trigger-key "TAB")
+  (setq ac-dwim t)
+  (setq ac-auto-start 3)
+  (ac-flyspell-workaround))
+(ac-config-default)
+(add-hook 'auto-complete-mode-hook 'ac-mode-setup)
 
 ;;===========ecb配置
 (setq ecb-tree-indent 4
@@ -315,10 +350,12 @@
 (add-hook 'js2-mode-hook
           (lambda ()
 	    (require 'smart-snippets-conf)
-	    (setq js2-highlight-level 3)
+	    (set (make-local-variable 'ac-sources)
+		 (append '(ac-source-js2)
+			 ac-sources))
+  	    (setq js2-highlight-level 3)
             (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
             (define-key js2-mode-map "\r" 'newline-and-indent)
-	    
             (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)
 	    (common-smart-snippets-setup js2-mode-map js2-mode-abbrev-table)
 	    ))
@@ -417,43 +454,6 @@
 
 ;; (require 'jira)
 ;; =======org mode end here======================
-
-;;=========yasnipet mode
-(when (locate-library "yasnippet")
-  (require 'yasnippet)
-  (setq yasnippet-dir
-        (file-name-directory (locate-library "yasnippet")))
-  (setq yasnippet-snippets-dir (concat yasnippet-dir "snippets"))
-  (add-to-list 'yas/snippet-dirs "~/.emacs.d/snippets")
-  (add-to-list 'yas/snippet-dirs yasnippet-snippets-dir)
-  (yas-reload-all)
-  (yas-global-mode t))
-
-(autoload 'top "top-mode" nil t)
-
-;;==========ac-mode
-(require 'auto-complete)
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/el-get/auto-complete/dict")
-(add-to-list 'ac-modes 'nxhtml-mode)
-(add-to-list 'ac-modes 'nxml-mode)
-(add-to-list 'ac-modes 'jde-mode)
-;; (add-to-list 'ac-user-dictionary "foobar@example.com")
-(defun ac-mode-setup ()
-  (add-to-list 'ac-sources 'ac-source-yasnippet)
-  (set-face-background 'ac-candidate-face "lightgray")
-  (set-face-attribute 'ac-candidate-face nil
-                      :underline "red")
-  (set-face-background 'ac-selection-face "steelblue")
-  (define-key ac-completing-map "\M-n" 'ac-next)
-  (define-key ac-completing-map "\M-p" 'ac-previous)
-  (define-key ac-mode-map (kbd "C-`") 'auto-complete)
-  (ac-set-trigger-key "TAB")
-  (setq ac-dwim t)
-  (setq ac-auto-start 3)
-  (ac-flyspell-workaround))
-(ac-config-default)
-(add-hook 'auto-complete-mode-hook 'ac-mode-setup)
 
 ;;========regex-tool
 (setq regex-tool-backend (quote perl))
