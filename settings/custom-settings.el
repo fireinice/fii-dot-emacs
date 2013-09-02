@@ -141,3 +141,5 @@
   (set-face-attribute 'font-lock-constant-face nil :foreground "Aquamarine")
   (set-face-attribute 'font-lock-type-face nil :foreground "PaleGreen")
   (set-face-attribute 'font-lock-function-name-face nil :foreground "LightSkyBlue"))  
+
+(setq default-buffer-file-coding-system 'utf-8)

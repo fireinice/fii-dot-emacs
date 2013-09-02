@@ -15,7 +15,8 @@
   (require 'cl)
   (require 'cc-mode))
 
-
+;;====初始化加载路径
+;;add all subdirectories into the load-path except start with dot
 (defconst my-emacs-path "~/.emacs.d/" "emacs conf base path")
 
 (defun zzq-subdirectories (directory)
@@ -31,65 +32,63 @@
           (add-to-list 'subdirectories-list file-name))))
     subdirectories-list))
 
-
-;;; This was installed by package-install.el.
-;;; This provides support for the package system and
-;;; interfacing with ELPA, the package archive.
-;;; Move this code earlier if you want to reference
-;;; packages in your .emacs.t
-;; (when
-;;     (load
-;;      (expand-file-name (concat my-emacs-path "/elpa/package.el")))
-;;   (package-initialize))
-(require 'package)
-(add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(package-initialize)
-
-;; ========加载路径 start
-;;add all subdirectories into the load-path except start with dot
 (setq load-path
       (append (zzq-subdirectories (concat my-emacs-path "/"))
               (zzq-subdirectories (concat my-emacs-path "el-get/"))
               load-path))
 (add-to-list 'load-path (concat my-emacs-path "el-get/jdee/lisp"))
 (add-to-list 'load-path (concat my-emacs-path "settings/"))
+;;====end of 初始化加载路径
+
+;;=====加载自定义函数及配置
+(require 'custom-variables)
+(require 'misc-funcs)
+(require 'custom-settings)
+(require 'keybindings)
+;;=====end of 加载自定义函数及配置
 
 ;;=====私人信息,if you are not author please comment this line
+;; ***FIXME*** need review https://github.com/mattkeller/mk-project
 (load-file (concat my-emacs-path "conf/projects-conf.el")) ;;porjects
 ;; 设置 custom-file 可以让用 M-x customize 这样定义的变量和 Face 写入到
 ;; 这个文件中
 (setq custom-file (concat my-emacs-path "myinfo.el"))
 ;;=====end of 私人信息
 
-(require 'custom-variables)
-(require 'misc-funcs)
-(require 'custom-settings)
-(require 'keybindings)
+;;====elpa
+(unless (try-require 'package)
+  (lambda ()
+    (message "use old package")
+    (load
+     (expand-file-name (concat my-emacs-path "/elpa/package/package.el")))))
+(add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(package-initialize)
+;;====end of elpa
 
 ;;========调用公用模块
-(autoload 'fvwm-mode "fvwm-mode" nil t)
-(autoload 'regex-tool "regex-tool" nil t)
-(try-require 'protobuf-mode)
-(require 'cc-mode)
 (require 'ido)
+(require 'uniquify) ;to identified same name buffer
+(require 'cc-mode)
 (require 'ange-ftp) ;req by tramp for ftp protocol
 (require 'tramp)
-(require 'uniquify) ;to identified same name buffer
-(require 'autopair)
+
+(autoload 'fvwm-mode "fvwm-mode" nil t)
+(autoload 'regex-tool "regex-tool" nil t)
+
+;; (try-require 'protobuf-mode)
 (try-require 'volume)
 (try-require 'unicad)
 (try-require 'doxymacs)
-(require 'autopair)
-(autopair-global-mode) ;; to enable in all buffers
-(setq autopair-autowrap t)
+(if (try-require 'autopair)
+    (lambda ()
+      (autopair-global-mode) 
+      (setq autopair-autowrap t)))
 (if (try-require 'highlight-chars)
     (lambda()
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
-
-
 
 ;;(require 'tabbar)
 ;; (require 'color-moccur)
@@ -108,7 +107,6 @@
 (autoload 'el-get-remove "el-get-conf" nil t)
 ;; ======= END
 
-(setq default-buffer-file-coding-system 'utf-8)
 
 ;;=========ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
@@ -352,11 +350,10 @@
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (add-hook 'js2-mode-hook
           (lambda ()
+	    ;; (autoload 'ac-define-source "auto-complete")
+	    ;; (require 'ac-js2)
 	    (require 'smart-snippets-conf)
-	    (set (make-local-variable 'ac-sources)
-		 (append '(ac-source-js2)
-			 ac-sources))
-  	    (setq js2-highlight-level 3)
+	    (setq js2-highlight-level 3)
             (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
             (define-key js2-mode-map "\r" 'newline-and-indent)
             (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)

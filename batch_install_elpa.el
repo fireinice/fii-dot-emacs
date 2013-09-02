@@ -35,6 +35,7 @@
 (try-package-install 'ipython)
 
 (try-package-install 'google-c-style)
+(try-package-install 'protobuf-mode)
 
 (try-package-install 'flymake)
 (try-package-install 'flymake-python-pyflakes)
@@ -49,6 +50,7 @@
 
 (try-package-install 'php-mode)
 (try-package-install 'php-eldoc)
+(try-package-install 'flymake-php)
 
 (try-package-install 'js2-mode)
 (try-package-install 'ac-js2)
