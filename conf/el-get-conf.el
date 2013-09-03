@@ -102,33 +102,6 @@
 	       :type git
 	       :url "https://github.com/purcell/flymake-shell.git")))
 
-;; (el-get)
-;; (setq el-get-sources
-;;       '((:name bbdb
-;;             :type git
-;;             :url "git://github.com/barak/BBDB.git"
-;;             :load-path ("./lisp" "./bits")
-;;             :info "texinfo"
-;;             :build ("./configure" "make"))
-
-;;      (:name magit
-;;             :type git
-;;             :url "http://github.com/philjackson/magit.git"
-;;             :info "."
-;;             :build ("./autogen.sh" "./configure" "make"))
-
-;;      (:name vkill
-;;             :type http
-;;             :url "http://www.splode.com/~friedman/software/emacs-lisp/src/vkill.el"
-;;             :features vkill)
-
-;;      (:name yasnippet
-;;             :type git-svn
-;;             :url "http://yasnippet.googlecode.com/svn/trunk/")
-
-;;      (:name asciidoc         :type elpa)
-;;      (:name dictionary-el    :type apt-get)))
-
 
 ;;;;##########################################################################
 ;;;;  User Options, Variables

@@ -57,6 +57,7 @@
 (try-package-install 'ac-js2)
 
 (try-package-install 'apt-utils)
+(try-package-install 'top-mode)
 
 (try-package-install 'mediawiki)
 

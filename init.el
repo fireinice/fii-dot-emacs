@@ -78,7 +78,6 @@
 (autoload 'fvwm-mode "fvwm-mode" nil t)
 (autoload 'regex-tool "regex-tool" nil t)
 
-;; (try-require 'protobuf-mode)
 (try-require 'volume)
 (try-require 'unicad)
 (try-require 'doxymacs)
@@ -91,13 +90,9 @@
     (lambda()
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
-
-
-;; (autoload 'senator-try-expand-semantic "senator")
 ;; (require 'ede)
 ;; (require 'ecb)
 ;;========END
-
 
 ;; ======== el-get
 ;; el-get to manage the packages
@@ -110,6 +105,7 @@
 ;;=========ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
 (global-set-key (kbd "\C-x \C-b") 'ibuffer-other-window)
+;;=====END
 
 ;;=========speedbar
 (autoload 'speedbar-frame-mode "speedbar" "Popup a speedbar frame" t)
@@ -118,10 +114,8 @@
 ;; w3 link listings
 (autoload 'w3-speedbar-buttons "sb-w3" "s3 specific speedbar button generator.")
 (global-set-key [(f4)] 'sr-speedbar-toggle)
-(define-key-after (lookup-key global-map [menu-bar tools])
-  [speedbar]
-  '("Speedbar" . speedbar-frame-mode)
-  [calendar])
+;;=====speedbar
+
 ;; Texinfo fancy chapter tags
 ;; (add-hook 'texinfo-mode-hook (lambda () (require 'sb-texinfo)))
 ;; HTML fancy chapter tags
@@ -139,8 +133,7 @@
   (add-to-list 'yas/snippet-dirs yasnippet-snippets-dir)
   (yas-reload-all)
   (yas-global-mode t))
-
-(autoload 'top "top-mode" nil t)
+;;===== END of Yasnipet
 
 ;;==========ac-mode
 (require 'auto-complete)
@@ -485,7 +478,6 @@
 (load-conf-file-and-setup 'ess-mode-hook 'r-conf setup-r-mode)
 
 ;; ==========
-
 (when (file-readable-p custom-file)
   (load custom-file))
 ;;========init.el end here
