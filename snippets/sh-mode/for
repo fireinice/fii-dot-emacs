@@ -1,0 +1,5 @@
+#name : for ... in ...; do .... done
+# --
+for ${1:ITEM} in \$\{${2:COLLECT}\}; do
+     $0
+done
