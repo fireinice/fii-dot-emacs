@@ -83,11 +83,11 @@
 (try-require 'doxymacs)
 (try-require 'moccur-edit) ;; ***FIXME*** need a fix here not install yet
 (if (try-require 'autopair)
-    (lambda ()
+    (progn
       (autopair-global-mode) 
       (setq autopair-autowrap t)))
 (if (try-require 'highlight-chars)
-    (lambda()
+    (progn
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
 ;; (require 'ede)
