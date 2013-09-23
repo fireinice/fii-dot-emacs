@@ -86,6 +86,12 @@
   (setq cc-search-directories '("." "../include" "../src" "/usr/include" "/usr/local/include/*"))
   )
 
+(defun cpplint ()
+  "check source code format according to Google Style Guide"
+  (interactive)
+  (setq cpplint-cmd (concat "python " my-emacs-path "misc/cpplint.py "))
+  (compilation-start (concat cpplint-cmd (buffer-file-name))))
+
 ;; C/C++语言启动时自动加载semantic对/usr/include的索引数据库
 ;; (setq semanticdb-search-system-databases t)
 ;;   (add-hook 'c-mode-common-hook
