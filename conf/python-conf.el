@@ -26,7 +26,7 @@
 (require 'flymake-python-pyflakes)
 ;; (require 'pymacs)
 
-
+(message "pabc")
 (defun setup-python-buffer ()
   (setq py-load-pymacs-p 'nil)
   (set (make-local-variable 'browse-url-browser-function) 'w3m-browse-url)
@@ -46,17 +46,15 @@
   (message "setup python mode")
   (try-require 'python-pylint)
   ;; pylookup setup
-  (autoload 'pylookup-lookup "pylookup"
-    "Lookup SEARCH-TERM in the Python HTML indexes." t)
-  (autoload 'pylookup-update "pylookup" 
-    "Run pylookup-update and create the database at `pylookup-db-file'." t)
-  (setq pylookup-dir (file-name-directory (locate-library "pylookup")))
-  ;; set executable file and db file
-  (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
-  (setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
-  ;; (setq flymake-python-pyflakes-extra-arguments '("--ignore=W806"))
-  (define-key python-mode-map "\C-c\C-o" 'pylookup-lookup)
-  ;; pylookup ends here
+  (when (try-require 'pylookup)
+    (setq pylookup-dir (file-name-directory (locate-library "pylookup")))
+    ;; set executable file and db file
+    (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
+    (setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
+    ;; (setq flymake-python-pyflakes-extra-arguments '("--ignore=W806"))
+    (define-key python-mode-map "\C-c\C-o" 'pylookup-lookup)
+    ;; pylookup ends here
+    )
 
   (setq flymake-python-pyflakes-executable "flake8")
   ;; (setq autopair-dont-activate t)
