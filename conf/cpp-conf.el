@@ -8,13 +8,13 @@
 (require 'xcscope)
 (require 'doxymacs)
 (require 'cedet-conf)
+(require 'flymake)
 (try-require 'cpp-projects)
 ;; (require 'auto-complete-clang-async)
 ;; this package would find the load-path of the system automatically through gcc
 ;; (require 'smart-snippets-conf)
 ;; (require 'flymake-conf)
 (load-file "~/.emacs.d/ede-projects.el")
-
 
 ;; (define-key c-mode-base-map [(f7)] 'compile)
 (defconst baidu-c-style
@@ -37,7 +37,6 @@
 (defun setup-c-base-mode ()
   (message "set up c base mode")
   (require 'cedet-conf)
-  ;; fixme
   (setq gdb-many-windows t)
   (which-function-mode t)
   (abbrev-mode t)
@@ -46,13 +45,15 @@
 (defun setup-c-base-buffer ()
   (message "set up c base buffer")
   (google-set-c-style)
-  (semantic-key-bindings)
+  ;; fixme
+  ;; (semantic-key-bindings)
   (c-toggle-auto-newline t)
   (c-toggle-auto-hungry-state t)
   ;; (google-set-c-style)
   (google-make-newline-indent)
   (hs-minor-mode t)
   (doxymacs-mode)
+  (setq flymake-start-syntax-check-on-find-file t)
   (flymake-mode t)
   (doxymacs-font-lock)
   ;; ac-omni-completion-sources is made buffer local so
@@ -85,6 +86,12 @@
   (setq cc-search-directories '("." "../include" "../src" "/usr/include" "/usr/local/include/*"))
   )
 
+(defun cpplint ()
+  "check source code format according to Google Style Guide"
+  (interactive)
+  (setq cpplint-cmd (concat "python " my-emacs-path "misc/cpplint.py "))
+  (compilation-start (concat cpplint-cmd (buffer-file-name))))
+
 ;; C/C++语言启动时自动加载semantic对/usr/include的索引数据库
 ;; (setq semanticdb-search-system-databases t)
 ;;   (add-hook 'c-mode-common-hook
@@ -97,7 +104,8 @@
 ;; (setq semanticdb-project-roots
 ;;           (list
 ;;         (expand-file-name "/")))
-
+(global-ede-mode 1)
+(ede-enable-generic-projects)
 (ede-cpp-root-project
  "Gatling"
  :name "Gatling Project"

@@ -101,7 +101,6 @@
 (autoload 'el-get-remove "el-get-conf" nil t)
 ;; ======= END
 
-
 ;;=========ibuffer
 (setq ibuffer-default-sorting-mode 'major-mode)
 (global-set-key (kbd "\C-x \C-b") 'ibuffer-other-window)

@@ -34,6 +34,7 @@
 (eval-when-compile
   (require 'cl))
 
+(require 'ansi-color)
 (autoload 'smart-compile "smart-compile" nil t)
 (setq smart-compile-alist
       '(("/network/asio/.*cpp$" .       "g++ -Wall %f -lm -lboost_thread -o %n")
@@ -96,6 +97,15 @@
         "%n.pm"
         "%n.bat"
         "%n.sh"))
+
+(setq compilation-scroll-output t)
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region (point-min) (point-max))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+
 
 
 ;;;;##########################################################################
