@@ -17,7 +17,7 @@ then
     emacs -q --batch -l batch_install_elpa.el
     echo "installing elpa package....done"
     echo "installing el-get package...."
-    wget --no-check-certificate https://github.com/dimitri/el-get/raw/master/el-get-install.el
+    wget --no-check-certificate "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
     emacs --script el-get-install.el
     rm el-get-install.el
     echo "installing el-get package....done"
