@@ -78,8 +78,6 @@
       font-lock-verbose t
       font-lock-maximum-size '((t . 1048576) (vm-mode . 5250000)))
 
-;; 不要 tool-bar / scroll-bar / menu-bar
-(tool-bar-mode -1)
 (menu-bar-mode -1)
 (setq use-file-dialog nil)
 
@@ -127,6 +125,7 @@
 (when window-system
   (require 'icicles)
   ;; 设置前景，,背景色 list-colors-display看颜色
+  (tool-bar-mode -1)
   (add-to-list 'default-frame-alist '(background-color . "grey25"))
   (add-to-list 'default-frame-alist '(foreground-color . "grey85"))
   (add-to-list 'default-frame-alist '(cursor-color . "red"))
