@@ -21,14 +21,14 @@
 ;; (require 'ipython)
 (require 'smart-snippets-conf)
 (require 'auto-complete-config)
-(require 'w3m-conf)
 (require 'flymake-python-pyflakes)
 ;; (require 'pymacs)
 
 (message "pabc")
 (defun setup-python-buffer ()
   (setq py-load-pymacs-p 'nil)
-  (set (make-local-variable 'browse-url-browser-function) 'w3m-browse-url)
+  (when (try-require 'pylookup)
+    (set (make-local-variable 'browse-url-browser-function) 'w3m-browse-url))
   (set (make-local-variable 'indent-tabs-mode) 'nil)
   (set (make-local-variable 'tab-width) 4)
   (jedi:setup)
@@ -46,6 +46,7 @@
   (try-require 'python-pylint)
   ;; pylookup setup
   (when (try-require 'pylookup)
+    (require 'w3m-conf)
     (setq pylookup-dir (file-name-directory (locate-library "pylookup")))
     ;; set executable file and db file
     (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
