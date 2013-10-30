@@ -15,7 +15,7 @@ then
     touch myinfo.el
     echo "install elpa package"
     emacs -q --batch -l batch_install_elpa.el
-    echo "installing el-get package....done"
+    echo "installing elpa package....done"
     echo "installing el-get package...."
     wget --no-check-certificate https://github.com/dimitri/el-get/raw/master/el-get-install.el
     emacs --script el-get-install.el
