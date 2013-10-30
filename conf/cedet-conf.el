@@ -51,8 +51,6 @@
 (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode t)
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
 ;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode -1)
-(add-to-list 'semantic-default-submodes 'global-semantic-highlight-edits-mode (if window-system 1 -1))
-(add-to-list 'semantic-default-submodes 'global-semantic-highlight-edits-mode (if window-system 1 -1))
 (add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode t)
 (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode t)
 
