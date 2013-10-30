@@ -13,8 +13,7 @@
 ;; load pylookup when compile time
 (eval-when-compile
     ;; (load "../init.el")
-  (require 'python)
-  (require 'pylookup))
+  (require 'python))
 
 (require 'flymake-conf)
 (require 'python-mode)
