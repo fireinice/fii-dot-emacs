@@ -22,7 +22,7 @@ then
     rm el-get-install.el
     echo "installing el-get package....done"
     echo "installing other packages...."
-    emacs -q --batch -l setup/el-get-all.el
+    emacs -q --batch -L el-get/el-get/el-get.el -l setup/el-get-all.el
     echo "installing other packages....done"
 fi
 
