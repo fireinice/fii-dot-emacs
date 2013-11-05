@@ -6,7 +6,7 @@
 
 (try-require 'google-c-style)
 (require 'xcscope)
-(require 'doxymacs)
+(try-require 'doxymacs)
 (require 'cedet-conf)
 (require 'flymake)
 (try-require 'cpp-projects)
@@ -52,10 +52,11 @@
   ;; (google-set-c-style)
   (google-make-newline-indent)
   (hs-minor-mode t)
-  (doxymacs-mode)
+  (when (try-require 'doxymacs)
+    (doxymacs-mode)
+    (doxymacs-font-lock))
   (setq flymake-start-syntax-check-on-find-file t)
   (flymake-mode t)
-  (doxymacs-font-lock)
   ;; ac-omni-completion-sources is made buffer local so
   ;; you need to add it to a mode hook to activate on 
   ;; whatever buffer you want to use it with.  This
