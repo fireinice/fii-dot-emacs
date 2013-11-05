@@ -123,7 +123,7 @@
 ;;========仅作用于X下
 
 (when window-system
-  (require 'icicles)
+  ;;(require 'icicles)
   ;; 设置前景，,背景色 list-colors-display看颜色
   (tool-bar-mode -1)
   (add-to-list 'default-frame-alist '(background-color . "grey25"))

@@ -68,9 +68,9 @@
 (global-set-key (kbd "\C-cpc")  'project-compile)
 (global-set-key (kbd "\C-ccf")  'ffap)
 
-(when window-system
+;; (when window-system
   ;;对info仍使用原样式
-  (define-key Info-mode-map [(tab)] 'Info-next-reference))
+  ;; (define-key Info-mode-map [(tab)] 'Info-next-reference))
 
 ;;;;##########################################################################
 ;;;;  User Options, Variables

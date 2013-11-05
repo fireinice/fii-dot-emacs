@@ -36,7 +36,7 @@
       (append (zzq-subdirectories (concat my-emacs-path "/"))
               (zzq-subdirectories (concat my-emacs-path "el-get/"))
               load-path))
-(add-to-list 'load-path (concat my-emacs-path "el-get/jdee/lisp"))
+(add-to-list 'load-path (concat my-emacs-path "jdee/lisp"))
 (add-to-list 'load-path (concat my-emacs-path "settings/"))
 ;;====end of 初始化加载路径
 
