@@ -9,5 +9,8 @@
 	(:name fvwm-mode
                :type http
                :url "http://www.lair.be/files/fvwm/fvwm-mode/fvwm-mode.el")
+	(:name pylookup
+               :type git
+               :url "http://github.com/tsgates/pylookup.git")
 	))
 (el-get 'sync 'fvwm-mode 'moccur-edit 'nxhtml 'pylookup 'sql 'unicad)
