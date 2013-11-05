@@ -28,6 +28,7 @@
 (try-package-install 'w3m)
 (try-package-install 'yasnippet)
 (try-package-install 'ascope)
+(try-package-install 'xcscope)
 (try-package-install 'smart-compile)
 (try-package-install 'color-moccur)
 
