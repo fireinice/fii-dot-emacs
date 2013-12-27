@@ -1,4 +1,3 @@
-
 ;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Filename: init.el
 ;; Author: zigler
@@ -134,11 +133,20 @@
   (yas-global-mode t))
 ;;===== END of Yasnipet
 
+(get 'cua-inhibit-cua-keys 'permanent-local)
+(when
+    (and
+     (>= emacs-major-version 24)
+     (>= emacs-minor-version 2))
+  (eval-after-load "mumamo"
+    '(progn
+       (put 'cua-inhibit-cua-keys 'permanent-local nil)
+       (setq mumamo-per-buffer-local-vars
+	     (delq 'buffer-file-name mumamo-per-buffer-local-vars)))))
 ;;==========ac-mode
 (require 'auto-complete)
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/el-get/auto-complete/dict")
-(add-to-list 'ac-modes 'nxhtml-mode)
 (add-to-list 'ac-modes 'nxml-mode)
 (add-to-list 'ac-modes 'jde-mode)
 ;; (add-to-list 'ac-user-dictionary "foobar@example.com")
@@ -267,6 +275,11 @@
 ;; (setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
 ;; (add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
 ;; (load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
+(require 'jde-ecj-flymake)
+;; (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))
+(push '("\\\.java\\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup) flymake-allowed-file-name-masks)
+(setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))
+
 (modify-coding-system-alist 'file "\\.java$" 'utf-8-unix)
 (load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode setup-java-buffer)
 ;;==========END
@@ -278,6 +291,22 @@
             interpreter-mode-alist))
 (load-conf-file-and-setup 'python-mode-hook 'python-conf setup-python-mode setup-python-buffer)
 ;;==========END
+
+;;=========HTML 模式
+;;
+(require 'html-conf)
+;; What files to invoke the new html-mode for?
+;; (add-to-list 'auto-mode-alist '("\\.inc\\'" . html-mode))
+;; (add-to-list 'auto-mode-alist '("\\.phtml\\'" . html-mode))
+;; (add-to-list 'auto-mode-alist '("\\.php[34]?\\'" . html-mode))
+;; (add-to-list 'auto-mode-alist '("\\.[sj]?html?\\'" . html-mode))
+;; (add-to-list 'auto-mode-alist '("\\.jsp\\'" . html-mode))
+;; ;;
+;; ;; What features should be turned on in this html-mode?
+;; ;; (add-to-list 'mmm-mode-ext-classes-alist '(html-mode nil html-js))
+;; (add-to-list 'mmm-mode-ext-classes-alist '(html-mode nil embedded-css))
+;; (add-to-list 'mmm-mode-ext-classes-alist '(html-mode nil fancy-html))
+;;=========END
 
 ;;=========Ruby 模式
 (try-require 'rspec-mode)
@@ -302,15 +331,6 @@
 ;; (macroexpand '(load-conf-file-and-setup 'emacs-lisp-mode-hook 'elisp-conf setup-emacs-list-mode))
 ;;==========END
 
-;;=========nxhtml
-(autoload 'zzq-html-mode "xhtml-conf" nil t)
-(autoload 'zzq-phtml-mode "xhtml-conf" nil t)
-(autoload 'common-smart-snippets-setup "smart-snippets-conf" nil t)
-(add-to-list 'auto-mode-alist
-             '("\\.html$" . zzq-html-mode))
-(add-to-list 'auto-mode-alist
-             '("\\.php$" . zzq-phtml-mode))
-;; (add-hook 'php-mode-hook ')
 (add-hook 'php-mode-hook
 	  (lambda ()
 	    (c-set-offset 'arglist-cont 0)
@@ -327,8 +347,7 @@
           (lambda()
             (require 'xhtml-conf)
             ;; (require 'smart-snippets-conf)
-            (hexcolour-add-to-font-lock)
-            (common-smart-snippets-setup css-mode-map css-mode-abbrev-table)))
+            (hexcolour-add-to-font-lock)))
 
 
 
@@ -347,9 +366,7 @@
 	    (setq js2-highlight-level 3)
             (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
             (define-key js2-mode-map "\r" 'newline-and-indent)
-            (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)
-	    (common-smart-snippets-setup js2-mode-map js2-mode-abbrev-table)
-	    ))
+            (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
 
 
 ;;=========SQL模式

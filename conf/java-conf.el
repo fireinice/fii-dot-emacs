@@ -33,50 +33,32 @@
 (eval-when-compile
   (require 'cl))
 
-(require 'cedet-conf)
-(require 'jde)
-(require 'smart-snippets-conf)
-(require 'flymake-conf)
-(require 'jde-ecj-flymake)
-(message "java-mode file loaded")
-(setenv "JAVA_HOME" "/usr/lib/jvm/java-6-sun/")
-(setenv "CLASSPATH" ".")
-(autoload 'emdroid-create-activity "emdroid" nil t)
-
-(push '("\\.java\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup)
-      flymake-allowed-file-name-masks)
-
 (defun setup-java-mode ()
-  (message "java-mode load start")
-  (custom-set-variables
-   '(android-mode-avd "test")
-   '(android-mode-sdk-dir "/home/zigler/tools/android-sdk-linux/"))
-  (autoload 'android-mode "android-mode" nil t)
+  (message "set java mode")
+  (require 'jde)
+  (require 'ajc-java-complete-config)
   (setq jde-global-classpath
-	'("/home/zigler/tools/android-sdk-linux/platforms/android-10/android.jar"
-	  "/home/zigler/tools/android-sdk-linux/platforms/android-15/android.jar"
-	  "/home/zigler/tools/android-sdk-linux/platforms/android-16/android.jar"))
-  (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))
-  (setq jde-web-browser "firefox")
-  (setq jde-doc-dir "/usr/lib/jvm/java-6-sun/docs")
-  (setq jde-enable-abbrev-mode t)
-  (setq jde-complete-insert-method-signature nil)
-  (setq jde-launch-beanshell-on-demand-p nil)
-  (setq c-basic-offset 2)
-  (hs-minor-mode t)
-  (jde-mode)
-  (local-set-key [(control return)] 'jde-complete)
-  (local-set-key [(shift return)] 'jde-complete-minibuf)
-  (local-set-key [(meta return)] 'jde-complete-in-line)
-  (flymake-mode)
-  (common-smart-snippets-setup java-mode-map java-mode-abbrev-table)
-  (set (make-local-variable 'ac-sources)
-       (append '(ac-source-yasnippet ac-source-semantic ac-source-words-in-same-mode-buffers)
-	       ac-sources)))
+	'("/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-14/android.jar"
+	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-15/android.jar"
+	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-16/android.jar"
+	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-17/android.jar"
+	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-18/android.jar"
+	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-19/android.jar"))
+  ;; we need ecj compiler here more detail in jde-eclipse-compiler-server
+  (message "set java mode done")
+  
+)
 
 (defun setup-java-buffer ()
-  (setq c-basic-offset 2))
-(message "java-mode file load end")
+  (message "set java buffer")
+  (setq c-basic-offset 2)
+  (set (make-local-variable 'ac-sources)
+       (append '(ac-source-yasnippet ac-source-semantic ac-source-words-in-same-mode-buffers)
+	       ac-sources))
+  (ajc-java-complete-mode)
+  (message "set java buffer done"))
+
+
 
 ;;;;##########################################################################
 ;;;;  User Options, Variables
