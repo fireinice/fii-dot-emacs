@@ -90,15 +90,14 @@ makes)."
 (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
+(push '("\\\.java\\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup) flymake-allowed-file-name-masks)
 
-
-
-
-
-
-
-
-
+(if (try-require 'jde-ecj-flymake)
+    (lambda ()
+      (require 'jde-ecj-flymake)
+      ;; (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))
+      (push '("\\\.java\\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup) flymake-allowed-file-name-masks)
+      (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))))
 
 ;; (defun flymake-pylint-init ()
 ;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
