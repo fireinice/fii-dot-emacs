@@ -127,6 +127,7 @@
   ;; 设置前景，,背景色 list-colors-display看颜色
   (tool-bar-mode -1)
   (add-to-list 'default-frame-alist '(background-color . "grey25"))
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
   (add-to-list 'default-frame-alist '(foreground-color . "grey85"))
   (add-to-list 'default-frame-alist '(cursor-color . "red"))
   (autoload 'ecb-activate "ecb" nil t) ;;nox

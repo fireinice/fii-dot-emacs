@@ -36,7 +36,7 @@
             (setq flymake-compilation-prevents-syntax-check t)
             (setq flymake-log-level -1)
 	    (setq flymake-run-in-place nil)
-	    (setq flymake-master-file-dirs (quote ("../src" "." "./src" "./UnitTest")))
+	    (setq flymake-master-file-dirs '("../src" "." "./src" "./UnitTest"))
             (set-face-attribute 'flymake-warnline nil
                                 :background "LightBlue2"
                                 :foreground "black")

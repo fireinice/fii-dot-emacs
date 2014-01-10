@@ -36,6 +36,31 @@
 
 (require 'ansi-color)
 (autoload 'smart-compile "smart-compile" nil t)
+
+(setq compilation-filenames '("Makefile" "makefile"))
+
+(defun get-nearest-compilation-file ()
+  "Search for the compilation file traversing up the directory tree."
+  (let ((dir default-directory)
+	(parent-dir (file-name-directory (directory-file-name default-directory)))
+	(nearest-compilation-file 'nil))
+    (while (and (not (string= dir parent-dir))
+		(not nearest-compilation-file))
+      (dolist (filename compilation-filenames)
+	(setq file-path (concat dir filename))
+	(when (file-readable-p file-path)
+	  (setq nearest-compilation-file file-path)))
+      (setq dir parent-dir
+	    parent-dir (file-name-directory (directory-file-name parent-dir))))
+    nearest-compilation-file))
+
+
+;; bind compiling with get-above-makefile to f8
+(global-set-key [f8]
+		(lambda ()
+		  (interactive)
+		  (compile (format "make -f %s" (get-nearest-compilation-file)))))
+
 (setq smart-compile-alist
       '(("/network/asio/.*cpp$" .       "g++ -Wall %f -lm -lboost_thread -o %n")
 	;;         ("\\.c\\'"      .   "gcc -Wall %f -lm -o %n")

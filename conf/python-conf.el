@@ -12,7 +12,6 @@
 ;;
 ;; load pylookup when compile time
 (eval-when-compile
-    ;; (load "../init.el")
   (require 'python))
 
 (require 'flymake-conf)
@@ -24,7 +23,6 @@
 (require 'flymake-python-pyflakes)
 ;; (require 'pymacs)
 
-(message "pabc")
 (defun setup-python-buffer ()
   (setq py-load-pymacs-p 'nil)
   (when (try-require 'pylookup)

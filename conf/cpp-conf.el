@@ -5,7 +5,6 @@
   (require 'cc-mode))
 
 (try-require 'google-c-style)
-(require 'xcscope)
 (try-require 'doxymacs)
 (require 'cedet-conf)
 (require 'flymake)
@@ -36,7 +35,9 @@
 
 (defun setup-c-base-mode ()
   (message "set up c base mode")
+  (require 'xcscope)
   (require 'cedet-conf)
+  (cscope-setup)
   (setq gdb-many-windows t)
   (which-function-mode t)
   (abbrev-mode t)
