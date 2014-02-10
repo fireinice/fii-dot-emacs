@@ -16,5 +16,8 @@
                :type http-tar
 	       :options "xjf"
                :url "http://downloads.sourceforge.net/project/jdee/jdee/2.4.1/jdee-bin-2.4.1.tar.bz2")
-	))
-(el-get 'sync 'fvwm-mode 'moccur-edit 'nxhtml 'pylookup 'sql 'unicad 'grep-edit 'top-mode 'auto-complete-java)
+	(:name shell-completion
+	       :type emacswiki
+	       :description "provides tab completion for shell commands"
+	       :website "https://raw.github.com/emacsmirror/emacswiki.org/master/shell-completion.el")))
+(el-get 'sync 'fvwm-mode 'moccur-edit 'nxhtml 'pylookup 'sql 'unicad 'grep-edit 'top-mode 'auto-complete-java 'shell-completion)

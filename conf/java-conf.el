@@ -37,6 +37,8 @@
   (message "set java mode")
   (require 'jde)
   (require 'ajc-java-complete-config)
+  (require 'emdroid)
+  (require 'android-mode)
   (setq jde-global-classpath
 	'("/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-14/android.jar"
 	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-15/android.jar"
@@ -44,6 +46,10 @@
 	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-17/android.jar"
 	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-18/android.jar"
 	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-19/android.jar"))
+  (setq emdroid-activity-creator "ActivityCreator.py")
+  (setq emdroid-tools-dir "~/tools/lib/android-sdk-linux/tools/")
+  (setq android-avd "test"
+	android-mode-sdk-dir "~/tools/lib/android-sdk-linux/")
   ;; we need ecj compiler here more detail in jde-eclipse-compiler-server
   (message "set java mode done")
   
