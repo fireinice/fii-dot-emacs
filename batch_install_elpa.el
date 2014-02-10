@@ -53,6 +53,8 @@
 
 (try-package-install 'php-mode)
 (try-package-install 'php-eldoc)
+(try-package-install 'mmm-mode)
+(try-package-install 'multi-web-mode)
 (try-package-install 'flymake-php)
 
 (try-package-install 'js2-mode)
