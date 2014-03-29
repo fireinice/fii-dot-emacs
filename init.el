@@ -291,7 +291,7 @@
 
 ;;=========HTML 模式
 ;;
-(require 'html-conf)
+;; (require 'html-conf)
 ;; What files to invoke the new html-mode for?
 ;; (add-to-list 'auto-mode-alist '("\\.inc\\'" . html-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.phtml\\'" . html-mode))

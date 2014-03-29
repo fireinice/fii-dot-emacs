@@ -1,6 +1,9 @@
 (eval-when-compile
   (require 'cl))
 (require 'el-get)
+(require 'el-get-recipes)
+;; (el-get-emacswiki-refresh "~/.emacs.d/el-get/el-get/recipes/emacswiki" t)
+(el-get-read-all-recipes)
 (setq el-get-sources
       '(
 	(:name template
@@ -8,16 +11,6 @@
                :url "http://ncu.dl.sourceforge.net/project/emacs-template/template/3.1/template-3.1.tar.gz")
 	(:name fvwm-mode
                :type http
-               :url "http://www.lair.be/files/fvwm/fvwm-mode/fvwm-mode.el")
-	(:name pylookup
-               :type git
-               :url "http://github.com/tsgates/pylookup.git")
-	(:name jdee
-               :type http-tar
-	       :options "xjf"
-               :url "http://downloads.sourceforge.net/project/jdee/jdee/2.4.1/jdee-bin-2.4.1.tar.bz2")
-	(:name shell-completion
-	       :type emacswiki
-	       :description "provides tab completion for shell commands"
-	       :website "https://raw.github.com/emacsmirror/emacswiki.org/master/shell-completion.el")))
-(el-get 'sync 'fvwm-mode 'moccur-edit 'nxhtml 'pylookup 'sql 'unicad 'grep-edit 'top-mode 'auto-complete-java 'shell-completion)
+               :url "http://www.lair.be/files/fvwm/fvwm-mode/fvwm-mode.el")))
+(el-get 'sync 'fvwm-mode 'moccur-edit 'pylookup 'unicad 'grep-edit 'top-mode 'shell-completion 'unicad)
+;; (el-get 'sync 'nxhtml)

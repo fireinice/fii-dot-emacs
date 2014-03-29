@@ -1,8 +1,8 @@
 (require 'package)
 (package-initialize)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-refresh-contents)
 
 (unless (package-installed-p 'ansi)
@@ -65,4 +65,4 @@
 
 (try-package-install 'emacs-droid)
 (try-package-install 'android-mode)
-
+(try-package-install 'emacs-eclim)

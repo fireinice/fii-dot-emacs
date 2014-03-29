@@ -18,6 +18,20 @@ C-c C-u : abort
 C-c C-r : Remove the highlight in the region (The Changes doesn't apply to files)
 
 -
+name: grep-edit.el
+location: misc
+version: 2.9
+brief: grep-edit provides to edit grep buffer and to apply the changes to the file.
+site: http://www.bookshelf.jp/elc/grep-edit.el
+Install:
+(require 'grep-edit)
+Usage:
+You can start editing the text on *grep* buffer. And the changed text is highlighted
+C-c C-e : apply the highlighting changes to files.
+C-c C-u : abort
+C-c C-r : Remove the highlight in the region (The Changes doesn't apply to files)
+
+-
 name: unicad.el
 location: misc
 version: 1.1.4

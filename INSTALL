@@ -1,0 +1,6 @@
+Just run install.sh in command line and wait it finish
+
+MODE SPECIFICATION
+For java I use eclim-emacs with eclipse, so we need to install eclipse and eclim
+For Debian link jdt from /usr/share/eclipse/dropins to /usr/lib/ecplipse/ddropins
+the eclim whould not recognize automatically otherwise.
