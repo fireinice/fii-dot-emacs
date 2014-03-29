@@ -388,6 +388,7 @@
 
 
 ;;=========Shell Script 模式
+(require 'shell-completion)
 (add-hook 'sh-mode-hook 'flymake-shell-load)
 ;; 自动设置script buffer 为可执行
 (add-hook 'after-save-hook
@@ -489,6 +490,9 @@
 
 ;; ========ess
 (load-conf-file-and-setup 'ess-mode-hook 'r-conf setup-r-mode)
+
+;; ========mediawiki
+(autoload 'mediawiki-site "mediawiki" nil t)
 
 ;; ==========
 (when (file-readable-p custom-file)
