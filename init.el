@@ -35,7 +35,7 @@
       (append (zzq-subdirectories (concat my-emacs-path "/"))
               (zzq-subdirectories (concat my-emacs-path "el-get/"))
               load-path))
-(add-to-list 'load-path (concat my-emacs-path "jdee/lisp"))
+;; (add-to-list 'load-path (concat my-emacs-path "jdee/lisp"))
 (add-to-list 'load-path (concat my-emacs-path "settings/"))
 ;;====end of 初始化加载路径
 
@@ -89,6 +89,7 @@
     (progn
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
+(require 'flymake-conf)
 ;; (require 'ede)
 ;; (require 'ecb)
 ;;========END
@@ -275,7 +276,7 @@
 ;; (setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
 ;; (add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
 ;; (load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
-(require 'flymake-conf)
+(autoload 'start-eclimd "eclimd" nil t)
 (modify-coding-system-alist 'file "\\.java$" 'utf-8-unix)
 (load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode setup-java-buffer)
 ;;==========END

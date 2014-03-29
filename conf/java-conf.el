@@ -35,17 +35,15 @@
 
 (defun setup-java-mode ()
   (message "set java mode")
-  (require 'jde)
-  (require 'ajc-java-complete-config)
-  (require 'emdroid)
-  (require 'android-mode)
-  (setq jde-global-classpath
-	'("/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-14/android.jar"
-	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-15/android.jar"
-	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-16/android.jar"
-	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-17/android.jar"
-	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-18/android.jar"
-	  "/home/zhangzhiqiang/tools/lib/android-sdk-linux/platforms/android-19/android.jar"))
+  (setq java-workspace "~/.eclipse/workspace")
+  (require 'eclimd)
+  (start-eclimd java-workspace)
+  (require 'eclim)
+  (require 'ac-emacs-eclim-source)
+  (global-eclim-mode)
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
   (setq emdroid-activity-creator "ActivityCreator.py")
   (setq emdroid-tools-dir "~/tools/lib/android-sdk-linux/tools/")
   (setq android-avd "test"
@@ -59,9 +57,9 @@
   (message "set java buffer")
   (setq c-basic-offset 2)
   (set (make-local-variable 'ac-sources)
-       (append '(ac-source-yasnippet ac-source-semantic ac-source-words-in-same-mode-buffers)
-	       ac-sources))
-  (ajc-java-complete-mode)
+       (delete-dups
+	(append '(ac-source-emacs-eclim ac-source-yasnippet ac-source-semantic ac-source-words-in-same-mode-buffers)
+		ac-sources)))
   (message "set java buffer done"))
 
 

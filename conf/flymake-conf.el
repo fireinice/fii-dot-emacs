@@ -76,7 +76,7 @@ makes)."
 (autoload 'flymake-shell-load "flymake-shell" nil t)
 ;; (require 'flymake-shell)
 (add-hook 'sh-mode-hook 'flymake-shell-load)
-
+(delete '("\\.java\\'" flymake-simple-make-java-init flymake-simple-java-cleanup) flymake-allowed-file-name-masks)
 ;; Invoke ruby with '-c' to get syntax checking
 (defun flymake-ruby-init ()
   (let* ((temp-file   (flymake-init-create-temp-buffer-copy
@@ -90,14 +90,14 @@ makes)."
 (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
-(push '("\\\.java\\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup) flymake-allowed-file-name-masks)
+;; (push '("\\\.java\\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup) flymake-allowed-file-name-masks)
 
-(if (try-require 'jde-ecj-flymake)
-    (lambda ()
-      (require 'jde-ecj-flymake)
-      ;; (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))
-      (push '("\\\.java\\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup) flymake-allowed-file-name-masks)
-      (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))))
+;; (if (try-require 'jde-ecj-flymake)
+;;     (lambda ()
+;;       (require 'jde-ecj-flymake)
+;;       ;; (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))
+;;       (push '("\\\.java\\\'" jde-ecj-server-flymake-init jde-ecj-flymake-cleanup) flymake-allowed-file-name-masks)
+;;       (setq jde-compiler '(("eclipse java compiler server" "/usr/share/java/ecj.jar")))))
 
 ;; (defun flymake-pylint-init ()
 ;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
