@@ -20,4 +20,4 @@
 	       :type emacswiki
 	       :description "provides tab completion for shell commands"
 	       :website "https://raw.github.com/emacsmirror/emacswiki.org/master/shell-completion.el")))
-(el-get 'sync 'fvwm-mode 'moccur-edit 'nxhtml 'pylookup 'sql 'unicad 'grep-edit 'top-mode 'auto-complete-java 'shell-completion)
+(el-get 'sync 'moccur-edit 'nxhtml 'pylookup 'unicad 'grep-edit 'auto-complete-java 'shell-completion)

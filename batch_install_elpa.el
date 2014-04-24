@@ -43,6 +43,7 @@
 (try-package-install 'flymake)
 (try-package-install 'flymake-python-pyflakes)
 (try-package-install 'flymake-shell)
+(try-package-install 'flymake-cursor)
 
 (try-package-install 'psvn)
 (try-package-install 'magit)
@@ -67,4 +68,7 @@
 
 (try-package-install 'emacs-droid)
 (try-package-install 'android-mode)
+
+(try-package-install 'fvwm-mode)
+(try-package-install 'sql)
 

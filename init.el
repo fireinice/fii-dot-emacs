@@ -90,8 +90,6 @@
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-tabs)
       (add-hook 'font-lock-mode-hook 'hc-dont-highlight-trailing-whitespace)))
 (require 'flymake-conf)
-;; (require 'ede)
-;; (require 'ecb)
 ;;========END
 
 ;; ======== el-get
