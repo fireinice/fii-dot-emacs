@@ -86,6 +86,7 @@
   (google-set-c-style)
   (define-key c-mode-base-map (kbd "M-o" ) 'ff-find-other-file)
   (setq cc-search-directories '("." "../include" "../src" "/usr/include" "/usr/local/include/*"))
+  (semantic-key-bindings)
   )
 
 (defun cpplint ()
@@ -111,7 +112,7 @@
 (ede-cpp-root-project
  "Gatling"
  :name "Gatling Project"
- :file "~/gat/cscope.files"
+ :file "~/gatling/cscope.files"
  :include-path '("include"
 		 "../include"
 		 "/third_party/poco-1.4.6p1/Net/include"

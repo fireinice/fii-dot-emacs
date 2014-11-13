@@ -109,10 +109,10 @@
       (forward-line 1)
       (delete-region beg (point)))))
 
-(defun ruby-insert-end ()
-  "Insert \"end\" at point and reindent current line."
-  (interactive)
-  (insert "end")
-  (ruby-indent-line t)
-  (end-of-line))
+;; (defun ruby-insert-end ()
+;;   "Insert \"end\" at point and reindent current line."
+;;   (interactive)
+;;   (insert "end")
+;;   (ruby-indent-line t)
+;;   (end-of-line))
 (provide 'ruby-conf)

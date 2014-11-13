@@ -70,5 +70,11 @@
 (try-package-install 'android-mode)
 (try-package-install 'emacs-eclim)
 
+(try-package-install 'ruby-electric)
+(try-package-install 'rspec-mode)
+(try-package-install 'ruby-end)
+(try-package-install 'rinari)
+(try-package-install 'rvm)
+
 (try-package-install 'fvwm-mode)
 (try-package-install 'sql)
