@@ -1,13 +1,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; -*- Mode: Emacs-Lisp -*- ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Filename: python-conf.el
 ;; Author: Zhiqiang.Zhang
-;; Description: 
+;; Description:
 ;; Created: 二  4月 28 15:23:18 2009 (CST)
 ;;           By: Zhiqiang.Zhang
 ;; Last-Updated: 二  4月 28 15:53:55 2009 (CST)
 ;;     Update #: 10
-;; 
-;; 
+;;
+;;
 ;;; Change log:
 ;;
 ;; load pylookup when compile time
@@ -15,13 +15,15 @@
   (require 'python))
 
 (require 'flymake-conf)
-(require 'python-mode)
+;; (require 'python-mode)
 (require 'auto-complete)
 ;; (require 'ipython)
-(require 'smart-snippets-conf)
+;; (require 'smart-snippets-conf)
+
+(require 'autopair)
 (require 'auto-complete-config)
 (require 'flymake-python-pyflakes)
-;; (require 'pymacs)
+;; ;; (require 'pymacs)
 
 (defun setup-python-buffer ()
   (setq py-load-pymacs-p 'nil)
@@ -33,11 +35,12 @@
   (flymake-python-pyflakes-load)
   (flymake-mode 1)
   (hs-minor-mode 1)
+  (autopair-on)
   (abbrev-mode t)
   (auto-complete-mode 1)
   (set (make-local-variable 'ac-sources)
        (append '(ac-source-yasnippet)
-	       ac-sources)))
+               ac-sources)))
 
 (defun setup-python-mode ()
   (message "setup python mode")
@@ -58,7 +61,7 @@
   ;; (setq autopair-dont-activate t)
   (setq py-python-command-args '( "-colors" "Linux"))
   (setq python-indent-offset 4)
-  
+
   ;; (py-shell 1)
   (setq jedi:complete-on-dot t)
   (set beginning-of-defun-function

@@ -32,7 +32,7 @@
 (provide 'java-conf)
 (eval-when-compile
   (require 'cl))
-
+(require 'cedet)
 (defun setup-java-mode ()
   (message "set java mode")
   (setq java-workspace "~/.eclipse/workspace")

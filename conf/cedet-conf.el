@@ -59,8 +59,6 @@
 ;; (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
 ;; Enable Semantic
 (semantic-mode 1)
-;; Enable EDE (Project Management) features
-(global-ede-mode 1)
 
 (setq-mode-local c-mode semanticdb-find-default-throttle
                  '(project unloaded system recursive))

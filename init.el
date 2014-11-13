@@ -83,7 +83,7 @@
 (try-require 'moccur-edit) ;; ***FIXME*** need a fix here not install yet
 (if (try-require 'autopair)
     (progn
-      (autopair-global-mode) 
+      (autopair-global-mode)
       (setq autopair-autowrap t)))
 (if (try-require 'highlight-chars)
     (progn
@@ -141,7 +141,7 @@
     '(progn
        (put 'cua-inhibit-cua-keys 'permanent-local nil)
        (setq mumamo-per-buffer-local-vars
-	     (delq 'buffer-file-name mumamo-per-buffer-local-vars)))))
+             (delq 'buffer-file-name mumamo-per-buffer-local-vars)))))
 ;;==========ac-mode
 (require 'auto-complete)
 (require 'auto-complete-config)
@@ -226,7 +226,7 @@
 
 ;;=========smart-compile
 ;; 智能编译:支持c/c++/elisp/html/muse 绑定到 F9
-(global-set-key (kbd "<f9>") 'smart-compile)
+(global-set-key (kbd "C-9") 'smart-compile)
 (require 'smart-compile-conf)
 
 
@@ -274,6 +274,7 @@
 ;; (setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
 ;; (add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
 ;; (load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
+(require 'ede-project-conf)
 (autoload 'start-eclimd "eclimd" nil t)
 (modify-coding-system-alist 'file "\\.java$" 'utf-8-unix)
 (load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode setup-java-buffer)
@@ -317,7 +318,7 @@
               interpreter-mode-alist))
 (modify-coding-system-alist 'file "\\.rb$" 'utf-8)
 (modify-coding-system-alist 'file "\\.rhtml$" 'utf-8)
-(load-conf-file-and-setup 'ruby-mode-hook 'ruby-conf setup-ruby-mode)
+(load-conf-file-and-setup 'ruby-mode-hook 'ruby-conf setup-ruby-mode setup-ruby-buffer)
 ;;==========END
 
 
@@ -327,16 +328,16 @@
 ;;==========END
 
 (add-hook 'php-mode-hook
-	  (lambda ()
-	    (c-set-offset 'arglist-cont 0)
-	    (c-set-offset 'arglist-intro '+)
-	    (c-set-offset 'case-label 2)
-	    (c-set-offset 'arglist-close 0)
-	    (setq c-basic-offset 4)
-	    (setq indent-tabs-mode nil)
-	    (flymake-php-load)
-	    (php-eldoc-enable)
-	    (set (make-local-variable 'browse-url-browser-function) 'w3m-browse-url)))
+          (lambda ()
+            (c-set-offset 'arglist-cont 0)
+            (c-set-offset 'arglist-intro '+)
+            (c-set-offset 'case-label 2)
+            (c-set-offset 'arglist-close 0)
+            (setq c-basic-offset 4)
+            (setq indent-tabs-mode nil)
+            (flymake-php-load)
+            (php-eldoc-enable)
+            (set (make-local-variable 'browse-url-browser-function) 'w3m-browse-url)))
 
 (add-hook 'css-mode-hook
           (lambda()
@@ -355,10 +356,10 @@
 (define-abbrev-table 'js2-mode-abbrev-table ())
 (add-hook 'js2-mode-hook
           (lambda ()
-	    ;; (autoload 'ac-define-source "auto-complete")
-	    ;; (require 'ac-js2)
-	    (require 'smart-snippets-conf)
-	    (setq js2-highlight-level 3)
+            ;; (autoload 'ac-define-source "auto-complete")
+            ;; (require 'ac-js2)
+            (require 'smart-snippets-conf)
+            (setq js2-highlight-level 3)
             (define-key js2-mode-map (kbd "C-c C-e") 'js2-next-error)
             (define-key js2-mode-map "\r" 'newline-and-indent)
             (define-key js2-mode-map (kbd "C-c C-d") 'js2-mode-hide-element)))
