@@ -274,7 +274,7 @@
 ;; (setq auto-mode-alist (rassq-delete-all 'java-mode auto-mode-alist))
 ;; (add-to-list 'auto-mode-alist '("\\.java\\'" . jde-mode))
 ;; (load-conf-file-and-setup 'jde-mode-hook 'java-conf setup-java-mode)
-(require 'ede-project-conf)
+;; (require 'ede-project-conf)
 (autoload 'start-eclimd "eclimd" nil t)
 (modify-coding-system-alist 'file "\\.java$" 'utf-8-unix)
 (load-conf-file-and-setup 'java-mode-hook 'java-conf setup-java-mode setup-java-buffer)

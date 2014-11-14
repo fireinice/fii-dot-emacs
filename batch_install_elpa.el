@@ -75,6 +75,12 @@
 (try-package-install 'ruby-end)
 (try-package-install 'rinari)
 (try-package-install 'rvm)
+(try-package-install 'flymake-ruby)
+(try-package-install 'ac-inf-ruby)
+(try-package-install 'robe)
+(try-package-install 'yari)
+(try-package-install 'rsense)
+(try-package-install 'flymake-ruby)
 
 (try-package-install 'fvwm-mode)
 (try-package-install 'sql)

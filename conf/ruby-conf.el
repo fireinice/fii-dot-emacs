@@ -11,10 +11,32 @@
     "Pops up a irbsh-buffer and insert a \"cd <file-dir>\" command." t))
 
 (defun setup-ruby-buffer ()
+  (setq auto-info-started t)
+  (condition-case nil
+      (inf-ruby-console-auto)
+    ;; no base directory found by
+    (error (setq auto-info-started nil)))
+  (if auto-info-started
+      (progn
+        (robe-mode t)
+        (robe-start)
+        (set (make-local-variable 'ac-sources)
+             (append
+              '(ac-source-robe) ac-sources))))
+  ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
+  (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
+      (flymake-mode t))
+  (set (make-local-variable 'tab-width) 2)
+  (set (make-local-variable 'indent-tabs-mode) 'nil)
+  (ruby-end-mode t)
   (ruby-electric-mode t)
   (rinari-minor-mode t)
   (autopair-mode 0)
+
+  (message (find-rsense-home-with-rvm))
+  (setq rsense-home (find-rsense-home-with-rvm))
   )
+
 ;; (defun rhtml-mode ()
 ;;   (require 'xhtml-conf)
 ;;   ;; (setq nxml-degraded t)
@@ -29,16 +51,16 @@
   (require 'flymake-ruby)
   (require 'rspec-mode)
   (require 'rsense)
-  (setq rsense-home "/opt/rsense")
-  (setq rsense-rurema-home (concat rsense-home "/ruby-refm"))
-  (autoload 'yari "yari" nil t)
   (require 'rinari)
+  (require 'rvm)
+  ;; (rvm-use "ruby-1.9.2-p0" "rails3tutorial")
+  ;; (setenv "GEM_HOME" (cdr (assoc "GEM_HOME" (rvm/info "ruby-1.9.2-p0@rails3tutorial"))))
+  (message rsense-home)
+  ;; (setq rsense-rurema-home (concat rsense-home "/ruby-refm"))
+  (autoload 'yari "yari" nil t)
   ;; (require 'rails)
   ;; (require 'inf-ruby)
-  (require 'rvm)
   (imenu-add-to-menubar "IMENU")
-  (set (make-local-variable 'tab-width) 2)
-  (set (make-local-variable 'indent-tabs-mode) 'nil)
   (setq rspec-use-rvm t)
   (setq rvm--gemset-default "default")
   ;; (local-unset-key (kbd "<return>"))
@@ -47,24 +69,31 @@
   (define-key ruby-mode-map (kbd "\C-c\C-t") 'rspec-toggle-spec-and-target)
   (local-unset-key (kbd "RET"))
   (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
-  ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
-  (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
-      (lambda ()
-        (flymake-mode t)))
-  (set (make-local-variable 'ac-sources)
-       (append
-        '(ac-source-rcodetools ac-source-rsense-method ac-source-rsense-constant ac-source-rsense)
-        ac-sources))
   (add-hook 'compilation-filter-hook 'compilation-filter-hook-rspec)
   (add-hook 'write-file-functions
             '(lambda()
                (save-excursion
                  (untabify (point-min) (point-max))
                  (delete-trailing-whitespace))))
-  ;; (rvm-use "ruby-1.9.2-p0" "rails3tutorial")
-  ;; (setenv "GEM_HOME" (cdr (assoc "GEM_HOME" (rvm/info "ruby-1.9.2-p0@rails3tutorial"))))
+  (set (make-local-variable 'ac-sources)
+       (append
+        '(ac-source-rcodetools ac-source-rsense-method ac-source-rsense-constant ac-source-rsense)
+        ac-sources))
   (ac-mode-setup))
 
+(defun find-rsense-home-with-rvm ()
+  (let ((binary-paths rvm--current-ruby-binary-path)
+        (rsense-gem-path ""))
+    (dolist (gem-path binary-paths)
+      (progn
+        (message gem-path)
+        (setq bin-path (concat gem-path "/rsense"))
+        (if (file-executable-p bin-path)
+            (progn
+              (setq rsense-gem-path
+                    (mapconcat 'identity
+                               (butlast (split-string gem-path "/")) "/"))))))
+    rsense-gem-path))
 
 (defun ruby-eval-buffer ()
   (interactive)
