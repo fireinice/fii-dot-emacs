@@ -70,6 +70,8 @@
 (try-package-install 'android-mode)
 (try-package-install 'emacs-eclim)
 
+(try-package-install 'projectile)
+
 (try-package-install 'ruby-electric)
 (try-package-install 'rspec-mode)
 (try-package-install 'ruby-end)
@@ -81,6 +83,7 @@
 (try-package-install 'yari)
 (try-package-install 'rsense)
 (try-package-install 'flymake-ruby)
+(try-package-install 'projectile-ruby)
 
 (try-package-install 'fvwm-mode)
 (try-package-install 'sql)

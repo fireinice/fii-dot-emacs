@@ -11,6 +11,7 @@
     "Pops up a irbsh-buffer and insert a \"cd <file-dir>\" command." t))
 
 (defun setup-ruby-buffer ()
+  (rvm-activate-corresponding-ruby)
   (setq auto-info-started t)
   (condition-case nil
       (inf-ruby-console-auto)
@@ -32,9 +33,16 @@
   (ruby-electric-mode t)
   (rinari-minor-mode t)
   (autopair-mode 0)
+  (projectile-on)
+  (projectile-rails-on)
 
-  (message (find-rsense-home-with-rvm))
-  (setq rsense-home (find-rsense-home-with-rvm))
+  (setq rsense-home "/home/zhangzhiqiang/.local/lib/rsense-0.3")
+  (set (make-local-variable 'ac-sources)
+       (append
+        '(ac-source-rcodetools ac-source-rsense-method ac-source-rsense-constant ac-source-rsense)
+        ac-sources))
+  ;; (setq rsense-home (find-rsense-home-with-rvm rvm--current-gem-binary-path))
+  ;; (message rsense-home)
   )
 
 ;; (defun rhtml-mode ()
@@ -54,13 +62,8 @@
   (require 'rinari)
   (require 'rvm)
   ;; (rvm-use "ruby-1.9.2-p0" "rails3tutorial")
-  ;; (setenv "GEM_HOME" (cdr (assoc "GEM_HOME" (rvm/info "ruby-1.9.2-p0@rails3tutorial"))))
-  (message rsense-home)
   ;; (setq rsense-rurema-home (concat rsense-home "/ruby-refm"))
   (autoload 'yari "yari" nil t)
-  ;; (require 'rails)
-  ;; (require 'inf-ruby)
-  (imenu-add-to-menubar "IMENU")
   (setq rspec-use-rvm t)
   (setq rvm--gemset-default "default")
   ;; (local-unset-key (kbd "<return>"))
@@ -75,18 +78,13 @@
                (save-excursion
                  (untabify (point-min) (point-max))
                  (delete-trailing-whitespace))))
-  (set (make-local-variable 'ac-sources)
-       (append
-        '(ac-source-rcodetools ac-source-rsense-method ac-source-rsense-constant ac-source-rsense)
-        ac-sources))
   (ac-mode-setup))
 
-(defun find-rsense-home-with-rvm ()
-  (let ((binary-paths rvm--current-ruby-binary-path)
+(defun find-rsense-home-with-rvm (gem-binary-paths)
+  (let ((binary-paths gem-binary-paths)
         (rsense-gem-path ""))
     (dolist (gem-path binary-paths)
       (progn
-        (message gem-path)
         (setq bin-path (concat gem-path "/rsense"))
         (if (file-executable-p bin-path)
             (progn
@@ -138,10 +136,4 @@
       (forward-line 1)
       (delete-region beg (point)))))
 
-;; (defun ruby-insert-end ()
-;;   "Insert \"end\" at point and reindent current line."
-;;   (interactive)
-;;   (insert "end")
-;;   (ruby-indent-line t)
-;;   (end-of-line))
 (provide 'ruby-conf)
