@@ -84,6 +84,10 @@
 (try-package-install 'rsense)
 (try-package-install 'flymake-ruby)
 (try-package-install 'projectile-ruby)
+(try-package-install 'rhtml-mode)
+
+(try-package-install 'flymake-yaml)
+(try-package-install 'yaml-mode)
 
 (try-package-install 'fvwm-mode)
 (try-package-install 'sql)

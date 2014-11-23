@@ -306,7 +306,7 @@
 
 ;;=========Ruby 模式
 (try-require 'rspec-mode)
-(autoload 'rhtml-mode "ruby-conf")
+;; (autoload 'rhtml-mode "ruby-conf")
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)
                 ("Rakefile$" . ruby-mode)
@@ -384,7 +384,9 @@
 ;;==========YAML 模式
 (autoload 'yaml-mode "yaml-mode.el" nil t)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-
+(add-hook 'yaml-mode-hook
+          '(lambda ()
+             (flymake-yaml-load)))
 
 ;;=========Shell Script 模式
 (require 'shell-completion)

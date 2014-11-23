@@ -11,12 +11,6 @@
     "Pops up a irbsh-buffer and insert a \"cd <file-dir>\" command." t))
 
 (defun setup-ruby-buffer ()
-  (rvm-activate-corresponding-ruby)
-  (setq auto-info-started t)
-  (condition-case nil
-      (inf-ruby-console-auto)
-    ;; no base directory found by
-    (error (setq auto-info-started nil)))
   (if auto-info-started
       (progn
         (robe-mode t)
@@ -25,22 +19,25 @@
              (append
               '(ac-source-robe) ac-sources))))
   ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
+  (rvm-activate-corresponding-ruby)
   (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
       (flymake-mode t))
   (set (make-local-variable 'tab-width) 2)
   (set (make-local-variable 'indent-tabs-mode) 'nil)
-  (ruby-end-mode t)
+  ;; (ruby-end-mode t)
   (ruby-electric-mode t)
   (rinari-minor-mode t)
   (autopair-mode 0)
-  (projectile-on)
   (projectile-rails-on)
-
-  (setq rsense-home "/home/zhangzhiqiang/.local/lib/rsense-0.3")
   (set (make-local-variable 'ac-sources)
        (append
-        '(ac-source-rcodetools ac-source-rsense-method ac-source-rsense-constant ac-source-rsense)
+        '(ac-source-rcodetools)
         ac-sources))
+  ;; (setq rsense-home "/home/zhangzhiqiang/.local/lib/rsense-0.3")
+  ;; (set (make-local-variable 'ac-sources)
+       ;; (append
+        ;; '(ac-source-rcodetools ac-source-rsense-method ac-source-rsense-constant ac-source-rsense)
+        ;; ac-sources))
   ;; (setq rsense-home (find-rsense-home-with-rvm rvm--current-gem-binary-path))
   ;; (message rsense-home)
   )
@@ -61,6 +58,17 @@
   (require 'rsense)
   (require 'rinari)
   (require 'rvm)
+  (defadvice inf-ruby-console-auto (before activate-rvm-for-robe activate)
+    (rvm-activate-corresponding-ruby))
+  (setq auto-info-started t)
+  (let ((ruby-file-buffer-name (buffer-name)))
+    (progn
+      (condition-case nil
+          (inf-ruby-console-auto)
+        ;; no base directory found by
+        (error (setq auto-info-started nil)))
+      (if auto-info-started
+          (switch-to-buffer ruby-file-buffer-name))))
   ;; (rvm-use "ruby-1.9.2-p0" "rails3tutorial")
   ;; (setq rsense-rurema-home (concat rsense-home "/ruby-refm"))
   (autoload 'yari "yari" nil t)
@@ -78,7 +86,12 @@
                (save-excursion
                  (untabify (point-min) (point-max))
                  (delete-trailing-whitespace))))
-  (ac-mode-setup))
+  (add-hook 'rhtml-mode-hook
+            '(lambda ()
+               (projectile-rails-on)))
+  (ac-mode-setup)
+
+  )
 
 (defun find-rsense-home-with-rvm (gem-binary-paths)
   (let ((binary-paths gem-binary-paths)
@@ -92,7 +105,6 @@
                     (mapconcat 'identity
                                (butlast (split-string gem-path "/")) "/"))))))
     rsense-gem-path))
-
 (defun ruby-eval-buffer ()
   (interactive)
   "Evaluate the buffer with ruby."
@@ -135,5 +147,12 @@
                       (point))))
       (forward-line 1)
       (delete-region beg (point)))))
+
+(defun ruby-insert-end ()
+  "Insert \"end\" at point and reindent current line."
+  (interactive)
+  (insert "end")
+  (ruby-indent-line t)
+  (end-of-line))
 
 (provide 'ruby-conf)
